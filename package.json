@@ -1,0 +1,19 @@
+{
+  "name": "dweb",
+  "version": "1.0.0",
+  "description": "Reference application for MIX Blockchain.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mix-blockchain/dWeb.git"
+  },
+  "author": "Jonathan Brown <jbrown@mix-blockchain.org>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mix-blockchain/dWeb/issues"
+  },
+  "homepage": "https://github.com/mix-blockchain/dWeb#readme"
+}
