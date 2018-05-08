@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/mix-blockchain/dWeb/issues"
   },
-  "homepage": "https://github.com/mix-blockchain/dWeb#readme"
+  "homepage": "https://github.com/mix-blockchain/dWeb#readme",
+  "devDependencies": {
+    "electron": "^2.0.0"
+  }
 }
