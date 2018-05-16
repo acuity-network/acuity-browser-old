@@ -44,11 +44,22 @@
         // Send a POST request
         this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
           .then(function (response) {
-            var hash = response.data.Hash;
-            console.log(hash);
+            var hash = response.data.Hash
+            console.log(hash)
+
+            const multihash = require('multihashes');
+            var decodedHash = multihash.decode(multihash.fromB58String(hash))
+            console.log(decodedHash)
+
+            if (decodedHash.name != 'sha2-256') {
+              throw 'Wrong type of multihash.'
+            }
+
+            var hashHex = '0x' + decodedHash.digest.toString('hex')
+            console.log(hashHex)
           })
           .catch(function (error) {
-            console.log(error);
+            console.log(error)
           })
       }
     },
