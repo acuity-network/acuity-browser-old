@@ -2,7 +2,7 @@
   <div id="wrapper">
     <main>
       <h1>Publish Mixin Type</h1>
-      <textarea id="schema" v-model="message" rows="20"></textarea>
+      <textarea id="schema" rows="20"></textarea>
       <button v-on:click="publish">Publish Mixin Type</button>
     </main>
   </div>
