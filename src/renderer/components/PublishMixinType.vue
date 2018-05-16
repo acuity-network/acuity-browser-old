@@ -57,6 +57,17 @@
 
             var hashHex = '0x' + decodedHash.digest.toString('hex')
             console.log(hashHex)
+
+            const Web3 = require('web3')
+            var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8645"))
+
+            const itemStoreIpfsSha256Abi = require('./item_store_ipfs_sha256.abi.json')
+            const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, "0xc57631b8f0b4b2eca51f02b695c877917297f54f")
+
+            var flagsNonce = "0x00" + web3.utils.keccak256(Math.random().toString()).substr(4)
+            itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call().then(function(itemId) {
+              console.log(itemId);
+            });
           })
           .catch(function (error) {
             console.log(error)
