@@ -5,11 +5,23 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import mixinProto from './mixin_pb.js'
-
 import itemProto from './item_pb.js'
-Vue.prototype.$mixinProto = mixinProto
 Vue.prototype.$itemProto = itemProto
+
+import languageProto from './language_pb.js'
+Vue.prototype.$languageProto = languageProto
+
+import titleProto from './title_pb.js'
+Vue.prototype.$titleProto = titleProto
+
+import bodyTextProto from './body_pb.js'
+Vue.prototype.$bodyTextProto = bodyTextProto
+
+import descriptionProto from './description_pb.js'
+Vue.prototype.$descriptionProto = descriptionProto
+
+import jpegImageProto from './jpeg-image_pb.js'
+Vue.prototype.$jpegImageProto = jpegImageProto
 
 require('./brotli.js')
 Vue.prototype.$bro = new Brotli('/static/')

@@ -2,7 +2,14 @@
   <div id="wrapper">
     <main>
       <h1>Publish Mixin Type</h1>
+      <label for="title">Title</label>
+      <input type="text" id="title">
+      <label for="schema">Schema</label>
       <textarea id="schema" rows="20"></textarea>
+      <label for="description">Description</label>
+      <textarea id="description" rows="20"></textarea>
+      <label for="parentId">Parent itemId</label>
+      <input id="parentId" type="text" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" mozactionhint="go" size="66" style="font-family: monospace;">
       <button v-on:click="publish">Publish Mixin Type</button>
     </main>
   </div>
@@ -16,20 +23,59 @@
       publish: function (event) {
         // `this` inside methods points to the Vue instance
         console.log('Publishing mixin type.')
-        console.log(this.$web3.version)
+
+        var itemMessage = new this.$itemProto.Item()
+
+        // Mixin type
+        var mixinMessage = new this.$itemProto.Mixin()
+        mixinMessage.setMixinId(0x51c32e3a)
+        itemMessage.addMixin(mixinMessage)
+
+        // Language
+        var languageMessage = new this.$languageProto.LanguageMixin()
+        languageMessage.setLanguageTag('en-US');
+
+        mixinMessage = new this.$itemProto.Mixin()
+        mixinMessage.setMixinId(0x4e4e06c4)
+        mixinMessage.setPayload(languageMessage.serializeBinary())
+        itemMessage.addMixin(mixinMessage)
+
+        // Title
+        var title = document.getElementById('title').value
+        console.log(title)
+
+        var titleMessage = new this.$titleProto.TitleMixin()
+        titleMessage.setTitle(title)
+
+        mixinMessage = new this.$itemProto.Mixin()
+        mixinMessage.setMixinId(0x24da6114)
+        mixinMessage.setPayload(titleMessage.serializeBinary())
+        itemMessage.addMixin(mixinMessage)
+
+        // Schema
         var schema = document.getElementById('schema').value
         console.log(schema)
 
-        var mixinMixin = new this.$mixinProto.MixinMixin()
-        mixinMixin.setSchema(schema)
-        var mixinPayload = mixinMixin.serializeBinary()
-        console.log(mixinPayload)
+        if (schema.length > 0) {
+          var bodyTextMessage = new this.$bodyTextProto.BodyTextMixin()
+          bodyTextMessage.setBodyText(schema)
 
-        var mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0)
-        mixinMessage.setPayload(mixinPayload)
+          mixinMessage = new this.$itemProto.Mixin()
+          mixinMessage.setMixinId(0x34a9a6ec)
+          mixinMessage.setPayload(bodyTextMessage.serializeBinary())
+          itemMessage.addMixin(mixinMessage)
+        }
 
-        var itemMessage = new this.$itemProto.Item()
+        // Description
+        var description = document.getElementById('description').value
+        console.log(description)
+
+        var descriptionMessage = new this.$descriptionProto.DescriptionMixin()
+        descriptionMessage.setDescription(description)
+
+        mixinMessage = new this.$itemProto.Mixin()
+        mixinMessage.setMixinId(0x5a474550)
+        mixinMessage.setPayload(descriptionMessage.serializeBinary())
         itemMessage.addMixin(mixinMessage)
 
         var itemPayload = itemMessage.serializeBinary()
@@ -59,15 +105,33 @@
             console.log(hashHex)
 
             const Web3 = require('web3')
-            var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8645"))
+            var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
+            web3.eth.defaultAccount = '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'
 
-            const itemStoreIpfsSha256Abi = require('./item_store_ipfs_sha256.abi.json')
-            const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, "0xc57631b8f0b4b2eca51f02b695c877917297f54f")
 
-            var flagsNonce = "0x00" + web3.utils.keccak256(Math.random().toString()).substr(4)
+            const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
+            const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
+
+            var flagsNonce = '0x00' + web3.utils.keccak256(Math.random().toString()).substr(4)
+            console.log(flagsNonce)
             itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call().then(function(itemId) {
-              console.log(itemId);
-            });
+              console.log(itemId)
+
+              const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
+              const itemStoreShortId = new web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
+
+              itemStoreShortId.methods.createShortId(itemId).send({from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'}).then(function(shortId) {
+                console.log(shortId)
+              })
+
+              itemStoreIpfsSha256.methods.create(flagsNonce, hashHex).send({
+                from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+                gas: 1000000
+              }).then(function(result) {
+                console.log(result)
+              })
+
+            })
           })
           .catch(function (error) {
             console.log(error)
@@ -91,6 +155,10 @@
 
   textarea {
     width: 98%;
+    display: block;
+  }
+
+  input {
     display: block;
   }
 
