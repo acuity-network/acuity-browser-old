@@ -1,16 +1,38 @@
 <template>
   <div id="wrapper">
     <main>
-      <h1>Publish Mixin Type</h1>
-      <label for="title">Title</label>
-      <input type="text" id="title">
-      <label for="schema">Schema</label>
-      <textarea id="schema" rows="20"></textarea>
-      <label for="description">Description</label>
-      <textarea id="description" rows="20"></textarea>
-      <label for="parentId">Parent itemId</label>
-      <input id="parentId" type="text" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" mozactionhint="go" size="66" style="font-family: monospace;">
-      <button v-on:click="publish">Publish Mixin Type</button>
+
+      <section class="hero is-primary">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title is-1">Publish Mixin Type</h1>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+
+          <b-field label="Title">
+            <b-input id="title"></b-input>
+          </b-field>
+
+          <b-field label="Schema">
+            <b-input id="schema" type="textarea"></b-input>
+          </b-field>
+
+          <b-field label="Description">
+            <b-input id="description" type="textarea"></b-input>
+          </b-field>
+
+          <b-field label="Parent itemId">
+            <b-input id="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+          </b-field>
+
+          <button class="button is-primary" v-on:click="publish">Publish</button>
+
+        </div>
+      </section>
     </main>
   </div>
 </template>
@@ -151,15 +173,6 @@
   body {
     font-family: 'OpenSans', 'sans-serif';
     font-weight: 300;
-  }
-
-  textarea {
-    width: 98%;
-    display: block;
-  }
-
-  input {
-    display: block;
   }
 
 </style>
