@@ -5,6 +5,11 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import Buefy from 'buefy'
+import 'buefy/lib/buefy.css'
+
+Vue.use(Buefy)
+
 import itemProto from './item_pb.js'
 Vue.prototype.$itemProto = itemProto
 
