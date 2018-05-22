@@ -170,9 +170,12 @@
 
 <style>
 
-  body {
+  body, button {
     font-family: 'OpenSans', 'sans-serif';
-    font-weight: 300;
+  }
+
+  button {
+    font-weight: bold;
   }
 
 </style>
