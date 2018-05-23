@@ -1,7 +1,20 @@
 <template>
   <div id="wrapper">
     <main>
-      Hi!
+
+      <section class="hero is-primary">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">Trusted accounts</h1>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+
+        </div>
+      </section>
     </main>
   </div>
 </template>
