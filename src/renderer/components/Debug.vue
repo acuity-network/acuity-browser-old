@@ -29,6 +29,13 @@
 </template>
 
 <script>
+  import axios from 'axios'
+  import itemProto from '../item_pb.js'
+  import languageProto from '../language_pb.js'
+  import titleProto from '../title_pb.js'
+  import bodyTextProto from '../body_pb.js'
+  import descriptionProto from '../description_pb.js'
+
   export default {
     name: 'debug',
     components: {},
@@ -67,14 +74,76 @@
               const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, itemStoreAddress)
 
               itemStoreIpfsSha256.methods.getItem(itemId).call().then(function(item) {
-                output.append("Updatable: " + ((item.flags & 0x01) ? 'true' : 'false') + '\n')
-                output.append("Enforce revisions: " + ((item.flags & 0x02) ? 'true' : "false") + '\n')
-                output.append("Retractable: " + ((item.flags & 0x04) ? 'true' : 'false') + '\n')
-                output.append("Transferable: " + ((item.flags & 0x08) ? 'true' : 'false') + '\n')
-                output.append("Owner: " + item.owner + '\n')
-                output.append("Revision count: " + item.revisionCount + '\n')
-                output.append("Parent count: " + item.parentIds.length + '\n')
-                output.append("Child count: " + item.childIds.length + '\n')
+                output.append('Updatable: ' + ((item.flags & 0x01) ? 'true' : 'false') + '\n')
+                output.append('Enforce revisions: ' + ((item.flags & 0x02) ? 'true' : "false") + '\n')
+                output.append('Retractable: ' + ((item.flags & 0x04) ? 'true' : 'false') + '\n')
+                output.append('Transferable: ' + ((item.flags & 0x08) ? 'true' : 'false') + '\n')
+                output.append('Owner: ' + item.owner + '\n')
+                output.append('Revision count: ' + item.revisionCount + '\n')
+                output.append('Parent count: ' + item.parentIds.length + '\n')
+                output.append('Child count: ' + item.childIds.length + '\n\n')
+
+                const timestamp = new Date(item.timestamps[0] * 1000)
+                output.append('Revision 0 timestamp: ' + timestamp + '\n')
+
+                const multihashes = require('multihashes')
+                const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[0].substr(2), "hex"), 'sha2-256'))
+                output.append('Revision 0 IPFS hash: ' + ipfsHash + '\n')
+
+                axios.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
+          .then(function (response) {
+                  const containerPayload = new Uint8Array(Buffer.from(response.data, "binary"))
+                  output.append('Compressed length: ' + containerPayload.length + '\n')
+
+                  require('../brotli.js')
+                  const bro = new Brotli('/static/')
+
+                  const itemPayload = bro.decompressArray(containerPayload)
+                  output.append('Uncompressed length: ' + itemPayload.length + '\n')
+
+                  const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
+                  const mixins = itemMessage.getMixinList()
+
+                  output.append('Mixin count: ' + mixins.length + '\n')
+
+                  for (var i = 0; i < mixins.length; i++) {
+                    output.append('\nMixin ' + i + '\n')
+                    var mixinId = '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8)
+                    output.append('mixinId: ' + mixinId + '\n')
+
+                    var mixinPayload = mixins[i].getPayload()
+
+                    switch (mixinId) {
+                      case '0x51c32e3a':
+                        output.append('Mixin type: Mixin type\n')
+                        break;
+
+                      case '0x4e4e06c4':
+                        output.append('Mixin type: Language\n')
+                        var languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
+                        output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
+                        break;
+
+                      case '0x24da6114':
+                        output.append('Mixin type: Title\n')
+                        var titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
+                        output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
+                        break;
+
+                      case '0x34a9a6ec':
+                        output.append('Mixin type: Body text\n')
+                        var bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
+                        output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
+                        break;
+
+                      case '0x5a474550':
+                        output.append('Mixin type: Description\n')
+                        var descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
+                        output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
+                        break;
+                    }
+                  }
+                })
               })
             })
           })
