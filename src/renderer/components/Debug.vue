@@ -35,6 +35,8 @@
   import titleProto from '../title_pb.js'
   import bodyTextProto from '../body_pb.js'
   import descriptionProto from '../description_pb.js'
+  import jpegImageProto from '../jpeg-image_pb.js'
+  const Base58 = require("base-58")
 
   export default {
     name: 'debug',
@@ -146,6 +148,27 @@
                           output.append('Mixin type: Description\n')
                           var descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
                           output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
+                          break;
+
+                        case '0x12745469':
+                          output.append('Mixin type: Image\n')
+                          var imageMessage = jpegImageProto.JpegMipmap.deserializeBinary(mixinPayload)
+                          var width = imageMessage.getWidth()
+                          output.append('Original width: ' + width + '\n')
+                          var height = imageMessage.getHeight()
+                          output.append('Original height: ' + height + '\n')
+                          var mipmaps = imageMessage.getMipmapLevelList()
+                          output.append('Mipmap levels: ' + mipmaps.length + '\n')
+                          var renderHeight = Math.floor(256 * height / width)
+                          for (var j = 0; j < mipmaps.length; j++) {
+                            output.append('\nMipmap level: ' + j + '\n')
+                            output.append('Mipmap filesize: ' + mipmaps[j].getFilesize() + '\n')
+                            var el = document.createElement('img')
+                            var domString = '<img src="http://localhost:8081/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
+                            el.innerHTML = domString
+                            output.appendChild(el.firstChild)
+                          }
+
                           break;
                       }
                     }
