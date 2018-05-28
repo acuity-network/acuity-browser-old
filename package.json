@@ -56,9 +56,12 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
+    "base-58": "^0.0.1",
     "buefy": "^0.6.5",
     "google-protobuf": "^3.5.0",
+    "jpeg-js": "^0.3.4",
     "multihashes": "^0.4.13",
+    "pica": "^4.1.1",
     "vue": "^2.3.3",
     "vue-electron": "^1.0.6",
     "vue-router": "^2.5.3",

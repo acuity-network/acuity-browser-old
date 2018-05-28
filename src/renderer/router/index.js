@@ -33,9 +33,19 @@ export default new Router({
       component: require('@/components/BrowsingHistory').default
     },
     {
-      path: '/new-post',
+      path: '/publish-item',
+      name: 'publish-item',
+      component: require('@/components/PublishItem').default
+    },
+    {
+      path: '/publish-item/mixin-type',
       name: 'publish-mixin-type',
       component: require('@/components/PublishMixinType').default
+    },
+    {
+      path: '/publish-item/image',
+      name: 'publish-image',
+      component: require('@/components/PublishImage').default
     },
     {
       path: '/profile',
