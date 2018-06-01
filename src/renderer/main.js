@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import AsyncComputed from 'vue-async-computed'
 import axios from 'axios'
 
 import App from './App'
@@ -34,6 +35,8 @@ Vue.prototype.$bro = new Brotli('/static/')
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
+
+Vue.use(AsyncComputed)
 
 /* eslint-disable no-new */
 new Vue({

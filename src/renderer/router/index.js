@@ -9,6 +9,11 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '/item/:itemId',
+      name: 'item',
+      component: require('@/components/ViewItem').default
+    },
+    {
       path: '*',
       redirect: '/home'
     },

@@ -41,6 +41,7 @@
   const Base58 = require("base-58")
   require('../brotli.js')
   const bro = new Brotli('/static/')
+  import router from '../router/index.js'
 
   export default {
     name: 'publish-image',
@@ -55,7 +56,7 @@
           window.fileNames = fileNames;
         })
       },
-      publish: function (event) {
+      publish: event => {
         const pica = require('pica')()
         function scaleImage(rawImageData, width, height) {
           return pica.resizeBuffer({
@@ -162,7 +163,7 @@
 
           // Send a POST request
           axios.post('http://127.0.0.1:5001/api/v0/add', data)
-            .then(function (response) {
+            .then(response => {
               var hash = response.data.Hash
               console.log(hash)
 
@@ -186,16 +187,16 @@
 
               var flagsNonce = '0x00' + web3.utils.keccak256(Math.random().toString()).substr(4)
               console.log(flagsNonce)
-              itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call().then(function(itemId) {
+              itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call().then(itemId => {
                 console.log(itemId)
 
                 itemStoreIpfsSha256.methods.create(flagsNonce, hashHex).send({
                   from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                  gas: 1000000
-                }).then(function(result) {
-                  console.log(result)
+                  gas: 1000000,
+                  gasPrice: 1
+                }).then(result => {
                 })
-
+                router.push({ name: 'item', params: { itemId: itemId }})
               })
             })
             .catch(function (error) {
