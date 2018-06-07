@@ -61,7 +61,8 @@ proto.Mixin.prototype.toObject = function(opt_includeInstance) {
 proto.Mixin.toObject = function(includeInstance, msg) {
   var f, obj = {
     mixinId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    payload: msg.getPayload_asB64()
+    payload: msg.getPayload_asB64(),
+    extraId: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -106,6 +107,10 @@ proto.Mixin.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setPayload(value);
       break;
+    case 3:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setExtraId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -146,6 +151,13 @@ proto.Mixin.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeBytes(
       2,
+      f
+    );
+  }
+  f = message.getExtraId();
+  if (f !== 0) {
+    writer.writeUint32(
+      3,
       f
     );
   }
@@ -203,6 +215,21 @@ proto.Mixin.prototype.getPayload_asU8 = function() {
 /** @param {!(string|Uint8Array)} value */
 proto.Mixin.prototype.setPayload = function(value) {
   jspb.Message.setProto3BytesField(this, 2, value);
+};
+
+
+/**
+ * optional uint32 extra_id = 3;
+ * @return {number}
+ */
+proto.Mixin.prototype.getExtraId = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.Mixin.prototype.setExtraId = function(value) {
+  jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -345,15 +372,15 @@ proto.Item.serializeBinaryToWriter = function(message, writer) {
 
 /**
  * repeated Mixin mixin = 1;
- * @return {!Array.<!proto.Mixin>}
+ * @return {!Array<!proto.Mixin>}
  */
 proto.Item.prototype.getMixinList = function() {
-  return /** @type{!Array.<!proto.Mixin>} */ (
+  return /** @type{!Array<!proto.Mixin>} */ (
     jspb.Message.getRepeatedWrapperField(this, proto.Mixin, 1));
 };
 
 
-/** @param {!Array.<!proto.Mixin>} value */
+/** @param {!Array<!proto.Mixin>} value */
 proto.Item.prototype.setMixinList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 1, value);
 };

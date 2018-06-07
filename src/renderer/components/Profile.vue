@@ -12,7 +12,9 @@
 
       <section class="section">
         <div class="container">
-
+          <ul>
+            <li><router-link to="/profile/edit">Edit profile</router-link></li>
+          </ul>
         </div>
       </section>
     </main>

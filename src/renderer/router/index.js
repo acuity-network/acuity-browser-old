@@ -58,6 +58,11 @@ export default new Router({
       component: require('@/components/Profile').default
     },
     {
+      path: '/profile/edit',
+      name: 'profile-edit',
+      component: require('@/components/ProfileEdit').default
+    },
+    {
       path: '/trusted-accounts',
       name: 'trusted-accounts',
       component: require('@/components/TrustedAccounts').default
