@@ -14,11 +14,11 @@
         <div class="container">
 
           <b-field label="Name">
-            <b-input id="name"></b-input>
+            <b-input id="name" :value="name"></b-input>
           </b-field>
 
           <b-field label="Type">
-            <b-select id="type">
+            <b-select id="type" :value="type">
               <option value="0">Anon</option>
               <option value="1">Person</option>
               <option value="2">Project</option>
@@ -30,11 +30,11 @@
           </b-field>
 
           <b-field label="Location">
-            <b-input id="location"></b-input>
+            <b-input id="location" :value="location"></b-input>
           </b-field>
 
           <b-field label="Bio">
-            <b-input id="bio" type="textarea"></b-input>
+            <b-input id="bio" type="textarea" :value="bio"></b-input>
           </b-field>
 
           <b-field label="Image">
@@ -66,10 +66,72 @@
   const accountProfile = new web3.eth.Contract(accountProfileAbi, '0x72f52ab6b1d15630ee9b2d8763b23478c0327df8')
   const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
   const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
+  import router from '../router/index.js'
+  import MixItem from './mix_item.js'
 
   export default {
     name: 'profile',
     components: {},
+    asyncComputed: {
+      name() {
+        return accountProfile.methods.getProfile().call()
+        .then(itemId => {
+          var item = new MixItem(itemId)
+          return item.init()
+        })
+        .then(item => {
+          return item.latestRevision().load()
+        })
+        .then(revision => {
+          return revision.getTitle()
+        })
+      },
+      bio() {
+        return accountProfile.methods.getProfile().call()
+        .then(itemId => {
+          var item = new MixItem(itemId)
+          return item.init()
+        })
+        .then(item => {
+          return item.latestRevision().load()
+        })
+        .then(revision => {
+          return revision.getBodyText()
+        })
+      },
+      location() {
+        return accountProfile.methods.getProfile().call()
+        .then(itemId => {
+          var item = new MixItem(itemId)
+          return item.init()
+        })
+        .then(item => {
+          return item.latestRevision().load()
+        })
+        .then(revision => {
+          return revision.getProfile()
+        })
+        .then(result => {
+          return result.location
+        })
+      },
+      type() {
+        return accountProfile.methods.getProfile().call()
+        .then(itemId => {
+          var item = new MixItem(itemId)
+          return item.init()
+        })
+        .then(item => {
+          return item.latestRevision().load()
+        })
+        .then(revision => {
+          return revision.getProfile()
+        })
+        .then(result => {
+          return result.type
+        })
+      }
+    },
     methods: {
       chooseFile: function (event) {
         const {dialog} = require('electron').remote
@@ -123,10 +185,15 @@
         axios.post('http://127.0.0.1:5001/api/v0/add', data)
           .then(response => {
             hexHash = '0x' + multihash.decode(multihash.fromB58String(response.data.Hash)).digest.toString('hex')
-            console.log(hexHash)
-            return accountProfile.methods.getProfile('0xe58b128142a5e94b169396dd021f5f02fa38b3b0').call()
+            return accountProfile.methods.getProfile().call()
           })
           .then(itemId => {
+            itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash).send({
+              from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+              gas: 1000000,
+              gasPrice: 1
+            })
+            router.push({ name: 'profile' })
           })
           .catch(err => {
             console.log('No profile item found, creating new one.')

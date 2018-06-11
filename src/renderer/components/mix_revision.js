@@ -6,6 +6,7 @@ import itemProto from '../item_pb.js'
 import titleProto from '../title_pb.js'
 import jpegImageProto from '../jpeg-image_pb.js'
 import bodyTextProto from '../body_pb.js'
+import profileProto from '../account-profile_pb.js'
 const Base58 = require("base-58")
 
 export default class MixRevision {
@@ -84,6 +85,18 @@ export default class MixRevision {
       if (this.mixins[i].mixinId == '0x5a474550') {
         var bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(this.mixins[i].mixinPayload)
         return bodyTextMessage.getBodyText()
+      }
+    }
+  }
+
+  getProfile() {
+    for (var i = 0; i < this.mixins.length; i++) {
+      if (this.mixins[i].mixinId == '0x4bf3ce07') {
+        var profileMessage = profileProto.AccountProfile.deserializeBinary(this.mixins[i].mixinPayload)
+        return {
+          type: profileMessage.getType(),
+          location: profileMessage.getLocation()
+        }
       }
     }
   }

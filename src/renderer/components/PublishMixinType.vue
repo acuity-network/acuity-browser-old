@@ -130,7 +130,6 @@
             var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
             web3.eth.defaultAccount = '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'
 
-
             const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
             const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
 

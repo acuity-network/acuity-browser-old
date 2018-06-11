@@ -68,6 +68,10 @@ export default class MixItem {
     return this.revisions
   }
 
+  latestRevision() {
+    return this.revisions[this.item.revisionCount - 1]
+  }
+
   get exists() {
   }
 
