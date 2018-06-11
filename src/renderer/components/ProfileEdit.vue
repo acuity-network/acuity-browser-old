@@ -63,7 +63,7 @@
   web3.eth.defaultAccount = '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'
   web3.eth.defaultBlock = 'pending'
   const accountProfileAbi = require('./AccountProfile.abi.json')
-  const accountProfile = new web3.eth.Contract(accountProfileAbi, '0x9e5e8f5d2c52d4da79a8ce59e94002e68c753a2d')
+  const accountProfile = new web3.eth.Contract(accountProfileAbi, '0x72f52ab6b1d15630ee9b2d8763b23478c0327df8')
   const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
   const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
 
@@ -127,33 +127,32 @@
             return accountProfile.methods.getProfile('0xe58b128142a5e94b169396dd021f5f02fa38b3b0').call()
           })
           .then(itemId => {
-            console.log(itemId)
-            if (itemId == '0x0000000000000000000000000000000000000000000000000000000000000000') {
-              console.log('No profile item found, creating new one.')
-              var flagsNonce = '0x01' + web3.utils.keccak256(Math.random().toString()).substr(4)
-              web3.eth.getTransactionCount('0xe58b128142a5e94b169396dd021f5f02fa38b3b0')
-              .then (nonce => {
-                itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
-                .then(itemId => {
-                  itemStoreIpfsSha256.methods.create(flagsNonce, hexHash).send({
-                    from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                    gas: 1000000,
-                    gasPrice: 1,
-                    nonce: nonce
-                  }).then(result => {
-                    console.log(result)
-                  })
-                  accountProfile.methods.setProfile(itemId).send({
-                    from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                    gas: 1000000,
-                    gasPrice: 1,
-                    nonce: nonce + 1
-                  }).then(result => {
-                    console.log(result)
-                  })
+          })
+          .catch(err => {
+            console.log('No profile item found, creating new one.')
+            var flagsNonce = '0x01' + web3.utils.keccak256(Math.random().toString()).substr(4)
+            web3.eth.getTransactionCount('0xe58b128142a5e94b169396dd021f5f02fa38b3b0')
+            .then (nonce => {
+              itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
+              .then(itemId => {
+                itemStoreIpfsSha256.methods.create(flagsNonce, hexHash).send({
+                  from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+                  gas: 1000000,
+                  gasPrice: 1,
+                  nonce: nonce
+                }).then(result => {
+                  console.log(result)
+                })
+                accountProfile.methods.setProfile(itemId).send({
+                  from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+                  gas: 1000000,
+                  gasPrice: 1,
+                  nonce: nonce + 1
+                }).then(result => {
+                  console.log(result)
                 })
               })
-            }
+            })
           })
       }
     }
