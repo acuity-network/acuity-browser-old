@@ -68,6 +68,7 @@
   const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
   import router from '../router/index.js'
   import MixItem from './mix_item.js'
+  import Image from './image.js'
 
   export default {
     name: 'profile',
@@ -173,50 +174,58 @@
         mixinMessage.setPayload(bodyTextMessage.serializeBinary())
         itemMessage.addMixin(mixinMessage)
 
-        var itemPayload = itemMessage.serializeBinary()
-        var output = bro.compressArray(itemPayload, 11)
+        // Image
+        var image = new Image(window.fileNames[0])
+        image.createMixin()
+        .then(imageMixin => {
+          itemMessage.addMixin(imageMixin)
 
-        var data = new FormData()
-        data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
+          var itemPayload = itemMessage.serializeBinary()
+          var output = bro.compressArray(itemPayload, 11)
 
-        var hexHash
+          var data = new FormData()
+          data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
 
-        // Publish to IPFS.
-        axios.post('http://127.0.0.1:5001/api/v0/add', data)
-          .then(response => {
-            hexHash = '0x' + multihash.decode(multihash.fromB58String(response.data.Hash)).digest.toString('hex')
-            return accountProfile.methods.getProfile().call()
-          })
-          .then(itemId => {
-            itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash).send({
-              from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-              gas: 1000000,
-              gasPrice: 1
+          var hexHash
+
+          // Publish to IPFS.
+          axios.post('http://127.0.0.1:5001/api/v0/add', data)
+            .then(response => {
+              hexHash = '0x' + multihash.decode(multihash.fromB58String(response.data.Hash)).digest.toString('hex')
+              return accountProfile.methods.getProfile().call()
             })
-            router.push({ name: 'profile' })
-          })
-          .catch(err => {
-            console.log('No profile item found, creating new one.')
-            var flagsNonce = '0x01' + web3.utils.keccak256(Math.random().toString()).substr(4)
-            web3.eth.getTransactionCount('0xe58b128142a5e94b169396dd021f5f02fa38b3b0')
-            .then (nonce => {
-              itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
-              .then(itemId => {
-                itemStoreIpfsSha256.methods.create(flagsNonce, hexHash).send({
-                  from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                  gas: 1000000,
-                  gasPrice: 1,
-                  nonce: nonce
-                }).then(result => {
-                  console.log(result)
-                })
-                accountProfile.methods.setProfile(itemId).send({
-                  from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                  gas: 1000000,
-                  gasPrice: 1,
-                  nonce: nonce + 1
-                }).then(result => {
-                  console.log(result)
+            .then(itemId => {
+              console.log(itemId)
+              itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash).send({
+                from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+                gas: 1000000,
+                gasPrice: 1
+              })
+              router.push({ name: 'profile' })
+            })
+            .catch(err => {
+              console.log('No profile item found, creating new one.')
+              var flagsNonce = '0x01' + web3.utils.keccak256(Math.random().toString()).substr(4)
+              web3.eth.getTransactionCount('0xe58b128142a5e94b169396dd021f5f02fa38b3b0')
+              .then (nonce => {
+                itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
+                .then(itemId => {
+                  itemStoreIpfsSha256.methods.create(flagsNonce, hexHash).send({
+                    from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+                    gas: 1000000,
+                    gasPrice: 1,
+                    nonce: nonce
+                  }).then(result => {
+                    console.log(result)
+                  })
+                  accountProfile.methods.setProfile(itemId).send({
+                    from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+                    gas: 1000000,
+                    gasPrice: 1,
+                    nonce: nonce + 1
+                  }).then(result => {
+                    console.log(result)
+                  })
                 })
               })
             })
