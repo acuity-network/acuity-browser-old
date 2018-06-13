@@ -96,6 +96,11 @@ export default new Router({
       path: '/debug',
       name: 'debug',
       component: require('@/components/Debug').default
+    },
+    {
+      path: '/block-explorer',
+      name: 'block-explorer',
+      component: require('@/components/BlockExplorer').default
     }
   ]
 })

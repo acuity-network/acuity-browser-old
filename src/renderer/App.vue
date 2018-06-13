@@ -17,6 +17,7 @@
           <router-link class="navbar-item" to="/settings" title="Settings"><img src="/static/icons/settings.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/search" title="Search"><img src="/static/icons/search.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/debug" title="Debug"><img src="/static/icons/debug.svg" width="64" height="64"></router-link>
+          <router-link class="navbar-item" to="/block-explorer" title="Block explorer"><img src="/static/icons/block-explorer.svg" width="64" height="64"></router-link>
         </div>
       </div>
     </nav>
