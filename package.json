@@ -60,6 +60,7 @@
     "buefy": "^0.6.5",
     "google-protobuf": "^3.5.0",
     "jpeg-js": "^0.3.4",
+    "level": "^4.0.0",
     "multihashes": "^0.4.13",
     "pica": "^4.1.1",
     "vue": "^2.3.3",
