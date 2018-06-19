@@ -38,6 +38,14 @@ Vue.config.productionTip = false
 
 Vue.use(AsyncComputed)
 
+var level = require('level')
+import { remote } from 'electron'
+import path from 'path'
+var dbPath = path.join(remote.app.getPath('userData'), '/state.db')
+console.log('Initializing database: ' + dbPath)
+var db = level(dbPath)
+Vue.prototype.$db = db
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },
