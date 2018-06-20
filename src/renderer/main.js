@@ -46,6 +46,11 @@ console.log('Initializing database: ' + dbPath)
 var db = level(dbPath)
 Vue.prototype.$db = db
 
+const Web3 = require('web3')
+var net = require('net')
+Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/mix-blockchain/mix.ipc', net))
+
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },

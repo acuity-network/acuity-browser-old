@@ -12,7 +12,14 @@
 
       <section class="section">
         <div class="container">
-
+          <ul>
+            <li><router-link to="/manage-accounts/new">Create account</router-link></li>
+          </ul>
+          <ul id="accounts">
+            <li v-for="account in accounts">
+              <code><router-link :to="{ name: 'manage-account-controller', params: { address: account }}">{{ account }}</router-link></code>
+            </li>
+          </ul>
         </div>
       </section>
     </main>
@@ -20,8 +27,14 @@
 </template>
 
 <script>
+
   export default {
     name: 'manage-accounts',
-    components: {}
+    components: {},
+    asyncComputed: {
+      accounts() {
+        return this.$web3.eth.personal.getAccounts()
+      }
+    }
   }
 </script>

@@ -27,7 +27,8 @@
 
 <script>
   const Web3 = require('web3')
-  var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
+  var net = require('net')
+  var web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/mix-blockchain/mix.ipc', net))
   web3.eth.defaultAccount = '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'
   web3.eth.defaultBlock = 'pending'
   const accountProfileAbi = require('./AccountProfile.abi.json')

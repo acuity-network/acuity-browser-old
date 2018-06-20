@@ -78,6 +78,16 @@ export default new Router({
       component: require('@/components/ManageAccounts').default
     },
     {
+      path: '/manage-accounts/new',
+      name: 'new-account',
+      component: require('@/components/NewAccount').default
+    },
+    {
+      path: '/manage-accounts/controller/:address',
+      name: 'manage-account-controller',
+      component: require('@/components/ManageAccountController').default
+    },
+    {
       path: '/node-status',
       name: 'node-status',
       component: require('@/components/NodeStatus').default
