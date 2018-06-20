@@ -63,6 +63,7 @@
     "level": "^4.0.0",
     "multihashes": "^0.4.13",
     "pica": "^4.1.1",
+    "qrcode": "^1.2.0",
     "vue": "^2.3.3",
     "vue-async-computed": "^3.3.1",
     "vue-electron": "^1.0.6",
