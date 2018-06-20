@@ -15,8 +15,11 @@
           <img :src="qrcode" />
           <h2 class="subtitle">Balance</h2>
           {{ balance }}
-          </div>
+        </div>
+          {{ contract }}
+        <div>
           <button class="button is-primary" v-on:click="activate">Activate account</button>
+        </div>
       </section>
     </main>
   </div>
@@ -24,6 +27,8 @@
 
 <script>
   var QRCode = require('qrcode')
+  var fs = require('fs-extra')
+  const accountAbi = require('./Account.abi.json')
 
   export default {
     name: 'manage-account-controller',
@@ -35,6 +40,9 @@
           errorCorrectionLevel: 'H'
         })
       },
+      contract() {
+        return this.$db.get('/account/' + this.$route.params.address + '/contract')
+      },
       balance() {
         return this.$web3.eth.getBalance(this.$route.params.address, 'pending')
         .then(balance => {
@@ -43,7 +51,32 @@
       }
     },
     methods: {
-      activate: event => {
+      activate() {
+        fs.readFile('./src/renderer/components/Account.bin', 'utf8')
+        .then(accountBytecode => {
+          const account = new this.$web3.eth.Contract(accountAbi)
+          account.deploy({data: '0x' + accountBytecode}).send({
+            from: this.$route.params.address,
+            gas: 500000,
+            gasPrice: 1
+          })
+          .on('error', error => {
+            console.log(error)
+          })
+          .on('transactionHash', transactionHash => {
+            console.log(transactionHash)
+          })
+          .on('receipt', receipt => {
+            console.log(receipt)
+            this.$db.put('/account/' + this.$route.params.address + '/contract', receipt.contractAddress)
+            .then(result => {
+              console.log(result)
+            })
+          })
+          .then(newContractInstance => {
+            console.log(newContractInstance)
+          })
+        })
       }
     }
   }

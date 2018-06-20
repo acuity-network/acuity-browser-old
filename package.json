@@ -58,6 +58,7 @@
     "axios": "^0.16.1",
     "base-58": "^0.0.1",
     "buefy": "^0.6.5",
+    "fs-extra": "^6.0.1",
     "google-protobuf": "^3.5.0",
     "jpeg-js": "^0.3.4",
     "level": "^4.0.0",
