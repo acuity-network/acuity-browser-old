@@ -49,7 +49,7 @@ Vue.prototype.$db = db
 const Web3 = require('web3')
 var net = require('net')
 Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/mix-blockchain/mix.ipc', net))
-
+Vue.prototype.$web3.eth.defaultBlock = 'pending';
 
 /* eslint-disable no-new */
 new Vue({

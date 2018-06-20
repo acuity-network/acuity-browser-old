@@ -36,7 +36,10 @@
         })
       },
       balance() {
-        return this.$web3.eth.getBalance(this.$route.params.address)
+        return this.$web3.eth.getBalance(this.$route.params.address, 'pending')
+        .then(balance => {
+          return this.$web3.utils.fromWei(balance) + ' MIX'
+        })
       }
     },
     methods: {

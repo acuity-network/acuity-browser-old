@@ -18,6 +18,7 @@
           <ul id="accounts">
             <li v-for="account in accounts">
               <code><router-link :to="{ name: 'manage-account-controller', params: { address: account }}">{{ account }}</router-link></code>
+              <router-link :to="{ name: 'manage-account-unlock', params: { address: account }}">Unlock</router-link>
             </li>
           </ul>
         </div>
