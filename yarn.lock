@@ -3102,8 +3102,8 @@ encodeurl@~1.0.1, encodeurl@~1.0.2:
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
 
 encoding-down@~5.0.0:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/encoding-down/-/encoding-down-5.0.3.tgz#b2b2305b2b810ff6d0bda85583bfc71bda56dc49"
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/encoding-down/-/encoding-down-5.0.4.tgz#1e477da8e9e9d0f7c8293d320044f8b2cd8e9614"
   dependencies:
     abstract-leveldown "^5.0.0"
     inherits "^2.0.3"
@@ -4211,8 +4211,8 @@ glur@^1.1.2:
   resolved "https://registry.yarnpkg.com/glur/-/glur-1.1.2.tgz#f20ea36db103bfc292343921f1f91e83c3467689"
 
 google-protobuf@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.5.0.tgz#b8cc63c74d83457bd8a9a904503c8efb26bca339"
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.6.0.tgz#e2bafb00c20a8734174d8f89e0a842709e2ceed0"
 
 got@7.1.0, got@^7.1.0:
   version "7.1.0"
@@ -5375,8 +5375,8 @@ leveldown@^4.0.0:
     prebuild-install "^4.0.0"
 
 levelup@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/levelup/-/levelup-3.0.1.tgz#07794639fd0af185089130aaea09d03023637b8d"
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/levelup/-/levelup-3.1.0.tgz#4a14724d53132a673ad49a821594cf0faee005bd"
   dependencies:
     deferred-leveldown "~4.0.0"
     level-errors "~2.0.0"
