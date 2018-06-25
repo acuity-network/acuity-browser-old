@@ -23,8 +23,13 @@
                 {{ props.row.balance }}
               </b-table-column>
 
-              <b-table-column field="action" label="Action">
-                <router-link :to="{ name: props.row.route, params: { address: props.row.account }}">{{ props.row.action }}</router-link>
+              <b-table-column field="lock" label="">
+                <a v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</a>
+                <router-link v-else :to="{ name: props.row.route, params: { address: props.row.account }}">unlock</router-link>
+              </b-table-column>
+
+              <b-table-column field="manage" label=" ">
+                <router-link :to="{ name: 'manage-account-controller', params: { address: props.row.account }}">manage</router-link>
               </b-table-column>
 
             </template>
@@ -52,7 +57,17 @@
     methods: {
       select (event) {
         this.$web3.eth.defaultAccount = event.account
-      }
+      },
+      lock (event) {
+        this.$web3.eth.personal.lockAccount(event.target.dataset.address)
+        .then(result => {
+          console.log(result)
+          window.location.reload(false)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      },
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
@@ -77,6 +92,7 @@
               var row = {
                 account: address,
                 balance: vm.$web3.utils.fromWei(result[0]),
+                unlocked: result[1],
                 action: (result[1] == false) ? 'unlock' : ((result[2] == false) ? 'deploy' : 'lock'),
                 route: (result[1] == false) ? 'manage-account-unlock' : 'manage-account-controller',
               }
