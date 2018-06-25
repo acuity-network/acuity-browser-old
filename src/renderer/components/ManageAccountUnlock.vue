@@ -9,16 +9,14 @@
           </div>
         </div>
       </section>
-
       <section class="section">
         <div class="container">
-          <b-field label="Password">
-            <b-input type="password" id="password"></b-input>
-          </b-field>
-          <b-field label="Duration">
-            <b-input type="number" id="duration"></b-input>
-          </b-field>
-          <button class="button is-primary" v-on:click="unlock">Unlock</button>
+          <form v-on:submit="unlock">
+            <b-field label="Password">
+              <b-input type="password" id="password" password-reveal></b-input>
+            </b-field>
+            <button type="submit "class="button is-primary">Unlock</button>
+          </form>
         </div>
       </section>
     </main>
@@ -33,9 +31,12 @@
     },
     methods: {
       unlock() {
-        return this.$web3.eth.personal.unlockAccount(this.$route.params.address, document.getElementById('password').value)
+        return this.$web3.eth.personal.unlockAccount(this.$route.params.address, document.getElementById('password').value, 0)
         .then(result => {
-          console.log(result)
+          this.$router.push({name: 'manage-accounts'})
+        })
+        .catch(error => {
+          console.log(error)
         })
       }
     }

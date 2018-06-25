@@ -12,7 +12,7 @@
 
       <section class="section">
         <div class="container">
-          <b-table :data="data">
+          <b-table :data="data" :selected.sync="selected" v-on:click="select">
             <template slot-scope="props">
 
               <b-table-column field="account" label="Account">
@@ -28,10 +28,10 @@
               </b-table-column>
 
             </template>
+            <template slot="footer">
+              <router-link to="/manage-accounts/new">Create account</router-link>
+            </template>
           </b-table>
-          <ul>
-            <li><router-link to="/manage-accounts/new">Create account</router-link></li>
-          </ul>
         </div>
       </section>
     </main>
@@ -46,27 +46,44 @@
     data() {
       return {
         data: [],
+        selected: {}
+      }
+    },
+    methods: {
+      select (event) {
+        this.$web3.eth.defaultAccount = event.account
       }
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        vm.$web3.eth.personal.getAccounts()
+        return vm.$web3.eth.personal.getAccounts()
         .then (accounts => {
           for (let address of accounts) {
             Promise.all([
               vm.$web3.eth.getBalance(address),
+              vm.$web3.eth.sign('', address)
+              .then(() => {
+                return true
+              })
+              .catch(() => {
+                return false
+              }),
               vm.$db.get('/account/' + address + '/contract')
               .catch(() => {
                 return false
               }),
             ])
             .then (result => {
-              vm.data.push({
+              var row = {
                 account: address,
                 balance: vm.$web3.utils.fromWei(result[0]),
-                action: (result[1] == false) ? 'deploy' : 'unlock',
-                route: (result[1] == false) ? 'manage-account-controller' : 'manage-account-unlock',
-              })
+                action: (result[1] == false) ? 'unlock' : ((result[2] == false) ? 'deploy' : 'lock'),
+                route: (result[1] == false) ? 'manage-account-unlock' : 'manage-account-controller',
+              }
+              vm.data.push(row)
+              if (address == vm.$web3.eth.defaultAccount) {
+                vm.selected = row
+              }
             })
           }
         })
