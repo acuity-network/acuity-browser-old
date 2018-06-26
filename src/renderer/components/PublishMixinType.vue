@@ -133,7 +133,7 @@
             const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
             const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
 
-            var flagsNonce = '0x00' + web3.utils.keccak256(Math.random().toString()).substr(4)
+            var flagsNonce = '0x00' + web3.utils.randomHex(30).substr(2)
             console.log(flagsNonce)
             itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call().then(function(itemId) {
               console.log(itemId)

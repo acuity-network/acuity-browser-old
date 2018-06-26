@@ -205,7 +205,7 @@
             })
             .catch(err => {
               console.log('No profile item found, creating new one.')
-              var flagsNonce = '0x01' + web3.utils.keccak256(Math.random().toString()).substr(4)
+              var flagsNonce = '0x01' + web3.utils.randomHex(30).substr(2)
               web3.eth.getTransactionCount('0xe58b128142a5e94b169396dd021f5f02fa38b3b0')
               .then (nonce => {
                 itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
