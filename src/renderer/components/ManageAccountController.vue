@@ -27,8 +27,8 @@
 
 <script>
   var QRCode = require('qrcode')
-  var fs = require('fs-extra')
-  const accountAbi = require('./Account.abi.json')
+
+  import MixAccount from '../../lib/MixAccount.js'
 
   export default {
     name: 'manage-account-controller',
@@ -52,31 +52,8 @@
     },
     methods: {
       activate() {
-        fs.readFile('./src/renderer/components/Account.bin', 'utf8')
-        .then(accountBytecode => {
-          const account = new this.$web3.eth.Contract(accountAbi)
-          account.deploy({data: '0x' + accountBytecode}).send({
-            from: this.$route.params.address,
-            gas: 500000,
-            gasPrice: 1
-          })
-          .on('error', error => {
-            console.log(error)
-          })
-          .on('transactionHash', transactionHash => {
-            console.log(transactionHash)
-          })
-          .on('receipt', receipt => {
-            console.log(receipt)
-            this.$db.put('/account/' + this.$route.params.address + '/contract', receipt.contractAddress)
-            .then(result => {
-              console.log(result)
-            })
-          })
-          .then(newContractInstance => {
-            console.log(newContractInstance)
-          })
-        })
+        var account = new MixAccount(this, this.$route.params.address)
+        return account.deploy()
       }
     }
   }

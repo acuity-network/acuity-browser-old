@@ -41,13 +41,14 @@
   const Base58 = require("base-58")
   require('../brotli.js')
   const bro = new Brotli('/static/')
-  import router from '../router/index.js'
+
+  import MixAccount from '../../lib/MixAccount.js'
 
   export default {
     name: 'publish-image',
     components: {},
     methods: {
-      chooseFile: function (event) {
+      chooseFile (event) {
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose image',
@@ -56,7 +57,7 @@
           window.fileNames = fileNames;
         })
       },
-      publish: event => {
+      publish (event) {
         const pica = require('pica')()
         function scaleImage(rawImageData, width, height) {
           return pica.resizeBuffer({
@@ -104,7 +105,8 @@
           var imageMessage = new jpegImageProto.JpegMipmap()
           imageMessage.setWidth(rawImageData.width)
           imageMessage.setHeight(rawImageData.height)
-          mipmaps.forEach(function(mipmap) {
+
+          mipmaps.forEach(mipmap => {
             var mipmapLevelMessage = new jpegImageProto.MipmapLevel()
             mipmapLevelMessage.setFilesize(mipmap.data.Size)
             mipmapLevelMessage.setIpfsHash(Base58.decode(mipmap.data.Hash))
@@ -161,6 +163,8 @@
           var data = new FormData()
           data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
 
+          var hashHex;
+
           // Send a POST request
           axios.post('http://127.0.0.1:5001/api/v0/add', data)
             .then(response => {
@@ -175,31 +179,26 @@
                 throw 'Wrong type of multihash.'
               }
 
-              var hashHex = '0x' + decodedHash.digest.toString('hex')
+              hashHex = '0x' + decodedHash.digest.toString('hex')
               console.log(hashHex)
 
-              const Web3 = require('web3')
-              var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
-              web3.eth.defaultAccount = '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'
-
+              var account = new MixAccount(this, this.$web3.eth.defaultAccount)
+              return account.init()
+            })
+            .then (account => {
               const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
-              const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
+              const itemStoreIpfsSha256 = new this.$web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
 
-              var flagsNonce = '0x00' + web3.utils.keccak256(Math.random().toString()).substr(4)
+              var flagsNonce = '0x00' + this.$web3.utils.keccak256(Math.random().toString()).substr(4)
               console.log(flagsNonce)
-              itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call().then(itemId => {
+              account.call(itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32).then(itemId => {
                 console.log(itemId)
 
-                itemStoreIpfsSha256.methods.create(flagsNonce, hashHex).send({
-                  from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                  gas: 1000000,
-                  gasPrice: 1
-                }).then(result => {
-                })
-                router.push({ name: 'item', params: { itemId: itemId }})
+                account.send(itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
+                this.$router.push({ name: 'item', params: { itemId: itemId }})
               })
             })
-            .catch(function (error) {
+            .catch(error => {
               console.log(error)
             })
           })

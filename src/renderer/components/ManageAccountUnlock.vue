@@ -15,7 +15,7 @@
             <b-field label="Password">
               <b-input type="password" id="password" password-reveal></b-input>
             </b-field>
-            <button type="submit "class="button is-primary">Unlock</button>
+            <button type="submit" class="button is-primary">Unlock</button>
           </form>
         </div>
       </section>
