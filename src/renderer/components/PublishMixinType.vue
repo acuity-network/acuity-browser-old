@@ -42,7 +42,7 @@
     name: 'publish-mixin-type',
     components: {},
     methods: {
-      publish: function (event) {
+      publish (event) {
         // `this` inside methods points to the Vue instance
         console.log('Publishing mixin type.')
 
@@ -55,7 +55,7 @@
 
         // Language
         var languageMessage = new this.$languageProto.LanguageMixin()
-        languageMessage.setLanguageTag('en-US');
+        languageMessage.setLanguageTag('en-US')
 
         mixinMessage = new this.$itemProto.Mixin()
         mixinMessage.setMixinId(0x4e4e06c4)
@@ -63,11 +63,8 @@
         itemMessage.addMixin(mixinMessage)
 
         // Title
-        var title = document.getElementById('title').value
-        console.log(title)
-
         var titleMessage = new this.$titleProto.TitleMixin()
-        titleMessage.setTitle(title)
+        titleMessage.setTitle(document.getElementById('title').value)
 
         mixinMessage = new this.$itemProto.Mixin()
         mixinMessage.setMixinId(0x24da6114)
@@ -75,12 +72,9 @@
         itemMessage.addMixin(mixinMessage)
 
         // Schema
-        var schema = document.getElementById('schema').value
-        console.log(schema)
-
         if (schema.length > 0) {
           var bodyTextMessage = new this.$bodyTextProto.BodyTextMixin()
-          bodyTextMessage.setBodyText(schema)
+          bodyTextMessage.setBodyText(document.getElementById('schema').value)
 
           mixinMessage = new this.$itemProto.Mixin()
           mixinMessage.setMixinId(0x34a9a6ec)
@@ -89,11 +83,8 @@
         }
 
         // Description
-        var description = document.getElementById('description').value
-        console.log(description)
-
         var descriptionMessage = new this.$descriptionProto.DescriptionMixin()
-        descriptionMessage.setDescription(description)
+        descriptionMessage.setDescription(document.getElementById('description').value)
 
         mixinMessage = new this.$itemProto.Mixin()
         mixinMessage.setMixinId(0x5a474550)
@@ -111,59 +102,50 @@
 
         // Send a POST request
         this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-          .then(function (response) {
-            var hash = response.data.Hash
-            console.log(hash)
+        .then(response => {
+          var hash = response.data.Hash
+          console.log(hash)
 
-            const multihash = require('multihashes');
-            var decodedHash = multihash.decode(multihash.fromB58String(hash))
-            console.log(decodedHash)
+          const multihash = require('multihashes')
+          var decodedHash = multihash.decode(multihash.fromB58String(hash))
+          console.log(decodedHash)
 
-            if (decodedHash.name != 'sha2-256') {
-              throw 'Wrong type of multihash.'
-            }
+          if (decodedHash.name != 'sha2-256') {
+            throw 'Wrong type of multihash.'
+          }
 
-            var hashHex = '0x' + decodedHash.digest.toString('hex')
-            console.log(hashHex)
+          var hashHex = '0x' + decodedHash.digest.toString('hex')
+          console.log(hashHex)
 
-            const Web3 = require('web3')
-            var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
-            web3.eth.defaultAccount = '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'
+          var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+          console.log(flagsNonce)
+          this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
+          .then(itemId => {
+            console.log(itemId)
 
-            const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
-            const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
+            const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
+            const itemStoreShortId = new this.$web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
 
-            var flagsNonce = '0x00' + web3.utils.randomHex(30).substr(2)
-            console.log(flagsNonce)
-            itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call().then(function(itemId) {
-              console.log(itemId)
-
-              const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
-              const itemStoreShortId = new web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
-
-              itemStoreShortId.methods.createShortId(itemId).send({from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'}).then(function(shortId) {
-                console.log(shortId)
-              })
-
-              itemStoreIpfsSha256.methods.create(flagsNonce, hashHex).send({
-                from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                gas: 1000000
-              }).then(function(result) {
-                console.log(result)
-              })
-
+            itemStoreShortId.methods.createShortId(itemId).send({from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'})
+            .then(shortId => {
+              console.log(shortId)
             })
+
+            this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex).send({
+              from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+              gas: 1000000
+            })
+            .then(result => {
+              console.log(result)
+            })
+
           })
-          .catch(function (error) {
-            console.log(error)
-          })
+        })
+        .catch(error => {
+          console.log(error)
+        })
       }
     },
-    data () {
-      return {
-        electron: this.$web3.version
-      }
-    }
   }
 </script>
 

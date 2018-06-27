@@ -4,7 +4,7 @@
     <nav class="navbar is-fixed-bottom" role="navigation" aria-label="main navigation">
       <div class="navbar-menu is-active">
         <div class="navbar-start">
-          <router-link class="navbar-item" to="/home" title="Home"><img src="/static/icons/home.svg" width="64" height="64"></router-link>
+          <router-link class="navbar-item" to="/item/0x2d54bddf4be19c6c2bea6f06c5a99785341a06fd2a60c6fa853417ee7611d31c" title="Home"><img src="/static/icons/home.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/feeds" title="Feeds"><img src="/static/icons/feeds.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/interactions" title="Interactions"><img src="/static/icons/interactions.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/browsing-history" title="Browsing history"><img src="/static/icons/browsing-history.svg" width="64" height="64"></router-link>

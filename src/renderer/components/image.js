@@ -1,14 +1,14 @@
 const fs = require('fs')
 const jpeg = require('jpeg-js')
 const pica = require('pica')()
-import axios from 'axios'
 import jpegImageProto from '../jpeg-image_pb.js'
 const Base58 = require("base-58")
 import itemProto from '../item_pb.js'
 
 export default class Image {
 
-  constructor(filepath) {
+  constructor(vue, filepath) {
+    this.vue = vue
     this.filepath = filepath
   }
 
@@ -19,7 +19,8 @@ export default class Image {
       height: rawImageData.height,
       toWidth: width,
       toHeight: height
-    }).then(result => {
+    })
+    .then(result => {
       rawImageData = {
         data: result,
         width: width,
@@ -30,7 +31,7 @@ export default class Image {
       var data = new FormData()
       data.append('', new File([jpegImageData.data], {type: 'application/octet-stream'}))
 
-      return axios.post('http://127.0.0.1:5001/api/v0/add', data)
+      return this.vue.$http.post('http://127.0.0.1:5001/api/v0/add', data)
     })
   }
 
@@ -50,11 +51,12 @@ export default class Image {
     }
     while (width > 64 && height > 64)
 
-    return Promise.all(mipmaps).then(mipmaps => {
+    return Promise.all(mipmaps)
+    .then(mipmaps => {
       var imageMessage = new jpegImageProto.JpegMipmap()
       imageMessage.setWidth(rawImageData.width)
       imageMessage.setHeight(rawImageData.height)
-      mipmaps.forEach(function(mipmap) {
+      mipmaps.forEach(mipmap => {
         var mipmapLevelMessage = new jpegImageProto.MipmapLevel()
         mipmapLevelMessage.setFilesize(mipmap.data.Size)
         mipmapLevelMessage.setIpfsHash(Base58.decode(mipmap.data.Hash))

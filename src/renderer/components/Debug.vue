@@ -43,7 +43,7 @@
     methods: {
       read (event) {
         const output = document.getElementById('output')
-        output.innerHTML = '';
+        output.innerHTML = ''
         const itemId = document.getElementById('itemId').value
 
         const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
@@ -67,21 +67,18 @@
             .then(inUse => {
               if (!inUse) {
                 output.append('Item not found.\n')
-                return;
+                return
               }
 
               itemStore.methods.getContractId().call()
               .then(contractId => {
                 if (contractId != "0x2d54bddf4be19c6c") {
                   output.append('Unknown item store.\n')
-                  return;
+                  return
                 }
                 output.append('itemStore: ItemStoreIpfsSha256\n')
 
-                const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
-                const itemStoreIpfsSha256 = new this.$web3.eth.Contract(itemStoreIpfsSha256Abi, itemStoreAddress)
-
-                itemStoreIpfsSha256.methods.getItem(itemId).call()
+                this.$itemStoreIpfsSha256.methods.getItem(itemId).call()
                 .then(item => {
                   output.append('Updatable: ' + ((item.flags & 0x01) ? 'true' : 'false') + '\n')
                   output.append('Enforce revisions: ' + ((item.flags & 0x02) ? 'true' : "false") + '\n')
@@ -130,31 +127,31 @@
                       switch (mixinId) {
                         case '0x51c32e3a':
                           output.append('Mixin type: Mixin type\n')
-                          break;
+                          break
 
                         case '0x4e4e06c4':
                           output.append('Mixin type: Language\n')
                           var languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
                           output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
-                          break;
+                          break
 
                         case '0x24da6114':
                           output.append('Mixin type: Title\n')
                           var titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
                           output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
-                          break;
+                          break
 
                         case '0x34a9a6ec':
                           output.append('Mixin type: Body text\n')
                           var bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
                           output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
-                          break;
+                          break
 
                         case '0x5a474550':
                           output.append('Mixin type: Description\n')
                           var descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
                           output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
-                          break;
+                          break
 
                         case '0x12745469':
                           output.append('Mixin type: Image\n')
@@ -174,12 +171,11 @@
                             el.innerHTML = domString
                             output.appendChild(el.firstChild)
                           }
-
-                          break;
+                          break
 
                         case '0xbcec8faa':
                           output.append('Mixin type: Topic Feed\n')
-                          break;
+                          break
                       }
                     }
                   })

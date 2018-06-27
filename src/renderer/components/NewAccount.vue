@@ -26,16 +26,12 @@
 </template>
 
 <script>
-  const Web3 = require('web3')
-  var net = require('net')
-  var web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/mix-blockchain/mix.ipc', net))
-
   export default {
     name: 'new-account',
     components: {},
     methods: {
-      create: event => {
-        web3.eth.personal.newAccount(document.getElementById('password').value)
+      create (event) {
+        this.$web3.eth.personal.newAccount(document.getElementById('password').value)
       }
     }
   }

@@ -50,23 +50,11 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import itemProto from '../item_pb.js'
   import profileProto from '../account-profile_pb.js'
   import titleProto from '../title_pb.js'
   import bodyTextProto from '../body_pb.js'
-  require('../brotli.js')
-  const bro = new Brotli('/static/')
   const multihash = require('multihashes')
-  const Web3 = require('web3')
-  var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
-  web3.eth.defaultAccount = '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'
-  web3.eth.defaultBlock = 'pending'
-  const accountProfileAbi = require('./AccountProfile.abi.json')
-  const accountProfile = new web3.eth.Contract(accountProfileAbi, '0x72f52ab6b1d15630ee9b2d8763b23478c0327df8')
-  const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
-  const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
-  import router from '../router/index.js'
   import MixItem from './mix_item.js'
   import Image from './image.js'
 
@@ -75,7 +63,7 @@
     components: {},
     asyncComputed: {
       name() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -88,7 +76,7 @@
         })
       },
       bio() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -101,7 +89,7 @@
         })
       },
       location() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -117,7 +105,7 @@
         })
       },
       type() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -134,16 +122,16 @@
       }
     },
     methods: {
-      chooseFile: function (event) {
+      chooseFile (event) {
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose image',
           filters: [{name: 'Images', extensions: ['jpg', 'png', 'gif']}]
         }, (fileNames) => {
-          window.fileNames = fileNames;
+          window.fileNames = fileNames
         })
       },
-      publish: event => {
+      publish (event) {
         var itemMessage = new itemProto.Item()
 
         // Account profile
@@ -175,13 +163,13 @@
         itemMessage.addMixin(mixinMessage)
 
         // Image
-        var image = new Image(window.fileNames[0])
+        var image = new Image(this, window.fileNames[0])
         image.createMixin()
         .then(imageMixin => {
           itemMessage.addMixin(imageMixin)
 
           var itemPayload = itemMessage.serializeBinary()
-          var output = bro.compressArray(itemPayload, 11)
+          var output = this.$brotli.compressArray(itemPayload, 11)
 
           var data = new FormData()
           data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
@@ -189,47 +177,47 @@
           var hexHash
 
           // Publish to IPFS.
-          axios.post('http://127.0.0.1:5001/api/v0/add', data)
-            .then(response => {
-              hexHash = '0x' + multihash.decode(multihash.fromB58String(response.data.Hash)).digest.toString('hex')
-              return accountProfile.methods.getProfile().call()
+          this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
+          .then(response => {
+            hexHash = '0x' + multihash.decode(multihash.fromB58String(response.data.Hash)).digest.toString('hex')
+            return this.$accountProfile.methods.getProfile().call()
+          })
+          .then(itemId => {
+            console.log(itemId)
+            this.$itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash).send({
+              from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+              gas: 1000000,
+              gasPrice: 1
             })
-            .then(itemId => {
-              console.log(itemId)
-              itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash).send({
-                from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                gas: 1000000,
-                gasPrice: 1
-              })
-              router.push({ name: 'profile' })
-            })
-            .catch(err => {
-              console.log('No profile item found, creating new one.')
-              var flagsNonce = '0x01' + web3.utils.randomHex(30).substr(2)
-              web3.eth.getTransactionCount('0xe58b128142a5e94b169396dd021f5f02fa38b3b0')
-              .then (nonce => {
-                itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
-                .then(itemId => {
-                  itemStoreIpfsSha256.methods.create(flagsNonce, hexHash).send({
-                    from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                    gas: 1000000,
-                    gasPrice: 1,
-                    nonce: nonce
-                  }).then(result => {
-                    console.log(result)
-                  })
-                  accountProfile.methods.setProfile(itemId).send({
-                    from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-                    gas: 1000000,
-                    gasPrice: 1,
-                    nonce: nonce + 1
-                  }).then(result => {
-                    console.log(result)
-                  })
+            router.push({ name: 'profile' })
+          })
+          .catch(err => {
+            console.log('No profile item found, creating new one.')
+            var flagsNonce = '0x01' + this.$web3.utils.randomHex(30).substr(2)
+            this.$web3.eth.getTransactionCount('0xe58b128142a5e94b169396dd021f5f02fa38b3b0')
+            .then (nonce => {
+              this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
+              .then(itemId => {
+                this.$itemStoreIpfsSha256.methods.create(flagsNonce, hexHash).send({
+                  from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+                  gas: 1000000,
+                  gasPrice: 1,
+                  nonce: nonce
+                }).then(result => {
+                  console.log(result)
+                })
+                this.$accountProfile.methods.setProfile(itemId).send({
+                  from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
+                  gas: 1000000,
+                  gasPrice: 1,
+                  nonce: nonce + 1
+                }).then(result => {
+                  console.log(result)
                 })
               })
             })
           })
+        })
       }
     }
   }

@@ -1,7 +1,4 @@
 const multihashes = require('multihashes')
-import axios from 'axios'
-require('../brotli.js')
-const bro = new Brotli('/static/')
 import itemProto from '../item_pb.js'
 import titleProto from '../title_pb.js'
 import jpegImageProto from '../jpeg-image_pb.js'
@@ -11,10 +8,11 @@ const Base58 = require("base-58")
 
 export default class MixRevision {
 
-  constructor(item, revisionId) {
+  constructor(vue, item, revisionId) {
+    this.vue = vue
     this.item = item
     this.revisionId = revisionId
-    this.mixins = [];
+    this.mixins = []
   }
 
   load() {
@@ -22,10 +20,10 @@ export default class MixRevision {
 
       const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(this.item.item.ipfsHashes[this.revisionId].substr(2), "hex"), 'sha2-256'))
 
-      return axios.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
+      return this.vue.$http.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
       .then(response => {
         const containerPayload = new Uint8Array(Buffer.from(response.data, "binary"))
-        const itemPayload = bro.decompressArray(containerPayload)
+        const itemPayload = this.vue.$brotli.decompressArray(containerPayload)
         const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
         const mixins = itemMessage.getMixinList()
 
@@ -53,15 +51,15 @@ export default class MixRevision {
   getImage() {
     for (var i = 0; i < this.mixins.length; i++) {
       if (this.mixins[i].mixinId == '0x12745469') {
-        var imageMessage = new jpegImageProto.JpegMipmap.deserializeBinary(this.mixins[i].mixinPayload);
-        var width = imageMessage.getWidth();
-        var height = imageMessage.getHeight();
-        var mipmapList = imageMessage.getMipmapLevelList();
+        var imageMessage = new jpegImageProto.JpegMipmap.deserializeBinary(this.mixins[i].mixinPayload)
+        var width = imageMessage.getWidth()
+        var height = imageMessage.getHeight()
+        var mipmapList = imageMessage.getMipmapLevelList()
 
         for (var i = 0; i < mipmapList.length; i++) {
-          var scale = Math.pow(2, i + 1);
+          var scale = Math.pow(2, i + 1)
           if (width / scale < 2048) {
-            break;
+            break
           }
         }
 

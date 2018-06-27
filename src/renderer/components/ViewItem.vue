@@ -35,7 +35,7 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        var item = new MixItem(vm.$route.params.itemId)
+        var item = new MixItem(vm, vm.$route.params.itemId)
 
         return item.init()
         .then(item => {

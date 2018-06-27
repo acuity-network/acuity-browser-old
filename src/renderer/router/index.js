@@ -1,9 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Web3 from 'web3'
-
-Vue.prototype.$web3 = new Web3('http://localhost:8645')
-
 Vue.use(Router)
 
 export default new Router({
@@ -55,7 +51,7 @@ export default new Router({
     {
       path: '/publish-item/feed-personal',
       name: 'publish-feed',
-      component: require('@/components/PublishPersonalFeed').default
+      component: require('@/components/PublishTopicFeed').default
     },
     {
       path: '/publish-item/feed-topic',

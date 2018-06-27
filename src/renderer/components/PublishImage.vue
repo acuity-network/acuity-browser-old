@@ -41,8 +41,7 @@
   import bodyTextProto from '../body_pb.js'
   import descriptionProto from '../description_pb.js'
   import jpegImageProto from '../jpeg-image_pb.js'
-  const Base58 = require("base-58")
-
+  import Image from './image.js'
   import MixAccount from '../../lib/MixAccount.js'
 
   export default {
@@ -55,88 +54,32 @@
           title: 'Choose image',
           filters: [{name: 'Images', extensions: ['jpg', 'png', 'gif']}]
         }, (fileNames) => {
-          window.fileNames = fileNames;
+          window.fileNames = fileNames
         })
       },
       publish (event) {
-        const pica = require('pica')()
-        function scaleImage(vue, rawImageData, width, height) {
-          return pica.resizeBuffer({
-            src: rawImageData.data,
-            width: rawImageData.width,
-            height: rawImageData.height,
-            toWidth: width,
-            toHeight: height
-          }).then(result => {
-            rawImageData = {
-              data: result,
-              width: width,
-              height: height
-            }
-            var jpegImageData = jpeg.encode(rawImageData, 70)
-
-            var data = new FormData()
-            data.append('', new File([jpegImageData.data], {type: 'application/octet-stream'}))
-
-            return vue.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-          })
-        }
-
-        console.log('Publishing Image.')
         console.log(window.fileNames[0])
 
-        const fs = require('fs')
-        const jpeg = require('jpeg-js')
-        var jpegData = fs.readFileSync(window.fileNames[0])
-        var rawImageData = jpeg.decode(jpegData)
-
-        var mipmaps = []
-        var level = 1
-        do {
-          var scale = Math.pow(2, level)
-          var width = Math.floor(rawImageData.width / scale)
-          var height = Math.floor(rawImageData.height / scale)
-          console.log(level, width, height)
-          mipmaps.push(scaleImage(this, rawImageData, width, height))
-          level++
-        }
-        while (width > 64 && height > 64)
-
-        Promise.all(mipmaps).then(mipmaps => {
-          var imageMessage = new jpegImageProto.JpegMipmap()
-          imageMessage.setWidth(rawImageData.width)
-          imageMessage.setHeight(rawImageData.height)
-
-          mipmaps.forEach(mipmap => {
-            var mipmapLevelMessage = new jpegImageProto.MipmapLevel()
-            mipmapLevelMessage.setFilesize(mipmap.data.Size)
-            mipmapLevelMessage.setIpfsHash(Base58.decode(mipmap.data.Hash))
-            imageMessage.addMipmapLevel(mipmapLevelMessage)
-          })
-
+        var image = new Image(this, window.fileNames[0])
+        image.createMixin()
+        .then(imageMixin => {
           var itemMessage = new itemProto.Item()
 
           // Image
-          var mixinMessage = new itemProto.Mixin()
-          mixinMessage.setMixinId(0x12745469)
-          mixinMessage.setPayload(imageMessage.serializeBinary())
-          itemMessage.addMixin(mixinMessage)
+          itemMessage.addMixin(imageMixin)
 
           // Language
           var languageMessage = new languageProto.LanguageMixin()
-          languageMessage.setLanguageTag('en-US');
+          languageMessage.setLanguageTag('en-US')
 
-          mixinMessage = new itemProto.Mixin()
+          var mixinMessage = new itemProto.Mixin()
           mixinMessage.setMixinId(0x4e4e06c4)
           mixinMessage.setPayload(languageMessage.serializeBinary())
           itemMessage.addMixin(mixinMessage)
 
           // Title
-          var title = document.getElementById('title').value
-          console.log(title)
-
           var titleMessage = new titleProto.TitleMixin()
-          titleMessage.setTitle(title)
+          titleMessage.setTitle(document.getElementById('title').value)
 
           mixinMessage = new itemProto.Mixin()
           mixinMessage.setMixinId(0x24da6114)
@@ -144,11 +87,8 @@
           itemMessage.addMixin(mixinMessage)
 
           // Description
-          var description = document.getElementById('description').value
-          console.log(description)
-
           var descriptionMessage = new descriptionProto.DescriptionMixin()
-          descriptionMessage.setDescription(description)
+          descriptionMessage.setDescription(document.getElementById('description').value)
 
           mixinMessage = new itemProto.Mixin()
           mixinMessage.setMixinId(0x5a474550)
@@ -164,60 +104,52 @@
           var data = new FormData()
           data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
 
-          var hashHex;
+          var hashHex
 
           // Send a POST request
           this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-            .then(response => {
-              var hash = response.data.Hash
-              console.log(hash)
+          .then(response => {
+            var hash = response.data.Hash
+            console.log(hash)
 
-              const multihash = require('multihashes');
-              var decodedHash = multihash.decode(multihash.fromB58String(hash))
-              console.log(decodedHash)
+            const multihash = require('multihashes')
+            var decodedHash = multihash.decode(multihash.fromB58String(hash))
+            console.log(decodedHash)
 
-              if (decodedHash.name != 'sha2-256') {
-                throw 'Wrong type of multihash.'
+            if (decodedHash.name != 'sha2-256') {
+              throw 'Wrong type of multihash.'
+            }
+
+            hashHex = '0x' + decodedHash.digest.toString('hex')
+            console.log(hashHex)
+
+            var account = new MixAccount(this, this.$web3.eth.defaultAccount)
+            return account.init()
+          })
+          .then (account => {
+            var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+            console.log(flagsNonce)
+            account.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32)
+            .then(itemId => {
+              console.log(itemId)
+
+              var parentId = document.getElementById('parentId').value
+
+              if (parentId) {
+                account.send(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId), 0, 0)
               }
-
-              hashHex = '0x' + decodedHash.digest.toString('hex')
-              console.log(hashHex)
-
-              var account = new MixAccount(this, this.$web3.eth.defaultAccount)
-              return account.init()
-            })
-            .then (account => {
-              const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
-              const itemStoreIpfsSha256 = new this.$web3.eth.Contract(itemStoreIpfsSha256Abi, '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
-
-              var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-              console.log(flagsNonce)
-              account.call(itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32)
-              .then(itemId => {
-                console.log(itemId)
-
-                var parentId = document.getElementById('parentId').value;
-
-                if (parentId) {
-                  account.send(itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId), 0, 0)
-                }
-                else {
-                  account.send(itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
-                }
-                this.$router.push({ name: 'item', params: { itemId: itemId }})
-              })
-            })
-            .catch(error => {
-              console.log(error)
+              else {
+                account.send(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
+              }
+              this.$router.push({ name: 'item', params: { itemId: itemId }})
             })
           })
+          .catch(error => {
+            console.log(error)
+          })
+        })
       }
     },
-    data () {
-      return {
-        electron: this.$web3.version
-      }
-    }
   }
 </script>
 

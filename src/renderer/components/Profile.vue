@@ -26,13 +26,6 @@
 </template>
 
 <script>
-  const Web3 = require('web3')
-  var net = require('net')
-  var web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/mix-blockchain/mix.ipc', net))
-  web3.eth.defaultAccount = '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'
-  web3.eth.defaultBlock = 'pending'
-  const accountProfileAbi = require('./AccountProfile.abi.json')
-  const accountProfile = new web3.eth.Contract(accountProfileAbi, '0x72f52ab6b1d15630ee9b2d8763b23478c0327df8')
   import MixItem from './mix_item.js'
 
   export default {
@@ -40,7 +33,7 @@
     components: {},
     asyncComputed: {
       title() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -53,7 +46,7 @@
         })
       },
       bio() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -66,7 +59,7 @@
         })
       },
       image() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -79,7 +72,7 @@
         })
       },
       location() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -95,7 +88,7 @@
         })
       },
       type() {
-        return accountProfile.methods.getProfile().call()
+        return this.$accountProfile.methods.getProfile().call()
         .then(itemId => {
           var item = new MixItem(itemId)
           return item.init()
@@ -108,13 +101,14 @@
         })
         .then(result => {
           switch (result.type) {
-            case 0: return 'Anon';
-            case 1: return 'Person';
-            case 2: return 'Project';
-            case 3: return 'Organization';
-            case 4: return 'Proxy';
-            case 5: return 'Parody';
-            case 6: return 'Bot';
+            case 0: return 'Anon'
+            case 1: return 'Person'
+            case 2: return 'Project'
+            case 3: return 'Organization'
+            case 4: return 'Proxy'
+            case 5: return 'Parody'
+            case 6: return 'Bot'
+            case 7: return 'Shill'
           }
         })
       }
