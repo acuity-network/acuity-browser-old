@@ -21,58 +21,33 @@
 </template>
 
 <script>
-  import languageProto from '../language_pb.js'
-  import titleProto from '../title_pb.js'
-  import bodyTextProto from '../body_pb.js'
-  import descriptionProto from '../description_pb.js'
-  import jpegImageProto from '../jpeg-image_pb.js'
-  const Base58 = require("base-58")
-  import router from '../router/index.js'
   import MixItem from './mix_item.js'
 
   export default {
     name: 'view-item',
     components: {},
-    asyncComputed: {
-      title() {
-
-        var item = new MixItem(this.$route.params.itemId)
-
-        return item.init()
-        .then(item => {
-          console.log(item)
-          return item.revisions[0].load()
-        })
-        .then(revision => {
-          return revision.getTitle()
-        })
-      },
-      body() {
-
-        var item = new MixItem(this.$route.params.itemId)
-
-        return item.init()
-        .then(item => {
-          console.log(item)
-          return item.revisions[0].load()
-        })
-        .then(revision => {
-          return revision.getImage()
-        })
-      },
-      description() {
-
-        var item = new MixItem(this.$route.params.itemId)
-
-        return item.init()
-        .then(item => {
-          console.log(item)
-          return item.revisions[0].load()
-        })
-        .then(revision => {
-          return revision.getDescription()
-        })
+    data() {
+      return {
+        title: '',
+        body: '',
+        description: '',
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        var item = new MixItem(vm.$route.params.itemId)
+
+        return item.init()
+        .then(item => {
+          console.log(item)
+          return item.revisions[0].load()
+        })
+        .then(revision => {
+          vm.title = revision.getTitle()
+          vm.body = revision.getImage()
+          vm.description = revision.getDescription()
+        })
+      })
     }
   }
 </script>
