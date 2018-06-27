@@ -53,6 +53,16 @@ export default new Router({
       component: require('@/components/PublishImage').default
     },
     {
+      path: '/publish-item/feed-personal',
+      name: 'publish-feed',
+      component: require('@/components/PublishPersonalFeed').default
+    },
+    {
+      path: '/publish-item/feed-topic',
+      name: 'publish-feed',
+      component: require('@/components/PublishTopicFeed').default
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: require('@/components/Profile').default

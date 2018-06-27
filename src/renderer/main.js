@@ -30,7 +30,7 @@ import jpegImageProto from './jpeg-image_pb.js'
 Vue.prototype.$jpegImageProto = jpegImageProto
 
 require('./brotli.js')
-Vue.prototype.$bro = new Brotli('/static/')
+Vue.prototype.$brotli = new Brotli('/static/')
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios

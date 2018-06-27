@@ -15,6 +15,8 @@
           <ul>
             <li><router-link to="/publish-item/mixin-type">Publish Mixin type</router-link></li>
             <li><router-link to="/publish-item/image">Publish Image</router-link></li>
+            <li><router-link to="/publish-item/feed-personal">Publish Personal Feed</router-link></li>
+            <li><router-link to="/publish-item/feed-topic">Publish Topic Feed</router-link></li>
           </ul>
         </div>
       </section>
