@@ -5,7 +5,7 @@
       <section class="hero is-primary">
         <div class="hero-body">
           <div class="container">
-            <h1 class="title">Publish Image</h1>
+            <h1 class="title">Publish Personal Feed</h1>
           </div>
         </div>
       </section>
@@ -21,10 +21,6 @@
             <b-input id="description" type="textarea"></b-input>
           </b-field>
 
-          <b-field label="Parent itemId">
-            <b-input id="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
-          </b-field>
-
           <button class="button" v-on:click="chooseFile">Choose image</button>
           <button class="button is-primary" v-on:click="publish">Publish</button>
 
@@ -35,6 +31,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   import itemProto from '../item_pb.js'
   import languageProto from '../language_pb.js'
   import titleProto from '../title_pb.js'
@@ -42,6 +39,8 @@
   import descriptionProto from '../description_pb.js'
   import jpegImageProto from '../jpeg-image_pb.js'
   const Base58 = require("base-58")
+  require('../brotli.js')
+  const bro = new Brotli('/static/')
 
   import MixAccount from '../../lib/MixAccount.js'
 
@@ -60,7 +59,7 @@
       },
       publish (event) {
         const pica = require('pica')()
-        function scaleImage(vue, rawImageData, width, height) {
+        function scaleImage(rawImageData, width, height) {
           return pica.resizeBuffer({
             src: rawImageData.data,
             width: rawImageData.width,
@@ -78,7 +77,7 @@
             var data = new FormData()
             data.append('', new File([jpegImageData.data], {type: 'application/octet-stream'}))
 
-            return vue.$http.post('http://127.0.0.1:5001/api/v0/add', data)
+            return axios.post('http://127.0.0.1:5001/api/v0/add', data)
           })
         }
 
@@ -97,7 +96,7 @@
           var width = Math.floor(rawImageData.width / scale)
           var height = Math.floor(rawImageData.height / scale)
           console.log(level, width, height)
-          mipmaps.push(scaleImage(this, rawImageData, width, height))
+          mipmaps.push(scaleImage(rawImageData, width, height))
           level++
         }
         while (width > 64 && height > 64)
@@ -158,7 +157,7 @@
           var itemPayload = itemMessage.serializeBinary()
           console.log(itemPayload)
 
-          var output = this.$brotli.compressArray(itemPayload, 11)
+          var output = bro.compressArray(itemPayload, 11)
           console.log(output)
 
           var data = new FormData()
@@ -167,7 +166,7 @@
           var hashHex;
 
           // Send a POST request
-          this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
+          axios.post('http://127.0.0.1:5001/api/v0/add', data)
             .then(response => {
               var hash = response.data.Hash
               console.log(hash)
@@ -192,18 +191,10 @@
 
               var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
               console.log(flagsNonce)
-              account.call(itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32)
-              .then(itemId => {
+              account.call(itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32).then(itemId => {
                 console.log(itemId)
 
-                var parentId = document.getElementById('parentId').value;
-
-                if (parentId) {
-                  account.send(itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId), 0, 0)
-                }
-                else {
-                  account.send(itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
-                }
+                account.send(itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
                 this.$router.push({ name: 'item', params: { itemId: itemId }})
               })
             })
