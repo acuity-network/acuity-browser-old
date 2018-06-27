@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import itemProto from '../item_pb.js'
   import languageProto from '../language_pb.js'
   import titleProto from '../title_pb.js'
@@ -42,36 +41,37 @@
     name: 'debug',
     components: {},
     methods: {
-      read: function (event) {
+      read (event) {
         const output = document.getElementById('output')
         output.innerHTML = '';
         const itemId = document.getElementById('itemId').value
 
-        const Web3 = require('web3')
-        const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
-
         const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
-        const itemStoreShortId = new web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
+        const itemStoreShortId = new this.$web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
 
-        itemStoreShortId.methods.getShortId(itemId).call().then(function(shortId) {
+        itemStoreShortId.methods.getShortId(itemId).call()
+        .then(shortId => {
           output.appendChild(document.createTextNode('shortId: '  + shortId + '\n'))
 
           const itemStoreRegistryAbi = require('./ItemStoreRegistry.abi.json')
-          const itemStoreRegistry = new web3.eth.Contract(itemStoreRegistryAbi, '0xa46adddd3105715fa0ea0d4a883d4be99452c3f6')
+          const itemStoreRegistry = new this.$web3.eth.Contract(itemStoreRegistryAbi, '0xa46adddd3105715fa0ea0d4a883d4be99452c3f6')
 
-          itemStoreRegistry.methods.getItemStore(itemId).call().then(function(itemStoreAddress) {
+          itemStoreRegistry.methods.getItemStore(itemId).call()
+          .then(itemStoreAddress => {
             output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
 
             const itemStoreAbi = require('./ItemStoreInterface.abi.json')
-            const itemStore = new web3.eth.Contract(itemStoreAbi, itemStoreAddress)
+            const itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
-            itemStore.methods.getInUse(itemId).call().then(function(inUse) {
+            itemStore.methods.getInUse(itemId).call()
+            .then(inUse => {
               if (!inUse) {
                 output.append('Item not found.\n')
                 return;
               }
 
-              itemStore.methods.getContractId().call().then(function(contractId) {
+              itemStore.methods.getContractId().call()
+              .then(contractId => {
                 if (contractId != "0x2d54bddf4be19c6c") {
                   output.append('Unknown item store.\n')
                   return;
@@ -79,9 +79,10 @@
                 output.append('itemStore: ItemStoreIpfsSha256\n')
 
                 const itemStoreIpfsSha256Abi = require('./ItemStoreIpfsSha256.abi.json')
-                const itemStoreIpfsSha256 = new web3.eth.Contract(itemStoreIpfsSha256Abi, itemStoreAddress)
+                const itemStoreIpfsSha256 = new this.$web3.eth.Contract(itemStoreIpfsSha256Abi, itemStoreAddress)
 
-                itemStoreIpfsSha256.methods.getItem(itemId).call().then(function(item) {
+                itemStoreIpfsSha256.methods.getItem(itemId).call()
+                .then(item => {
                   output.append('Updatable: ' + ((item.flags & 0x01) ? 'true' : 'false') + '\n')
                   output.append('Enforce revisions: ' + ((item.flags & 0x02) ? 'true' : "false") + '\n')
                   output.append('Retractable: ' + ((item.flags & 0x04) ? 'true' : 'false') + '\n')
@@ -98,15 +99,12 @@
                   const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[0].substr(2), "hex"), 'sha2-256'))
                   output.append('Revision 0 IPFS hash: ' + ipfsHash + '\n')
 
-                  axios.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
-            .then(function (response) {
+                  this.$http.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
+                  .then(response => {
                     const containerPayload = new Uint8Array(Buffer.from(response.data, "binary"))
                     output.append('Compressed length: ' + containerPayload.length + '\n')
 
-                    require('../brotli.js')
-                    const bro = new Brotli('/static/')
-
-                    const itemPayload = bro.decompressArray(containerPayload)
+                    const itemPayload = this.$brotli.decompressArray(containerPayload)
                     output.append('Uncompressed length: ' + itemPayload.length + '\n')
 
                     const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
@@ -169,6 +167,10 @@
                             output.appendChild(el.firstChild)
                           }
 
+                          break;
+
+                        case '0xbcec8faa':
+                          output.append('Mixin type: Topic Feed\n')
                           break;
                       }
                     }
