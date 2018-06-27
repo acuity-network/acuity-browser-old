@@ -92,8 +92,16 @@
                   output.append('Parent count: ' + item.parentIds.length + '\n')
                   output.append('Child count: ' + item.childIds.length + '\n\n')
 
+                  for (var i = 0; i < item.parentIds.length; i++) {
+                    output.append('Parent #' + i + ': ' + item.parentIds[i] + '\n')
+                  }
+
+                  for (var i = 0; i < item.childIds.length; i++) {
+                    output.append('Child #' + i + ': ' + item.childIds[i] + '\n')
+                  }
+
                   const timestamp = new Date(item.timestamps[0] * 1000)
-                  output.append('Revision 0 timestamp: ' + timestamp + '\n')
+                  output.append('\nRevision 0 timestamp: ' + timestamp + '\n')
 
                   const multihashes = require('multihashes')
                   const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[0].substr(2), "hex"), 'sha2-256'))
