@@ -12,13 +12,12 @@ export default class MixAccount {
     .then(contractAddress => {
       this.contractAddress = contractAddress
       this.contract = new this.vue.$web3.eth.Contract(accountAbi, contractAddress)
-      return this
     })
   }
 
   deploy() {
     var fs = require('fs-extra')
-    fs.readFile('./src/lib/Account.bin', 'ascii')
+    return fs.readFile('./src/lib/Account.bin', 'ascii')
     .then(accountBytecode => {
       this.contract = new this.vue.$web3.eth.Contract(accountAbi)
       return this.contract.deploy({data: '0x' + accountBytecode}).send({
@@ -42,6 +41,12 @@ export default class MixAccount {
     })
   }
 
+  call(transaction) {
+    return transaction.call({
+      from: this.contractAddress
+    })
+  }
+
   unlock(password) {
     return this.vue.$web3.eth.personal.unlockAccount(this.controllerAddress, password, 0)
   }
@@ -50,45 +55,40 @@ export default class MixAccount {
     return this.vue.$web3.eth.personal.lockAccount(this.controllerAddress)
   }
 
-  _call(transaction) {
-    return transaction.call({
-      from: this.controllerAddress,
-    })
-  }
-
   _send(transaction, value) {
-    return transaction.estimateGas({
-      from: this.controllerAddress,
-      value: value,
-    })
-    .then (gas => {
-      return transaction.send({
+    return new Promise((resolve, reject) => {
+      transaction.estimateGas({
         from: this.controllerAddress,
-        gasPrice: 1,
-        gas: gas,
         value: value,
+      })
+      .then (gas => {
+        transaction.send({
+          from: this.controllerAddress,
+          gasPrice: 1,
+          gas: gas,
+          value: value,
+        })
+        .on('transactionHash', transactionHash => {
+          resolve(transactionHash)
+        })
       })
     })
   }
 
   setController(newController) {
-    return this._send(this.contract.methods.setControllerM(newController))
-  }
-
-  sendMix(to, value) {
-    return this._send(this.contract.methods.sendMix(to))
+    return this._send(this.contract.methods.setController(newController))
   }
 
   consolidateMix() {
-    return this._send(this.contract.methods.withdraw().send())
+    return this._send(this.contract.methods.withdraw())
   }
 
-  call(transaction, returnLength) {
-    return this._call(this.contract.methods.callH(transaction._parent._address, transaction.encodeABI(), returnLength))
+  sendMix(to, value) {
+    return this._send(this.contract.methods.sendMix(to), value)
   }
 
-  send(transaction, value, returnLength) {
-    return this._send(this.contract.methods.callH(transaction._parent._address, transaction.encodeABI(), returnLength), value)
+  sendData(transaction, value) {
+    return this._send(this.contract.methods.sendData(transaction._parent._address, transaction.encodeABI()), value)
   }
 
 }

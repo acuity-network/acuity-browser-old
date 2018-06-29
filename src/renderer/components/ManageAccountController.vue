@@ -13,12 +13,13 @@
       <section class="section">
         <div class="container">
           <img :src="qrcode" />
-          <h2 class="subtitle">Balance</h2>
+          <h2>Balance</h2>
           {{ balance }}
-        </div>
+          <h2>Contract</h2>
           {{ contract }}
-        <div>
-          <button class="button is-primary" v-on:click="activate">Activate account</button>
+          <div>
+            <button class="button is-primary" v-on:click="activate">Activate account</button>
+          </div>
         </div>
       </section>
     </main>

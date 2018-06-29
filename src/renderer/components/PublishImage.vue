@@ -129,17 +129,17 @@
           .then (account => {
             var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
             console.log(flagsNonce)
-            account.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32)
+            account.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
             .then(itemId => {
               console.log(itemId)
 
               var parentId = document.getElementById('parentId').value
 
               if (parentId) {
-                account.send(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId), 0, 0)
+                account.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId))
               }
               else {
-                account.send(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
+                account.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex))
               }
               this.$router.push({ name: 'item', params: { itemId: itemId }})
             })

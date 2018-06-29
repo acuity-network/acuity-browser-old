@@ -27,91 +27,80 @@
 
 <script>
   import MixItem from './mix_item.js'
+  import MixAccount from '../../lib/MixAccount.js'
 
   export default {
     name: 'profile',
     components: {},
-    asyncComputed: {
-      title() {
-        return this.$accountProfile.methods.getProfile().call()
-        .then(itemId => {
-          var item = new MixItem(itemId)
-          return item.init()
-        })
-        .then(item => {
-          return item.latestRevision().load()
-        })
-        .then(revision => {
-          return revision.getTitle()
-        })
-      },
-      bio() {
-        return this.$accountProfile.methods.getProfile().call()
-        .then(itemId => {
-          var item = new MixItem(itemId)
-          return item.init()
-        })
-        .then(item => {
-          return item.latestRevision().load()
-        })
-        .then(revision => {
-          return revision.getBodyText()
-        })
-      },
-      image() {
-        return this.$accountProfile.methods.getProfile().call()
-        .then(itemId => {
-          var item = new MixItem(itemId)
-          return item.init()
-        })
-        .then(item => {
-          return item.latestRevision().load()
-        })
-        .then(revision => {
-          return revision.getImage()
-        })
-      },
-      location() {
-        return this.$accountProfile.methods.getProfile().call()
-        .then(itemId => {
-          var item = new MixItem(itemId)
-          return item.init()
-        })
-        .then(item => {
-          return item.latestRevision().load()
-        })
-        .then(revision => {
-          return revision.getProfile()
-        })
-        .then(result => {
-          return result.location
-        })
-      },
-      type() {
-        return this.$accountProfile.methods.getProfile().call()
-        .then(itemId => {
-          var item = new MixItem(itemId)
-          return item.init()
-        })
-        .then(item => {
-          return item.latestRevision().load()
-        })
-        .then(revision => {
-          return revision.getProfile()
-        })
-        .then(result => {
-          switch (result.type) {
-            case 0: return 'Anon'
-            case 1: return 'Person'
-            case 2: return 'Project'
-            case 3: return 'Organization'
-            case 4: return 'Proxy'
-            case 5: return 'Parody'
-            case 6: return 'Bot'
-            case 7: return 'Shill'
-          }
-        })
+    data() {
+      return {
+        title: '',
+        bio: '',
+        image: '',
+        location: '',
+        type: '',
       }
-    }
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        var account = new MixAccount(vm, vm.$web3.eth.defaultAccount)
+        account.init()
+        .then(() => {
+          return account.call(vm.$accountProfile.methods.getProfile())
+        })
+        .then(itemId => {
+          var item = new MixItem(vm, itemId)
+
+          item.init()
+          .then(item => {
+            return item.latestRevision().load()
+          })
+          .then(revision => {
+            vm.title = revision.getTitle()
+            vm.bio = revision.getBodyText()
+            vm.image = revision.getImage()
+            var profile = revision.getProfile()
+            vm.location = profile.location
+
+            switch (profile.type) {
+              case 0:
+                vm.type = 'Anon'
+                break
+
+              case 1:
+                vm.type = 'Person'
+                break
+
+              case 2:
+                vm.type = 'Project'
+                break
+
+              case 3:
+                vm.type = 'Organization'
+                break
+
+              case 4:
+                vm.type = 'Proxy'
+                break
+
+              case 5:
+                vm.type = 'Parody'
+                break
+
+              case 6:
+                vm.type = 'Bot'
+                break
+
+              case 7:
+                vm.type = 'Shill'
+                break
+            }
+          })
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      })
+    },
   }
 </script>
