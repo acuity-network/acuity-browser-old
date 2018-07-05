@@ -15,6 +15,16 @@ export default class MixAccount {
     })
   }
 
+  _logTransaction(transaction, to, comment) {
+    console.log(transaction)
+    var info = {
+      hash: transaction.hash,
+      to: to,
+      comment: comment,
+    }
+    return this.vue.$db.put('/account/' + this.controllerAddress + '/transaction/' + transaction.nonce, info)
+  }
+
   deploy() {
     var fs = require('fs-extra')
     return fs.readFile('./src/lib/Account.bin', 'ascii')
@@ -61,7 +71,7 @@ export default class MixAccount {
         from: this.controllerAddress,
         value: value,
       })
-      .then (gas => {
+      .then(gas => {
         transaction.send({
           from: this.controllerAddress,
           gasPrice: 1,
@@ -69,7 +79,10 @@ export default class MixAccount {
           value: value,
         })
         .on('transactionHash', transactionHash => {
-          resolve(transactionHash)
+          return this.vue.$web3.eth.getTransaction(transactionHash)
+        })
+        .then(transaction => {
+          resolve(transaction)
         })
       })
     })
@@ -83,12 +96,64 @@ export default class MixAccount {
     return this._send(this.contract.methods.withdraw())
   }
 
-  sendMix(to, value) {
-    return this._send(this.contract.methods.sendMix(to), value)
+  sendMix(to, value, comment) {
+    // Check if the destination is a contract.
+    return this.vue.$web3.eth.getCode(to)
+    .then(data => {
+      if (data == '0x') {
+        // Send to a non-contract address.
+        return new Promise((resolve, reject) => {
+          this.vue.$web3.eth.sendTransaction({
+            from: this.controllerAddress,
+            to: to,
+            value: value,
+            gas: 21000,
+            gasPrice: 1,
+          })
+          .on('transactionHash', transactionHash => {
+            this.vue.$web3.eth.getTransaction(transactionHash)
+            .then(transaction => {
+              this._logTransaction(transaction, to, comment)
+              .then(() => {
+                resolve(transaction)
+              })
+            })
+          })
+        })
+      }
+      else {
+        // Send to a contract address.
+        return this._send(this.contract.methods.sendMix(to), value)
+        .then(transaction => {
+          return this._logTransaction(transaction, to, comment)
+          .then(() => {
+            return transaction
+          })
+        })
+      }
+    })
   }
 
-  sendData(transaction, value) {
-    return this._send(this.contract.methods.sendData(transaction._parent._address, transaction.encodeABI()), value)
+  sendData(transaction, value, comment) {
+    var to = transaction._parent._address
+    return this._send(this.contract.methods.sendData(to, transaction.encodeABI()), value)
+    .then(transaction => {
+      return this._logTransaction(transaction, to, comment)
+      .then(() => {
+        return transaction
+      })
+    })
+  }
+
+  getBalance() {
+    var BN = this.vue.$web3.utils.BN
+    return Promise.all([
+      this.vue.$web3.eth.getBalance(this.controllerAddress, 'pending'),
+      this.vue.$web3.eth.getBalance(this.contractAddress, 'pending'),
+    ])
+    .then(balances => {
+      return new BN(balances[0]).add(new BN(balances[1]))
+    })
   }
 
 }
