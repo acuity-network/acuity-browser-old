@@ -30,6 +30,10 @@
           <button type="submit" class="button is-primary" v-on:click="send">Send</button>
         </div>
 
+        <div class="container">
+          <b-table :data="data" :columns="columns" default-sort="nonce" default-sort-direction="desc"></b-table>
+        </div>
+
       </section>
     </main>
   </div>
@@ -38,6 +42,7 @@
 <script>
   var QRCode = require('qrcode')
   import MixAccount from '../../lib/MixAccount.js'
+
   export default {
     name: 'wallet',
     components: {},
@@ -49,6 +54,32 @@
         to: '',
         amount: '',
         comment: '',
+        data: [],
+        columns: [
+          {
+            field: 'nonce',
+            sortable: true,
+            visible: false,
+          },
+          {
+            field: 'when',
+            label: 'When',
+          },
+          {
+            field: 'to',
+            label: 'To',
+          },
+          {
+            field: 'fee',
+            label: 'Fee',
+            numeric: true
+          },
+          {
+            field: 'amount',
+            label: 'Amount',
+            numeric: true
+          },
+        ],
       }
     },
     methods: {
@@ -62,6 +93,7 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
+        var BN = vm.$web3.utils.BN
         var account = new MixAccount(vm, vm.$web3.eth.defaultAccount)
         account.init()
         .then(() => {
@@ -86,6 +118,23 @@
           account.getBalance()
           .then(balance => {
             vm.balance = vm.$web3.utils.fromWei(balance) + ' MIX'
+          })
+
+          vm.$web3.eth.getTransactionCount(vm.$web3.eth.defaultAccount)
+          .then(nonce => {
+            for (var i = 1; i <= 20; i++) {
+              account.getTransactionInfo(nonce - i)
+              .then(info => {
+                vm.data.push({
+                  'nonce': info.transaction.nonce,
+                  'when': info.block ? new Date(info.block.timestamp * 1000).toLocaleString() : 'pending',
+                  'to': info.to,
+                  'fee': info.receipt ? vm.$web3.utils.fromWei(new BN(info.receipt.gasUsed).mul(new BN(info.transaction.gasPrice))) : '?',
+                  'amount': vm.$web3.utils.fromWei(info.transaction.value),
+                })
+              })
+              .catch(err => {})
+            }
           })
         })
       })

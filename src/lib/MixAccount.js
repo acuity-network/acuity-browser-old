@@ -22,7 +22,7 @@ export default class MixAccount {
       to: to,
       comment: comment,
     }
-    return this.vue.$db.put('/account/' + this.controllerAddress + '/transaction/' + transaction.nonce, info)
+    return this.vue.$db.put('/account/' + this.controllerAddress + '/transaction/' + transaction.nonce, JSON.stringify(info))
   }
 
   deploy() {
@@ -153,6 +153,31 @@ export default class MixAccount {
     ])
     .then(balances => {
       return new BN(balances[0]).add(new BN(balances[1]))
+    })
+  }
+
+  getTransactionInfo(nonce) {
+    return this.vue.$db.get('/account/' + this.controllerAddress + '/transaction/' + nonce)
+    .then(infoJson => {
+      var info = JSON.parse(infoJson)
+      return Promise.all([
+        this.vue.$web3.eth.getTransaction(info.hash),
+        this.vue.$web3.eth.getTransactionReceipt(info.hash),
+      ])
+      .then(results => {
+        info.transaction = results[0]
+        info.receipt = results[1]
+        if (info.receipt) {
+          return this.vue.$web3.eth.getBlock(info.receipt.blockNumber)
+          .then(block => {
+            info.block = block
+            return info
+          })
+        }
+        else {
+          return info
+        }
+      })
     })
   }
 
