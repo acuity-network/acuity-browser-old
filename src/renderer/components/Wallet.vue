@@ -31,7 +31,7 @@
         </div>
 
         <div class="container">
-          <b-table :data="data" :columns="columns" default-sort="nonce" default-sort-direction="desc"></b-table>
+          <b-table :data="data" :columns="columns"></b-table>
         </div>
 
       </section>
@@ -56,11 +56,6 @@
         comment: '',
         data: [],
         columns: [
-          {
-            field: 'nonce',
-            sortable: true,
-            visible: false,
-          },
           {
             field: 'when',
             label: 'When',
@@ -120,21 +115,40 @@
             vm.balance = vm.$web3.utils.fromWei(balance) + ' MIX'
           })
 
-          vm.$web3.eth.getTransactionCount(vm.$web3.eth.defaultAccount)
-          .then(nonce => {
-            for (var i = 1; i <= 20; i++) {
-              account.getTransactionInfo(nonce - i)
-              .then(info => {
-                vm.data.push({
-                  'nonce': info.transaction.nonce,
-                  'when': info.block ? new Date(info.block.timestamp * 1000).toLocaleString() : 'pending',
-                  'to': info.to,
-                  'fee': info.receipt ? vm.$web3.utils.fromWei(new BN(info.receipt.gasUsed).mul(new BN(info.transaction.gasPrice))) : '?',
-                  'amount': vm.$web3.utils.fromWei(info.transaction.value),
-                })
-              })
-              .catch(err => {})
-            }
+          function loadData() {
+            vm.$web3.eth.getTransactionCount(vm.$web3.eth.defaultAccount)
+            .then(nonce => {
+              var transactions = [];
+              var data = []
+              for (var i = 1; i <= 20; i++) {
+                transactions.push(account.getTransactionInfo(nonce - i)
+                  .catch(err => {
+                    return false
+                  })
+                )
+              }
+              Promise.all(transactions)
+              .then(results => {
+                for (var i = 0; i < results.length; i++) {
+                  if (results[i]) {
+                    data.push({
+                      'when': results[i].block ? new Date(results[i].block.timestamp * 1000).toLocaleString() : 'pending',
+                      'to': results[i].to,
+                      'fee': results[i].receipt ? vm.$web3.utils.fromWei(new BN(results[i].receipt.gasUsed).mul(new BN(results[i].transaction.gasPrice))) : '?',
+                      'amount': vm.$web3.utils.fromWei(results[i].transaction.value),
+                    })
+                  }
+                }
+                vm.data = data
+              });
+            })
+          }
+
+          loadData()
+
+          vm.$web3.eth.subscribe('newBlockHeaders')
+          .on('data', block => {
+            loadData()
           })
         })
       })
