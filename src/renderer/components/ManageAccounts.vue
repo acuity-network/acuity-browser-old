@@ -25,7 +25,7 @@
 
               <b-table-column field="lock" label="">
                 <a v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</a>
-                <router-link v-else :to="{ name: props.row.route, params: { address: props.row.account }}">unlock</router-link>
+                <a v-else v-on:click="unlock" :data-address="props.row.account">unlock</a>
               </b-table-column>
 
               <b-table-column field="manage" label=" ">
@@ -44,10 +44,13 @@
 </template>
 
 <script>
+  import ManageAccountUnlock from './ManageAccountUnlock.vue'
 
   export default {
     name: 'manage-accounts',
-    components: {},
+    components: {
+      ManageAccountUnlock,
+    },
     data() {
       return {
         data: [],
@@ -55,35 +58,21 @@
       }
     },
     methods: {
-      select (event) {
-        this.$web3.eth.defaultAccount = event.account
-      },
-      lock (event) {
-        this.$web3.eth.personal.lockAccount(event.target.dataset.address)
-        .then(result => {
-          console.log(result)
-          window.location.reload(false)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-      },
-    },
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        return vm.$web3.eth.personal.getAccounts()
+      loadAccounts() {
+        this.$web3.eth.personal.getAccounts()
         .then (accounts => {
+          this.data = []
           for (let address of accounts) {
             Promise.all([
-              vm.$web3.eth.getBalance(address),
-              vm.$web3.eth.sign('', address)
+              this.$web3.eth.getBalance(address),
+              this.$web3.eth.sign('', address)
               .then(() => {
                 return true
               })
               .catch(() => {
                 return false
               }),
-              vm.$db.get('/account/' + address + '/contract')
+              this.$db.get('/account/' + address + '/contract')
               .catch(() => {
                 return false
               }),
@@ -91,19 +80,44 @@
             .then (result => {
               var row = {
                 account: address,
-                balance: vm.$web3.utils.fromWei(result[0]),
+                balance: this.$web3.utils.fromWei(result[0]),
                 unlocked: result[1],
                 action: (result[1] == false) ? 'unlock' : ((result[2] == false) ? 'deploy' : 'lock'),
                 route: (result[1] == false) ? 'manage-account-unlock' : 'manage-account-controller',
               }
-              vm.data.push(row)
-              if (address == vm.$web3.eth.defaultAccount) {
-                vm.selected = row
+              this.data.push(row)
+              if (address == this.$web3.eth.defaultAccount) {
+                this.selected = row
               }
             })
           }
         })
-      })
+      },
+      select (event) {
+        this.$web3.eth.defaultAccount = event.account
+      },
+      unlock (event) {
+        this.$modal.open({
+          parent: this,
+          component: ManageAccountUnlock,
+          hasModalCard: true,
+          props: {
+            address: event.target.dataset.address,
+          },
+        })
+      },
+      lock (event) {
+        this.$web3.eth.personal.lockAccount(event.target.dataset.address)
+        .then(result => {
+          this.loadAccounts();
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      },
+    },
+    created () {
+      this.loadAccounts()
     },
   }
 </script>

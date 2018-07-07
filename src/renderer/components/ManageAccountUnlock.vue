@@ -1,39 +1,31 @@
 <template>
-  <div id="wrapper">
-    <main>
-
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Unlock account</h1>
-          </div>
-        </div>
+  <div class="modal-card" style="width: auto">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Unlock account</p>
+    </header>
+    <form v-on:submit="unlock();$parent.close();">
+      <section class="modal-card-body">
+        <b-field label="Password">
+          <b-input type="password" id="password" password-reveal></b-input>
+        </b-field>
       </section>
-      <section class="section">
-        <div class="container">
-          <form v-on:submit="unlock">
-            <b-field label="Password">
-              <b-input type="password" id="password" password-reveal></b-input>
-            </b-field>
-            <button type="submit" class="button is-primary">Unlock</button>
-          </form>
-        </div>
-      </section>
-    </main>
+      <footer class="modal-card-foot">
+          <button class="button is-primary"type="button" @click="unlock();">Unlock</button>
+      </footer>
+    </form>
   </div>
 </template>
 
 <script>
   export default {
     name: 'manage-account-unlock',
-    components: {},
-    asyncComputed: {
-    },
+    props: ['address'],
     methods: {
       unlock() {
-        return this.$web3.eth.personal.unlockAccount(this.$route.params.address, document.getElementById('password').value, 0)
+        this.$web3.eth.personal.unlockAccount(this.address, document.getElementById('password').value, 0)
         .then(result => {
-          this.$router.push({name: 'manage-accounts'})
+          this.$parent.$parent.loadAccounts()
+          this.$emit('close')
         })
         .catch(error => {
           console.log(error)
