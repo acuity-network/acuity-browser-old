@@ -6,11 +6,11 @@
     <form v-on:submit="unlock">
       <section class="modal-card-body">
         <b-field label="Password">
-          <b-input type="password" v-model="password" password-reveal></b-input>
+          <b-input type="password" v-model="password" id="password" password-reveal></b-input>
         </b-field>
       </section>
       <footer class="modal-card-foot">
-          <button class="button is-primary"type="button" @click="unlock">Unlock</button>
+        <button class="button is-primary" type="button" @click="unlock">Unlock</button>
       </footer>
     </form>
   </div>
@@ -22,8 +22,11 @@
     props: ['address'],
     data() {
       return {
-        password
+        password: ''
       }
+    },
+    mounted() {
+      document.getElementById('password').focus()
     },
     methods: {
       unlock() {
@@ -35,7 +38,7 @@
         .catch(error => {
           console.log(error)
         })
-      }
+      },
     }
   }
 </script>
