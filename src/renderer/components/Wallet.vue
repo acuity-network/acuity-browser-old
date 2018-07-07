@@ -27,7 +27,7 @@
           <b-field label="Comment">
             <b-input v-model="comment"></b-input>
           </b-field>
-          <button type="submit" class="button is-primary" v-on:click="send">Send</button>
+          <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
         </div>
 
         <div class="container">
@@ -42,10 +42,13 @@
 <script>
   var QRCode = require('qrcode')
   import MixAccount from '../../lib/MixAccount.js'
+  import WalletConfirmSend from './WalletConfirmSend.vue'
 
   export default {
     name: 'wallet',
-    components: {},
+    components: {
+      WalletConfirmSend,
+    },
     data() {
       return {
         qrcode: '',
@@ -78,11 +81,16 @@
       }
     },
     methods: {
-      send (event) {
-        var account = new MixAccount(this, this.$web3.eth.defaultAccount)
-        account.init()
-        .then(() => {
-          account.sendMix(this.to, this.$web3.utils.toWei(this.amount), this.comment)
+      confirm (event) {
+        this.$modal.open({
+          parent: this,
+          component: WalletConfirmSend,
+          hasModalCard: true,
+          props: {
+            to: this.to,
+            amount: this.amount,
+            comment: this.comment,
+          },
         })
       },
     },
