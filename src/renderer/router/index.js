@@ -94,11 +94,6 @@ export default new Router({
       component: require('@/components/ManageAccountController').default
     },
     {
-      path: '/manage-accounts/unlock/:address',
-      name: 'manage-account-unlock',
-      component: require('@/components/ManageAccountUnlock').default
-    },
-    {
       path: '/node-status',
       name: 'node-status',
       component: require('@/components/NodeStatus').default
