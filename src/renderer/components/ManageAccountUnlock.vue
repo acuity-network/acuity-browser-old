@@ -10,6 +10,7 @@
         </b-field>
       </section>
       <footer class="modal-card-foot">
+        <button class="button" type="button" @click="$parent.close()">Close</button>
         <button class="button is-primary" type="button" @click="unlock">Unlock</button>
       </footer>
     </form>
