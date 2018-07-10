@@ -81,6 +81,35 @@
       }
     },
     methods: {
+      loadData(account) {
+        var BN = this.$web3.utils.BN
+        this.$web3.eth.getTransactionCount(this.$web3.eth.defaultAccount)
+        .then(nonce => {
+          var transactions = [];
+          var data = []
+          for (var i = 1; i <= 20; i++) {
+            transactions.push(account.getTransactionInfo(nonce - i)
+              .catch(err => {
+                return false
+              })
+            )
+          }
+          Promise.all(transactions)
+          .then(results => {
+            for (var i = 0; i < results.length; i++) {
+              if (results[i]) {
+                data.push({
+                  'when': results[i].block ? new Date(results[i].block.timestamp * 1000).toLocaleString() : 'pending',
+                  'to': results[i].to,
+                  'fee': results[i].receipt ? this.$web3.utils.fromWei(new BN(results[i].receipt.gasUsed).mul(new BN(results[i].transaction.gasPrice))) : '?',
+                  'amount': this.$web3.utils.fromWei(results[i].transaction.value),
+                })
+              }
+            }
+            this.data = data
+          });
+        })
+      },
       confirm (event) {
         this.$modal.open({
           parent: this,
@@ -94,70 +123,38 @@
         })
       },
     },
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        var BN = vm.$web3.utils.BN
-        var account = new MixAccount(vm, vm.$web3.eth.defaultAccount)
-        account.init()
-        .then(() => {
-          QRCode.toDataURL(account.contractAddress, {
-            mode: 'alphanumeric',
-            errorCorrectionLevel: 'H'
-          })
-          .then(qrcode => {
-            vm.qrcode = qrcode
-          })
+    created () {
+      var account = new MixAccount(this, this.$web3.eth.defaultAccount)
+      account.init()
+      .then(() => {
+        QRCode.toDataURL(account.contractAddress, {
+          mode: 'alphanumeric',
+          errorCorrectionLevel: 'H'
+        })
+        .then(qrcode => {
+          this.qrcode = qrcode
+        })
 
-          account.contract.events.Receive({
-            toBlock: 'pending'
-          })
-          .on('data', event => {
-            account.getBalance()
-            .then(balance => {
-              vm.balance = vm.$web3.utils.fromWei(balance) + ' MIX'
-            })
-          })
-
+        account.contract.events.Receive({
+          toBlock: 'pending'
+        })
+        .on('data', event => {
           account.getBalance()
           .then(balance => {
-            vm.balance = vm.$web3.utils.fromWei(balance) + ' MIX'
+            this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
           })
+        })
 
-          function loadData() {
-            vm.$web3.eth.getTransactionCount(vm.$web3.eth.defaultAccount)
-            .then(nonce => {
-              var transactions = [];
-              var data = []
-              for (var i = 1; i <= 20; i++) {
-                transactions.push(account.getTransactionInfo(nonce - i)
-                  .catch(err => {
-                    return false
-                  })
-                )
-              }
-              Promise.all(transactions)
-              .then(results => {
-                for (var i = 0; i < results.length; i++) {
-                  if (results[i]) {
-                    data.push({
-                      'when': results[i].block ? new Date(results[i].block.timestamp * 1000).toLocaleString() : 'pending',
-                      'to': results[i].to,
-                      'fee': results[i].receipt ? vm.$web3.utils.fromWei(new BN(results[i].receipt.gasUsed).mul(new BN(results[i].transaction.gasPrice))) : '?',
-                      'amount': vm.$web3.utils.fromWei(results[i].transaction.value),
-                    })
-                  }
-                }
-                vm.data = data
-              });
-            })
-          }
+        account.getBalance()
+        .then(balance => {
+          this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
+        })
 
-          loadData()
+        this.loadData(account)
 
-          vm.$web3.eth.subscribe('newBlockHeaders')
-          .on('data', block => {
-            loadData()
-          })
+        this.$web3.eth.subscribe('newBlockHeaders')
+        .on('data', block => {
+          this.loadData(account)
         })
       })
     },

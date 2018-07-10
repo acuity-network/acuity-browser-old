@@ -65,6 +65,16 @@ export default class MixAccount {
     return this.vue.$web3.eth.personal.lockAccount(this.controllerAddress)
   }
 
+  isUnlocked() {
+    return this.vue.$web3.eth.sign('', this.controllerAddress)
+    .then(() => {
+      return true
+    })
+    .catch(() => {
+      return false
+    })
+  }
+
   _send(transaction, value) {
     return new Promise((resolve, reject) => {
       transaction.estimateGas({
@@ -79,10 +89,10 @@ export default class MixAccount {
           value: value,
         })
         .on('transactionHash', transactionHash => {
-          return this.vue.$web3.eth.getTransaction(transactionHash)
-        })
-        .then(transaction => {
-          resolve(transaction)
+          this.vue.$web3.eth.getTransaction(transactionHash)
+          .then(transaction => {
+            resolve(transaction)
+          })
         })
       })
     })
@@ -93,12 +103,31 @@ export default class MixAccount {
   }
 
   consolidateMix() {
-    return this._send(this.contract.methods.withdraw())
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.vue.$web3.eth.getBalance(this.controllerAddress, 'pending'),
+        this.vue.$web3.eth.getBalance(this.contractAddress, 'pending'),
+      ])
+      .then(balances => {
+        if (balances[0] < 1000000 && balances[1] > 0) {
+          this._send(this.contract.methods.withdraw())
+          .then(tx => {
+            resolve()
+          })
+        }
+        else {
+          resolve()
+        }
+      })
+    })
   }
 
   sendMix(to, value, comment) {
-    // Check if the destination is a contract.
-    return this.vue.$web3.eth.getCode(to)
+    return this.consolidateMix()
+    .then(() => {
+      // Check if the destination is a contract.
+      return this.vue.$web3.eth.getCode(to)
+    })
     .then(data => {
       if (data == '0x') {
         // Send to a non-contract address.
@@ -136,7 +165,10 @@ export default class MixAccount {
 
   sendData(transaction, value, comment) {
     var to = transaction._parent._address
-    return this._send(this.contract.methods.sendData(to, transaction.encodeABI()), value)
+    return this.consolidateMix()
+    .then(() => {
+      return this._send(this.contract.methods.sendData(to, transaction.encodeABI()), value)
+    })
     .then(transaction => {
       return this._logTransaction(transaction, to, comment)
       .then(() => {
