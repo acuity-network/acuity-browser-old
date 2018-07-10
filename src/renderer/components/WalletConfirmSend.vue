@@ -17,8 +17,8 @@
       </b-field>
     </section>
     <footer class="modal-card-foot">
-        <button class="button" type="button" @click="$parent.close()">Close</button>
-        <button class="button is-primary"type="button" @click="send();$parent.close()">Send</button>
+      <button class="button" type="button" @click="$parent.close()">Close</button>
+      <button class="button is-primary"type="button" @click="send">Send</button>
     </footer>
   </div>
 </template>
@@ -34,7 +34,11 @@
         var account = new MixAccount(this, this.$web3.eth.defaultAccount)
         account.init()
         .then(() => {
-          account.sendMix(this.to, this.$web3.utils.toWei(this.amount), this.comment)
+          return account.sendMix(this.to, this.$web3.utils.toWei(this.amount), this.comment)
+        })
+        .then(() => {
+          this.$parent.$parent.loadData(account)
+          this.$emit('close')
         })
       },
     },

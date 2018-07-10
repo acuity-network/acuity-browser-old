@@ -83,6 +83,12 @@
     methods: {
       loadData(account) {
         var BN = this.$web3.utils.BN
+
+        account.getBalance()
+        .then(balance => {
+          this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
+        })
+
         this.$web3.eth.getTransactionCount(this.$web3.eth.defaultAccount)
         .then(nonce => {
           var transactions = [];
@@ -143,11 +149,6 @@
           .then(balance => {
             this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
           })
-        })
-
-        account.getBalance()
-        .then(balance => {
-          this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
         })
 
         this.loadData(account)
