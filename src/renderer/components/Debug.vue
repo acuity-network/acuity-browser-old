@@ -97,88 +97,90 @@
                     output.append('Child #' + i + ': ' + item.childIds[i] + '\n')
                   }
 
-                  const timestamp = new Date(item.timestamps[0] * 1000)
-                  output.append('\nRevision 0 timestamp: ' + timestamp + '\n')
+                  for (var i = 0; i < item.revisionCount; i++) {
+                    const timestamp = new Date(item.timestamps[i] * 1000)
+                    output.append('\nRevision ' + i + ' timestamp: ' + timestamp + '\n')
 
-                  const multihashes = require('multihashes')
-                  const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[0].substr(2), "hex"), 'sha2-256'))
-                  output.append('Revision 0 IPFS hash: ' + ipfsHash + '\n')
+                    const multihashes = require('multihashes')
+                    const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
+                    output.append('Revision ' + i + ' IPFS hash: ' + ipfsHash + '\n')
 
-                  this.$http.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
-                  .then(response => {
-                    const containerPayload = new Uint8Array(Buffer.from(response.data, "binary"))
-                    output.append('Compressed length: ' + containerPayload.length + '\n')
+                    this.$http.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
+                    .then(response => {
+                      const containerPayload = new Uint8Array(Buffer.from(response.data, "binary"))
+                      output.append('Compressed length: ' + containerPayload.length + '\n')
 
-                    const itemPayload = this.$brotli.decompressArray(containerPayload)
-                    output.append('Uncompressed length: ' + itemPayload.length + '\n')
+                      const itemPayload = this.$brotli.decompressArray(containerPayload)
+                      output.append('Uncompressed length: ' + itemPayload.length + '\n')
 
-                    const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
-                    const mixins = itemMessage.getMixinList()
+                      const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
+                      const mixins = itemMessage.getMixinList()
 
-                    output.append('Mixin count: ' + mixins.length + '\n')
+                      output.append('Mixin count: ' + mixins.length + '\n')
 
-                    for (var i = 0; i < mixins.length; i++) {
-                      output.append('\nMixin ' + i + '\n')
-                      var mixinId = '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8)
-                      output.append('mixinId: ' + mixinId + '\n')
+                      for (var i = 0; i < mixins.length; i++) {
+                        output.append('\nMixin ' + i + '\n')
+                        var mixinId = '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8)
+                        output.append('mixinId: ' + mixinId + '\n')
 
-                      var mixinPayload = mixins[i].getPayload()
+                        var mixinPayload = mixins[i].getPayload()
 
-                      switch (mixinId) {
-                        case '0x51c32e3a':
-                          output.append('Mixin type: Mixin type\n')
-                          break
+                        switch (mixinId) {
+                          case '0x51c32e3a':
+                            output.append('Mixin type: Mixin type\n')
+                            break
 
-                        case '0x4e4e06c4':
-                          output.append('Mixin type: Language\n')
-                          var languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
-                          output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
-                          break
+                          case '0x4e4e06c4':
+                            output.append('Mixin type: Language\n')
+                            var languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
+                            output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
+                            break
 
-                        case '0x24da6114':
-                          output.append('Mixin type: Title\n')
-                          var titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
-                          output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
-                          break
+                          case '0x24da6114':
+                            output.append('Mixin type: Title\n')
+                            var titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
+                            output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
+                            break
 
-                        case '0x34a9a6ec':
-                          output.append('Mixin type: Body text\n')
-                          var bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
-                          output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
-                          break
+                          case '0x34a9a6ec':
+                            output.append('Mixin type: Body text\n')
+                            var bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
+                            output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
+                            break
 
-                        case '0x5a474550':
-                          output.append('Mixin type: Description\n')
-                          var descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
-                          output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
-                          break
+                          case '0x5a474550':
+                            output.append('Mixin type: Description\n')
+                            var descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
+                            output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
+                            break
 
-                        case '0x12745469':
-                          output.append('Mixin type: Image\n')
-                          var imageMessage = jpegImageProto.JpegMipmap.deserializeBinary(mixinPayload)
-                          var width = imageMessage.getWidth()
-                          output.append('Original width: ' + width + '\n')
-                          var height = imageMessage.getHeight()
-                          output.append('Original height: ' + height + '\n')
-                          var mipmaps = imageMessage.getMipmapLevelList()
-                          output.append('Mipmap levels: ' + mipmaps.length + '\n')
-                          var renderHeight = Math.floor(256 * height / width)
-                          for (var j = 0; j < mipmaps.length; j++) {
-                            output.append('\nMipmap level: ' + j + '\n')
-                            output.append('Mipmap filesize: ' + mipmaps[j].getFilesize() + '\n')
-                            var el = document.createElement('img')
-                            var domString = '<img src="http://localhost:8081/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
-                            el.innerHTML = domString
-                            output.appendChild(el.firstChild)
-                          }
-                          break
+                          case '0x12745469':
+                            output.append('Mixin type: Image\n')
+                            var imageMessage = jpegImageProto.JpegMipmap.deserializeBinary(mixinPayload)
+                            var width = imageMessage.getWidth()
+                            output.append('Original width: ' + width + '\n')
+                            var height = imageMessage.getHeight()
+                            output.append('Original height: ' + height + '\n')
+                            var mipmaps = imageMessage.getMipmapLevelList()
+                            output.append('Mipmap levels: ' + mipmaps.length + '\n')
+                            var renderHeight = Math.floor(256 * height / width)
+                            for (var j = 0; j < mipmaps.length; j++) {
+                              output.append('\nMipmap level: ' + j + '\n')
+                              output.append('Mipmap filesize: ' + mipmaps[j].getFilesize() + '\n')
+                              var el = document.createElement('img')
+                              var domString = '<img src="http://localhost:8081/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
+                              el.innerHTML = domString
+                              output.appendChild(el.firstChild)
+                            }
+                            break
 
-                        case '0xbcec8faa':
-                          output.append('Mixin type: Topic Feed\n')
-                          break
+                          case '0xbcec8faa':
+                            output.append('Mixin type: Topic Feed\n')
+                            break
+                        }
                       }
-                    }
-                  })
+                    })
+                  }
                 })
               })
             })
