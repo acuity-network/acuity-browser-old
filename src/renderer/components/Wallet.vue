@@ -72,6 +72,7 @@
           {
             field: 'who',
             label: 'Who',
+            renderHtml: true,
           },
           {
             field: 'amount',
@@ -129,7 +130,7 @@
               data.push({
                 'timestamp': results[i].timestamp ? results[i].timestamp : 4000000000,
                 'when': results[i].timestamp ? new Date(results[i].timestamp * 1000).toLocaleString() : 'pending',
-                'who': results[i].sender,
+                'who': '<code>' + results[i].sender + '</code>',
                 'amount': this.$web3.utils.fromWei(results[i].amount),
               })
             }
@@ -152,7 +153,7 @@
                 data.push({
                   'timestamp': results[i].block ? results[i].block.timestamp : 4000000000,
                   'when': results[i].block ? new Date(results[i].block.timestamp * 1000).toLocaleString() : 'pending',
-                  'who': results[i].to,
+                  'who': '<code>' + results[i].to + '</code>',
                   'amount': '-' + this.$web3.utils.fromWei(results[i].transaction.value),
                 })
               }

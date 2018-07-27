@@ -5,7 +5,7 @@
     </header>
     <section class="modal-card-body">
       <b-field label="To">
-        {{ to }}
+        <code>{{ to }}</code>
       </b-field>
 
       <b-field label="Amount">
