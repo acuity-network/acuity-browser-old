@@ -13,11 +13,9 @@
       <section class="section">
         <div class="container">
           <img :src="qrcode" />
-          <h2>Balance</h2>
-          {{ balance }}
-        </div>
-
-        <div class="container">
+          <b-field label="Balance">
+            {{ balance }}
+          </b-field>
           <b-field label="To">
             <b-input v-model="to"></b-input>
           </b-field>
