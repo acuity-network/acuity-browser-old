@@ -41,6 +41,7 @@
 
 <script>
   var QRCode = require('qrcode')
+  import { bus } from '../main'
   import MixAccount from '../../lib/MixAccount.js'
   import WalletConfirmSend from './WalletConfirmSend.vue'
 
@@ -149,7 +150,7 @@
             for (var i = 0; i < results.length; i++) {
               if (results[i] && results[i].transaction.value != 0) {
                 data.push({
-                  'timestamp': results[i].block ? results[i].block.timestamp : 0,
+                  'timestamp': results[i].block ? results[i].block.timestamp : 4000000000,
                   'when': results[i].block ? new Date(results[i].block.timestamp * 1000).toLocaleString() : 'pending',
                   'who': results[i].to,
                   'amount': '-' + this.$web3.utils.fromWei(results[i].transaction.value),
@@ -185,11 +186,10 @@
           this.qrcode = qrcode
         })
 
-        account.contract.events.Receive({
-          toBlock: 'pending'
-        })
-        .on('data', event => {
-          this.loadData(account)
+        bus.$on('account-receive', accountAddress => {
+          if (accountAddress == account.contractAddress) {
+            this.loadData(account)
+          }
         })
 
         this.$web3.eth.subscribe('newBlockHeaders')

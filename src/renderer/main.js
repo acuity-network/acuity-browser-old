@@ -55,6 +55,8 @@ Vue.prototype.$web3.eth.defaultBlock = 'pending';
 Vue.prototype.$itemStoreIpfsSha256 = new Vue.prototype.$web3.eth.Contract(require('./ItemStoreIpfsSha256.abi.json'), '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
 Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('./AccountProfile.abi.json'), '0x72f52ab6b1d15630ee9b2d8763b23478c0327df8')
 
+export const bus = new Vue();
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },

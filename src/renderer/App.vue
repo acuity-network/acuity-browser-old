@@ -26,6 +26,7 @@
 
 <script>
   import MixAccount from '../lib/MixAccount.js'
+  import { bus } from './main'
 
   export default {
     name: 'd-web',
@@ -50,11 +51,11 @@
 
               this.$db.get('/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
               .then(id => {
-                this.$db.put('/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+                return this.$db.put('/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
               })
               .catch(error => {
                 var id
-                this.$db.get('/contract/' + account.contractAddress + '/receivedCount')
+                return this.$db.get('/contract/' + account.contractAddress + '/receivedCount')
                 .then(count => {
                   id = parseInt(count)
                 })
@@ -62,19 +63,27 @@
                   id = 0
                 })
                 .then(() => {
-                  this.$db.batch()
-                    .put('/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
-                    .put('/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex, id)
-                    .put('/contract/' + account.contractAddress + '/receivedCount', id + 1)
-                    .write()
+                  return this.$db.batch()
+                  .put('/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+                  .put('/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex, id)
+                  .put('/contract/' + account.contractAddress + '/receivedCount', id + 1)
+                  .write()
                 })
+              })
+              .then(() => {
+                bus.$emit('account-receive', account.contractAddress)
               })
             })
             .on('changed', log => {
-              this.$db.get('/contract/' + this.contractAddress + '/receivedTransaction/' + log.transactionHash + '/' + log.logIndex)
+              this.$db.get('/contract/' + account.contractAddress + '/receivedTransaction/' + log.transactionHash + '/' + log.logIndex)
               .then(id => {
-                this.$db.del('/contract/' + this.contractAddress + '/receivedTransaction/' + log.transactionHash + '/' + log.logIndex)
-                this.$db.del('/contract/' + this.contractAddress + '/received/' + id)
+                return this.$db.batch()
+                .del('/contract/' + account.contractAddress + '/receivedTransaction/' + log.transactionHash + '/' + log.logIndex)
+                .del('/contract/' + account.contractAddress + '/received/' + id)
+                .write()
+              })
+              .then(() => {
+                bus.$emit('account-receive', account.contractAddress)
               })
             })
           })
