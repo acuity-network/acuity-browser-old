@@ -180,8 +180,8 @@ export default class MixAccount {
   getBalance() {
     var BN = this.vue.$web3.utils.BN
     return Promise.all([
-      this.vue.$web3.eth.getBalance(this.controllerAddress, 'pending'),
-      this.vue.$web3.eth.getBalance(this.contractAddress, 'pending'),
+      this.vue.$web3.eth.getBalance(this.controllerAddress, 'latest'),
+      this.vue.$web3.eth.getBalance(this.contractAddress, 'latest'),
     ])
     .then(balances => {
       return new BN(balances[0]).add(new BN(balances[1]))
