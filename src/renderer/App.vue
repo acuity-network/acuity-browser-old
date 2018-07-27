@@ -40,7 +40,7 @@
           .then(() => {
             return account.contract.events.Receive({
               fromBlock: 0,
-              toBlock: 'pending'
+              toBlock: 'pending',
             })
             .on('data', log => {
               var payment = {
