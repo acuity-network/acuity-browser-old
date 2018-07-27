@@ -31,7 +31,7 @@
         </div>
 
         <div class="container">
-          <b-table :data="data" :columns="columns"></b-table>
+          <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc"></b-table>
         </div>
 
       </section>
@@ -60,17 +60,17 @@
         data: [],
         columns: [
           {
+            field: 'timestamp',
+            sortable: true,
+            visible: false,
+          },
+          {
             field: 'when',
             label: 'When',
           },
           {
-            field: 'to',
-            label: 'To',
-          },
-          {
-            field: 'fee',
-            label: 'Fee',
-            numeric: true
+            field: 'who',
+            label: 'Who',
           },
           {
             field: 'amount',
@@ -89,12 +89,56 @@
           this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
         })
 
-        this.$web3.eth.getTransactionCount(this.$web3.eth.defaultAccount)
+        var data = []
+
+        this.$db.get('/contract/' + account.contractAddress + '/receivedCount')
+        .then(count => {
+          var payments = []
+
+          for (var i = 0; i < count; i++) {
+            payments.push(this.$db.get('/contract/' + account.contractAddress + '/received/' + i)
+              .then(json => {
+                var payment = JSON.parse(json)
+                return this.$web3.eth.getTransaction(payment.transaction)
+                .then(tx => {
+                  return this.$web3.eth.getBlock(tx.blockNumber)
+                  .then(block => {
+                    payment.timestamp = block.timestamp
+                  })
+                  .catch(error => {})
+                  .then(() => {
+                    return payment
+                  })
+                })
+              })
+              .catch(error => {
+                return
+              })
+            )
+          }
+
+          return Promise.all(payments)
+        })
+        .catch(error => {
+          return []
+        })
+        .then(results => {
+          for (var i = 0; i < results.length; i++) {
+            if (results[i]) {
+              data.push({
+                'timestamp': results[i].timestamp ? results[i].timestamp : 4000000000,
+                'when': results[i].timestamp ? new Date(results[i].timestamp * 1000).toLocaleString() : 'pending',
+                'who': results[i].sender,
+                'amount': this.$web3.utils.fromWei(results[i].amount),
+              })
+            }
+          }
+          return this.$web3.eth.getTransactionCount(this.$web3.eth.defaultAccount)
+        })
         .then(nonce => {
           var transactions = [];
-          var data = []
-          for (var i = 1; i <= 20; i++) {
-            transactions.push(account.getTransactionInfo(nonce - i)
+          for (var i = 0; i < nonce; i++) {
+            transactions.push(account.getTransactionInfo(i)
               .catch(err => {
                 return false
               })
@@ -103,12 +147,12 @@
           Promise.all(transactions)
           .then(results => {
             for (var i = 0; i < results.length; i++) {
-              if (results[i]) {
+              if (results[i] && results[i].transaction.value != 0) {
                 data.push({
+                  'timestamp': results[i].block ? results[i].block.timestamp : 0,
                   'when': results[i].block ? new Date(results[i].block.timestamp * 1000).toLocaleString() : 'pending',
-                  'to': results[i].to,
-                  'fee': results[i].receipt ? this.$web3.utils.fromWei(new BN(results[i].receipt.gasUsed).mul(new BN(results[i].transaction.gasPrice))) : '?',
-                  'amount': this.$web3.utils.fromWei(results[i].transaction.value),
+                  'who': results[i].to,
+                  'amount': '-' + this.$web3.utils.fromWei(results[i].transaction.value),
                 })
               }
             }
@@ -145,18 +189,15 @@
           toBlock: 'pending'
         })
         .on('data', event => {
-          account.getBalance()
-          .then(balance => {
-            this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
-          })
+          this.loadData(account)
         })
-
-        this.loadData(account)
 
         this.$web3.eth.subscribe('newBlockHeaders')
         .on('data', block => {
           this.loadData(account)
         })
+
+        this.loadData(account)
       })
     },
   }
