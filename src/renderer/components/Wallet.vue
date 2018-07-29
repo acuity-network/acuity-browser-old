@@ -16,6 +16,9 @@
           <b-field label="Balance">
             {{ balance }}
           </b-field>
+          <b-field label="Unconfirmed Balance">
+            {{ unconfirmedBalance }}
+          </b-field>
           <b-field label="To">
             <b-input v-model="to"></b-input>
           </b-field>
@@ -53,6 +56,7 @@
         qrcode: '',
         address: '',
         balance: '',
+        unconfirmedBalance: '',
         to: '',
         amount: '',
         comment: '',
@@ -89,14 +93,19 @@
           this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
         })
 
+        account.getUnconfirmedBalance()
+        .then(balance => {
+          this.unconfirmedBalance = this.$web3.utils.fromWei(balance) + ' MIX'
+        })
+
         var data = []
 
-        this.$db.get('/contract/' + account.contractAddress + '/receivedCount')
+        this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
         .then(count => {
           var payments = []
 
           for (var i = 0; i < count; i++) {
-            payments.push(this.$db.get('/contract/' + account.contractAddress + '/received/' + i)
+            payments.push(this.$db.get('/account/contract/' + account.contractAddress + '/received/' + i)
               .then(json => {
                 var payment = JSON.parse(json)
                 return this.$web3.eth.getTransaction(payment.transaction)

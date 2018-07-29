@@ -42,7 +42,7 @@
         })
       },
       contract() {
-        return this.$db.get('/account/' + this.$route.params.address + '/contract')
+        return this.$db.get('/account/controller/' + this.$route.params.address + '/contract')
       },
       balance() {
         return this.$web3.eth.getBalance(this.$route.params.address, 'pending')

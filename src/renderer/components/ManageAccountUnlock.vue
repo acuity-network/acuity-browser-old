@@ -18,6 +18,8 @@
 </template>
 
 <script>
+  import MixAccount from '../../lib/MixAccount.js'
+
   export default {
     name: 'manage-account-unlock',
     props: ['address'],
@@ -31,8 +33,13 @@
     },
     methods: {
       unlock() {
-        this.$web3.eth.personal.unlockAccount(this.address, this.password, 0)
-        .then(result => {
+        var account = new MixAccount(this, this.address)
+        account.init()
+        account.unlock(this.password)
+        .then(() => {
+          return account.consolidateMix()
+        })
+        .then(() => {
           this.$parent.$parent.loadAccounts()
           this.$emit('close')
         })

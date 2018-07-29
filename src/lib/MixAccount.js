@@ -8,21 +8,21 @@ export default class MixAccount {
   }
 
   init() {
-    return this.vue.$db.get('/account/' + this.controllerAddress + '/contract')
+    return this.vue.$db.get('/account/controller/' + this.controllerAddress + '/contract')
     .then(contractAddress => {
       this.contractAddress = contractAddress
       this.contract = new this.vue.$web3.eth.Contract(accountAbi, contractAddress)
+      return this
     })
   }
 
   _logTransaction(transaction, to, comment) {
-    console.log(transaction)
     var info = {
       hash: transaction.hash,
       to: to,
       comment: comment,
     }
-    return this.vue.$db.put('/account/' + this.controllerAddress + '/transaction/' + transaction.nonce, JSON.stringify(info))
+    return this.vue.$db.put('/account/controller/' + this.controllerAddress + '/transaction/' + transaction.nonce, JSON.stringify(info))
   }
 
   deploy() {
@@ -43,7 +43,10 @@ export default class MixAccount {
       })
       .on('receipt', receipt => {
         console.log(receipt)
-        this.vue.$db.put('/account/' + this.controllerAddress + '/contract', receipt.contractAddress)
+        this.vue.$db.batch()
+        .put('/account/controller/' + this.controllerAddress + '/contract', receipt.contractAddress)
+        .put('/account/contract/' + this.contractAddress + '/controller', receipt.controllerAddress)
+        .write()
       })
       .then(newContractInstance => {
         console.log(newContractInstance)
@@ -91,6 +94,7 @@ export default class MixAccount {
         .on('transactionHash', transactionHash => {
           this.vue.$web3.eth.getTransaction(transactionHash)
           .then(transaction => {
+            console.log(transaction)
             resolve(transaction)
           })
         })
@@ -104,12 +108,9 @@ export default class MixAccount {
 
   consolidateMix() {
     return new Promise((resolve, reject) => {
-      Promise.all([
-        this.vue.$web3.eth.getBalance(this.controllerAddress, 'pending'),
-        this.vue.$web3.eth.getBalance(this.contractAddress, 'pending'),
-      ])
-      .then(balances => {
-        if (balances[0] < 1000000 && balances[1] > 0) {
+      this.vue.$web3.eth.getBalance(this.contractAddress, 'pending')
+      .then(balance => {
+        if (balance > 0) {
           this._send(this.contract.methods.withdraw())
           .then(tx => {
             resolve()
@@ -123,11 +124,8 @@ export default class MixAccount {
   }
 
   sendMix(to, value, comment) {
-    return this.consolidateMix()
-    .then(() => {
-      // Check if the destination is a contract.
-      return this.vue.$web3.eth.getCode(to)
-    })
+    // Check if the destination is a contract.
+    return this.vue.$web3.eth.getCode(to)
     .then(data => {
       if (data == '0x') {
         // Send to a non-contract address.
@@ -165,10 +163,7 @@ export default class MixAccount {
 
   sendData(transaction, value, comment) {
     var to = transaction._parent._address
-    return this.consolidateMix()
-    .then(() => {
-      return this._send(this.contract.methods.sendData(to, transaction.encodeABI()), value)
-    })
+    return this._send(this.contract.methods.sendData(to, transaction.encodeABI()), value)
     .then(transaction => {
       return this._logTransaction(transaction, to, comment)
       .then(() => {
@@ -188,8 +183,19 @@ export default class MixAccount {
     })
   }
 
+  getUnconfirmedBalance() {
+    var BN = this.vue.$web3.utils.BN
+    return Promise.all([
+      this.vue.$web3.eth.getBalance(this.controllerAddress, 'pending'),
+      this.vue.$web3.eth.getBalance(this.contractAddress, 'pending'),
+    ])
+    .then(balances => {
+      return new BN(balances[0]).add(new BN(balances[1]))
+    })
+  }
+
   getTransactionInfo(nonce) {
-    return this.vue.$db.get('/account/' + this.controllerAddress + '/transaction/' + nonce)
+    return this.vue.$db.get('/account/controller/' + this.controllerAddress + '/transaction/' + nonce)
     .then(infoJson => {
       var info = JSON.parse(infoJson)
       return Promise.all([

@@ -72,7 +72,7 @@
               .catch(() => {
                 return false
               }),
-              this.$db.get('/account/' + address + '/contract')
+              this.$db.get('/account/controller/' + address + '/contract')
               .catch(() => {
                 return false
               }),
