@@ -36,7 +36,6 @@
   import titleProto from '../title_pb.js'
   import bodyTextProto from '../body_pb.js'
   import descriptionProto from '../description_pb.js'
-  import MixAccount from '../../lib/MixAccount.js'
 
   export default {
     name: 'publish-image',
@@ -124,16 +123,12 @@
           hashHex = '0x' + decodedHash.digest.toString('hex')
           console.log(hashHex)
 
-          var account = new MixAccount(this, this.$web3.eth.defaultAccount)
-          return account.init()
-        })
-        .then (account => {
           var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
           console.log(flagsNonce)
-          account.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32).then(itemId => {
+          window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32).then(itemId => {
             console.log(itemId)
 
-            account.send(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
+            window.activeAccount.send(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
             this.$router.push({ name: 'item', params: { itemId: itemId }})
           })
         })

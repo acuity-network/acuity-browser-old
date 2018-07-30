@@ -44,6 +44,7 @@
 </template>
 
 <script>
+  import MixAccount from '../../lib/MixAccount.js'
   import ManageAccountUnlock from './ManageAccountUnlock.vue'
 
   export default {
@@ -86,7 +87,7 @@
                 route: (result[1] == false) ? 'manage-account-unlock' : 'manage-account-controller',
               }
               this.data.push(row)
-              if (address == this.$web3.eth.defaultAccount) {
+              if (address == window.activeAccount.controllerAddress) {
                 this.selected = row
               }
             })
@@ -94,7 +95,10 @@
         })
       },
       select (event) {
-        this.$web3.eth.defaultAccount = event.account
+        new MixAccount(this.$root, event.account).init()
+        .then(account => {
+          window.activeAccount = account
+        })
       },
       unlock (event) {
         this.$modal.open({

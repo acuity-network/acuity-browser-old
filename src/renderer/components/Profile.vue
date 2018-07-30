@@ -27,7 +27,6 @@
 
 <script>
   import MixItem from './mix_item.js'
-  import MixAccount from '../../lib/MixAccount.js'
 
   export default {
     name: 'profile',
@@ -43,11 +42,7 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        var account = new MixAccount(vm, vm.$web3.eth.defaultAccount)
-        account.init()
-        .then(() => {
-          return account.call(vm.$accountProfile.methods.getProfile())
-        })
+        window.activeAccount.call(vm.$accountProfile.methods.getProfile())
         .then(itemId => {
           var item = new MixItem(vm, itemId)
 

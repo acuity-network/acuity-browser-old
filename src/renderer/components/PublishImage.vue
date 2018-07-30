@@ -42,7 +42,6 @@
   import descriptionProto from '../description_pb.js'
   import jpegImageProto from '../jpeg-image_pb.js'
   import Image from './image.js'
-  import MixAccount from '../../lib/MixAccount.js'
 
   export default {
     name: 'publish-image',
@@ -123,23 +122,19 @@
             hashHex = '0x' + decodedHash.digest.toString('hex')
             console.log(hashHex)
 
-            var account = new MixAccount(this, this.$web3.eth.defaultAccount)
-            return account.init()
-          })
-          .then (account => {
             var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
             console.log(flagsNonce)
-            account.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+            window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
             .then(itemId => {
               console.log(itemId)
 
               var parentId = document.getElementById('parentId').value
 
               if (parentId) {
-                account.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId))
+                window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId))
               }
               else {
-                account.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex))
+                window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex))
               }
               this.$router.push({ name: 'item', params: { itemId: itemId }})
             })

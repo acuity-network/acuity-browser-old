@@ -58,7 +58,6 @@
   const multihash = require('multihashes')
   import MixItem from './mix_item.js'
   import Image from './image.js'
-  import MixAccount from '../../lib/MixAccount.js'
 
   export default {
     name: 'profile',
@@ -73,11 +72,7 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        var account = new MixAccount(vm, vm.$web3.eth.defaultAccount)
-        account.init()
-        .then(() => {
-          return account.call(vm.$accountProfile.methods.getProfile())
-        })
+        window.activeAccount.call(vm.$accountProfile.methods.getProfile())
         .then(itemId => {
           var item = new MixItem(vm, itemId)
 
@@ -151,11 +146,7 @@
         }
 
         var hexHash
-        var account = new MixAccount(this, this.$web3.eth.defaultAccount)
-        account.init()
-        .then ( () => {
-          return Promise.all(promises)
-        })
+        Promise.all(promises)
         .then ( () => {
           var itemPayload = itemMessage.serializeBinary()
           var output = this.$brotli.compressArray(itemPayload, 11)
@@ -167,10 +158,10 @@
         })
         .then(response => {
           hexHash = '0x' + multihash.decode(multihash.fromB58String(response.data.Hash)).digest.toString('hex')
-          return account.call(this.$accountProfile.methods.getProfile())
+          return window.activeAccount.call(this.$accountProfile.methods.getProfile())
         })
         .then(itemId => {
-          account.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash))
+          window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash))
           .then(() => {
             this.$router.push({ name: 'profile' })
           })
@@ -178,11 +169,11 @@
         .catch(err => {
           console.log('No profile item found, creating new one.')
           var flagsNonce = '0x01' + this.$web3.utils.randomHex(30).substr(2)
-          account.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+          window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
           .then(itemId => {
-            account.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hexHash))
+            window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hexHash))
             .then(result => {
-              return account.sendData(this.$accountProfile.methods.setProfile(itemId))
+              return window.activeAccount.sendData(this.$accountProfile.methods.setProfile(itemId))
             })
             .then(() => {
               this.$router.push({ name: 'profile' })

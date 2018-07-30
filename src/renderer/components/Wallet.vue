@@ -43,7 +43,6 @@
 <script>
   var QRCode = require('qrcode')
   import { bus } from '../main'
-  import MixAccount from '../../lib/MixAccount.js'
   import WalletConfirmSend from './WalletConfirmSend.vue'
 
   export default {
@@ -85,27 +84,27 @@
       }
     },
     methods: {
-      loadData(account) {
+      loadData() {
         var BN = this.$web3.utils.BN
 
-        account.getBalance()
+        window.activeAccount.getBalance()
         .then(balance => {
           this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
         })
 
-        account.getUnconfirmedBalance()
+        window.activeAccount.getUnconfirmedBalance()
         .then(balance => {
           this.unconfirmedBalance = this.$web3.utils.fromWei(balance) + ' MIX'
         })
 
         var data = []
 
-        this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
+        this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/receivedCount')
         .then(count => {
           var payments = []
 
           for (var i = 0; i < count; i++) {
-            payments.push(this.$db.get('/account/contract/' + account.contractAddress + '/received/' + i)
+            payments.push(this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/received/' + i)
               .then(json => {
                 var payment = JSON.parse(json)
                 return this.$web3.eth.getTransaction(payment.transaction)
@@ -142,12 +141,12 @@
               })
             }
           }
-          return this.$web3.eth.getTransactionCount(this.$web3.eth.defaultAccount)
+          return this.$web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
         })
         .then(nonce => {
           var transactions = [];
           for (var i = 0; i < nonce; i++) {
-            transactions.push(account.getTransactionInfo(i)
+            transactions.push(window.activeAccount.getTransactionInfo(i)
               .catch(err => {
                 return false
               })
@@ -183,30 +182,26 @@
       },
     },
     created () {
-      var account = new MixAccount(this, this.$web3.eth.defaultAccount)
-      account.init()
-      .then(() => {
-        QRCode.toDataURL(account.contractAddress, {
-          mode: 'alphanumeric',
-          errorCorrectionLevel: 'H'
-        })
-        .then(qrcode => {
-          this.qrcode = qrcode
-        })
-
-        bus.$on('account-receive', accountAddress => {
-          if (accountAddress == account.contractAddress) {
-            this.loadData(account)
-          }
-        })
-
-        this.$web3.eth.subscribe('newBlockHeaders')
-        .on('data', block => {
-          this.loadData(account)
-        })
-
-        this.loadData(account)
+      QRCode.toDataURL(window.activeAccount.contractAddress, {
+        mode: 'alphanumeric',
+        errorCorrectionLevel: 'H'
       })
+      .then(qrcode => {
+        this.qrcode = qrcode
+      })
+
+      bus.$on('account-receive', accountAddress => {
+        if (accountAddress == window.activeAccount.contractAddress) {
+          this.loadData(window.activeAccount)
+        }
+      })
+
+      this.$web3.eth.subscribe('newBlockHeaders')
+      .on('data', block => {
+        this.loadData(window.activeAccount)
+      })
+
+      this.loadData(window.activeAccount)
     },
   }
 </script>

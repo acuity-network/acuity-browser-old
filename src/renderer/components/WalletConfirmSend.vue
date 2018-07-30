@@ -24,20 +24,14 @@
 </template>
 
 <script>
-  import MixAccount from '../../lib/MixAccount.js'
-
   export default {
     name: 'walletConfirmSend',
     props: ['to', 'amount', 'comment'],
     methods: {
       send (event) {
-        var account = new MixAccount(this, this.$web3.eth.defaultAccount)
-        account.init()
+        window.activeAccount.sendMix(this.to, this.$web3.utils.toWei(this.amount), this.comment)
         .then(() => {
-          return account.sendMix(this.to, this.$web3.utils.toWei(this.amount), this.comment)
-        })
-        .then(() => {
-          this.$parent.$parent.loadData(account)
+          this.$parent.$parent.loadData()
           this.$emit('close')
         })
       },
