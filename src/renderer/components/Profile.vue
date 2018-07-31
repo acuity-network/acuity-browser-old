@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import MixItem from './mix_item.js'
+  import MixItem from '../../lib/MixItem.js'
 
   export default {
     name: 'profile',

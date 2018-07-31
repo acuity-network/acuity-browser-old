@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import MixItem from './mix_item.js'
+  import MixItem from '../../lib/MixItem.js'
 
   export default {
     name: 'view-item',
@@ -33,20 +33,17 @@
         description: '',
       }
     },
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        var item = new MixItem(vm, vm.$route.params.itemId)
+    created () {
+      var item = new MixItem(this.$root, this.$route.params.itemId)
 
-        return item.init()
-        .then(item => {
-          console.log(item)
-          return item.revisions[0].load()
-        })
-        .then(revision => {
-          vm.title = revision.getTitle()
-          vm.body = revision.getImage()
-          vm.description = revision.getDescription()
-        })
+      return item.init()
+      .then(item => {
+        return item.latestRevision().load()
+      })
+      .then(revision => {
+        this.title = revision.getTitle()
+        this.body = revision.getImage()
+        this.description = revision.getDescription()
       })
     }
   }

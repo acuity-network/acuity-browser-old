@@ -1,9 +1,9 @@
 const fs = require('fs')
 const jpeg = require('jpeg-js')
 const pica = require('pica')()
-import jpegImageProto from '../jpeg-image_pb.js'
+import jpegImageProto from './jpeg-image_pb.js'
 const Base58 = require("base-58")
-import itemProto from '../item_pb.js'
+import itemProto from './item_pb.js'
 
 export default class Image {
 

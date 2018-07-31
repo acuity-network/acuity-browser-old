@@ -123,7 +123,7 @@
           .then(itemId => {
             console.log(itemId)
 
-            const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
+            const itemStoreShortIdAbi = require('../../lib/ItemStoreShortId.abi.json')
             const itemStoreShortId = new this.$web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
 
             itemStoreShortId.methods.createShortId(itemId).send({from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'})

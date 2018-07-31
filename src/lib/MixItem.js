@@ -1,8 +1,8 @@
 const itemStoreRegistryAbi = require('./ItemStoreRegistry.abi.json')
 const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
 const itemStoreAbi = require('./ItemStoreInterface.abi.json')
-import itemProto from '../item_pb.js'
-import MixRevision from './mix_revision.js'
+import itemProto from './item_pb.js'
+import MixRevision from './MixRevision.js'
 
 export default class MixItem {
 

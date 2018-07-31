@@ -35,13 +35,13 @@
 </template>
 
 <script>
-  import itemProto from '../item_pb.js'
-  import languageProto from '../language_pb.js'
-  import titleProto from '../title_pb.js'
-  import bodyTextProto from '../body_pb.js'
-  import descriptionProto from '../description_pb.js'
-  import jpegImageProto from '../jpeg-image_pb.js'
-  import Image from './image.js'
+  import itemProto from '../../lib/item_pb.js'
+  import languageProto from '../../lib/language_pb.js'
+  import titleProto from '../../lib/title_pb.js'
+  import bodyTextProto from '../../lib/body_pb.js'
+  import descriptionProto from '../../lib/description_pb.js'
+  import jpegImageProto from '../../lib/jpeg-image_pb.js'
+  import Image from '../../lib/Image.js'
 
   export default {
     name: 'publish-image',

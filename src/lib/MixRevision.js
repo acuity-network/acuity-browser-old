@@ -1,9 +1,9 @@
 const multihashes = require('multihashes')
-import itemProto from '../item_pb.js'
-import titleProto from '../title_pb.js'
-import jpegImageProto from '../jpeg-image_pb.js'
-import bodyTextProto from '../body_pb.js'
-import profileProto from '../account-profile_pb.js'
+import itemProto from './item_pb.js'
+import titleProto from './title_pb.js'
+import jpegImageProto from './jpeg-image_pb.js'
+import bodyTextProto from './body_pb.js'
+import profileProto from './account-profile_pb.js'
 const Base58 = require("base-58")
 
 export default class MixRevision {

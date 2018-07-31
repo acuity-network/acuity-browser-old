@@ -31,11 +31,11 @@
 </template>
 
 <script>
-  import itemProto from '../item_pb.js'
-  import languageProto from '../language_pb.js'
-  import titleProto from '../title_pb.js'
-  import bodyTextProto from '../body_pb.js'
-  import descriptionProto from '../description_pb.js'
+  import itemProto from '../../lib/item_pb.js'
+  import languageProto from '../../lib/language_pb.js'
+  import titleProto from '../../lib/title_pb.js'
+  import bodyTextProto from '../../lib/body_pb.js'
+  import descriptionProto from '../../lib/description_pb.js'
 
   export default {
     name: 'publish-image',
@@ -128,7 +128,7 @@
           window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32).then(itemId => {
             console.log(itemId)
 
-            window.activeAccount.send(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 0)
+            window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 'Creating Topic Feed item.')
             this.$router.push({ name: 'item', params: { itemId: itemId }})
           })
         })

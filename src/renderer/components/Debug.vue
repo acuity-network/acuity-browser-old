@@ -29,12 +29,12 @@
 </template>
 
 <script>
-  import itemProto from '../item_pb.js'
-  import languageProto from '../language_pb.js'
-  import titleProto from '../title_pb.js'
-  import bodyTextProto from '../body_pb.js'
-  import descriptionProto from '../description_pb.js'
-  import jpegImageProto from '../jpeg-image_pb.js'
+  import itemProto from '../../lib/item_pb.js'
+  import languageProto from '../../lib/language_pb.js'
+  import titleProto from '../../lib/title_pb.js'
+  import bodyTextProto from '../../lib/body_pb.js'
+  import descriptionProto from '../../lib/description_pb.js'
+  import jpegImageProto from '../../lib/jpeg-image_pb.js'
   const Base58 = require("base-58")
 
   export default {
@@ -46,21 +46,21 @@
         output.innerHTML = ''
         const itemId = document.getElementById('itemId').value
 
-        const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
+        const itemStoreShortIdAbi = require('../../lib/ItemStoreShortId.abi.json')
         const itemStoreShortId = new this.$web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
 
         itemStoreShortId.methods.getShortId(itemId).call()
         .then(shortId => {
           output.appendChild(document.createTextNode('shortId: '  + shortId + '\n'))
 
-          const itemStoreRegistryAbi = require('./ItemStoreRegistry.abi.json')
+          const itemStoreRegistryAbi = require('../../lib/ItemStoreRegistry.abi.json')
           const itemStoreRegistry = new this.$web3.eth.Contract(itemStoreRegistryAbi, '0xa46adddd3105715fa0ea0d4a883d4be99452c3f6')
 
           itemStoreRegistry.methods.getItemStore(itemId).call()
           .then(itemStoreAddress => {
             output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
 
-            const itemStoreAbi = require('./ItemStoreInterface.abi.json')
+            const itemStoreAbi = require('../../lib/ItemStoreInterface.abi.json')
             const itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
             itemStore.methods.getInUse(itemId).call()

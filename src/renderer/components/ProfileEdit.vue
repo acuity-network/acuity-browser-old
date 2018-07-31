@@ -51,13 +51,13 @@
 </template>
 
 <script>
-  import itemProto from '../item_pb.js'
-  import profileProto from '../account-profile_pb.js'
-  import titleProto from '../title_pb.js'
-  import bodyTextProto from '../body_pb.js'
+  import itemProto from '../../lib/item_pb.js'
+  import profileProto from '../../lib/account-profile_pb.js'
+  import titleProto from '../../lib/title_pb.js'
+  import bodyTextProto from '../../lib/body_pb.js'
   const multihash = require('multihashes')
-  import MixItem from './mix_item.js'
-  import Image from './image.js'
+  import MixItem from '../../lib/MixItem.js'
+  import Image from '../../lib/Image.js'
 
   export default {
     name: 'profile',

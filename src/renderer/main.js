@@ -11,22 +11,22 @@ import 'buefy/lib/buefy.css'
 
 Vue.use(Buefy)
 
-import itemProto from './item_pb.js'
+import itemProto from '../lib/item_pb.js'
 Vue.prototype.$itemProto = itemProto
 
-import languageProto from './language_pb.js'
+import languageProto from '../lib/language_pb.js'
 Vue.prototype.$languageProto = languageProto
 
-import titleProto from './title_pb.js'
+import titleProto from '../lib/title_pb.js'
 Vue.prototype.$titleProto = titleProto
 
-import bodyTextProto from './body_pb.js'
+import bodyTextProto from '../lib/body_pb.js'
 Vue.prototype.$bodyTextProto = bodyTextProto
 
-import descriptionProto from './description_pb.js'
+import descriptionProto from '../lib/description_pb.js'
 Vue.prototype.$descriptionProto = descriptionProto
 
-import jpegImageProto from './jpeg-image_pb.js'
+import jpegImageProto from '../lib/jpeg-image_pb.js'
 Vue.prototype.$jpegImageProto = jpegImageProto
 
 require('./brotli.js')
@@ -52,8 +52,8 @@ Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.mix
 //Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/mix-blockchain/mix.ipc', net))
 //Vue.prototype.$web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
 Vue.prototype.$web3.eth.defaultBlock = 'pending';
-Vue.prototype.$itemStoreIpfsSha256 = new Vue.prototype.$web3.eth.Contract(require('./ItemStoreIpfsSha256.abi.json'), '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
-Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('./AccountProfile.abi.json'), '0x72f52ab6b1d15630ee9b2d8763b23478c0327df8')
+Vue.prototype.$itemStoreIpfsSha256 = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreIpfsSha256.abi.json'), '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
+Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('../lib/AccountProfile.abi.json'), '0x72f52ab6b1d15630ee9b2d8763b23478c0327df8')
 
 export const bus = new Vue();
 
