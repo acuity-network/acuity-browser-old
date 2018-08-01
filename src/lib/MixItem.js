@@ -55,6 +55,14 @@ export default class MixItem {
     return this.itemId
   }
 
+  parentIds() {
+    return this.item.parentIds
+  }
+
+  childIds() {
+    return this.item.childIds
+  }
+
   revisions() {
     return this.revisions
   }

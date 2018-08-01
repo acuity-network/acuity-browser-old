@@ -94,7 +94,7 @@
         var itemPayload = itemMessage.serializeBinary()
         console.log(itemPayload)
 
-        var output = this.$bro.compressArray(itemPayload, 11)
+        var output = this.$brotli.compressArray(itemPayload, 11)
         console.log(output)
 
         var data = new FormData()
@@ -119,26 +119,16 @@
 
           var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
           console.log(flagsNonce)
-          this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce).call()
+          window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
           .then(itemId => {
             console.log(itemId)
-
-            const itemStoreShortIdAbi = require('../../lib/ItemStoreShortId.abi.json')
-            const itemStoreShortId = new this.$web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
-
-            itemStoreShortId.methods.createShortId(itemId).send({from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0'})
-            .then(shortId => {
-              console.log(shortId)
+            window.activeAccount.sendData(this.$itemStoreShortId.methods.createShortId(itemId), 0, 'Create short ID')
+            .then(() => {
+              return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 'Create mixin type')
             })
-
-            this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex).send({
-              from: '0xe58b128142a5e94b169396dd021f5f02fa38b3b0',
-              gas: 1000000
+            .then(() => {
+              this.$router.push({ name: 'item', params: { itemId: itemId }})
             })
-            .then(result => {
-              console.log(result)
-            })
-
           })
         })
         .catch(error => {

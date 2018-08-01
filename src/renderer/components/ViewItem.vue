@@ -15,6 +15,21 @@
           <span v-html="body"></span>
           <div class="bodyText">{{ description }}</div>
         </div>
+        <div class="container">
+          <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+
+          <b-field label="Comment">
+            <b-input v-model="comment" type="textarea"></b-input>
+          </b-field>
+
+          <button class="button is-primary" v-on:click="publish">Publish</button>
+
+        </div>
       </section>
     </main>
   </div>
@@ -22,30 +37,83 @@
 
 <script>
   import MixItem from '../../lib/MixItem.js'
+  import Comment from './Comment.vue'
 
   export default {
     name: 'view-item',
-    components: {},
+    components: {
+      Comment,
+    },
     data() {
       return {
         title: '',
         body: '',
         description: '',
+        childIds: [],
+        comment: '',
       }
     },
     created () {
-      var item = new MixItem(this.$root, this.$route.params.itemId)
+      this.loadData()
+    },
+    methods: {
+      loadData() {
+        var item = new MixItem(this.$root, this.$route.params.itemId)
 
-      return item.init()
-      .then(item => {
-        return item.latestRevision().load()
-      })
-      .then(revision => {
-        this.title = revision.getTitle()
-        this.body = revision.getImage()
-        this.description = revision.getDescription()
-      })
-    }
+        return item.init()
+        .then(item => {
+          this.childIds = item.childIds()
+          return item.latestRevision().load()
+        })
+        .then(revision => {
+          this.title = revision.getTitle()
+          this.body = revision.getImage()
+          this.description = revision.getDescription()
+        })
+      },
+      publish (event) {
+        var itemMessage = new this.$itemProto.Item()
+
+        // Mixin type
+        var mixinMessage = new this.$itemProto.Mixin()
+        mixinMessage.setMixinId(0x874aba65)
+        itemMessage.addMixin(mixinMessage)
+
+        // BodyText
+        var bodyTextMessage = new this.$bodyTextProto.BodyTextMixin()
+        bodyTextMessage.setBodyText(this.comment)
+        mixinMessage = new this.$itemProto.Mixin()
+        mixinMessage.setMixinId(0x34a9a6ec)
+        mixinMessage.setPayload(bodyTextMessage.serializeBinary())
+        itemMessage.addMixin(mixinMessage)
+
+        var itemPayload = itemMessage.serializeBinary()
+        var output = this.$brotli.compressArray(itemPayload, 11)
+        var data = new FormData()
+        data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
+        var hashHex
+        // Send a POST request
+        this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
+        .then(response => {
+          const multihash = require('multihashes')
+          var decodedHash = multihash.decode(multihash.fromB58String(response.data.Hash))
+
+          if (decodedHash.name != 'sha2-256') {
+            throw 'Wrong type of multihash.'
+          }
+
+          hashHex = '0x' + decodedHash.digest.toString('hex')
+          var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+          return window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+          .then(itemId => {
+            return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.$route.params.itemId))
+          })
+          .then(() => {
+            this.loadData()
+          })
+        })
+      }
+    },
   }
 </script>
 
