@@ -51,7 +51,7 @@
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose image',
-          filters: [{name: 'Images', extensions: ['jpg', 'png', 'gif']}]
+          filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}]
         }, (fileNames) => {
           window.fileNames = fileNames
         })
