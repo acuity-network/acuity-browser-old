@@ -24,11 +24,13 @@ export default class Image {
   }
 
   createMixin() {
+    // Use SIMD instructions if available.
     sharp.simd(true)
     var source = sharp(this.filepath).rotate()
 
     return source.metadata()
     .then(metadata => {
+      // Work out correct dimensions if rotation occured.
       var width, height
       if (metadata.orientation > 4) {
         width = metadata.height
@@ -39,13 +41,35 @@ export default class Image {
         height = metadata.height
       }
       var mipmaps = []
-      var level = 0
+      // Don't resize the top-level mipmap.
+      mipmaps.push(source
+        .webp()
+        .toBuffer()
+        .then(data => {
+          var formData = new FormData()
+          // See https://github.com/electron/electron/issues/11700
+          formData.append('', new File([data.buffer.slice(0)], {type: 'application/octet-stream'}))
+          return this.vue.$http.post('http://127.0.0.1:5001/api/v0/add', formData)
+        })
+      )
+
+      var level = 1
       do {
         var scale = Math.pow(2, level)
         var outWidth = Math.floor(width / scale)
         var outHeight = Math.floor(height / scale)
         console.log(level, outWidth, outHeight)
-        mipmaps.push(this.scaleImage(source, outWidth, outHeight))
+        mipmaps.push(source
+          .resize(outWidth, outHeight, {fastShrinkOnLoad: false})
+          .webp()
+          .toBuffer()
+          .then(data => {
+            var formData = new FormData()
+            // See https://github.com/electron/electron/issues/11700
+            formData.append('', new File([data.buffer.slice(0)], {type: 'application/octet-stream'}))
+            return this.vue.$http.post('http://127.0.0.1:5001/api/v0/add', formData)
+          })
+        )
         level++
       }
       while (outWidth > 64 && outHeight > 64)
