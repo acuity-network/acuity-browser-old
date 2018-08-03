@@ -13,7 +13,9 @@ export default class Image {
   createMixin() {
     // Use SIMD instructions if available.
     sharp.simd(true)
-    var source = sharp(this.filepath).rotate()
+    var source = sharp(this.filepath)
+    .rotate()             // Rotate/flip the image if specified in EXIF.
+    .ignoreAspectRatio()  // Ensure that our predictable dimensions algorithm is used.
 
     return source.metadata()
     .then(metadata => {
