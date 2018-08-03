@@ -3,6 +3,7 @@ const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
 const itemStoreAbi = require('./ItemStoreInterface.abi.json')
 import itemProto from './item_pb.js'
 import MixRevision from './MixRevision.js'
+import MixAccount from './MixAccount.js'
 
 export default class MixItem {
 
@@ -48,6 +49,15 @@ export default class MixItem {
           resolve(this)
         })
       })
+    })
+  }
+
+  account() {
+    console.log(this.item.owner)
+    return this.vue.$db.get('/account/contract/' + this.item.owner + '/controller')
+    .then(controller => {
+      console.log(controller)
+      return new MixAccount(this.vue, controller).init()
     })
   }
 

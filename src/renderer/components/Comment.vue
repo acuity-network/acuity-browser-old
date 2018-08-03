@@ -1,6 +1,7 @@
 <template>
   <div class="blog-post">
-    <span v-html="bodyText"></span>
+    <div class="avatar" v-html="avatar"></div>
+    <div v-html="bodyText"></div>
   </div>
 </template>
 
@@ -12,18 +13,38 @@
     props: ['itemId'],
     data() {
       return {
+        avatar: '',
         bodyText: '',
       }
     },
     created () {
       var item = new MixItem(this.$root, this.itemId)
 
-      return item.init()
+      item.init()
       .then(item => {
-        return item.latestRevision().load()
-      })
-      .then(revision => {
-        this.bodyText = revision.getBodyText()
+
+        item.account()
+        .then(account => {
+          console.log(account)
+          return account.call(this.$accountProfile.methods.getProfile())
+        })
+        .then(itemId => {
+          console.log(itemId)
+          var profile = new MixItem(this.$root, itemId)
+
+          profile.init()
+          .then(profile => {
+            return profile.latestRevision().load()
+          })
+          .then(revision => {
+            this.avatar = revision.getImage(64)
+          })
+        })
+
+        item.latestRevision().load()
+        .then(revision => {
+          this.bodyText = revision.getBodyText()
+        })
       })
     },
   }

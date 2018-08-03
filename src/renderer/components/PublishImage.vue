@@ -129,14 +129,18 @@
               console.log(itemId)
 
               var parentId = document.getElementById('parentId').value
+              var promise
 
               if (parentId) {
-                window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId))
+                promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId))
               }
               else {
-                window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex))
+                promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex))
               }
-              this.$router.push({ name: 'item', params: { itemId: itemId }})
+              promise
+              .then(() => {
+                this.$router.push({ name: 'item', params: { itemId: itemId }})
+              })
             })
           })
           .catch(error => {

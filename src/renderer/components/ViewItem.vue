@@ -67,7 +67,7 @@
         })
         .then(revision => {
           this.title = revision.getTitle()
-          this.body = revision.getImage()
+          this.body = revision.getImage(512)
           this.description = revision.getDescription()
         })
       },

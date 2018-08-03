@@ -48,7 +48,7 @@ export default class MixRevision {
     }
   }
 
-  getImage() {
+  getImage(widthOut) {
     for (var i = 0; i < this.mixins.length; i++) {
       if (this.mixins[i].mixinId == '0x12745469') {
         var imageMessage = new jpegImageProto.JpegMipmap.deserializeBinary(this.mixins[i].mixinPayload)
@@ -57,14 +57,14 @@ export default class MixRevision {
         var mipmapList = imageMessage.getMipmapLevelList()
 
         for (var i = 0; i < mipmapList.length; i++) {
-          var scale = Math.pow(2, i + 1)
-          if (width / scale < 2048) {
+          var scale = Math.pow(2, i)
+          if (width / scale < widthOut * 4) {
             break
           }
         }
 
-        var renderHeight = Math.floor(512 * height / width)
-        return '<img src="http://localhost:8081/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash()) + '" width="512" height="' + renderHeight + '">'
+        var renderHeight = Math.floor(widthOut * height / width)
+        return '<img src="http://localhost:8081/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash()) + '" width="' + widthOut + '" height="' + renderHeight + '">'
       }
     }
   }

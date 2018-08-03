@@ -24,21 +24,31 @@ export default class Image {
   }
 
   createMixin() {
-    var source = sharp(this.filepath)
+    sharp.simd(true)
+    var source = sharp(this.filepath).rotate()
 
     return source.metadata()
     .then(metadata => {
+      var width, height
+      if (metadata.orientation > 4) {
+        width = metadata.height
+        height = metadata.width
+      }
+      else {
+        width = metadata.width
+        height = metadata.height
+      }
       var mipmaps = []
-      var level = 1
+      var level = 0
       do {
         var scale = Math.pow(2, level)
-        var width = Math.floor(metadata.width / scale)
-        var height = Math.floor(metadata.height / scale)
-        console.log(level, width, height)
-        mipmaps.push(this.scaleImage(source, width, height))
+        var outWidth = Math.floor(width / scale)
+        var outHeight = Math.floor(height / scale)
+        console.log(level, outWidth, outHeight)
+        mipmaps.push(this.scaleImage(source, outWidth, outHeight))
         level++
       }
-      while (width > 64 && height > 64)
+      while (outWidth > 64 && outHeight > 64)
 
       return Promise.all(mipmaps)
       .then(mipmaps => {

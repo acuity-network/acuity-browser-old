@@ -43,9 +43,10 @@ export default class MixAccount {
       })
       .on('receipt', receipt => {
         console.log(receipt)
+        this.contractAddress = receipt.contractAddress
         this.vue.$db.batch()
-        .put('/account/controller/' + this.controllerAddress + '/contract', receipt.contractAddress)
-        .put('/account/contract/' + this.contractAddress + '/controller', receipt.controllerAddress)
+        .put('/account/controller/' + this.controllerAddress + '/contract', this.contractAddress)
+        .put('/account/contract/' + this.contractAddress + '/controller', this.controllerAddress)
         .write()
       })
       .then(newContractInstance => {
