@@ -10,19 +10,6 @@ export default class Image {
     this.filepath = filepath
   }
 
-  scaleImage(source, width, height) {
-    return source
-    .resize(width, height, {fastShrinkOnLoad: false})
-    .webp()
-    .toBuffer()
-    .then(data => {
-      var formData = new FormData()
-      // See https://github.com/electron/electron/issues/11700
-      formData.append('', new File([data.buffer.slice(0)], {type: 'application/octet-stream'}))
-      return this.vue.$http.post('http://127.0.0.1:5001/api/v0/add', formData)
-    })
-  }
-
   createMixin() {
     // Use SIMD instructions if available.
     sharp.simd(true)
