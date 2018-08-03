@@ -13,11 +13,7 @@ export default class Image {
   scaleImage(source, width, height) {
     return source
     .resize(width, height, {fastShrinkOnLoad: false})
-    .jpeg({
-      quality: 70,
-      progressive: true,
-      chromaSubsampling: '4:4:4'
-    })
+    .webp()
     .toBuffer()
     .then(data => {
       var formData = new FormData()
