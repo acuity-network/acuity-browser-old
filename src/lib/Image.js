@@ -43,6 +43,7 @@ export default class Image {
       var mipmaps = []
       // Don't resize the top-level mipmap.
       mipmaps.push(source
+        .clone()
         .webp()
         .toBuffer()
         .then(data => {
@@ -60,6 +61,7 @@ export default class Image {
         var outHeight = Math.floor(height / scale)
         console.log(level, outWidth, outHeight)
         mipmaps.push(source
+          .clone()
           .resize(outWidth, outHeight, {fastShrinkOnLoad: false})
           .webp()
           .toBuffer()
