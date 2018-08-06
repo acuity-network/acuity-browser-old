@@ -63,7 +63,7 @@ export default class MixRevision {
           }
         }
 
-        var renderHeight = Math.floor(widthOut * height / width)
+        var renderHeight = Math.round(widthOut * height / width)
         return '<img src="http://localhost:8081/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash()) + '" width="' + widthOut + '" height="' + renderHeight + '">'
       }
     }

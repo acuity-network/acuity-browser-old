@@ -163,7 +163,7 @@
                             output.append('Original height: ' + height + '\n')
                             var mipmaps = imageMessage.getMipmapLevelList()
                             output.append('Mipmap levels: ' + mipmaps.length + '\n')
-                            var renderHeight = Math.floor(256 * height / width)
+                            var renderHeight = Math.round(256 * height / width)
                             for (var j = 0; j < mipmaps.length; j++) {
                               output.append('\nMipmap level: ' + j + '\n')
                               output.append('Mipmap filesize: ' + mipmaps[j].getFilesize() + '\n')
