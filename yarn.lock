@@ -1727,12 +1727,12 @@ caniuse-api@^1.5.2:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
-  version "1.0.30000872"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000872.tgz#3f6e53b63d373768bf99e896133d66ef89c49999"
+  version "1.0.30000874"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000874.tgz#49edc0262efdc6c49d4d962bb16d1f0c790fa44e"
 
 caniuse-lite@^1.0.30000844:
-  version "1.0.30000872"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000872.tgz#aa1346ac88ed8dcdc7e372a42989bf9bea696f06"
+  version "1.0.30000874"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000874.tgz#a641b1f1c420d58d9b132920ef6ba87bbdcd2223"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -2058,7 +2058,7 @@ commander@1.0.4:
   dependencies:
     keypress "0.1.x"
 
-commander@2.16.x, commander@^2.15.1, commander@^2.8.1, commander@~2.16.0:
+commander@2.16.x, commander@~2.16.0:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.16.0.tgz#f16390593996ceb4f3eeb020b31d78528f7f8a50"
 
@@ -2073,6 +2073,10 @@ commander@2.9.0, commander@2.9.x, commander@~2.9.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"
   dependencies:
     graceful-readlink ">= 1.0.0"
+
+commander@^2.15.1, commander@^2.8.1:
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.0.tgz#9d07b25e2a6f198b76d8b756a0e8a9604a6a1a60"
 
 commondir@^1.0.1:
   version "1.0.1"
@@ -5946,8 +5950,8 @@ mocha@^3.0.2:
     supports-color "3.1.2"
 
 mock-fs@^4.1.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.5.0.tgz#75245b966f7e3defe197b03454af9c5b355594b7"
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.6.0.tgz#d944ef4c3e03ceb4e8332b4b31b8ac254051c8ae"
 
 mout@^0.11.0:
   version "0.11.1"
@@ -8812,8 +8816,8 @@ uuid@^3.0.1, uuid@^3.1.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
 validate-npm-package-license@^3.0.1:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/validate-npm-package-license/-/validate-npm-package-license-3.0.3.tgz#81643bcbef1bdfecd4623793dc4648948ba98338"
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/validate-npm-package-license/-/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
@@ -8849,8 +8853,8 @@ void-elements@^2.0.0:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
 
 vue-async-computed@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/vue-async-computed/-/vue-async-computed-3.3.1.tgz#9d754e649ccabef97e7e3932f1bc097a66a23db7"
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/vue-async-computed/-/vue-async-computed-3.4.0.tgz#5b041e7eb74d423e7bf09e113210516b064527a6"
 
 vue-electron@^1.0.6:
   version "1.0.6"
