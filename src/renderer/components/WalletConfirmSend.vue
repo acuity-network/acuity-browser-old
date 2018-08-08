@@ -11,10 +11,6 @@
       <b-field label="Amount">
         {{ amount }} MIX
       </b-field>
-
-      <b-field label="Comment">
-      {{ comment }}
-      </b-field>
     </section>
     <footer class="modal-card-foot">
       <button class="button" type="button" @click="$parent.close()">Close</button>
@@ -26,10 +22,10 @@
 <script>
   export default {
     name: 'walletConfirmSend',
-    props: ['to', 'amount', 'comment'],
+    props: ['to', 'amount'],
     methods: {
       send (event) {
-        window.activeAccount.sendMix(this.to, this.$web3.utils.toWei(this.amount), this.comment)
+        window.activeAccount.sendMix(this.to, this.$web3.utils.toWei(this.amount))
         .then(() => {
           this.$parent.$parent.loadData()
           this.$emit('close')

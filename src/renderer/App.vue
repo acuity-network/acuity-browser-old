@@ -8,6 +8,7 @@
           <router-link class="navbar-item" to="/feeds" title="Feeds"><img src="/static/icons/feeds.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/interactions" title="Interactions"><img src="/static/icons/interactions.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/browsing-history" title="Browsing history"><img src="/static/icons/browsing-history.svg" width="64" height="64"></router-link>
+          <router-link class="navbar-item" to="/transaction-history" title="Transaction history"><img src="/static/icons/transaction-history.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/publish-item" title="Create item"><img src="/static/icons/new-post.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/profile" title="Profile"><img src="/static/icons/profile.svg" width="64" height="64"></router-link>
           <router-link class="navbar-item" to="/trusted-accounts" title="Trusted accounts"><img src="/static/icons/trusted-accounts.svg" width="64" height="64"></router-link>

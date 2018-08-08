@@ -16,11 +16,11 @@ export default class MixAccount {
     })
   }
 
-  _logTransaction(transaction, to, comment) {
+  _logTransaction(transaction, to, description) {
     var info = {
       hash: transaction.hash,
       to: to,
-      comment: comment,
+      description: description,
     }
     return this.vue.$db.put('/account/controller/' + this.controllerAddress + '/transaction/' + transaction.nonce, JSON.stringify(info))
   }
@@ -124,7 +124,7 @@ export default class MixAccount {
     })
   }
 
-  sendMix(to, value, comment) {
+  sendMix(to, value) {
     // Check if the destination is a contract.
     return this.vue.$web3.eth.getCode(to)
     .then(data => {
@@ -141,7 +141,7 @@ export default class MixAccount {
           .on('transactionHash', transactionHash => {
             this.vue.$web3.eth.getTransaction(transactionHash)
             .then(transaction => {
-              this._logTransaction(transaction, to, comment)
+              this._logTransaction(transaction, to, 'Send MIX')
               .then(() => {
                 resolve(transaction)
               })
@@ -153,7 +153,7 @@ export default class MixAccount {
         // Send to a contract address.
         return this._send(this.contract.methods.sendMix(to), value)
         .then(transaction => {
-          return this._logTransaction(transaction, to, comment)
+          return this._logTransaction(transaction, to, 'Send MIX')
           .then(() => {
             return transaction
           })
@@ -162,11 +162,11 @@ export default class MixAccount {
     })
   }
 
-  sendData(transaction, value, comment) {
+  sendData(transaction, value, description) {
     var to = transaction._parent._address
     return this._send(this.contract.methods.sendData(to, transaction.encodeABI()), value)
     .then(transaction => {
-      return this._logTransaction(transaction, to, comment)
+      return this._logTransaction(transaction, to, description)
       .then(() => {
         return transaction
       })

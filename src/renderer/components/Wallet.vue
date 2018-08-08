@@ -25,9 +25,6 @@
           <b-field label="Amount">
             <b-input v-model="amount"></b-input>
           </b-field>
-          <b-field label="Comment">
-            <b-input v-model="comment"></b-input>
-          </b-field>
           <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
         </div>
 
@@ -58,7 +55,6 @@
         unconfirmedBalance: '',
         to: '',
         amount: '',
-        comment: '',
         data: [],
         columns: [
           {
@@ -144,7 +140,7 @@
           return this.$web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
         })
         .then(nonce => {
-          var transactions = [];
+          var transactions = []
           for (var i = 0; i < nonce; i++) {
             transactions.push(window.activeAccount.getTransactionInfo(i)
               .catch(err => {
@@ -176,7 +172,6 @@
           props: {
             to: this.to,
             amount: this.amount,
-            comment: this.comment,
           },
         })
       },
@@ -192,16 +187,16 @@
 
       bus.$on('account-receive', accountAddress => {
         if (accountAddress == window.activeAccount.contractAddress) {
-          this.loadData(window.activeAccount)
+          this.loadData()
         }
       })
 
       this.$web3.eth.subscribe('newBlockHeaders')
       .on('data', block => {
-        this.loadData(window.activeAccount)
+        this.loadData()
       })
 
-      this.loadData(window.activeAccount)
+      this.loadData()
     },
   }
 </script>

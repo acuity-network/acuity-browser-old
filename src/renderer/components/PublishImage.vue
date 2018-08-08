@@ -132,10 +132,10 @@
               var promise
 
               if (parentId) {
-                promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId))
+                promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId), 0, 'Create image')
               }
               else {
-                promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex))
+                promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 'Create image')
               }
               promise
               .then(() => {
