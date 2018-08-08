@@ -84,6 +84,33 @@
           this.title = revision.getTitle()
           this.body = revision.getImage(512)
           this.description = revision.getDescription()
+
+          var id
+          this.$db.get('/historyCount')
+          .then(count => {
+            id = parseInt(count)
+          })
+          .catch(err => {
+            id = 0
+          })
+          .then(() => {
+            return this.$db.get('/historyIndex/' + this.$route.params.itemId)
+            .then(id => {
+              this.$db.del('/history/' + id)
+            })
+            .catch(err => {})
+          })
+          .then(() => {
+            this.$db.batch()
+            .put('/history/' + id, JSON.stringify({
+              itemId: this.$route.params.itemId,
+              timestamp: Date.now(),
+              title: this.title,
+            }))
+            .put('/historyIndex/' + this.$route.params.itemId, id)
+            .put('/historyCount', id + 1)
+            .write()
+          })
         })
       },
       publish (event) {

@@ -16,7 +16,7 @@
             <template slot-scope="props">
 
               <b-table-column field="account" label="Account">
-                {{ props.row.account }}
+                <code>{{ props.row.account }}</code>
               </b-table-column>
 
               <b-table-column field="balance" label="Balance">
