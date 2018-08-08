@@ -6,6 +6,7 @@
         <div class="hero-body">
           <div class="container">
             <h1 class="title">{{ title }}</h1>
+            <h2 class="subtitle">by {{ owner }}</h2>
           </div>
         </div>
       </section>
@@ -47,6 +48,7 @@
     data() {
       return {
         title: '',
+        owner: '',
         body: '',
         description: '',
         childIds: [],
@@ -62,6 +64,19 @@
 
         return item.init()
         .then(item => {
+          item.account()
+          .then(account => {
+            return account.call(this.$accountProfile.methods.getProfile())
+          })
+          .then(profileItemId => {
+            return new MixItem(this.$root, profileItemId).init()
+          })
+          .then(profileItem => {
+            return profileItem.latestRevision().load()
+          })
+          .then(profileRevision => {
+            this.owner = profileRevision.getTitle()
+          })
           this.childIds = item.childIds()
           return item.latestRevision().load()
         })
