@@ -93,7 +93,7 @@ export default class MixRevision {
         var profileMessage = profileProto.AccountProfile.deserializeBinary(this.mixins[i].mixinPayload)
         return {
           type: profileMessage.getType(),
-          location: profileMessage.getLocation()
+          location: profileMessage.getLocation(),
         }
       }
     }

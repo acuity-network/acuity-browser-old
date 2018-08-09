@@ -70,30 +70,28 @@
         type: '',
       }
     },
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        if (!window.activeAccount) {
-          return
-        }
-        window.activeAccount.call(vm.$accountProfile.methods.getProfile())
-        .then(itemId => {
-          var item = new MixItem(vm, itemId)
+    created() {
+      if (!window.activeAccount) {
+        return
+      }
+      window.activeAccount.call(this.$accountProfile.methods.getProfile())
+      .then(itemId => {
+        var item = new MixItem(this, itemId)
 
-          item.init()
-          .then(item => {
-            return item.revisions[0].load()
-          })
-          .then(revision => {
-            vm.name = revision.getTitle()
-            vm.bio = revision.getBodyText()
-            var profile = revision.getProfile()
-            vm.type = profile.type
-            vm.location = profile.location
-          })
+        item.init()
+        .then(item => {
+          return item.latestRevision().load()
         })
-        .catch(error => {
-          console.log(error)
+        .then(revision => {
+          this.name = revision.getTitle()
+          this.bio = revision.getBodyText()
+          var profile = revision.getProfile()
+          this.type = profile.type
+          this.location = profile.location
         })
+      })
+      .catch(error => {
+        console.log(error)
       })
     },
     methods: {
