@@ -162,7 +162,7 @@
           return window.activeAccount.call(this.$accountProfile.methods.getProfile())
         })
         .then(itemId => {
-          window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash))
+          window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash), 0, 'Update profile')
           .then(() => {
             this.$router.push({ name: 'profile' })
           })
@@ -171,9 +171,9 @@
           var flagsNonce = '0x01' + this.$web3.utils.randomHex(30).substr(2)
           window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
           .then(itemId => {
-            window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hexHash))
+            window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hexHash), 0, 'Create profile item')
             .then(result => {
-              return window.activeAccount.sendData(this.$accountProfile.methods.setProfile(itemId))
+              return window.activeAccount.sendData(this.$accountProfile.methods.setProfile(itemId), 0, 'Set profile item')
             })
             .then(() => {
               this.$router.push({ name: 'profile' })

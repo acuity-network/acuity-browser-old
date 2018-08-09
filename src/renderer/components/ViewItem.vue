@@ -55,7 +55,7 @@
         comment: '',
       }
     },
-    created () {
+    created() {
       this.loadData()
     },
     methods: {
@@ -149,7 +149,7 @@
           var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
           return window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
           .then(itemId => {
-            return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.$route.params.itemId))
+            return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.$route.params.itemId), 0, 'Post comment')
           })
           .then(() => {
             this.loadData()
