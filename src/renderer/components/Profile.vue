@@ -16,9 +16,15 @@
             <li><router-link to="/profile/edit">Edit profile</router-link></li>
           </ul>
           <div v-html="image"></div>
-          <div>Account type: {{ type }}</div>
-          <div>Bio: {{ bio }}</div>
-          <div>Location: {{ location }}</div>
+          <b-field label="Account type">
+            {{ type }}
+          </b-field>
+          <b-field label="Bio">
+            {{ bio }}
+          </b-field>
+          <b-field label="Location">
+            {{ location }}
+          </b-field>
         </div>
       </section>
     </main>
