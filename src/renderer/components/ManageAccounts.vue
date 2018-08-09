@@ -16,7 +16,7 @@
             <template slot-scope="props">
 
               <b-table-column field="account" label="Account">
-                <code>{{ props.row.account }}</code>
+                {{ props.row.name }}
               </b-table-column>
 
               <b-table-column field="balance" label="Balance">
@@ -45,6 +45,7 @@
 
 <script>
   import MixAccount from '../../lib/MixAccount.js'
+  import MixItem from '../../lib/MixItem.js'
   import ManageAccountUnlock from './ManageAccountUnlock.vue'
 
   export default {
@@ -73,14 +74,27 @@
               .catch(() => {
                 return false
               }),
-              this.$db.get('/account/controller/' + address + '/contract')
+              new MixAccount(this.$root, address).init()
+              .then(account => {
+                return account.call(this.$accountProfile.methods.getProfile())
+              })
+              .then(itemId => {
+                return new MixItem(this, itemId).init()
+              })
+              .then(item => {
+                return item.latestRevision().load()
+              })
+              .then(revision => {
+                return revision.getTitle()
+              })
               .catch(() => {
                 return false
               }),
             ])
-            .then (result => {
+            .then(result => {
               var row = {
                 account: address,
+                name: result[2] ? result[2] : address,
                 balance: this.$web3.utils.fromWei(result[0]),
                 unlocked: result[1],
                 action: (result[1] == false) ? 'unlock' : ((result[2] == false) ? 'deploy' : 'lock'),
