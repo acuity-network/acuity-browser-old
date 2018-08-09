@@ -177,6 +177,9 @@
       },
     },
     created () {
+      if (!window.activeAccount) {
+        return
+      }
       QRCode.toDataURL(window.activeAccount.contractAddress, {
         mode: 'alphanumeric',
         errorCorrectionLevel: 'H'

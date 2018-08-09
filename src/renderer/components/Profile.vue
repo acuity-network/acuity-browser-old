@@ -42,6 +42,9 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
+        if (!window.activeAccount) {
+          return
+        }
         window.activeAccount.call(vm.$accountProfile.methods.getProfile())
         .then(itemId => {
           var item = new MixItem(vm, itemId)

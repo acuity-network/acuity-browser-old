@@ -38,6 +38,7 @@
             this.avatar = revision.getImage(64)
           })
         })
+        .catch(() => {})
 
         item.latestRevision().load()
         .then(revision => {

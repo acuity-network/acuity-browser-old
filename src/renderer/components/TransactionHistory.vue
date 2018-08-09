@@ -58,6 +58,9 @@
       }
     },
     created() {
+      if (!window.activeAccount) {
+        return
+      }
       this.$web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
       .then(nonce => {
         var transactions = []

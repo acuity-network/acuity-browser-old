@@ -87,7 +87,7 @@
                 route: (result[1] == false) ? 'manage-account-unlock' : 'manage-account-controller',
               }
               this.data.push(row)
-              if (address == window.activeAccount.controllerAddress) {
+              if (window.activeAccount && address == window.activeAccount.controllerAddress) {
                 this.selected = row
               }
             })

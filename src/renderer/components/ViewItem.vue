@@ -77,6 +77,7 @@
           .then(profileRevision => {
             this.owner = profileRevision.getTitle()
           })
+          .catch(() => {})
           this.childIds = item.childIds()
           return item.latestRevision().load()
         })
