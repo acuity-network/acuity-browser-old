@@ -98,7 +98,9 @@
         new MixAccount(this.$root, event.account).init()
         .then(account => {
           window.activeAccount = account
+          this.$db.put('/active-account', event.account)
         })
+        .catch(() => {})
       },
       unlock (event) {
         this.$modal.open({

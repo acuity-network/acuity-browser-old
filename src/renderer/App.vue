@@ -32,6 +32,15 @@
   export default {
     name: 'd-web',
     created() {
+      // Load previous active account.
+      this.$db.get('/active-account')
+      .then(controller => {
+        new MixAccount(this.$root, controller).init()
+        .then(account => {
+          window.activeAccount = account
+        })
+      })
+      .catch(() => {})
       this.$web3.eth.personal.getAccounts()
       .then(controllers => {
         var promises = []
