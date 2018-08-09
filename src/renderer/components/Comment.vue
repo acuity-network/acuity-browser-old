@@ -25,11 +25,9 @@
 
         item.account()
         .then(account => {
-          console.log(account)
           return account.call(this.$accountProfile.methods.getProfile())
         })
         .then(itemId => {
-          console.log(itemId)
           var profile = new MixItem(this.$root, itemId)
 
           profile.init()

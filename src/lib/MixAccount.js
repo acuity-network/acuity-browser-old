@@ -39,10 +39,8 @@ export default class MixAccount {
         console.log(error)
       })
       .on('transactionHash', transactionHash => {
-        console.log(transactionHash)
       })
       .on('receipt', receipt => {
-        console.log(receipt)
         this.contractAddress = receipt.contractAddress
         this.vue.$db.batch()
         .put('/account/controller/' + this.controllerAddress + '/contract', this.contractAddress)
@@ -50,7 +48,6 @@ export default class MixAccount {
         .write()
       })
       .then(newContractInstance => {
-        console.log(newContractInstance)
       })
     })
   }
@@ -95,7 +92,6 @@ export default class MixAccount {
         .on('transactionHash', transactionHash => {
           this.vue.$web3.eth.getTransaction(transactionHash)
           .then(transaction => {
-            console.log(transaction)
             resolve(transaction)
           })
         })

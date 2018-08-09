@@ -53,10 +53,8 @@ export default class MixItem {
   }
 
   account() {
-    console.log(this.item.owner)
     return this.vue.$db.get('/account/contract/' + this.item.owner + '/controller')
     .then(controller => {
-      console.log(controller)
       return new MixAccount(this.vue, controller).init()
     })
   }

@@ -167,7 +167,6 @@
           })
         })
         .catch(err => {
-          console.log('No profile item found, creating new one.')
           var flagsNonce = '0x01' + this.$web3.utils.randomHex(30).substr(2)
           window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
           .then(itemId => {

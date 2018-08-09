@@ -43,9 +43,6 @@
     components: {},
     methods: {
       publish (event) {
-        // `this` inside methods points to the Vue instance
-        console.log('Publishing mixin type.')
-
         var itemMessage = new this.$itemProto.Item()
 
         // Mixin type
@@ -92,11 +89,7 @@
         itemMessage.addMixin(mixinMessage)
 
         var itemPayload = itemMessage.serializeBinary()
-        console.log(itemPayload)
-
         var output = this.$brotli.compressArray(itemPayload, 11)
-        console.log(output)
-
         var data = new FormData()
         data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
 
@@ -104,24 +97,16 @@
         this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
         .then(response => {
           var hash = response.data.Hash
-          console.log(hash)
-
           const multihash = require('multihashes')
           var decodedHash = multihash.decode(multihash.fromB58String(hash))
-          console.log(decodedHash)
-
           if (decodedHash.name != 'sha2-256') {
             throw 'Wrong type of multihash.'
           }
 
           var hashHex = '0x' + decodedHash.digest.toString('hex')
-          console.log(hashHex)
-
           var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-          console.log(flagsNonce)
           window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
           .then(itemId => {
-            console.log(itemId)
             window.activeAccount.sendData(this.$itemStoreShortId.methods.createShortId(itemId), 0, 'Create short ID')
             .then(() => {
               return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 'Create mixin type')
