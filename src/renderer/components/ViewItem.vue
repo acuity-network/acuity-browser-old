@@ -6,7 +6,9 @@
         <div class="hero-body">
           <div class="container">
             <h1 class="title">{{ title }}</h1>
-            <h2 class="subtitle">by {{ owner }}</h2>
+            <h2 class="subtitle">
+              <router-link :to="ownerRoute">{{ owner }}</router-link>
+            </h2>
           </div>
         </div>
       </section>
@@ -42,6 +44,7 @@
 
   export default {
     name: 'view-item',
+    props: ['itemId'],
     components: {
       Comment,
     },
@@ -49,6 +52,7 @@
       return {
         title: '',
         owner: '',
+        ownerRoute: '',
         body: '',
         description: '',
         childIds: [],
@@ -58,9 +62,14 @@
     created() {
       this.loadData()
     },
+    watch: {
+      itemId() {
+        this.loadData()
+      }
+    },
     methods: {
       loadData() {
-        var item = new MixItem(this.$root, this.$route.params.itemId)
+        var item = new MixItem(this.$root, this.itemId)
 
         return item.init()
         .then(item => {
@@ -69,6 +78,8 @@
             return account.call(this.$accountProfile.methods.getProfile())
           })
           .then(profileItemId => {
+            console.log(profileItemId)
+            this.ownerRoute = '/item/' + profileItemId
             return new MixItem(this.$root, profileItemId).init()
           })
           .then(profileItem => {

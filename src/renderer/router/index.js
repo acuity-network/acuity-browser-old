@@ -7,7 +7,8 @@ export default new Router({
     {
       path: '/item/:itemId',
       name: 'item',
-      component: require('@/components/ViewItem').default
+      component: require('@/components/ViewItem').default,
+      props: true,
     },
     {
       path: '*',
