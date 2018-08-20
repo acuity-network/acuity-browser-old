@@ -78,7 +78,6 @@
             return account.call(this.$accountProfile.methods.getProfile())
           })
           .then(profileItemId => {
-            console.log(profileItemId)
             this.ownerRoute = '/item/' + profileItemId
             return new MixItem(this.$root, profileItemId).init()
           })
