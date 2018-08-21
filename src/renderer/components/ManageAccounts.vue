@@ -34,7 +34,7 @@
 
             </template>
             <template slot="footer">
-              <router-link to="/manage-accounts/new">Create account</router-link>
+              <a v-on:click="create">Create account</a>
             </template>
           </b-table>
         </div>
@@ -47,11 +47,13 @@
   import MixAccount from '../../lib/MixAccount.js'
   import MixItem from '../../lib/MixItem.js'
   import ManageAccountUnlock from './ManageAccountUnlock.vue'
+  import ManageAccountsNew from './ManageAccountsNew.vue'
 
   export default {
     name: 'manage-accounts',
     components: {
       ManageAccountUnlock,
+      ManageAccountsNew,
     },
     data() {
       return {
@@ -108,7 +110,7 @@
           }
         })
       },
-      select (event) {
+      select(event) {
         new MixAccount(this.$root, event.account).init()
         .then(account => {
           window.activeAccount = account
@@ -116,7 +118,7 @@
         })
         .catch(() => {})
       },
-      unlock (event) {
+      unlock(event) {
         this.$modal.open({
           parent: this,
           component: ManageAccountUnlock,
@@ -126,7 +128,7 @@
           },
         })
       },
-      lock (event) {
+      lock(event) {
         this.$web3.eth.personal.lockAccount(event.target.dataset.address)
         .then(result => {
           this.loadAccounts();
@@ -135,8 +137,15 @@
           console.log(error)
         })
       },
+      create(event) {
+        this.$modal.open({
+          parent: this,
+          component: ManageAccountsNew,
+          hasModalCard: true,
+        })
+      }
     },
-    created () {
+    created() {
       this.loadAccounts()
     },
   }
