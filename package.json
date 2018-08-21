@@ -55,6 +55,7 @@
     }
   },
   "dependencies": {
+    "@mdi/font": "^2.6.95",
     "axios": "^0.16.1",
     "base-58": "^0.0.1",
     "buefy": "^0.6.5",
@@ -63,7 +64,7 @@
     "level": "^4.0.0",
     "multihashes": "^0.4.13",
     "qrcode": "^1.2.0",
-    "sharp": "^0.20.5",
+    "sharp": "0.20.5",
     "vue": "^2.3.3",
     "vue-async-computed": "^3.3.1",
     "vue-electron": "^1.0.6",

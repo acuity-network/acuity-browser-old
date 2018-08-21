@@ -13,6 +13,10 @@
       <section class="section">
         <div class="container">
 
+          <span class="mdi mdi-36px mdi-shield-outline"></span>
+          <span class="mdi mdi-36px mdi-shield"></span>
+          <span class="mdi mdi-36px mdi-verified"></span>
+
         </div>
       </section>
     </main>
