@@ -39,12 +39,10 @@
         .then(() => {
           return account.consolidateMix()
         })
+        .catch(error => {})
         .then(() => {
           this.$parent.$parent.loadAccounts()
           this.$emit('close')
-        })
-        .catch(error => {
-          console.log(error)
         })
       },
     }

@@ -14,6 +14,7 @@ export default class MixAccount {
       this.contract = new this.vue.$web3.eth.Contract(accountAbi, contractAddress)
       return this
     })
+    .catch(() => {})
   }
 
   _logTransaction(transaction, to, description) {
