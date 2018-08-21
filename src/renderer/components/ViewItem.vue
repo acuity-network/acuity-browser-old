@@ -7,7 +7,8 @@
           <div class="container">
             <h1 class="title">{{ title }}</h1>
             <h2 class="subtitle">
-              <router-link :to="ownerRoute">{{ owner }}</router-link>
+              <router-link :to="ownerRoute">{{ owner }}</router-link>&ensp;
+              <span v-on:click="toggleTrust" :class="ownerTrusted" class="mdi mdi-24px"></span>
             </h2>
           </div>
         </div>
@@ -53,6 +54,7 @@
         title: '',
         owner: '',
         ownerRoute: '',
+        ownerTrusted: '',
         body: '',
         description: '',
         childIds: [],
@@ -75,6 +77,11 @@
         .then(item => {
           item.account()
           .then(account => {
+            this.ownerTrusted = 'mdi-shield-outline'
+            window.activeAccount.call(this.$trustedAccounts.methods.getIsTrusted(account.contractAddress))
+            .then(trusted => {
+              this.ownerTrusted = trusted ? 'mdi-verified' : 'mdi-shield-outline'
+            })
             return account.call(this.$accountProfile.methods.getProfile())
           })
           .then(profileItemId => {
@@ -124,7 +131,7 @@
           })
         })
       },
-      publish (event) {
+      publish(event) {
         var itemMessage = new this.$itemProto.Item()
 
         // Mixin type
@@ -165,7 +172,27 @@
             this.loadData()
           })
         })
-      }
+      },
+      toggleTrust(event) {
+        new MixItem(this.$root, this.itemId).init()
+        .then(item => {
+          return item.account()
+        })
+        .then(account => {
+          window.activeAccount.call(this.$trustedAccounts.methods.getIsTrusted(account.contractAddress))
+          .then(trusted => {
+            if (trusted) {
+              return window.activeAccount.sendData(this.$trustedAccounts.methods.untrustAccount(account.contractAddress), 0, 'Untrust account')
+            }
+            else {
+              return window.activeAccount.sendData(this.$trustedAccounts.methods.trustAccount(account.contractAddress), 0, 'Trust account')
+            }
+          })
+          .then(() => {
+            this.loadData()
+          })
+        })
+      },
     },
   }
 </script>
