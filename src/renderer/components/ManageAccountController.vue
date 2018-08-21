@@ -33,22 +33,11 @@
 
   export default {
     name: 'manage-account-controller',
-    components: {},
-    asyncComputed: {
-      qrcode() {
-        return QRCode.toDataURL(this.$route.params.address, {
-          mode: 'alphanumeric',
-          errorCorrectionLevel: 'H'
-        })
-      },
-      contract() {
-        return this.$db.get('/account/controller/' + this.$route.params.address + '/contract')
-      },
-      balance() {
-        return this.$web3.eth.getBalance(this.$route.params.address, 'pending')
-        .then(balance => {
-          return this.$web3.utils.fromWei(balance) + ' MIX'
-        })
+    data() {
+      return {
+        qrcode: '',
+        contract: '',
+        balance: '',
       }
     },
     methods: {
@@ -56,6 +45,25 @@
         var account = new MixAccount(this, this.$route.params.address)
         return account.deploy()
       }
-    }
+    },
+    created() {
+      QRCode.toDataURL(this.$route.params.address, {
+        mode: 'alphanumeric',
+        errorCorrectionLevel: 'H'
+      })
+      .then(qrcode => {
+        this.qrcode = qrcode
+      })
+
+      this.$db.get('/account/controller/' + this.$route.params.address + '/contract')
+      .then(contractAddress => {
+        this.contract = contractAddress
+      })
+
+      this.$web3.eth.getBalance(this.$route.params.address, 'pending')
+      .then(balance => {
+        this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
+      })
+    },
   }
 </script>
