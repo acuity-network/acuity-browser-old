@@ -81,53 +81,62 @@
             window.activeAccount.call(this.$trustedAccounts.methods.getIsTrusted(account.contractAddress))
             .then(trusted => {
               this.ownerTrusted = trusted ? 'mdi-verified' : 'mdi-shield-outline'
-            })
-            return account.call(this.$accountProfile.methods.getProfile())
-          })
-          .then(profileItemId => {
-            this.ownerRoute = '/item/' + profileItemId
-            return new MixItem(this.$root, profileItemId).init()
-          })
-          .then(profileItem => {
-            return profileItem.latestRevision().load()
-          })
-          .then(profileRevision => {
-            this.owner = profileRevision.getTitle()
-          })
-          .catch(() => {})
-          this.childIds = item.childIds()
-          return item.latestRevision().load()
-        })
-        .then(revision => {
-          this.title = revision.getTitle()
-          this.body = revision.getImage(512)
-          this.description = revision.getDescription()
+              account.call(this.$accountProfile.methods.getProfile())
+              .then(profileItemId => {
+                this.ownerRoute = '/item/' + profileItemId
+                return new MixItem(this.$root, profileItemId).init()
+              })
+              .then(profileItem => {
+                return profileItem.latestRevision().load()
+              })
+              .then(profileRevision => {
+                this.owner = profileRevision.getTitle()
+              })
+              .catch(() => {})
+              this.childIds = item.childIds()
 
-          var id
-          this.$db.get('/historyCount')
-          .then(count => {
-            id = parseInt(count)
-          })
-          .catch(err => {
-            id = 0
-          })
-          .then(() => {
-            return this.$db.get('/historyIndex/' + this.$route.params.itemId)
-            .then(id => {
-              this.$db.del('/history/' + id)
+              if (!trusted) {
+                this.title = ''
+                this.body = 'Author not trusted.'
+                this.description = ''
+                return
+              }
+
+              item.latestRevision().load()
+              .then(revision => {
+                this.title = revision.getTitle()
+
+                this.body = revision.getImage(512)
+                this.description = revision.getDescription()
+
+                var id
+                this.$db.get('/historyCount')
+                .then(count => {
+                  id = parseInt(count)
+                })
+                .catch(err => {
+                  id = 0
+                })
+                .then(() => {
+                  return this.$db.get('/historyIndex/' + this.$route.params.itemId)
+                  .then(id => {
+                    this.$db.del('/history/' + id)
+                  })
+                  .catch(err => {})
+                })
+                .then(() => {
+                  this.$db.batch()
+                  .put('/history/' + id, JSON.stringify({
+                    itemId: this.$route.params.itemId,
+                    timestamp: Date.now(),
+                    title: this.title,
+                  }))
+                  .put('/historyIndex/' + this.$route.params.itemId, id)
+                  .put('/historyCount', id + 1)
+                  .write()
+                })
+              })
             })
-            .catch(err => {})
-          })
-          .then(() => {
-            this.$db.batch()
-            .put('/history/' + id, JSON.stringify({
-              itemId: this.$route.params.itemId,
-              timestamp: Date.now(),
-              title: this.title,
-            }))
-            .put('/historyIndex/' + this.$route.params.itemId, id)
-            .put('/historyCount', id + 1)
-            .write()
           })
         })
       },
