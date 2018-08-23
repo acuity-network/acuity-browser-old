@@ -5,9 +5,11 @@
     </header>
     <section class="modal-card-body">
       <b-field label="Password">
-        <b-input type="password" v-model="password" id="password" password-reveal></b-input>      </b-field>
+        <b-input type="password" v-model="password" id="password" password-reveal></b-input>
+      </b-field>
       <b-field label="Repeat password">
-        <b-input type="password" v-model="passwordRepeat" password-reveal></b-input>      </b-field>
+        <b-input type="password" v-model="passwordRepeat" password-reveal></b-input>
+      </b-field>
     </section>
     <footer class="modal-card-foot">
       <button class="button" type="button" @click="$parent.close()">Close</button>
