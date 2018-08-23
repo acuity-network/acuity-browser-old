@@ -8,7 +8,7 @@
             <h1 class="title">{{ title }}</h1>
             <h2 class="subtitle">
               <router-link :to="ownerRoute">{{ owner }}</router-link>&ensp;
-              <span v-on:click="toggleTrust" :class="ownerTrusted" class="mdi mdi-24px"></span>
+              <span v-on:click="toggleTrust" :class="ownerTrusted" class="shield mdi mdi-24px"></span>
             </h2>
           </div>
         </div>
@@ -201,6 +201,11 @@
 
   body {
     font-family: 'OpenSans', 'sans-serif';
+  }
+
+  .shield {
+    cursor: pointer;
+    user-select: none;
   }
 
 </style>
