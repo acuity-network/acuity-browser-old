@@ -77,8 +77,7 @@
         .then(item => {
           item.account()
           .then(account => {
-            this.ownerTrusted = 'mdi-shield-outline'
-            window.activeAccount.call(this.$trustedAccounts.methods.getIsTrusted(account.contractAddress))
+            item.isTrusted()
             .then(trusted => {
               this.ownerTrusted = trusted ? 'mdi-verified' : 'mdi-shield-outline'
               account.call(this.$accountProfile.methods.getProfile())
@@ -93,7 +92,20 @@
                 this.owner = profileRevision.getTitle()
               })
               .catch(() => {})
-              this.childIds = item.childIds()
+
+              this.childIds = []
+
+              item.childIds().forEach(childId => {
+                new MixItem(this.$root, childId).init()
+                .then(item => {
+                  return item.isTrusted()
+                })
+                .then(trusted => {
+                  if (trusted) {
+                    this.childIds.push(childId)
+                  }
+                })
+              })
 
               if (!trusted) {
                 this.title = ''

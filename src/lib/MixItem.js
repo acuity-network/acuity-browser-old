@@ -85,4 +85,11 @@ export default class MixItem {
   get shortId() {
   }
 
+  isTrusted() {
+    if (window.activeAccount.contractAddress == this.item.owner) {
+      return Promise.resolve(true)
+    }
+    return window.activeAccount.call(this.vue.$trustedAccounts.methods.getIsTrusted(this.item.owner))
+  }
+
 }
