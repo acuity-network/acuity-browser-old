@@ -8,7 +8,11 @@
             <h1 class="title">{{ title }}</h1>
             <h2 class="subtitle">
               <router-link :to="ownerRoute">{{ owner }}</router-link>&ensp;
-              <span v-on:click="toggleTrust" :class="ownerTrusted" class="shield mdi mdi-24px"></span>
+              <span
+                v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
+                v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
+                :class="ownerTrustedClassCurrent" class="shield mdi mdi-24px"
+                v-on:click="toggleTrust"></span>
             </h2>
           </div>
         </div>
@@ -54,7 +58,9 @@
         title: '',
         owner: '',
         ownerRoute: '',
-        ownerTrusted: '',
+        ownerTrustedClass: '',
+        ownerTrustedClassHover: '',
+        ownerTrustedClassCurrent: '',
         body: '',
         description: '',
         childIds: [],
@@ -79,7 +85,9 @@
           .then(account => {
             item.isTrusted()
             .then(trusted => {
-              this.ownerTrusted = trusted ? (trusted == 1 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
+              this.ownerTrustedClass = trusted ? (trusted == 1 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
+              this.ownerTrustedClassHover = trusted == 1 ? 'mdi-shield-outline' : 'mdi-verified'
+              this.ownerTrustedClassCurrent = this.ownerTrustedClass
               account.call(this.$accountProfile.methods.getProfile())
               .then(profileItemId => {
                 this.ownerRoute = '/item/' + profileItemId
