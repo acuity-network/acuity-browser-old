@@ -92,60 +92,63 @@
                 this.owner = profileRevision.getTitle()
               })
               .catch(() => {})
+              .then(() => {
+                this.childIds = []
 
-              this.childIds = []
-
-              item.childIds().forEach(childId => {
-                new MixItem(this.$root, childId).init()
-                .then(item => {
-                  return item.isTrusted()
-                })
-                .then(trusted => {
-                  if (trusted) {
-                    this.childIds.push(childId)
-                  }
-                })
-              })
-
-              if (!trusted) {
-                this.title = ''
-                this.body = 'Author not trusted.'
-                this.description = ''
-                return
-              }
-
-              item.latestRevision().load()
-              .then(revision => {
-                this.title = revision.getTitle()
-
-                this.body = revision.getImage(512)
-                this.description = revision.getDescription()
-
-                var id
-                this.$db.get('/historyCount')
-                .then(count => {
-                  id = parseInt(count)
-                })
-                .catch(err => {
-                  id = 0
-                })
-                .then(() => {
-                  return this.$db.get('/historyIndex/' + this.$route.params.itemId)
-                  .then(id => {
-                    this.$db.del('/history/' + id)
+                item.childIds().forEach(childId => {
+                  new MixItem(this.$root, childId).init()
+                  .then(item => {
+                    return item.isTrusted()
                   })
-                  .catch(err => {})
+                  .then(trusted => {
+                    if (trusted) {
+                      this.childIds.push(childId)
+                    }
+                  })
                 })
-                .then(() => {
-                  this.$db.batch()
-                  .put('/history/' + id, JSON.stringify({
-                    itemId: this.$route.params.itemId,
-                    timestamp: Date.now(),
-                    title: this.title,
-                  }))
-                  .put('/historyIndex/' + this.$route.params.itemId, id)
-                  .put('/historyCount', id + 1)
-                  .write()
+
+                if (!trusted) {
+                  this.title = ''
+                  this.body = 'Author not trusted.'
+                  this.description = ''
+                  return
+                }
+
+                item.latestRevision().load()
+                .then(revision => {
+                  this.title = revision.getTitle()
+
+                  this.body = revision.getImage(512)
+                  this.description = revision.getDescription()
+
+                  var id
+                  this.$db.get('/historyCount')
+                  .then(count => {
+                    id = parseInt(count)
+                  })
+                  .catch(err => {
+                    id = 0
+                  })
+                  .then(() => {
+                    return this.$db.get('/historyIndex/' + this.$route.params.itemId)
+                    .then(id => {
+                      this.$db.del('/history/' + id)
+                    })
+                    .catch(err => {})
+                  })
+                  .then(() => {
+                    this.$db.batch()
+                    .put('/history/' + id, JSON.stringify({
+                      itemId: this.$route.params.itemId,
+                      timestamp: Date.now(),
+                      title: this.title,
+                      owner: this.owner,
+                      ownerRoute: this.ownerRoute,
+                    }))
+                    .put('/historyIndex/' + this.$route.params.itemId, id)
+                    .put('/historyCount', id + 1)
+                    .write()
+                  })
                 })
               })
             })

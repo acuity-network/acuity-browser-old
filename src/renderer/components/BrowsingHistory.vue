@@ -21,6 +21,11 @@
               <b-table-column field="item" label="Item">
                 <router-link :to="props.row.route">{{ props.row.title }}</router-link>
               </b-table-column>
+
+              <b-table-column field="author" label="Author">
+                <router-link :to="props.row.ownerRoute">{{ props.row.owner }}</router-link>
+              </b-table-column>
+
             </template>
           </b-table>
         </div>
@@ -50,6 +55,10 @@
             label: 'Item',
             renderHtml: true,
           },
+          {
+            field: 'author',
+            label: 'Author',
+          },
         ],
       }
     },
@@ -65,6 +74,8 @@
               when: new Date(item.timestamp).toLocaleString(),
               route: '/item/' + item.itemId,
               title: item.title,
+              owner: item.owner ? item.owner : '',
+              ownerRoute: item.ownerRoute ? item.ownerRoute : '',
             })
           })
           .catch(() => {})
