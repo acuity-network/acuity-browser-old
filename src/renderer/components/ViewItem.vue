@@ -79,7 +79,7 @@
           .then(account => {
             item.isTrusted()
             .then(trusted => {
-              this.ownerTrusted = trusted ? 'mdi-verified' : 'mdi-shield-outline'
+              this.ownerTrusted = trusted ? (trusted == 1 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
               account.call(this.$accountProfile.methods.getProfile())
               .then(profileItemId => {
                 this.ownerRoute = '/item/' + profileItemId
