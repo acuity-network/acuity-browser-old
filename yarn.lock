@@ -15,8 +15,8 @@
   resolved "https://registry.yarnpkg.com/@mdi/font/-/font-2.6.95.tgz#7af176a0b6b8dedff9e27ddc6fa126b29b658331"
 
 "@types/node@^8.0.24":
-  version "8.10.27"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.27.tgz#667d03fcd44d8683de5459b8ecd80506eee65f0e"
+  version "8.10.28"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.28.tgz#03bf70dd7f1de7826251331ce57beddf7f9dd253"
 
 abbrev@1:
   version "1.1.1"
@@ -8885,8 +8885,8 @@ vue-html-loader@^1.2.4:
     object-assign "^4.1.0"
 
 vue-loader@^13.0.5:
-  version "13.7.2"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-13.7.2.tgz#f633f6393e905ffd730400f03c99353618c08fe8"
+  version "13.7.3"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-13.7.3.tgz#e07440f78230a639d00ada4da7b96d0e9d62037f"
   dependencies:
     consolidate "^0.14.0"
     hash-sum "^1.0.2"
