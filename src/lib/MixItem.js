@@ -87,16 +87,39 @@ export default class MixItem {
 
   async isTrusted() {
     if (window.activeAccount.contractAddress == this.item.owner) {
-      return 1
+      return true
     }
-    var trusted = await window.activeAccount.call(this.vue.$trustedAccounts.methods.getIsTrusted(this.item.owner))
-    if (trusted) {
-      return 1
-    }
-    trusted = await window.activeAccount.call(this.vue.$trustedAccounts.methods.getIsTrustedDeep(this.item.owner))
-    if (trusted) {
-      return 2
-    }
+    return await window.activeAccount.call(this.vue.$trustedAccounts.methods.getIsTrustedDeep(this.item.owner))
   }
 
+  async getTrustLevel() {
+    if (window.activeAccount.contractAddress == this.item.owner) {
+      return 1
+    }
+    if (await window.activeAccount.call(this.vue.$trustedAccounts.methods.getIsTrusted(this.item.owner))) {
+      return 2
+    }
+    if (await window.activeAccount.call(this.vue.$trustedAccounts.methods.getIsTrustedOnlyDeep(this.item.owner))) {
+      return 3
+    }
+    return 0
+  }
+
+  async getTrustLevelToggled() {
+    var level = await this.getTrustLevel()
+
+    switch (level) {
+      case 1:
+        return 1
+
+      case 2:
+        if (await window.activeAccount.call(this.vue.$trustedAccounts.methods.getIsTrustedOnlyDeep(this.item.owner))) {
+          return 3
+        }
+        return 0
+
+      case 3:
+        return 2
+    }
+  }
 }
