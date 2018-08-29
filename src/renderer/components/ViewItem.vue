@@ -85,9 +85,11 @@
           .then(account => {
             item.isTrusted()
             .then(trusted => {
-              this.ownerTrustedClass = trusted ? (trusted == 1 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
-              this.ownerTrustedClassHover = trusted == 1 ? 'mdi-shield-outline' : 'mdi-verified'
-              this.ownerTrustedClassCurrent = this.ownerTrustedClass
+              if (window.activeAccount.contractAddress != account.contractAddress) {
+                this.ownerTrustedClass = trusted ? (trusted == 1 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
+                this.ownerTrustedClassHover = trusted == 1 ? 'mdi-shield-outline' : 'mdi-verified'
+                this.ownerTrustedClassCurrent = this.ownerTrustedClass
+              }
               account.call(this.$accountProfile.methods.getProfile())
               .then(profileItemId => {
                 this.ownerRoute = '/item/' + profileItemId
