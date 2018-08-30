@@ -109,6 +109,9 @@ export default class MixItem {
     var level = await this.getTrustLevel()
 
     switch (level) {
+      case 0:
+        return 2
+
       case 1:
         return 1
 
