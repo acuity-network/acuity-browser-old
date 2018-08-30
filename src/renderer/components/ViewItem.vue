@@ -23,6 +23,15 @@
           <span v-html="body"></span>
           <div class="bodyText">{{ description }}</div>
         </div>
+
+        <div v-if="isProfile" class="container">
+          <div class="container">
+            <b-field label="Trusted that trust">
+              <profile-link v-for="address in trustedThatTrust" v-bind:address="address"></profile-link>
+            </b-field>
+          </div>
+        </div>
+
         <div class="container">
           <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
         </div>
@@ -46,12 +55,14 @@
 <script>
   import MixItem from '../../lib/MixItem.js'
   import Comment from './Comment.vue'
+  import ProfileLink from './ProfileLink.vue'
 
   export default {
     name: 'view-item',
     props: ['itemId'],
     components: {
       Comment,
+      ProfileLink,
     },
     data() {
       return {
@@ -63,6 +74,8 @@
         ownerTrustedClassCurrent: '',
         body: '',
         description: '',
+        isProfile: '',
+        trustedThatTrust: [],
         childIds: [],
         comment: '',
       }
@@ -125,11 +138,16 @@
               }
 
               item.latestRevision().load()
-              .then(revision => {
+              .then(async revision => {
                 this.title = revision.getTitle()
 
                 this.body = revision.getImage(512)
                 this.description = revision.getDescription()
+
+                if (revision.mixins[0].mixinId == '0x4bf3ce07') {
+                  this.isProfile = true
+                  this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(account.contractAddress)
+                }
 
                 var id
                 this.$db.get('/historyCount')
