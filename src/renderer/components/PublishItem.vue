@@ -4,21 +4,17 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Publish item</h1>
-          </div>
+          <h1 class="title">Publish item</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <ul>
-            <li><router-link to="/publish-item/mixin-type">Publish Mixin type</router-link></li>
-            <li><router-link to="/publish-item/image">Publish Image</router-link></li>
-            <li><router-link to="/publish-item/feed-personal">Publish Personal Feed</router-link></li>
-            <li><router-link to="/publish-item/feed-topic">Publish Topic Feed</router-link></li>
-          </ul>
-        </div>
+        <ul>
+          <li><router-link to="/publish-item/mixin-type">Publish Mixin type</router-link></li>
+          <li><router-link to="/publish-item/image">Publish Image</router-link></li>
+          <li><router-link to="/publish-item/feed-personal">Publish Personal Feed</router-link></li>
+          <li><router-link to="/publish-item/feed-topic">Publish Topic Feed</router-link></li>
+        </ul>
       </section>
     </main>
   </div>

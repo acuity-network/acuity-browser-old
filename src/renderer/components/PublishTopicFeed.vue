@@ -4,27 +4,21 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Publish Topic Feed</h1>
-          </div>
+          <h1 class="title">Publish Topic Feed</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
+        <b-field label="Title">
+          <b-input id="title"></b-input>
+        </b-field>
 
-          <b-field label="Title">
-            <b-input id="title"></b-input>
-          </b-field>
+        <b-field label="Description">
+          <b-input id="description" type="textarea"></b-input>
+        </b-field>
 
-          <b-field label="Description">
-            <b-input id="description" type="textarea"></b-input>
-          </b-field>
-
-          <button class="button" v-on:click="chooseFile">Choose image</button>
-          <button class="button is-primary" v-on:click="publish">Publish</button>
-
-        </div>
+        <button class="button" v-on:click="chooseFile">Choose image</button>
+        <button class="button is-primary" v-on:click="publish">Publish</button>
       </section>
     </main>
   </div>

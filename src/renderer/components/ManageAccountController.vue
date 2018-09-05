@@ -4,22 +4,18 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Manage account</h1>
-          </div>
+          <h1 class="title">Manage account</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <img :src="qrcode" />
-          <h2>Balance</h2>
-          {{ balance }}
-          <h2>Contract</h2>
-          {{ contract }}
-          <div>
-            <button class="button is-primary" v-on:click="activate">Activate account</button>
-          </div>
+        <img :src="qrcode" />
+        <h2>Balance</h2>
+        {{ balance }}
+        <h2>Contract</h2>
+        {{ contract }}
+        <div>
+          <button class="button is-primary" v-on:click="activate">Activate account</button>
         </div>
       </section>
     </main>

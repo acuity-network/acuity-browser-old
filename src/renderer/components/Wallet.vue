@@ -4,34 +4,27 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Wallet</h1>
-          </div>
+          <h1 class="title">Wallet</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <img :src="qrcode" />
-          <b-field label="Balance">
-            {{ balance }}
-          </b-field>
-          <b-field label="Unconfirmed Balance">
-            {{ unconfirmedBalance }}
-          </b-field>
-          <b-field label="To">
-            <b-input v-model="to"></b-input>
-          </b-field>
-          <b-field label="Amount">
-            <b-input v-model="amount"></b-input>
-          </b-field>
-          <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
-        </div>
+        <img :src="qrcode" />
+        <b-field label="Balance">
+          {{ balance }}
+        </b-field>
+        <b-field label="Unconfirmed Balance">
+          {{ unconfirmedBalance }}
+        </b-field>
+        <b-field label="To">
+          <b-input v-model="to"></b-input>
+        </b-field>
+        <b-field label="Amount">
+          <b-input v-model="amount"></b-input>
+        </b-field>
+        <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
 
-        <div class="container">
-          <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc"></b-table>
-        </div>
-
+        <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc"></b-table>
       </section>
     </main>
   </div>

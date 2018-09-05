@@ -4,16 +4,12 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Transaction history</h1>
-          </div>
+          <h1 class="title">Transaction history</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <b-table :data="data" :columns="columns" default-sort="nonce" default-sort-direction="desc"></b-table>
-        </div>
+        <b-table :data="data" :columns="columns" default-sort="nonce" default-sort-direction="desc"></b-table>
       </section>
     </main>
   </div>

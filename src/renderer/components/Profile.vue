@@ -4,28 +4,24 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">{{ title }}</h1>
-          </div>
+          <h1 class="title">{{ title }}</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <ul>
-            <li><router-link to="/profile/edit">Edit profile</router-link></li>
-          </ul>
-          <div v-html="image"></div>
-          <b-field label="Account type">
-            {{ type }}
-          </b-field>
-          <b-field label="Bio">
-            {{ bio }}
-          </b-field>
-          <b-field label="Location">
-            {{ location }}
-          </b-field>
-        </div>
+        <ul>
+          <li><router-link to="/profile/edit">Edit profile</router-link></li>
+        </ul>
+        <div v-html="image"></div>
+        <b-field label="Account type">
+          {{ type }}
+        </b-field>
+        <b-field label="Bio">
+          {{ bio }}
+        </b-field>
+        <b-field label="Location">
+          {{ location }}
+        </b-field>
       </section>
     </main>
   </div>

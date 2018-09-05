@@ -4,47 +4,41 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Edit Profile</h1>
-          </div>
+          <h1 class="title">Edit Profile</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
+        <b-field label="Name">
+          <b-input id="name" :value="name"></b-input>
+        </b-field>
 
-          <b-field label="Name">
-            <b-input id="name" :value="name"></b-input>
-          </b-field>
+        <b-field label="Type">
+          <b-select id="type" :value="type">
+            <option value="0">Anon</option>
+            <option value="1">Person</option>
+            <option value="2">Project</option>
+            <option value="3">Organization</option>
+            <option value="4">Proxy</option>
+            <option value="5">Parody</option>
+            <option value="6">Bot</option>
+            <option value="7">Shill</option>
+          </b-select>
+        </b-field>
 
-          <b-field label="Type">
-            <b-select id="type" :value="type">
-              <option value="0">Anon</option>
-              <option value="1">Person</option>
-              <option value="2">Project</option>
-              <option value="3">Organization</option>
-              <option value="4">Proxy</option>
-              <option value="5">Parody</option>
-              <option value="6">Bot</option>
-              <option value="7">Shill</option>
-            </b-select>
-          </b-field>
+        <b-field label="Location">
+          <b-input id="location" :value="location"></b-input>
+        </b-field>
 
-          <b-field label="Location">
-            <b-input id="location" :value="location"></b-input>
-          </b-field>
+        <b-field label="Bio">
+          <b-input id="bio" type="textarea" :value="bio"></b-input>
+        </b-field>
 
-          <b-field label="Bio">
-            <b-input id="bio" type="textarea" :value="bio"></b-input>
-          </b-field>
+        <b-field label="Image">
+          <button class="button" v-on:click="chooseFile">Choose image</button>
+        </b-field>
 
-          <b-field label="Image">
-            <button class="button" v-on:click="chooseFile">Choose image</button>
-          </b-field>
-
-          <button class="button is-primary" v-on:click="publish">Publish</button>
-
-        </div>
+        <button class="button is-primary" v-on:click="publish">Publish</button>
       </section>
     </main>
   </div>

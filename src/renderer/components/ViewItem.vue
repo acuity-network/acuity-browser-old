@@ -4,49 +4,37 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">{{ title }}</h1>
-            <h2 class="subtitle">
-              <router-link :to="ownerRoute">{{ owner }}</router-link>&ensp;
-              <span
-                v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
-                v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
-                :class="ownerTrustedClassCurrent" class="shield mdi mdi-24px"
-                v-on:click="toggleTrust"></span>
-            </h2>
-          </div>
+          <h1 class="title">{{ title }}</h1>
+          <h2 class="subtitle">
+            <router-link :to="ownerRoute">{{ owner }}</router-link>&ensp;
+            <span
+              v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
+              v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
+              :class="ownerTrustedClassCurrent" class="shield mdi mdi-24px"
+              v-on:click="toggleTrust"></span>
+          </h2>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <span v-html="body"></span>
-          <div class="bodyText">{{ description }}</div>
-        </div>
+        <span v-html="body"></span>
+        <div class="bodyText">{{ description }}</div>
 
-        <div v-if="isProfile" class="container">
-          <div class="container">
-            <b-field label="Trusted that trust">
-              <profile-link v-for="address in trustedThatTrust" v-bind:address="address"></profile-link>
-            </b-field>
-          </div>
-        </div>
-
-        <div class="container">
-          <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-
-          <b-field label="Comment">
-            <b-input v-model="comment" type="textarea"></b-input>
+        <div v-if="isProfile">
+          <b-field label="Trusted that trust">
+            <profile-link v-for="address in trustedThatTrust" v-bind:address="address"></profile-link>
           </b-field>
-
-          <button class="button is-primary" v-on:click="publish">Publish</button>
-
         </div>
+
+        <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
+      </section>
+
+      <section class="section">
+        <b-field label="Comment">
+          <b-input v-model="comment" type="textarea"></b-input>
+        </b-field>
+
+        <button class="button is-primary" v-on:click="publish">Publish</button>
       </section>
     </main>
   </div>

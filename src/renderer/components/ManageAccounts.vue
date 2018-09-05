@@ -4,40 +4,36 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Manage accounts</h1>
-          </div>
+          <h1 class="title">Manage accounts</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <b-table :data="data" :selected.sync="selected" v-on:click="select">
-            <template slot-scope="props">
+        <b-table :data="data" :selected.sync="selected" v-on:click="select" default-sort="account">
+          <template slot-scope="props">
 
-              <b-table-column field="account" label="Account">
-                {{ props.row.name }}
-              </b-table-column>
+            <b-table-column field="account" label="Account" sortable>
+              {{ props.row.name }}
+            </b-table-column>
 
-              <b-table-column field="balance" label="Balance">
-                {{ props.row.balance }}
-              </b-table-column>
+            <b-table-column field="balance" label="Balance">
+              {{ props.row.balance }}
+            </b-table-column>
 
-              <b-table-column field="lock" label="">
-                <a v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</a>
-                <a v-else v-on:click="unlock" :data-address="props.row.account">unlock</a>
-              </b-table-column>
+            <b-table-column field="lock" label="">
+              <a v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</a>
+              <a v-else v-on:click="unlock" :data-address="props.row.account">unlock</a>
+            </b-table-column>
 
-              <b-table-column field="manage" label=" ">
-                <router-link :to="{ name: 'manage-account-controller', params: { address: props.row.account }}">manage</router-link>
-              </b-table-column>
+            <b-table-column field="manage" label=" ">
+              <router-link :to="{ name: 'manage-account-controller', params: { address: props.row.account }}">manage</router-link>
+            </b-table-column>
 
-            </template>
-            <template slot="footer">
-              <a v-on:click="create">Create account</a>
-            </template>
-          </b-table>
-        </div>
+          </template>
+          <template slot="footer">
+            <a v-on:click="create">Create account</a>
+          </template>
+        </b-table>
       </section>
     </main>
   </div>

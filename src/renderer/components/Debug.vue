@@ -4,25 +4,19 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Debug</h1>
-          </div>
+          <h1 class="title">Debug</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <b-field label="itemId">
-            <b-input id="itemId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
-          </b-field>
+        <b-field label="itemId">
+          <b-input id="itemId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+        </b-field>
 
-          <button class="button is-primary" v-on:click="read">Read item</button>
-        </div>
+        <button class="button is-primary" v-on:click="read">Read item</button>
       </section>
       <section class="section">
-        <div class="container">
-          <code id="output" style="display: block; white-space: pre;"></code>
-        </div>
+        <code id="output" style="display: block; white-space: pre;"></code>
       </section>
     </main>
   </div>

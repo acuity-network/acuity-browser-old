@@ -4,9 +4,7 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Block explorer</h1>
-          </div>
+          <h1 class="title">Block explorer</h1>
         </div>
       </section>
 

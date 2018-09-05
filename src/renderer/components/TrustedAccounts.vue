@@ -4,25 +4,21 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Trusted accounts</h1>
-          </div>
+          <h1 class="title">Trusted accounts</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <b-table :data="data">
-            <template slot-scope="props">
-              <b-table-column label="Account">
-                <router-link :to="props.row.route">{{ props.row.title }}</router-link>
-              </b-table-column>
-              <b-table-column label="">
-                <span class="remove" v-on:click="remove" :data-address="props.row.account">remove</span>
-              </b-table-column>
-            </template>
-          </b-table>
-        </div>
+        <b-table :data="data">
+          <template slot-scope="props">
+            <b-table-column label="Account">
+              <router-link :to="props.row.route">{{ props.row.title }}</router-link>
+            </b-table-column>
+            <b-table-column label="">
+              <span class="remove" v-on:click="remove" :data-address="props.row.account">remove</span>
+            </b-table-column>
+          </template>
+        </b-table>
       </section>
     </main>
   </div>

@@ -4,33 +4,29 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Node status</h1>
-          </div>
+          <h1 class="title">Node status</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <b-field label="Web3 version">
-            {{ web3Version }}
-          </b-field>
-          <b-field label="Protocol version">
-            {{ protocolVersion }}
-          </b-field>
-          <b-field label="Network ID">
-            {{ networkId }}
-          </b-field>
-          <b-field label="Block number">
-            {{ blockNumber }}
-          </b-field>
-          <b-field label="Peer count">
-            {{ peerCount }}
-          </b-field>
-          <b-field label="Syncing">
-            {{ isSyncing }}
-          </b-field>
-        </div>
+        <b-field label="Web3 version">
+          {{ web3Version }}
+        </b-field>
+        <b-field label="Protocol version">
+          {{ protocolVersion }}
+        </b-field>
+        <b-field label="Network ID">
+          {{ networkId }}
+        </b-field>
+        <b-field label="Block number">
+          {{ blockNumber }}
+        </b-field>
+        <b-field label="Peer count">
+          {{ peerCount }}
+        </b-field>
+        <b-field label="Syncing">
+          {{ isSyncing }}
+        </b-field>
       </section>
     </main>
   </div>

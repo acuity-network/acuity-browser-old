@@ -4,31 +4,27 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <div class="container">
-            <h1 class="title">Browsing history</h1>
-          </div>
+          <h1 class="title">Browsing history</h1>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <b-table :data="data">
-            <template slot-scope="props">
-              <b-table-column field="when" label="Last access">
-                {{ props.row.when }}
-              </b-table-column>
+        <b-table :data="data">
+          <template slot-scope="props">
+            <b-table-column field="when" label="Last access">
+              {{ props.row.when }}
+            </b-table-column>
 
-              <b-table-column field="item" label="Item">
-                <router-link :to="props.row.route">{{ props.row.title }}</router-link>
-              </b-table-column>
+            <b-table-column field="item" label="Item">
+              <router-link :to="props.row.route">{{ props.row.title }}</router-link>
+            </b-table-column>
 
-              <b-table-column field="author" label="Author">
-                <router-link :to="props.row.ownerRoute">{{ props.row.owner }}</router-link>
-              </b-table-column>
+            <b-table-column field="author" label="Author">
+              <router-link :to="props.row.ownerRoute">{{ props.row.owner }}</router-link>
+            </b-table-column>
 
-            </template>
-          </b-table>
-        </div>
+          </template>
+        </b-table>
       </section>
     </main>
   </div>
