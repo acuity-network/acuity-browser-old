@@ -139,7 +139,7 @@
           component: ManageAccountsNew,
           hasModalCard: true,
         })
-      }
+      },
     },
     created() {
       this.loadAccounts()
