@@ -4,7 +4,7 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <h1 class="title">Node status</h1>
+          <h1 class="title">Node Status</h1>
         </div>
       </section>
 

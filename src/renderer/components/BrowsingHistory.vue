@@ -4,7 +4,7 @@
 
       <section class="hero is-primary">
         <div class="hero-body">
-          <h1 class="title">Browsing history</h1>
+          <h1 class="title">Browsing History</h1>
         </div>
       </section>
 
