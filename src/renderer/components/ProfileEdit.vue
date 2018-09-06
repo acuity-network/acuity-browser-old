@@ -181,10 +181,6 @@
 
 <style>
 
-  body, button {
-    font-family: 'OpenSans', 'sans-serif';
-  }
-
   button {
     font-weight: bold;
   }

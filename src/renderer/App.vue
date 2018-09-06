@@ -126,6 +126,20 @@
 </script>
 
 <style>
+
+  body, button, textarea, input {
+    font-family: "Noto Sans";
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+
+  section.is-primary {
+    font-family: "Montserrat";
+  }
+
+  h1.title {
+    font-weight: bold;
+  }
+
   .is-narrow {
     position: fixed;
   }

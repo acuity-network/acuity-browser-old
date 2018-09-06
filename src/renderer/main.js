@@ -11,6 +11,8 @@ import 'buefy/lib/buefy.css'
 Vue.use(Buefy)
 
 import '@mdi/font/css/materialdesignicons.min.css'
+import 'notosans-fontface/css/notosans-fontface.css'
+import 'typeface-montserrat/index.css'
 
 import itemProto from '../lib/item_pb.js'
 Vue.prototype.$itemProto = itemProto

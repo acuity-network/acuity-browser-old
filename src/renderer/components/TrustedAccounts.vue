@@ -80,10 +80,6 @@
 
 <style>
 
-  body {
-    font-family: 'OpenSans', 'sans-serif';
-  }
-
   .remove {
     cursor: pointer;
     user-select: none;

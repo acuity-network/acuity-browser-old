@@ -6263,6 +6263,10 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
+notosans-fontface@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/notosans-fontface/-/notosans-fontface-1.1.0.tgz#327fd8b54aa3249a44678605d912e31f1449b855"
+
 npm-bundled@^1.0.1:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-1.0.5.tgz#3c1732b7ba936b3a10325aef616467c0ccbcc979"
@@ -8683,6 +8687,10 @@ typedarray-to-buffer@^3.1.2:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+typeface-montserrat@^0.0.54:
+  version "0.0.54"
+  resolved "https://registry.yarnpkg.com/typeface-montserrat/-/typeface-montserrat-0.0.54.tgz#3fc338db6428d73485b75aa7bd2af8c9a55b9ab3"
 
 uglify-js@2.6.x:
   version "2.6.4"

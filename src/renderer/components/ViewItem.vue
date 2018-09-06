@@ -238,10 +238,6 @@
 
 <style>
 
-  body {
-    font-family: 'OpenSans', 'sans-serif';
-  }
-
   .shield {
     cursor: pointer;
     user-select: none;
