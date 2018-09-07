@@ -1,36 +1,32 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Wallet
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Wallet</h1>
-        </div>
-      </section>
+    <template slot="body">
+      <img :src="qrcode" />
+      <b-field label="Balance">
+        {{ balance }}
+      </b-field>
+      <b-field label="Unconfirmed Balance">
+        {{ unconfirmedBalance }}
+      </b-field>
+      <b-field label="To">
+        <b-input v-model="to"></b-input>
+      </b-field>
+      <b-field label="Amount">
+        <b-input v-model="amount"></b-input>
+      </b-field>
+      <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
 
-      <section class="section">
-        <img :src="qrcode" />
-        <b-field label="Balance">
-          {{ balance }}
-        </b-field>
-        <b-field label="Unconfirmed Balance">
-          {{ unconfirmedBalance }}
-        </b-field>
-        <b-field label="To">
-          <b-input v-model="to"></b-input>
-        </b-field>
-        <b-field label="Amount">
-          <b-input v-model="amount"></b-input>
-        </b-field>
-        <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
-
-        <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc"></b-table>
-      </section>
-    </main>
-  </div>
+      <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc"></b-table>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
   var QRCode = require('qrcode')
   import { bus } from '../main'
   import WalletConfirmSend from './WalletConfirmSend.vue'
@@ -38,6 +34,7 @@
   export default {
     name: 'wallet',
     components: {
+      Page,
       WalletConfirmSend,
     },
     data() {

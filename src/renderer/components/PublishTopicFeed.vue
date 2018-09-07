@@ -1,30 +1,27 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Publish Topic Feed
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Publish Topic Feed</h1>
-        </div>
-      </section>
+    <template slot="body">
+      <b-field label="Title">
+        <b-input id="title"></b-input>
+      </b-field>
 
-      <section class="section">
-        <b-field label="Title">
-          <b-input id="title"></b-input>
-        </b-field>
+      <b-field label="Description">
+        <b-input id="description" type="textarea"></b-input>
+      </b-field>
 
-        <b-field label="Description">
-          <b-input id="description" type="textarea"></b-input>
-        </b-field>
-
-        <button class="button" v-on:click="chooseFile">Choose image</button>
-        <button class="button is-primary" v-on:click="publish">Publish</button>
-      </section>
-    </main>
-  </div>
+      <button class="button" v-on:click="chooseFile">Choose image</button>
+      <button class="button is-primary" v-on:click="publish">Publish</button>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
+
   import itemProto from '../../lib/item_pb.js'
   import languageProto from '../../lib/language_pb.js'
   import titleProto from '../../lib/title_pb.js'
@@ -33,7 +30,9 @@
 
   export default {
     name: 'publish-image',
-    components: {},
+    components: {
+      Page,
+    },
     methods: {
       chooseFile (event) {
         const {dialog} = require('electron').remote

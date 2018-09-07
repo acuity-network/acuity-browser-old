@@ -1,45 +1,41 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Manage accounts
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Manage accounts</h1>
-        </div>
-      </section>
+    <template slot="body">
+      <b-table :data="data" :selected.sync="selected" v-on:click="select" default-sort="account">
+        <template slot-scope="props">
 
-      <section class="section">
-        <b-table :data="data" :selected.sync="selected" v-on:click="select" default-sort="account">
-          <template slot-scope="props">
+          <b-table-column field="account" label="Account" sortable>
+            {{ props.row.name }}
+          </b-table-column>
 
-            <b-table-column field="account" label="Account" sortable>
-              {{ props.row.name }}
-            </b-table-column>
+          <b-table-column field="balance" label="Balance">
+            {{ props.row.balance }}
+          </b-table-column>
 
-            <b-table-column field="balance" label="Balance">
-              {{ props.row.balance }}
-            </b-table-column>
+          <b-table-column field="lock" label="">
+            <a v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</a>
+            <a v-else v-on:click="unlock" :data-address="props.row.account">unlock</a>
+          </b-table-column>
 
-            <b-table-column field="lock" label="">
-              <a v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</a>
-              <a v-else v-on:click="unlock" :data-address="props.row.account">unlock</a>
-            </b-table-column>
+          <b-table-column field="manage" label=" ">
+            <router-link :to="{ name: 'manage-account-controller', params: { address: props.row.account }}">manage</router-link>
+          </b-table-column>
 
-            <b-table-column field="manage" label=" ">
-              <router-link :to="{ name: 'manage-account-controller', params: { address: props.row.account }}">manage</router-link>
-            </b-table-column>
-
-          </template>
-          <template slot="footer">
-            <a v-on:click="create">Create account</a>
-          </template>
-        </b-table>
-      </section>
-    </main>
-  </div>
+        </template>
+        <template slot="footer">
+          <a v-on:click="create">Create account</a>
+        </template>
+      </b-table>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
   import MixAccount from '../../lib/MixAccount.js'
   import MixItem from '../../lib/MixItem.js'
   import ManageAccountUnlock from './ManageAccountUnlock.vue'
@@ -48,6 +44,7 @@
   export default {
     name: 'manage-accounts',
     components: {
+      Page,
       ManageAccountUnlock,
       ManageAccountsNew,
     },

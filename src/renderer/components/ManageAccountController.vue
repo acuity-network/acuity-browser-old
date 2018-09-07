@@ -1,34 +1,34 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Manage account
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Manage account</h1>
-        </div>
-      </section>
-
-      <section class="section">
-        <img :src="qrcode" />
-        <h2>Balance</h2>
-        {{ balance }}
-        <h2>Contract</h2>
-        {{ contract }}
-        <div>
-          <button class="button is-primary" v-on:click="activate">Activate account</button>
-        </div>
-      </section>
-    </main>
-  </div>
+    <template slot="body">
+      <img :src="qrcode" />
+      <h2>Balance</h2>
+      {{ balance }}
+      <h2>Contract</h2>
+      {{ contract }}
+      <div>
+        <button class="button is-primary" v-on:click="activate">Activate account</button>
+      </div>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
+
   var QRCode = require('qrcode')
 
   import MixAccount from '../../lib/MixAccount.js'
 
   export default {
     name: 'manage-account-controller',
+    components: {
+      Page,
+    },
     data() {
       return {
         qrcode: '',

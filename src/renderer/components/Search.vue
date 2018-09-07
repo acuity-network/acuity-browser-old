@@ -1,22 +1,18 @@
 <template>
-  <div id="wrapper">
-    <main>
-
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Search</h1>
-        </div>
-      </section>
-
-      <section class="section">
-      </section>
-    </main>
-  </div>
+  <page>
+    <template slot="title">
+      Search
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
+
   export default {
     name: 'search',
-    components: {}
+    components: {
+      Page,
+    },
   }
 </script>

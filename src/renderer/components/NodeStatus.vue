@@ -1,40 +1,40 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Node Status
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Node Status</h1>
-        </div>
-      </section>
-
-      <section class="section">
-        <b-field label="Web3 version">
-          {{ web3Version }}
-        </b-field>
-        <b-field label="Protocol version">
-          {{ protocolVersion }}
-        </b-field>
-        <b-field label="Network ID">
-          {{ networkId }}
-        </b-field>
-        <b-field label="Block number">
-          {{ blockNumber }}
-        </b-field>
-        <b-field label="Peer count">
-          {{ peerCount }}
-        </b-field>
-        <b-field label="Syncing">
-          {{ isSyncing }}
-        </b-field>
-      </section>
-    </main>
-  </div>
+    <template slot="body">
+      <b-field label="Web3 version">
+        {{ web3Version }}
+      </b-field>
+      <b-field label="Protocol version">
+        {{ protocolVersion }}
+      </b-field>
+      <b-field label="Network ID">
+        {{ networkId }}
+      </b-field>
+      <b-field label="Block number">
+        {{ blockNumber }}
+      </b-field>
+      <b-field label="Peer count">
+        {{ peerCount }}
+      </b-field>
+      <b-field label="Syncing">
+        {{ isSyncing }}
+      </b-field>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
+
   export default {
     name: 'node-status',
+    components: {
+      Page,
+    },
     data() {
       return {
         web3Version: '',

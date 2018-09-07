@@ -1,35 +1,35 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Trusted Accounts
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Trusted Accounts</h1>
-        </div>
-      </section>
-
-      <section class="section">
-        <b-table :data="data">
-          <template slot-scope="props">
-            <b-table-column label="Account">
-              <router-link :to="props.row.route">{{ props.row.title }}</router-link>
-            </b-table-column>
-            <b-table-column label="">
-              <span class="remove" v-on:click="remove" :data-address="props.row.account">remove</span>
-            </b-table-column>
-          </template>
-        </b-table>
-      </section>
-    </main>
-  </div>
+    <template slot="body">
+      <b-table :data="data">
+        <template slot-scope="props">
+          <b-table-column label="Account">
+            <router-link :to="props.row.route">{{ props.row.title }}</router-link>
+          </b-table-column>
+          <b-table-column label="">
+            <span class="remove" v-on:click="remove" :data-address="props.row.account">remove</span>
+          </b-table-column>
+        </template>
+      </b-table>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
+
   import MixAccount from '../../lib/MixAccount.js'
   import MixItem from '../../lib/MixItem.js'
 
   export default {
     name: 'trusted-accounts',
+    components: {
+      Page,
+    },
     data() {
       return {
         data: [],

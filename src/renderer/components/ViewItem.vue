@@ -1,54 +1,50 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      {{ title }}
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">{{ title }}</h1>
-          <h2 class="subtitle">
-            <router-link :to="ownerRoute">{{ owner }}</router-link>&ensp;
-            <span
-              v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
-              v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
-              :class="ownerTrustedClassCurrent" class="shield mdi mdi-24px"
-              v-on:click="toggleTrust"></span>
-          </h2>
-        </div>
-      </section>
+    <template slot="subtitle">
+      by <router-link :to="ownerRoute">{{ owner }}</router-link>&ensp;
+      <span
+        v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
+        v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
+        :class="ownerTrustedClassCurrent" class="shield mdi mdi-24px"
+        v-on:click="toggleTrust"></span>
+    </template>
 
-      <section class="section">
-        <span v-html="body"></span>
-        <div class="bodyText">{{ description }}</div>
+    <template slot="body">
+      <span v-html="body"></span>
+      <div class="bodyText">{{ description }}</div>
 
-        <div v-if="isProfile">
-          <b-field label="Trusted that trust">
-            <profile-link v-for="address in trustedThatTrust" v-bind:address="address"></profile-link>
-          </b-field>
-        </div>
-
-        <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
-      </section>
-
-      <section class="section">
-        <b-field label="Comment">
-          <b-input v-model="comment" type="textarea"></b-input>
+      <div v-if="isProfile">
+        <b-field label="Trusted that trust">
+          <profile-link v-for="address in trustedThatTrust" v-bind:address="address"></profile-link>
         </b-field>
+      </div>
 
-        <button class="button is-primary" v-on:click="publish">Publish</button>
-      </section>
-    </main>
-  </div>
+      <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
+
+      <b-field label="Comment">
+        <b-input v-model="comment" type="textarea"></b-input>
+      </b-field>
+
+      <button class="button is-primary" v-on:click="publish">Publish</button>
+    </template>
+  </page>
 </template>
 
 <script>
   import MixItem from '../../lib/MixItem.js'
   import Comment from './Comment.vue'
   import ProfileLink from './ProfileLink.vue'
+  import Page from './Page.vue'
 
   export default {
     name: 'view-item',
     props: ['itemId'],
     components: {
+      Page,
       Comment,
       ProfileLink,
     },

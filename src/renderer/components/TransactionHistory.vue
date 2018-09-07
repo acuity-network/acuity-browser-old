@@ -1,23 +1,23 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Transaction History
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Transaction History</h1>
-        </div>
-      </section>
-
-      <section class="section">
-        <b-table :data="data" :columns="columns" default-sort="nonce" default-sort-direction="desc"></b-table>
-      </section>
-    </main>
-  </div>
+    <template slot="body">
+      <b-table :data="data" :columns="columns" default-sort="nonce" default-sort-direction="desc"></b-table>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
+
   export default {
     name: 'transaction-history',
+    components: {
+      Page,
+    },
     data() {
       return {
         data: [],

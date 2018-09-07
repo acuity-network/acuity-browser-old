@@ -1,38 +1,36 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      {{ title }}
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">{{ title }}</h1>
-        </div>
-      </section>
-
-      <section class="section">
-        <ul>
-          <li><router-link to="/profile/edit">Edit profile</router-link></li>
-        </ul>
-        <div v-html="image"></div>
-        <b-field label="Account type">
-          {{ type }}
-        </b-field>
-        <b-field label="Bio">
-          {{ bio }}
-        </b-field>
-        <b-field label="Location">
-          {{ location }}
-        </b-field>
-      </section>
-    </main>
-  </div>
+    <template slot="body">
+      <ul>
+        <li><router-link to="/profile/edit">Edit profile</router-link></li>
+      </ul>
+      <div v-html="image"></div>
+      <b-field label="Account type">
+        {{ type }}
+      </b-field>
+      <b-field label="Bio">
+        {{ bio }}
+      </b-field>
+      <b-field label="Location">
+        {{ location }}
+      </b-field>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
 
   export default {
     name: 'profile',
-    components: {},
+    components: {
+      Page,
+    },
     data() {
       return {
         title: '',

@@ -1,40 +1,39 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Publish Mixin Type
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Publish Mixin type</h1>
-        </div>
-      </section>
+    <template slot="body">
+      <b-field label="Title">
+        <b-input id="title"></b-input>
+      </b-field>
 
-      <section class="section">
-        <b-field label="Title">
-          <b-input id="title"></b-input>
-        </b-field>
+      <b-field label="Schema">
+        <b-input id="schema" type="textarea"></b-input>
+      </b-field>
 
-        <b-field label="Schema">
-          <b-input id="schema" type="textarea"></b-input>
-        </b-field>
+      <b-field label="Description">
+        <b-input id="description" type="textarea"></b-input>
+      </b-field>
 
-        <b-field label="Description">
-          <b-input id="description" type="textarea"></b-input>
-        </b-field>
+      <b-field label="Parent itemId">
+        <b-input id="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+      </b-field>
 
-        <b-field label="Parent itemId">
-          <b-input id="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
-        </b-field>
-
-        <button class="button is-primary" v-on:click="publish">Publish</button>
-      </section>
-    </main>
-  </div>
+      <button class="button is-primary" v-on:click="publish">Publish</button>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
+
   export default {
     name: 'publish-mixin-type',
-    components: {},
+    components: {
+      Page,
+    },
     methods: {
       publish (event) {
         var itemMessage = new this.$itemProto.Item()

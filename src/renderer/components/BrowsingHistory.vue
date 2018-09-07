@@ -1,38 +1,37 @@
 <template>
-  <div id="wrapper">
-    <main>
+  <page>
+    <template slot="title">
+      Browsing History
+    </template>
 
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <h1 class="title">Browsing History</h1>
-        </div>
-      </section>
+    <template slot="body">
+      <b-table :data="data">
+        <template slot-scope="props">
+          <b-table-column field="when" label="Last access">
+            {{ props.row.when }}
+          </b-table-column>
 
-      <section class="section">
-        <b-table :data="data">
-          <template slot-scope="props">
-            <b-table-column field="when" label="Last access">
-              {{ props.row.when }}
-            </b-table-column>
+          <b-table-column field="item" label="Item">
+            <router-link :to="props.row.route">{{ props.row.title }}</router-link>
+          </b-table-column>
 
-            <b-table-column field="item" label="Item">
-              <router-link :to="props.row.route">{{ props.row.title }}</router-link>
-            </b-table-column>
-
-            <b-table-column field="author" label="Author">
-              <router-link :to="props.row.ownerRoute">{{ props.row.owner }}</router-link>
-            </b-table-column>
-
-          </template>
-        </b-table>
-      </section>
-    </main>
-  </div>
+          <b-table-column field="author" label="Author">
+            <router-link :to="props.row.ownerRoute">{{ props.row.owner }}</router-link>
+          </b-table-column>
+        </template>
+      </b-table>
+    </template>
+  </page>
 </template>
 
 <script>
+  import Page from './Page.vue'
+
   export default {
     name: 'browsing-history',
+    components: {
+      Page,
+    },
     data() {
       return {
         data: [],
