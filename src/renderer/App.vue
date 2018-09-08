@@ -1,39 +1,37 @@
 <template>
   <div class="columns sidebar">
     <div class="column is-narrow">
-      <section class="section menu">
-        <navigation></navigation>
-        <p class="menu-label">
-          General
-        </p>
-        <ul class="menu-list">
-          <li><router-link to="/feeds">Feeds</router-link>
-          <li><router-link to="/interactions">Interactions</router-link>
-          <li><router-link to="/browsing-history">Browsing History</router-link></li>
-          <li><router-link to="/publish-item">Publish Item</router-link></li>
-          <li><router-link to="/search">Search</router-link></li>
-        </ul>
-        <p class="menu-label">
-          Account
-        </p>
-        <ul class="menu-list">
-          <li><router-link to="/transaction-history">Transaction History</router-link></li>
-          <li><router-link to="/profile">Profile</router-link></li>
-          <li><router-link to="/trusted-accounts">Trusted Accounts</router-link></li>
-          <li><router-link to="/wallet">Wallet</router-link></li>
-          <li><router-link to="/video">Video</router-link></li>
-        </ul>
-        <p class="menu-label">
-          Administration
-        </p>
-        <ul class="menu-list">
-          <li><router-link to="/manage-accounts">Accounts</router-link></li>
-          <li><router-link to="/node-status">Node Status</router-link></li>
-          <li><router-link to="/settings">Settings</router-link></li>
-          <li><router-link to="/debug">Debug</router-link></li>
-          <li><router-link to="/block-explorer">Block Explorer</router-link></li>
-        </ul>
-      </section>
+      <navigation></navigation>
+      <p class="menu-label">
+        General
+      </p>
+      <ul class="menu-list">
+        <li><router-link to="/feeds">Feeds</router-link>
+        <li><router-link to="/interactions">Interactions</router-link>
+        <li><router-link to="/browsing-history">Browsing History</router-link></li>
+        <li><router-link to="/publish-item">Publish Item</router-link></li>
+        <li><router-link to="/search">Search</router-link></li>
+      </ul>
+      <p class="menu-label">
+        Account
+      </p>
+      <ul class="menu-list">
+        <li><router-link to="/transaction-history">Transaction History</router-link></li>
+        <li><router-link to="/profile">Profile</router-link></li>
+        <li><router-link to="/trusted-accounts">Trusted Accounts</router-link></li>
+        <li><router-link to="/wallet">Wallet</router-link></li>
+        <li><router-link to="/video">Video</router-link></li>
+      </ul>
+      <p class="menu-label">
+        Administration
+      </p>
+      <ul class="menu-list">
+        <li><router-link to="/manage-accounts">Accounts</router-link></li>
+        <li><router-link to="/node-status">Node Status</router-link></li>
+        <li><router-link to="/settings">Settings</router-link></li>
+        <li><router-link to="/debug">Debug</router-link></li>
+        <li><router-link to="/block-explorer">Block Explorer</router-link></li>
+      </ul>
     </div>
     <div class="column router-view">
       <router-view></router-view>
@@ -131,22 +129,36 @@
 </script>
 
 <style>
-
   body, button, textarea, input {
     font-family: "Noto Sans";
     -webkit-font-smoothing: subpixel-antialiased;
   }
 
-  section.is-primary {
+  section.section {
+    padding: 0 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  section.section.is-primary {
     font-family: "Montserrat";
+    margin: 3rem 0;
   }
 
   h1.title {
     font-weight: bold;
   }
 
+  section.section.is-primary h1.title {
+    margin-bottom: 0;
+  }
+
+  section.section.is-primary h2.subtitle {
+    margin-top: 0;
+  }
+
   .is-narrow {
     position: fixed;
+    padding: 1.5rem;
   }
 
   .router-view {
