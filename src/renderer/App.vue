@@ -2,6 +2,7 @@
   <div class="columns sidebar">
     <div class="column is-narrow">
       <section class="section menu">
+        <navigation></navigation>
         <p class="menu-label">
           General
         </p>
@@ -43,9 +44,13 @@
 <script>
   import MixAccount from '../lib/MixAccount.js'
   import { bus } from './main'
+  import Navigation from './components/Navigation.vue'
 
   export default {
     name: 'd-web',
+    components: {
+      Navigation,
+    },
     created() {
       // Load previous active account.
       this.$db.get('/active-account')
