@@ -5,7 +5,7 @@
     </template>
 
     <template slot="body">
-      <img :src="qrcode" />
+      <img class="qr" :src="qrcode" />
       <b-field label="Balance">
         {{ balance }}
       </b-field>
@@ -166,16 +166,14 @@
         })
       },
     },
-    created () {
+    async created() {
       if (!window.activeAccount) {
         return
       }
-      QRCode.toDataURL(window.activeAccount.contractAddress, {
+      this.qrcode = await QRCode.toDataURL(window.activeAccount.contractAddress, {
         mode: 'alphanumeric',
-        errorCorrectionLevel: 'H'
-      })
-      .then(qrcode => {
-        this.qrcode = qrcode
+        errorCorrectionLevel: 'H',
+        scale: 1,
       })
 
       bus.$on('account-receive', accountAddress => {
@@ -193,3 +191,11 @@
     },
   }
 </script>
+
+<style>
+  img.qr {
+    image-rendering: pixelated;
+    width: 256px;
+    height: 256px;
+  }
+</style>
