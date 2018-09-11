@@ -7,7 +7,6 @@
 
 <script>
   import MixItem from '../../lib/MixItem.js'
-  import { bus } from '../main'
 
   export default {
     name: 'active-account',
@@ -33,7 +32,7 @@
       }
     },
     created() {
-      bus.$on('change-active-account', accountAddress => {
+      this.$root.$on('change-active-account', accountAddress => {
         this.loadData()
       })
       this.loadData()

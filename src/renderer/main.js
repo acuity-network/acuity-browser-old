@@ -57,8 +57,6 @@ Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('..
 Vue.prototype.$itemStoreShortId = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreShortId.abi.json'), '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
 Vue.prototype.$trustedAccounts = new Vue.prototype.$web3.eth.Contract(require('../lib/TrustedAccounts.abi.json'), '0xaae497797e3f9a5ff341225bd9696d9759991418')
 
-export const bus = new Vue();
-
 /* eslint-disable no-new */
 new Vue({
   components: { App },

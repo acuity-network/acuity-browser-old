@@ -42,7 +42,6 @@
 
 <script>
   import MixAccount from '../lib/MixAccount.js'
-  import { bus } from './main'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
 
@@ -102,7 +101,7 @@
                 })
               })
               .then(() => {
-                bus.$emit('account-receive', account.contractAddress)
+                this.$root.$emit('account-receive', account.contractAddress)
                 account.isUnlocked()
                 .then(unlocked => {
                   if (unlocked) {
@@ -120,7 +119,7 @@
                 .write()
               })
               .then(() => {
-                bus.$emit('account-receive', account.contractAddress)
+                this.$root.$emit('account-receive', account.contractAddress)
               })
             })
           })

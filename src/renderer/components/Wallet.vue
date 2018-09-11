@@ -28,7 +28,6 @@
 <script>
   import Page from './Page.vue'
   var QRCode = require('qrcode')
-  import { bus } from '../main'
   import WalletConfirmSend from './WalletConfirmSend.vue'
 
   export default {
@@ -176,7 +175,7 @@
         scale: 1,
       })
 
-      bus.$on('account-receive', accountAddress => {
+      this.$root.$on('account-receive', accountAddress => {
         if (accountAddress == window.activeAccount.contractAddress) {
           this.loadData()
         }
