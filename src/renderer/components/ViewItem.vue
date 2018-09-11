@@ -14,7 +14,7 @@
     </template>
 
     <template slot="body">
-      <span v-html="body"></span>
+      <div class="image" v-html="body"></div>
       <div class="bodyText">{{ description }}</div>
 
       <div v-if="isProfile">
@@ -237,6 +237,10 @@
   .shield {
     cursor: pointer;
     user-select: none;
+  }
+
+  .image img {
+    width: 512px;
   }
 
 </style>

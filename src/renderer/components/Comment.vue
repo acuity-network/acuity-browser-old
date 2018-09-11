@@ -35,7 +35,7 @@
             return profile.latestRevision().load()
           })
           .then(revision => {
-            this.avatar = revision.getImage(64)
+            this.avatar = revision.getImage(32, 32)
           })
         })
         .catch(() => {})
@@ -52,8 +52,15 @@
 
 <style>
 
-.blog-post {
-  margin: 10px;
-}
+  .avatar img {
+    margin-right: 10px;
+    object-fit: cover;
+    width: 32px;
+    height: 32px;
+  }
+
+  .blog-post {
+    margin: 10px;
+  }
 
 </style>

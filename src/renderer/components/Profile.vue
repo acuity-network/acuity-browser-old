@@ -8,7 +8,7 @@
       <ul>
         <li><router-link to="/profile/edit">Edit profile</router-link></li>
       </ul>
-      <div v-html="image"></div>
+      <div class="avatar" v-html="image"></div>
       <b-field label="Account type">
         {{ type }}
       </b-field>
@@ -100,3 +100,11 @@
     },
   }
 </script>
+
+<style>
+
+  .avatar img {
+    width: 256px;
+  }
+
+</style>

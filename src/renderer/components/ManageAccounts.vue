@@ -40,6 +40,7 @@
   import MixItem from '../../lib/MixItem.js'
   import ManageAccountUnlock from './ManageAccountUnlock.vue'
   import ManageAccountsNew from './ManageAccountsNew.vue'
+  import { bus } from '../main'
 
   export default {
     name: 'manage-accounts',
@@ -108,6 +109,7 @@
         .then(account => {
           window.activeAccount = account
           this.$db.put('/active-account', event.account)
+          bus.$emit('change-active-account', event.account)
         })
         .catch(() => {})
       },
