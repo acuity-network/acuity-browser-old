@@ -1,7 +1,13 @@
 <template>
-  <div class="blog-post">
-    <div class="avatar" v-html="avatar"></div>
+  <div class="comment">
+    <div class="profile is-clearfix">
+      <div class="avatar is-pulled-left" v-html="avatar"></div>
+      <span class="author">{{ author }}</span>
+    </div>
     <div v-html="bodyText"></div>
+    <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
+    <b-input v-model="reply" type="textarea" spellcheck="true"></b-input>
+    <button class="button is-primary" v-on:click="publishReply">Reply</button>
   </div>
 </template>
 
@@ -14,37 +20,73 @@
     data() {
       return {
         avatar: '',
+        author: '',
         bodyText: '',
+        childIds: [],
+        reply: '',
       }
     },
-    created () {
-      var item = new MixItem(this.$root, this.itemId)
+    methods: {
+      async loadData() {
+        var item = await new MixItem(this.$root, this.itemId).init()
+        var account = await item.account()
+        var itemId = await account.call(this.$accountProfile.methods.getProfile())
+        var profile = await new MixItem(this.$root, itemId).init()
+        var revision = await profile.latestRevision().load()
+        this.avatar = revision.getImage(32, 32)
+        this.author = revision.getTitle()
 
-      item.init()
-      .then(item => {
+        var commentRevision = await item.latestRevision().load()
+        this.bodyText = commentRevision.getBodyText()
 
-        item.account()
-        .then(account => {
-          return account.call(this.$accountProfile.methods.getProfile())
+        this.childIds = []
+        item.childIds().forEach(async childId => {
+          var child = await new MixItem(this.$root, childId).init()
+          if (await child.isTrusted()) {
+            this.childIds.push(childId)
+          }
         })
-        .then(itemId => {
-          var profile = new MixItem(this.$root, itemId)
+      },
+      async publishReply(event) {
+        var itemMessage = new this.$itemProto.Item()
 
-          profile.init()
-          .then(profile => {
-            return profile.latestRevision().load()
-          })
-          .then(revision => {
-            this.avatar = revision.getImage(32, 32)
-          })
-        })
-        .catch(() => {})
+        // Mixin type
+        var mixinMessage = new this.$itemProto.Mixin()
+        mixinMessage.setMixinId(0x874aba65)
+        itemMessage.addMixin(mixinMessage)
 
-        item.latestRevision().load()
-        .then(revision => {
-          this.bodyText = revision.getBodyText()
-        })
-      })
+        // BodyText
+        var bodyTextMessage = new this.$bodyTextProto.BodyTextMixin()
+        bodyTextMessage.setBodyText(this.reply)
+        mixinMessage = new this.$itemProto.Mixin()
+        mixinMessage.setMixinId(0x34a9a6ec)
+        mixinMessage.setPayload(bodyTextMessage.serializeBinary())
+        itemMessage.addMixin(mixinMessage)
+
+        var itemPayload = itemMessage.serializeBinary()
+        var output = this.$brotli.compressArray(itemPayload, 11)
+        var data = new FormData()
+        data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
+
+        // Send a POST request
+        var response  = await this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
+        const multihash = require('multihashes')
+        var decodedHash = multihash.decode(multihash.fromB58String(response.data.Hash))
+
+        if (decodedHash.name != 'sha2-256') {
+          throw 'Wrong type of multihash.'
+        }
+
+        var hashHex = '0x' + decodedHash.digest.toString('hex')
+        var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+        var itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.itemId), 0, 'Post comment')
+        this.reply = ''
+        this.loadData()
+      },
+    },
+    async created() {
+      this.loadData()
     },
   }
 
@@ -59,8 +101,19 @@
     height: 32px;
   }
 
-  .blog-post {
-    margin: 10px;
+  .author {
+    line-height: 32px;
+  }
+
+  .comment {
+    padding: 10px;
+    border: 1px #4a4a4a solid;
+    border-radius: 10px;
+    margin: 10px 0;
+  }
+
+  .comment textarea {
+    margin: 10px 0;
   }
 
 </style>
