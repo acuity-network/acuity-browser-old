@@ -10,7 +10,8 @@
         v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
         v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
         :class="ownerTrustedClassCurrent" class="shield mdi mdi-24px"
-        v-on:click="toggleTrust"></span>
+        v-on:click="toggleTrust"></span><br />
+        {{ timestamp }}
     </template>
 
     <template slot="body">
@@ -56,6 +57,7 @@
         ownerTrustedClass: '',
         ownerTrustedClassHover: '',
         ownerTrustedClassCurrent: '',
+        timestamp: '',
         body: '',
         description: '',
         isProfile: '',
@@ -124,7 +126,7 @@
               item.latestRevision().load()
               .then(async revision => {
                 this.title = revision.getTitle()
-
+                this.timestamp = new Date(revision.getTimestamp() * 1000).toLocaleString()
                 this.body = revision.getImage(512)
                 this.description = revision.getDescription()
 

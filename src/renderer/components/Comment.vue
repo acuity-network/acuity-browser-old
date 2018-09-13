@@ -2,7 +2,7 @@
   <div class="comment">
     <div class="profile is-clearfix">
       <div class="avatar is-pulled-left" v-html="avatar"></div>
-      <span class="author">{{ author }}</span>
+      <span class="author">{{ author }}, {{ timestamp }}</span>
     </div>
     <div v-html="bodyText"></div>
     <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
@@ -21,6 +21,7 @@
       return {
         avatar: '',
         author: '',
+        timestamp: '',
         bodyText: '',
         childIds: [],
         reply: '',
@@ -37,6 +38,7 @@
         this.author = revision.getTitle()
 
         var commentRevision = await item.latestRevision().load()
+        this.timestamp = new Date(commentRevision.getTimestamp() * 1000).toLocaleString()
         this.bodyText = commentRevision.getBodyText()
 
         this.childIds = []

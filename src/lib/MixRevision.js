@@ -39,6 +39,10 @@ export default class MixRevision {
     })
   }
 
+  getTimestamp() {
+    return this.item.item.timestamps[this.revisionId]
+  }
+
   getTitle() {
     for (var i = 0; i < this.mixins.length; i++) {
       if (this.mixins[i].mixinId == '0x24da6114') {
