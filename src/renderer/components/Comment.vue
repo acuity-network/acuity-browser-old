@@ -42,14 +42,7 @@
         var commentRevision = await item.latestRevision().load()
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000).toLocaleString()
         this.bodyText = commentRevision.getBodyText()
-
-        this.childIds = []
-        item.childIds().forEach(async childId => {
-          var child = await new MixItem(this.$root, childId).init()
-          if (await child.isTrusted()) {
-            this.childIds.push(childId)
-          }
-        })
+        this.childIds = item.childIds()
       },
       async publishReply(event) {
         var itemMessage = new this.$itemProto.Item()
