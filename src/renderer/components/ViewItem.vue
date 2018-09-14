@@ -194,6 +194,7 @@
             return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.$route.params.itemId), 0, 'Post comment')
           })
           .then(() => {
+            this.comment = ''
             this.loadData()
           })
         })
