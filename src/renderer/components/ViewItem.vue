@@ -102,19 +102,7 @@
             })
             .catch(() => {})
             .then(() => {
-              this.childIds = []
-
-              item.childIds().forEach(childId => {
-                new MixItem(this.$root, childId).init()
-                .then(item => {
-                  return item.isTrusted()
-                })
-                .then(trusted => {
-                  if (trusted) {
-                    this.childIds.push(childId)
-                  }
-                })
-              })
+              this.childIds = item.childIds()
 
               if (!trustLevel) {
                 this.title = ''

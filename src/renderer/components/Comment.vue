@@ -1,5 +1,5 @@
 <template>
-  <div class="comment">
+  <div v-if="trusted" class="comment">
     <div class="profile is-clearfix">
       <div class="avatar is-pulled-left" v-html="avatar"></div>
       <span class="author">{{ author }}, {{ timestamp }}</span>
@@ -19,6 +19,7 @@
     props: ['itemId'],
     data() {
       return {
+        trusted: false,
         avatar: '',
         author: '',
         timestamp: '',
@@ -30,6 +31,7 @@
     methods: {
       async loadData() {
         var item = await new MixItem(this.$root, this.itemId).init()
+        this.trusted = await item.isTrusted()
         var account = await item.account()
         var itemId = await account.call(this.$accountProfile.methods.getProfile())
         var profile = await new MixItem(this.$root, itemId).init()
