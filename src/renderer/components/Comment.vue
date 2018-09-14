@@ -6,7 +6,7 @@
     </div>
     <div v-html="bodyText"></div>
     <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
-    <b-input v-model="reply" type="textarea" spellcheck="true"></b-input>
+    <b-input v-model="reply" type="textarea"></b-input>
     <button class="button is-primary" v-on:click="publishReply">Reply</button>
   </div>
 </template>
