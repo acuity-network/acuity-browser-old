@@ -26,11 +26,8 @@
 
       <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
 
-      <b-field label="Comment">
-        <b-input v-model="comment" type="textarea"></b-input>
-      </b-field>
-
-      <button class="button is-primary" v-on:click="publish">Publish</button>
+      <b-input v-model="reply" type="textarea"></b-input>
+      <button class="button is-primary" v-on:click="publishReply">Reply</button>
     </template>
   </page>
 </template>
@@ -63,7 +60,7 @@
         isProfile: '',
         trustedThatTrust: [],
         childIds: [],
-        comment: '',
+        reply: '',
       }
     },
     created() {
@@ -156,7 +153,7 @@
           })
         })
       },
-      publish(event) {
+      publishReply(event) {
         var itemMessage = new this.$itemProto.Item()
 
         // Mixin type
@@ -166,7 +163,7 @@
 
         // BodyText
         var bodyTextMessage = new this.$bodyTextProto.BodyTextMixin()
-        bodyTextMessage.setBodyText(this.comment)
+        bodyTextMessage.setBodyText(this.reply)
         mixinMessage = new this.$itemProto.Mixin()
         mixinMessage.setMixinId(0x34a9a6ec)
         mixinMessage.setPayload(bodyTextMessage.serializeBinary())
@@ -194,7 +191,7 @@
             return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.$route.params.itemId), 0, 'Post comment')
           })
           .then(() => {
-            this.comment = ''
+            this.reply = ''
             this.loadData()
           })
         })
@@ -232,6 +229,10 @@
 
   .image img {
     width: 512px;
+  }
+
+  textarea {
+    margin: 10px 0;
   }
 
 </style>
