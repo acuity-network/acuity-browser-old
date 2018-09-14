@@ -64,6 +64,17 @@
       }
     },
     created() {
+      this.$itemStoreIpfsSha256.events.allEvents({
+        toBlock: 'pending',
+        topics: [, this.itemId],
+      })
+      .on('data', log => {
+        this.loadData()
+      })
+      .on('changed', log => {
+        this.loadData()
+      })
+
       this.loadData()
     },
     watch: {
@@ -192,7 +203,6 @@
           })
           .then(() => {
             this.reply = ''
-            this.loadData()
           })
         })
       },

@@ -79,10 +79,20 @@
         var itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.itemId), 0, 'Post comment')
         this.reply = ''
-        this.loadData()
       },
     },
-    async created() {
+    created() {
+      this.$itemStoreIpfsSha256.events.allEvents({
+        toBlock: 'pending',
+        topics: [, this.itemId],
+      })
+      .on('data', log => {
+        this.loadData()
+      })
+      .on('changed', log => {
+        this.loadData()
+      })
+
       this.loadData()
     },
   }
