@@ -26,8 +26,13 @@
 
       <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
 
-      <b-input v-model="reply" type="textarea"></b-input>
-      <button class="button is-primary" v-on:click="publishReply">Reply</button>
+      <div v-if="startReply">
+        <b-input v-model="reply" type="textarea"></b-input>
+        <button class="button is-primary" v-on:click="publishReply">Reply</button>
+      </div>
+      <div v-else>
+        <button class="button is-primary" v-on:click="startReply = true">Reply</button>
+      </div>
     </template>
   </page>
 </template>
@@ -61,6 +66,7 @@
         trustedThatTrust: [],
         childIds: [],
         reply: '',
+        startReply: false,
       }
     },
     created() {
@@ -203,6 +209,7 @@
           })
           .then(() => {
             this.reply = ''
+            this.startReply = false
           })
         })
       },

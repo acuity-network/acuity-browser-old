@@ -6,8 +6,13 @@
     </div>
     <div v-html="bodyText"></div>
     <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
-    <b-input v-model="reply" type="textarea"></b-input>
-    <button class="button is-primary" v-on:click="publishReply">Reply</button>
+    <div v-if="startReply">
+      <b-input v-model="reply" type="textarea"></b-input>
+      <button class="button is-primary" v-on:click="publishReply">Reply</button>
+    </div>
+    <div v-else>
+      <button class="button is-primary" v-on:click="startReply = true">Reply</button>
+    </div>
   </div>
 </template>
 
@@ -26,6 +31,7 @@
         bodyText: '',
         childIds: [],
         reply: '',
+        startReply: false,
       }
     },
     methods: {
@@ -79,6 +85,7 @@
         var itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.itemId), 0, 'Post comment')
         this.reply = ''
+        this.startReply = false
       },
     },
     created() {
