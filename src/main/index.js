@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
+var path = require('path')
 
 /**
  * Set `__static` path to static files in production
@@ -20,13 +21,11 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
-    useContentSize: true,
-    width: 1000
+    icon: path.join(__dirname, '/mix-logo-filled.png') ,
   })
 
   mainWindow.loadURL(winURL)
-
+//  mainWindow.webContents.openDevTools()
   mainWindow.on('closed', () => {
     mainWindow = null
   })
