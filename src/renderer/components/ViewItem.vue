@@ -16,7 +16,7 @@
 
     <template slot="body">
       <div class="image" v-html="body"></div>
-      <div class="bodyText">{{ description }}</div>
+      <div class="bodyText"><vue-markdown v-bind:source="description"></vue-markdown></div>
 
       <div v-if="isProfile">
         <b-field label="Trusted that trust">
@@ -42,6 +42,7 @@
   import Comment from './Comment.vue'
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
+  import VueMarkdown from 'vue-markdown'
 
   export default {
     name: 'view-item',
@@ -50,6 +51,7 @@
       Page,
       Comment,
       ProfileLink,
+      VueMarkdown,
     },
     data() {
       return {

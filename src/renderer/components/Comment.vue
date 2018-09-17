@@ -4,7 +4,7 @@
       <div class="avatar is-pulled-left" v-html="avatar"></div>
       <span class="author">{{ author }}, {{ timestamp }}</span>
     </div>
-    <div v-html="bodyText"></div>
+    <vue-markdown v-bind:source="bodyText"></vue-markdown>
     <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
     <div v-if="startReply">
       <b-input v-model="reply" type="textarea"></b-input>
@@ -18,10 +18,14 @@
 
 <script>
   import MixItem from '../../lib/MixItem.js'
+  import VueMarkdown from 'vue-markdown'
 
   export default {
     name: 'comment',
     props: ['itemId'],
+    components: {
+      VueMarkdown,
+    },
     data() {
       return {
         trusted: false,
