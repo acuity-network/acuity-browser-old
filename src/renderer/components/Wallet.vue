@@ -5,22 +5,32 @@
     </template>
 
     <template slot="body">
-      <img class="qr" :src="qrcode" />
-      <b-field label="Balance">
-        {{ balance }}
-      </b-field>
-      <b-field label="Unconfirmed Balance">
-        {{ unconfirmedBalance }}
-      </b-field>
-      <b-field label="To">
-        <b-input v-model="to"></b-input>
-      </b-field>
-      <b-field label="Amount">
-        <b-input v-model="amount"></b-input>
-      </b-field>
-      <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
+      <div class="is-clearfix">
+        <img class="qr is-pulled-right" :src="qrcode" />
 
-      <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc"></b-table>
+        <b-field label="Balance">
+          {{ balance }}
+        </b-field>
+        <b-field label="Unconfirmed Balance">
+          {{ unconfirmedBalance }}
+        </b-field>
+      </div>
+
+      <b-tabs>
+        <b-tab-item label="Transactions">
+          <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc"></b-table>
+        </b-tab-item>
+
+        <b-tab-item label="Send">
+          <b-field label="To">
+            <b-input v-model="to"></b-input>
+          </b-field>
+          <b-field label="Amount">
+            <b-input v-model="amount"></b-input>
+          </b-field>
+          <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
+        </b-tab-item>
+      </b-tabs>
     </template>
   </page>
 </template>
