@@ -26,11 +26,3 @@
     methods: {}
   }
 </script>
-
-<style>
-
-  button {
-    font-weight: bold;
-  }
-
-</style>

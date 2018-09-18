@@ -136,28 +136,12 @@
     -webkit-font-smoothing: subpixel-antialiased;
   }
 
-  section.section {
-    padding: 0 1.5rem;
-    margin: 1.5rem 0;
-  }
-
-  section.section.is-primary {
-    font-family: "Montserrat";
-    margin: 3rem 0;
-  }
-
-  h1.title {
+  button {
     font-weight: bold;
   }
+</style>
 
-  section.section.is-primary h1.title {
-    margin-bottom: 0;
-  }
-
-  section.section.is-primary h2.subtitle {
-    margin-top: 0;
-  }
-
+<style scoped>
   .is-narrow {
     position: fixed;
     padding: 1.5rem;

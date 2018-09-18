@@ -201,8 +201,8 @@
   }
 </script>
 
-<style>
-  img.qr {
+<style scoped>
+  .qr {
     image-rendering: pixelated;
     width: 256px;
     height: 256px;

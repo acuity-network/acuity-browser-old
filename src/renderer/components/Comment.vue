@@ -7,7 +7,7 @@
     <vue-markdown v-bind:source="bodyText"></vue-markdown>
     <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
     <div v-if="startReply">
-      <b-input v-model="reply" type="textarea"></b-input>
+      <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
       <button class="button is-primary" v-on:click="publishReply">Reply</button>
     </div>
     <div v-else>
@@ -110,9 +110,8 @@
 
 </script>
 
-<style>
-
-  .avatar img {
+<style scoped>
+  .avatar {
     margin-right: 10px;
     object-fit: cover;
     width: 32px;
@@ -130,8 +129,7 @@
     margin: 10px 0;
   }
 
-  .comment textarea {
+  .comment-box {
     margin: 10px 0;
   }
-
 </style>

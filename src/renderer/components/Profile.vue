@@ -101,10 +101,8 @@
   }
 </script>
 
-<style>
-
-  .avatar img {
+<style scoped>
+  .avatar {
     width: 256px;
   }
-
 </style>

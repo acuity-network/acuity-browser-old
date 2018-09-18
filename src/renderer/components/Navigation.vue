@@ -19,11 +19,9 @@
   }
 </script>
 
-<style>
-
+<style scoped>
   .arrow {
     cursor: pointer;
     user-select: none;
   }
-
 </style>

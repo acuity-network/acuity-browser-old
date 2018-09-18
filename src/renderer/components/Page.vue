@@ -2,7 +2,7 @@
   <div id="wrapper">
     <main>
       <section class="section is-primary">
-        <h1 class="title"><slot name="title"></slot></h1>
+        <h1 class="title is-spaced"><slot name="title"></slot></h1>
         <h2 class="subtitle"><slot name="subtitle"></slot></h2>
       </section>
 
@@ -18,3 +18,20 @@
     name: 'page',
   }
 </script>
+
+<style scoped>
+  .section {
+    padding: 0 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  section.is-primary {
+    font-family: "Montserrat";
+    margin: 3rem 0;
+  }
+
+  .title {
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+</style>

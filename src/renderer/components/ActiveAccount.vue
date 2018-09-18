@@ -1,6 +1,6 @@
 <template>
-  <div id="active-account" class="is-clearfix">
-    <div v-html="image" class="is-pulled-left"></div>
+  <div class="is-clearfix">
+    <div v-html="image" class="avatar is-pulled-left"></div>
     {{ title }}
   </div>
 </template>
@@ -40,8 +40,8 @@
   }
 </script>
 
-<style>
-  #active-account img {
+<style scoped>
+  .avatar {
     margin-right: 10px;
     object-fit: cover;
     width: 64px;

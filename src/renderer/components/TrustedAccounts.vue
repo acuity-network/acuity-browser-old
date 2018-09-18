@@ -78,11 +78,9 @@
   }
 </script>
 
-<style>
-
+<style scoped>
   .remove {
     cursor: pointer;
     user-select: none;
   }
-
 </style>
