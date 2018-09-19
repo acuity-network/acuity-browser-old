@@ -16,7 +16,7 @@
 
     <template slot="body">
       <div class="image" v-html="body"></div>
-      <div class="bodyText"><vue-markdown v-bind:source="description"></vue-markdown></div>
+      <div class="bodyText"><vue-markdown class="markdown" v-bind:source="description"></vue-markdown></div>
 
       <div v-if="isProfile">
         <b-field label="Trusted that trust">

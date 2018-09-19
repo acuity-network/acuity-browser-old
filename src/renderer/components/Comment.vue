@@ -4,7 +4,7 @@
       <div class="avatar is-pulled-left" v-html="avatar"></div>
       <span class="author">{{ author }}, {{ timestamp }}</span>
     </div>
-    <vue-markdown v-bind:source="bodyText"></vue-markdown>
+    <vue-markdown class="markdown" v-bind:source="bodyText"></vue-markdown>
     <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
     <div v-if="startReply">
       <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
