@@ -21,7 +21,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, '/mix-logo-filled.png') ,
+    icon: path.join(__dirname, '/mix-logo-filled.png'),
   })
 
   mainWindow.loadURL(winURL)
