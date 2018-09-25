@@ -32,18 +32,13 @@
       document.getElementById('password').focus()
     },
     methods: {
-      unlock() {
-        var account = new MixAccount(this, this.address)
-        account.init()
-        account.unlock(this.password)
-        .then(() => {
-          return account.consolidateMix()
-        })
-        .catch(error => {})
-        .then(() => {
-          this.$parent.$parent.loadAccounts()
-          this.$emit('close')
-        })
+      async unlock() {
+        let account = new MixAccount(this.$root, this.address)
+        await account.init()
+        await account.unlock(this.password)
+        await account.consolidateMix()
+        await this.$parent.$parent.loadAccounts()
+        this.$emit('close')
       },
     }
   }
