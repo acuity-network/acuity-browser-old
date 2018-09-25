@@ -6,11 +6,11 @@
 
     <template slot="body">
       <b-field label="Title">
-        <b-input id="title"></b-input>
+        <b-input v-model="title"></b-input>
       </b-field>
 
       <b-field label="Description">
-        <b-input id="description" type="textarea"></b-input>
+        <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
       <button class="button" v-on:click="chooseFile">Choose image</button>
@@ -21,100 +21,66 @@
 
 <script>
   import Page from './Page.vue'
-
-  import itemProto from '../../lib/item_pb.js'
   import languageProto from '../../lib/language_pb.js'
   import titleProto from '../../lib/title_pb.js'
   import bodyTextProto from '../../lib/body_pb.js'
   import descriptionProto from '../../lib/description_pb.js'
+  import MixContent from '../../lib/MixContent.js'
+  import Image from '../../lib/Image.js'
 
   export default {
     name: 'publish-image',
     components: {
       Page,
     },
+    data() {
+      return {
+        title: '',
+        description: '',
+      }
+    },
     methods: {
-      chooseFile (event) {
+      chooseFile(event) {
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose image',
-          filters: [{name: 'Images', extensions: ['jpg', 'png', 'gif']}]
+          filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
           window.fileNames = fileNames
         })
       },
-      publish (event) {
+      async publish(event) {
+        let content = new MixContent(this.$root)
 
-        var itemMessage = new itemProto.Item()
-
-        // Topic
-        var mixinMessage = new itemProto.Mixin()
-        mixinMessage.setMixinId(0xbcec8faa)
-        itemMessage.addMixin(mixinMessage)
+        // Mixin type
+        content.addMixin(0xbcec8faa)
 
         // Language
-        var languageMessage = new languageProto.LanguageMixin()
+        let languageMessage = new languageProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-
-        mixinMessage = new itemProto.Mixin()
-        mixinMessage.setMixinId(0x4e4e06c4)
-        mixinMessage.setPayload(languageMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
-        var titleMessage = new titleProto.TitleMixin()
-        titleMessage.setTitle(document.getElementById('title').value)
-
-        mixinMessage = new itemProto.Mixin()
-        mixinMessage.setMixinId(0x24da6114)
-        mixinMessage.setPayload(titleMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        let titleMessage = new titleProto.TitleMixin()
+        titleMessage.setTitle(this.title)
+        content.addMixin(0x24da6114, titleMessage.serializeBinary())
 
         // Description
-        var descriptionMessage = new descriptionProto.DescriptionMixin()
-        descriptionMessage.setDescription(document.getElementById('description').value)
-
-        mixinMessage = new itemProto.Mixin()
-        mixinMessage.setMixinId(0x5a474550)
-        mixinMessage.setPayload(descriptionMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        let descriptionMessage = new descriptionProto.DescriptionMixin()
+        descriptionMessage.setDescription(this.description)
+        content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
 
         // Image
         if (window.fileNames) {
-          var image = new Image(this, window.fileNames[0])
-          image.createMixin()
-          .then(imageMixin => {
-            itemMessage.addMixin(imageMixin)
-          })
+          let image = new Image(this.$root, window.fileNames[0])
+          content.addMixin(0x12745469, await image.createMixin())
         }
 
-        var itemPayload = itemMessage.serializeBinary()
-        var output = this.$brotli.compressArray(itemPayload, 11)
-        var data = new FormData()
-        data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
-
-        var hashHex
-
-        // Send a POST request
-        this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-        .then(response => {
-          var hash = response.data.Hash
-          const multihash = require('multihashes')
-          var decodedHash = multihash.decode(multihash.fromB58String(hash))
-          if (decodedHash.name != 'sha2-256') {
-            throw 'Wrong type of multihash.'
-          }
-
-          hashHex = '0x' + decodedHash.digest.toString('hex')
-          var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-          window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce), 32).then(itemId => {
-            window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 'Creating Topic Feed item.')
-            this.$router.push({ name: 'item', params: { itemId: itemId }})
-          })
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        let ipfsHash = await content.save()
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
+        this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },
   }

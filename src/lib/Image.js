@@ -1,7 +1,6 @@
 const sharp = require('sharp')
 import jpegImageProto from './jpeg-image_pb.js'
 const Base58 = require("base-58")
-import itemProto from './item_pb.js'
 
 export default class Image {
 
@@ -76,11 +75,7 @@ export default class Image {
           imageMessage.addMipmapLevel(mipmapLevelMessage)
         })
 
-        var mixinMessage = new itemProto.Mixin()
-        mixinMessage.setMixinId(0x12745469)
-        mixinMessage.setPayload(imageMessage.serializeBinary())
-
-        return mixinMessage
+        return imageMessage.serializeBinary()
       })
     })
   }

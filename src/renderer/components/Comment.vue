@@ -18,7 +18,10 @@
 
 <script>
   import MixItem from '../../lib/MixItem.js'
+  import MixContent from '../../lib/MixContent.js'
   import VueMarkdown from 'vue-markdown'
+  import bodyTextProto from '../../lib/body_pb.js'
+  import languageProto from '../../lib/language_pb.js'
 
   export default {
     name: 'comment',
@@ -55,39 +58,25 @@
         this.childIds = item.childIds()
       },
       async publishReply(event) {
-        var itemMessage = new this.$itemProto.Item()
+        let content = new MixContent(this.$root)
 
-        // Mixin type
-        var mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0x874aba65)
-        itemMessage.addMixin(mixinMessage)
+        // Comment
+        content.addMixin(0x874aba65)
+
+        // Language
+        let languageMessage = new languageProto.LanguageMixin()
+        languageMessage.setLanguageTag('en-US')
+        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
 
         // BodyText
-        var bodyTextMessage = new this.$bodyTextProto.BodyTextMixin()
+        let bodyTextMessage = new bodyTextProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.reply)
-        mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0x34a9a6ec)
-        mixinMessage.setPayload(bodyTextMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
-        var itemPayload = itemMessage.serializeBinary()
-        var output = this.$brotli.compressArray(itemPayload, 11)
-        var data = new FormData()
-        data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
-
-        // Send a POST request
-        var response  = await this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-        const multihash = require('multihashes')
-        var decodedHash = multihash.decode(multihash.fromB58String(response.data.Hash))
-
-        if (decodedHash.name != 'sha2-256') {
-          throw 'Wrong type of multihash.'
-        }
-
-        var hashHex = '0x' + decodedHash.digest.toString('hex')
-        var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        var itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.itemId), 0, 'Post comment')
+        let ipfsHash = await content.save()
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, ipfsHash, this.itemId), 0, 'Post comment')
         this.reply = ''
         this.startReply = false
       },

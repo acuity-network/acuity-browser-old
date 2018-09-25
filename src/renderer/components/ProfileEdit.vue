@@ -6,11 +6,11 @@
 
     <template slot="body">
       <b-field label="Name">
-        <b-input id="name" :value="name"></b-input>
+        <b-input v-model="name"></b-input>
       </b-field>
 
       <b-field label="Type">
-        <b-select id="type" :value="type">
+        <b-select v-model="type">
           <option value="0">Anon</option>
           <option value="1">Person</option>
           <option value="2">Project</option>
@@ -23,11 +23,11 @@
       </b-field>
 
       <b-field label="Location">
-        <b-input id="location" :value="location"></b-input>
+        <b-input v-model="location"></b-input>
       </b-field>
 
       <b-field label="Bio">
-        <b-input id="bio" type="textarea" :value="bio"></b-input>
+        <b-input v-model="bio" type="textarea"></b-input>
       </b-field>
 
       <b-field label="Image">
@@ -45,9 +45,11 @@
   import profileProto from '../../lib/account-profile_pb.js'
   import titleProto from '../../lib/title_pb.js'
   import bodyTextProto from '../../lib/body_pb.js'
+  import languageProto from '../../lib/language_pb.js'
   const multihash = require('multihashes')
   import MixItem from '../../lib/MixItem.js'
   import Image from '../../lib/Image.js'
+  import MixContent from '../../lib/MixContent.js'
 
   export default {
     name: 'profile',
@@ -87,7 +89,7 @@
       })
     },
     methods: {
-      chooseFile (event) {
+      chooseFile(event) {
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose image',
@@ -96,82 +98,49 @@
           window.fileNames = fileNames
         })
       },
-      publish (event) {
-        var itemMessage = new itemProto.Item()
+      async publish(event) {
+        let content = new MixContent(this.$root)
 
         // Account profile
         var profileMessage = new profileProto.AccountProfile()
-        profileMessage.setType(document.getElementById('type').value)
-        profileMessage.setLocation(document.getElementById('location').value)
+        profileMessage.setType(this.type)
+        profileMessage.setLocation(this.location)
+        content.addMixin(0x4bf3ce07, profileMessage.serializeBinary())
 
-        var mixinMessage = new itemProto.Mixin()
-        mixinMessage.setMixinId(0x4bf3ce07)
-        mixinMessage.setPayload(profileMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        // Language
+        let languageMessage = new languageProto.LanguageMixin()
+        languageMessage.setLanguageTag('en-US')
+        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
-        var titleMessage = new titleProto.TitleMixin()
-        titleMessage.setTitle(document.getElementById('name').value)
-
-        mixinMessage = new itemProto.Mixin()
-        mixinMessage.setMixinId(0x24da6114)
-        mixinMessage.setPayload(titleMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        let titleMessage = new titleProto.TitleMixin()
+        titleMessage.setTitle(this.name)
+        content.addMixin(0x24da6114, titleMessage.serializeBinary())
 
         // BodyText
-        var bodyTextMessage = new bodyTextProto.BodyTextMixin()
-        bodyTextMessage.setBodyText(document.getElementById('bio').value)
-
-        mixinMessage = new itemProto.Mixin()
-        mixinMessage.setMixinId(0x34a9a6ec)
-        mixinMessage.setPayload(bodyTextMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        let bodyTextMessage = new bodyTextProto.BodyTextMixin()
+        bodyTextMessage.setBodyText(this.bio)
+        content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         // Image
-        var promises = []
         if (window.fileNames) {
-          var image = new Image(this, window.fileNames[0])
-          promises.push(image.createMixin()
-            .then(imageMixin => {
-              itemMessage.addMixin(imageMixin)
-            })
-          )
+          let image = new Image(this.$root, window.fileNames[0])
+          content.addMixin(0x12745469, await image.createMixin())
         }
 
-        var hexHash
-        Promise.all(promises)
-        .then ( () => {
-          var itemPayload = itemMessage.serializeBinary()
-          var output = this.$brotli.compressArray(itemPayload, 11)
+        let ipfsHash = await content.save()
+        try {
+          let itemId = await window.activeAccount.call(this.$accountProfile.methods.getProfile())
+          await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(itemId, ipfsHash), 0, 'Update profile')
+        }
+        catch(e) {
+          let flagsNonce = '0x01' + this.$web3.utils.randomHex(30).substr(2)
+          let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+          await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create profile item')
+          await window.activeAccount.sendData(this.$accountProfile.methods.setProfile(itemId), 0, 'Set profile item')
+        }
 
-          // Publish to IPFS.
-          var data = new FormData()
-          data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
-          return this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-        })
-        .then(response => {
-          hexHash = '0x' + multihash.decode(multihash.fromB58String(response.data.Hash)).digest.toString('hex')
-          return window.activeAccount.call(this.$accountProfile.methods.getProfile())
-        })
-        .then(itemId => {
-          window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(itemId, hexHash), 0, 'Update profile')
-          .then(() => {
-            this.$router.push({ name: 'profile' })
-          })
-        })
-        .catch(err => {
-          var flagsNonce = '0x01' + this.$web3.utils.randomHex(30).substr(2)
-          window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
-          .then(itemId => {
-            window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hexHash), 0, 'Create profile item')
-            .then(result => {
-              return window.activeAccount.sendData(this.$accountProfile.methods.setProfile(itemId), 0, 'Set profile item')
-            })
-            .then(() => {
-              this.$router.push({ name: 'profile' })
-            })
-          })
-        })
+        this.$router.push({ name: 'profile' })
       }
     }
   }

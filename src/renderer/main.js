@@ -13,30 +13,10 @@ import '@mdi/font/css/materialdesignicons.min.css'
 import 'notosans-fontface/css/notosans-fontface.css'
 import 'typeface-montserrat/index.css'
 
-import itemProto from '../lib/item_pb.js'
-Vue.prototype.$itemProto = itemProto
-
-import languageProto from '../lib/language_pb.js'
-Vue.prototype.$languageProto = languageProto
-
-import titleProto from '../lib/title_pb.js'
-Vue.prototype.$titleProto = titleProto
-
-import bodyTextProto from '../lib/body_pb.js'
-Vue.prototype.$bodyTextProto = bodyTextProto
-
-import descriptionProto from '../lib/description_pb.js'
-Vue.prototype.$descriptionProto = descriptionProto
-
-import jpegImageProto from '../lib/jpeg-image_pb.js'
-Vue.prototype.$jpegImageProto = jpegImageProto
-
-require('./brotli.js')
-Vue.prototype.$brotli = new Brotli('/static/')
-
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
+Vue.config.debug = true
 
 var level = require('level')
 import { remote } from 'electron'
@@ -49,6 +29,7 @@ Vue.prototype.$db = db
 const Web3 = require('web3')
 var net = require('net')
 Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.mix-geth/geth.ipc', net))
+//Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.ethereum/geth.ipc', net))
 //Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/mix-blockchain/mix.ipc', net))
 //Vue.prototype.$web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
 Vue.prototype.$web3.eth.defaultBlock = 'pending';

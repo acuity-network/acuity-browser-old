@@ -6,19 +6,19 @@
 
     <template slot="body">
       <b-field label="Title">
-        <b-input id="title"></b-input>
+        <b-input v-model="title"></b-input>
       </b-field>
 
       <b-field label="Schema">
-        <b-input id="schema" type="textarea"></b-input>
+        <b-input v-model="schema" type="textarea"></b-input>
       </b-field>
 
       <b-field label="Description">
-        <b-input id="description" type="textarea"></b-input>
+        <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
       <b-field label="Parent itemId">
-        <b-input id="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+        <b-input v-model="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
 
       <button class="button is-primary" v-on:click="publish">Publish</button>
@@ -28,90 +28,60 @@
 
 <script>
   import Page from './Page.vue'
+  import MixContent from '../../lib/MixContent.js'
+  import languageProto from '../../lib/language_pb.js'
+  import titleProto from '../../lib/title_pb.js'
+  import descriptionProto from '../../lib/description_pb.js'
+  import bodyTextProto from '../../lib/body_pb.js'
 
   export default {
     name: 'publish-mixin-type',
     components: {
       Page,
     },
+    data() {
+      return {
+        title: '',
+        schema: '',
+        description: '',
+        parentId: '',
+      }
+    },
     methods: {
-      publish (event) {
-        var itemMessage = new this.$itemProto.Item()
+      async publish(event) {
+        let content = new MixContent(this.$root)
 
         // Mixin type
-        var mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0x51c32e3a)
-        itemMessage.addMixin(mixinMessage)
+        content.addMixin(0x51c32e3a)
 
         // Language
-        var languageMessage = new this.$languageProto.LanguageMixin()
+        let languageMessage = new languageProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-
-        mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0x4e4e06c4)
-        mixinMessage.setPayload(languageMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
-        var titleMessage = new this.$titleProto.TitleMixin()
-        titleMessage.setTitle(document.getElementById('title').value)
-
-        mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0x24da6114)
-        mixinMessage.setPayload(titleMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
-
-        // Schema
-        if (schema.length > 0) {
-          var bodyTextMessage = new this.$bodyTextProto.BodyTextMixin()
-          bodyTextMessage.setBodyText(document.getElementById('schema').value)
-
-          mixinMessage = new this.$itemProto.Mixin()
-          mixinMessage.setMixinId(0x34a9a6ec)
-          mixinMessage.setPayload(bodyTextMessage.serializeBinary())
-          itemMessage.addMixin(mixinMessage)
-        }
+        let titleMessage = new titleProto.TitleMixin()
+        titleMessage.setTitle(this.title)
+        content.addMixin(0x24da6114, titleMessage.serializeBinary())
 
         // Description
-        var descriptionMessage = new this.$descriptionProto.DescriptionMixin()
-        descriptionMessage.setDescription(document.getElementById('description').value)
+        let descriptionMessage = new descriptionProto.DescriptionMixin()
+        descriptionMessage.setDescription(this.description)
+        content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
 
-        mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0x5a474550)
-        mixinMessage.setPayload(descriptionMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        // Schema
+        if (this.schema.length > 0) {
+          let bodyTextMessage = new bodyTextProto.BodyTextMixin()
+          bodyTextMessage.setBodyText(this.schema)
+          content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
+        }
 
-        var itemPayload = itemMessage.serializeBinary()
-        var output = this.$brotli.compressArray(itemPayload, 11)
-        var data = new FormData()
-        data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
-
-        // Send a POST request
-        this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-        .then(response => {
-          var hash = response.data.Hash
-          const multihash = require('multihashes')
-          var decodedHash = multihash.decode(multihash.fromB58String(hash))
-          if (decodedHash.name != 'sha2-256') {
-            throw 'Wrong type of multihash.'
-          }
-
-          var hashHex = '0x' + decodedHash.digest.toString('hex')
-          var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-          window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
-          .then(itemId => {
-            window.activeAccount.sendData(this.$itemStoreShortId.methods.createShortId(itemId), 0, 'Create short ID')
-            .then(() => {
-              return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 'Create mixin type')
-            })
-            .then(() => {
-              this.$router.push({ name: 'item', params: { itemId: itemId }})
-            })
-          })
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        let ipfsHash = await content.save()
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+        await window.activeAccount.sendData(this.$itemStoreShortId.methods.createShortId(itemId), 0, 'Create short ID')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create mixin type')
+        this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },
   }

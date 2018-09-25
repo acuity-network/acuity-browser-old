@@ -39,10 +39,13 @@
 
 <script>
   import MixItem from '../../lib/MixItem.js'
+  import MixContent from '../../lib/MixContent.js'
   import Comment from './Comment.vue'
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import VueMarkdown from 'vue-markdown'
+  import bodyTextProto from '../../lib/body_pb.js'
+  import languageProto from '../../lib/language_pb.js'
 
   export default {
     name: 'view-item',
@@ -134,7 +137,7 @@
                 this.body = revision.getImage(512)
                 this.description = revision.getDescription()
 
-                if (revision.mixins[0].mixinId == '0x4bf3ce07') {
+                if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
                   this.isProfile = true
                   this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(account.contractAddress)
                 }
@@ -172,48 +175,28 @@
           })
         })
       },
-      publishReply(event) {
-        var itemMessage = new this.$itemProto.Item()
+      async publishReply(event) {
+        let content = new MixContent(this.$root)
 
-        // Mixin type
-        var mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0x874aba65)
-        itemMessage.addMixin(mixinMessage)
+        // Comment
+        content.addMixin(0x874aba65)
+
+        // Language
+        let languageMessage = new languageProto.LanguageMixin()
+        languageMessage.setLanguageTag('en-US')
+        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
 
         // BodyText
-        var bodyTextMessage = new this.$bodyTextProto.BodyTextMixin()
+        let bodyTextMessage = new bodyTextProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.reply)
-        mixinMessage = new this.$itemProto.Mixin()
-        mixinMessage.setMixinId(0x34a9a6ec)
-        mixinMessage.setPayload(bodyTextMessage.serializeBinary())
-        itemMessage.addMixin(mixinMessage)
+        content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
-        var itemPayload = itemMessage.serializeBinary()
-        var output = this.$brotli.compressArray(itemPayload, 11)
-        var data = new FormData()
-        data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
-        var hashHex
-        // Send a POST request
-        this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-        .then(response => {
-          const multihash = require('multihashes')
-          var decodedHash = multihash.decode(multihash.fromB58String(response.data.Hash))
-
-          if (decodedHash.name != 'sha2-256') {
-            throw 'Wrong type of multihash.'
-          }
-
-          hashHex = '0x' + decodedHash.digest.toString('hex')
-          var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-          return window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
-          .then(itemId => {
-            return window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, this.$route.params.itemId), 0, 'Post comment')
-          })
-          .then(() => {
-            this.reply = ''
-            this.startReply = false
-          })
-        })
+        let ipfsHash = await content.save()
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, ipfsHash, this.itemId), 0, 'Post comment')
+        this.reply = ''
+        this.startReply = false
       },
       toggleTrust(event) {
         new MixItem(this.$root, this.itemId).init()

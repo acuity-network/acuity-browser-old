@@ -23,6 +23,7 @@
   import bodyTextProto from '../../lib/body_pb.js'
   import descriptionProto from '../../lib/description_pb.js'
   import jpegImageProto from '../../lib/jpeg-image_pb.js'
+  let brotli = require('iltorb')
   const Base58 = require("base-58")
 
   export default {
@@ -31,7 +32,7 @@
       Page,
     },
     methods: {
-      read (event) {
+      read(event) {
         const output = document.getElementById('output')
         output.innerHTML = ''
         const itemId = document.getElementById('itemId').value
@@ -96,11 +97,11 @@
                     output.append('Revision ' + i + ' IPFS hash: ' + ipfsHash + '\n')
 
                     this.$http.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
-                    .then(response => {
-                      const containerPayload = new Uint8Array(Buffer.from(response.data, "binary"))
+                    .then(async response => {
+                      const containerPayload = Buffer.from(response.data, "binary")
                       output.append('Compressed length: ' + containerPayload.length + '\n')
 
-                      const itemPayload = this.$brotli.decompressArray(containerPayload)
+                      const itemPayload = await brotli.decompress(Buffer.from(containerPayload))
                       output.append('Uncompressed length: ' + itemPayload.length + '\n')
 
                       const itemMessage = itemProto.Item.deserializeBinary(itemPayload)

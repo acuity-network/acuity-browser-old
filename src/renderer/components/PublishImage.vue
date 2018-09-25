@@ -6,15 +6,15 @@
 
     <template slot="body">
       <b-field label="Title">
-        <b-input id="title"></b-input>
+        <b-input v-model="title"></b-input>
       </b-field>
 
       <b-field label="Description">
-        <b-input id="description" type="textarea"></b-input>
+        <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
       <b-field label="Parent itemId">
-        <b-input id="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+        <b-input v-model="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
 
       <button class="button" v-on:click="chooseFile">Choose image</button>
@@ -25,21 +25,28 @@
 
 <script>
   import Page from './Page.vue'
-  import itemProto from '../../lib/item_pb.js'
   import languageProto from '../../lib/language_pb.js'
   import titleProto from '../../lib/title_pb.js'
   import bodyTextProto from '../../lib/body_pb.js'
   import descriptionProto from '../../lib/description_pb.js'
   import jpegImageProto from '../../lib/jpeg-image_pb.js'
   import Image from '../../lib/Image.js'
+  import MixContent from '../../lib/MixContent.js'
 
   export default {
     name: 'publish-image',
     components: {
       Page,
     },
+    data() {
+      return {
+        title: '',
+        description: '',
+        parentId: '',
+      }
+    },
     methods: {
-      chooseFile (event) {
+      chooseFile(event) {
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose image',
@@ -48,81 +55,45 @@
           window.fileNames = fileNames
         })
       },
-      publish (event) {
-        var image = new Image(this, window.fileNames[0])
-        image.createMixin()
-        .then(imageMixin => {
-          var itemMessage = new itemProto.Item()
+      async publish(event) {
+        let content = new MixContent(this.$root)
 
-          // Image
-          itemMessage.addMixin(imageMixin)
+        // Image
+        let image = new Image(this.$root, window.fileNames[0])
+        content.addMixin(0x12745469, await image.createMixin())
 
-          // Language
-          var languageMessage = new languageProto.LanguageMixin()
-          languageMessage.setLanguageTag('en-US')
+        // Language
+        let languageMessage = new languageProto.LanguageMixin()
+        languageMessage.setLanguageTag('en-US')
+        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
 
-          var mixinMessage = new itemProto.Mixin()
-          mixinMessage.setMixinId(0x4e4e06c4)
-          mixinMessage.setPayload(languageMessage.serializeBinary())
-          itemMessage.addMixin(mixinMessage)
+        // Title
+        let titleMessage = new titleProto.TitleMixin()
+        titleMessage.setTitle(this.title)
+        content.addMixin(0x24da6114, titleMessage.serializeBinary())
 
-          // Title
-          var titleMessage = new titleProto.TitleMixin()
-          titleMessage.setTitle(document.getElementById('title').value)
+        // Description
+        let descriptionMessage = new descriptionProto.DescriptionMixin()
+        descriptionMessage.setDescription(this.description)
+        content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
 
-          mixinMessage = new itemProto.Mixin()
-          mixinMessage.setMixinId(0x24da6114)
-          mixinMessage.setPayload(titleMessage.serializeBinary())
-          itemMessage.addMixin(mixinMessage)
+        let ipfsHash = await content.save()
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
 
-          // Description
-          var descriptionMessage = new descriptionProto.DescriptionMixin()
-          descriptionMessage.setDescription(document.getElementById('description').value)
-
-          mixinMessage = new itemProto.Mixin()
-          mixinMessage.setMixinId(0x5a474550)
-          mixinMessage.setPayload(descriptionMessage.serializeBinary())
-          itemMessage.addMixin(mixinMessage)
-
-          var itemPayload = itemMessage.serializeBinary()
-          var output = this.$brotli.compressArray(itemPayload, 11)
-          var data = new FormData()
-          data.append('', new File([Buffer.from(output).toString('binary')], {type: 'application/octet-stream'}))
-
-          var hashHex
-
-          // Send a POST request
-          this.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-          .then(response => {
-            var hash = response.data.Hash
-            const multihash = require('multihashes')
-            var decodedHash = multihash.decode(multihash.fromB58String(hash))
-            if (decodedHash.name != 'sha2-256') {
-              throw 'Wrong type of multihash.'
-            }
-
-            hashHex = '0x' + decodedHash.digest.toString('hex')
-            var flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-            window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
-            .then(itemId => {
-              var parentId = document.getElementById('parentId').value
-              var promise
-
-              if (parentId) {
-                promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, hashHex, parentId), 0, 'Create image')
-              }
-              else {
-                promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, hashHex), 0, 'Create image')
-              }
-              promise
-              .then(() => {
-                this.$router.push({ name: 'item', params: { itemId: itemId }})
-              })
-            })
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        let promise
+        if (this.parentId) {
+          promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, ipfsHash, this.parentId), 0, 'Create image')
+        }
+        else {
+          promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
+        }
+        promise
+        .then(() => {
+          this.$router.push({ name: 'item', params: { itemId: itemId }})
+        })
+        .catch(error => {
+          console.log(error)
         })
       }
     },
