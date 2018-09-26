@@ -30,7 +30,7 @@
     margin: 3rem 0;
   }
 
-  .title {
+  h1.title {
     font-weight: bold;
     margin-bottom: 0;
   }

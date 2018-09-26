@@ -131,12 +131,12 @@
 </script>
 
 <style>
-  body, button, textarea, input {
+  html body, html button, html textarea, html input {
     font-family: "Noto Sans";
     -webkit-font-smoothing: subpixel-antialiased;
   }
 
-  button {
+  html button {
     font-weight: bold;
   }
 
