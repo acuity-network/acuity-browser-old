@@ -42,6 +42,7 @@ export default class MixAccount {
       .on('transactionHash', transactionHash => {
       })
       .on('receipt', receipt => {
+        console.log(receipt)
         this.contractAddress = receipt.contractAddress
         this.vue.$db.batch()
         .put('/account/controller/' + this.controllerAddress + '/contract', this.contractAddress)
