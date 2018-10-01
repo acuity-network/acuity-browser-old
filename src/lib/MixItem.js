@@ -63,6 +63,10 @@ export default class MixItem {
     return this.itemId
   }
 
+  isUpdatable() {
+    return this.item.flags & 1
+  }
+
   parentIds() {
     return this.item.parentIds
   }

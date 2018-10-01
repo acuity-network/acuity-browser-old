@@ -73,4 +73,14 @@ export default class MixContent {
     })
   }
 
+  removeMixins(mixinId) {
+    let newMixins = []
+    for (let i = 0; i < this.mixins.length; i++) {
+      if (this.mixins[i].mixinId != mixinId) {
+        newMixins.push(this.mixins[i])
+      }
+    }
+    this.mixins = newMixins
+  }
+
 }

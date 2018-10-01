@@ -78,7 +78,7 @@
         content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
+        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(30).substr(2)
         let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
 
         let promise

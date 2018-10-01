@@ -2,6 +2,11 @@
   <page>
     <template slot="title">
       {{ title }}
+      <span
+        v-if="editable"
+        v-on:click="toggleEdit"
+        class="clickable mdi mdi-24px mdi-square-edit-outline">
+      </span>
     </template>
 
     <template slot="subtitle">
@@ -9,19 +14,34 @@
       <span
         v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
         v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
-        :class="ownerTrustedClassCurrent" class="shield mdi mdi-24px"
+        :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         v-on:click="toggleTrust"></span><br />
         {{ timestamp }}
     </template>
 
     <template slot="body">
-      <div class="image" v-html="body"></div>
-      <div class="bodyText"><vue-markdown class="markdown" v-bind:source="description"></vue-markdown></div>
+      <div class="columns">
+        <div class="column">
+          <div class="image" v-html="body"></div>
+          <div class="bodyText"><vue-markdown class="markdown" v-bind:source="description"></vue-markdown></div>
 
-      <div v-if="isProfile">
-        <b-field label="Trusted that trust">
-          <profile-link v-for="address in trustedThatTrust" v-bind:address="address"></profile-link>
-        </b-field>
+          <div v-if="isProfile">
+            <b-field label="Trusted that trust">
+              <profile-link v-for="address in trustedThatTrust" v-bind:address="address"></profile-link>
+            </b-field>
+          </div>
+        </div>
+        <div v-if="editing" class="column">
+          <b-field label="Title">
+            <b-input v-model="title"></b-input>
+          </b-field>
+
+          <b-field label="Description">
+            <b-input v-model="description" type="textarea"></b-input>
+          </b-field>
+
+          <button class="button is-primary" v-on:click="publish">Publish</button>
+        </div>
       </div>
 
       <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
@@ -44,6 +64,8 @@
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import VueMarkdown from 'vue-markdown'
+  import titleProto from '../../lib/title_pb.js'
+  import descriptionProto from '../../lib/description_pb.js'
   import bodyTextProto from '../../lib/body_pb.js'
   import languageProto from '../../lib/language_pb.js'
 
@@ -57,22 +79,9 @@
       VueMarkdown,
     },
     data() {
-      return {
-        title: '',
-        owner: '',
-        ownerRoute: '',
-        ownerTrustedClass: '',
-        ownerTrustedClassHover: '',
-        ownerTrustedClassCurrent: '',
-        timestamp: '',
-        body: '',
-        description: '',
-        isProfile: '',
-        trustedThatTrust: [],
-        childIds: [],
-        reply: '',
-        startReply: false,
-      }
+      let data = {}
+      this.resetData(data)
+      return data
     },
     created() {
       this.$itemStoreIpfsSha256.events.allEvents({
@@ -80,100 +89,148 @@
         topics: [, this.itemId],
       })
       .on('data', log => {
-        this.loadData()
+        if (!this.editing) {
+          this.loadData()
+        }
       })
       .on('changed', log => {
-        this.loadData()
+        if (!this.editing) {
+          this.loadData()
+        }
       })
 
       this.loadData()
     },
     watch: {
       itemId() {
+        this.resetData(this)
         this.loadData()
       }
     },
     methods: {
-      loadData() {
-        var item = new MixItem(this.$root, this.itemId)
+      resetData(data) {
+        data.title = ''
+        data.editable = false
+        data.editing = false
+        data.editForm = ''
+        data.owner = ''
+        data.ownerRoute = ''
+        data.ownerTrustedClass = ''
+        data.ownerTrustedClassHover = ''
+        data.ownerTrustedClassCurrent = ''
+        data.timestamp = ''
+        data.body = ''
+        data.description = ''
+        data.isProfile = ''
+        data.trustedThatTrust = []
+        data.childIds = []
+        data.reply = ''
+        data.startReply = false
+      },
+      async loadData() {
+        let item = await new MixItem(this.$root, this.itemId).init()
+        let account = await item.account()
+        let trustLevel = await item.getTrustLevel()
+        if (trustLevel != 1) {
+          var trustLevelToggled = await item.getTrustLevelToggled()
+          this.ownerTrustedClass = trustLevel ? (trustLevel == 2 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
+          this.ownerTrustedClassHover = trustLevelToggled ? (trustLevelToggled == 2 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
+          this.ownerTrustedClassCurrent = this.ownerTrustedClass
+        }
+        else {
+          this.editable = item.isUpdatable()
+        }
 
-        return item.init()
-        .then(item => {
-          item.account()
-          .then(async account => {
-            var trustLevel = await item.getTrustLevel()
-            if (trustLevel != 1) {
-              var trustLevelToggled = await item.getTrustLevelToggled()
-              this.ownerTrustedClass = trustLevel ? (trustLevel == 2 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
-              this.ownerTrustedClassHover = trustLevelToggled ? (trustLevelToggled == 2 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
-              this.ownerTrustedClassCurrent = this.ownerTrustedClass
+        account.call(this.$accountProfile.methods.getProfile())
+        .then(profileItemId => {
+          this.ownerRoute = '/item/' + profileItemId
+          return new MixItem(this.$root, profileItemId).init()
+        })
+        .then(profileItem => {
+          return profileItem.latestRevision().load()
+        })
+        .then(profileRevision => {
+          this.owner = profileRevision.getTitle()
+        })
+        .catch(() => {})
+        .then(() => {
+          this.childIds = item.childIds()
+
+          if (!trustLevel) {
+            this.title = ''
+            this.body = 'Author not trusted.'
+            this.description = ''
+            return
+          }
+
+          item.latestRevision().load()
+          .then(async revision => {
+            this.title = revision.getTitle()
+            this.timestamp = new Date(revision.getTimestamp() * 1000).toLocaleString()
+            this.body = revision.getImage(512)
+            this.description = revision.getDescription()
+
+            if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
+              this.isProfile = true
+              this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(account.contractAddress)
             }
-            account.call(this.$accountProfile.methods.getProfile())
-            .then(profileItemId => {
-              this.ownerRoute = '/item/' + profileItemId
-              return new MixItem(this.$root, profileItemId).init()
+
+            var id
+            this.$db.get('/historyCount')
+            .then(count => {
+              id = parseInt(count)
             })
-            .then(profileItem => {
-              return profileItem.latestRevision().load()
+            .catch(err => {
+              id = 0
             })
-            .then(profileRevision => {
-              this.owner = profileRevision.getTitle()
-            })
-            .catch(() => {})
             .then(() => {
-              this.childIds = item.childIds()
-
-              if (!trustLevel) {
-                this.title = ''
-                this.body = 'Author not trusted.'
-                this.description = ''
-                return
-              }
-
-              item.latestRevision().load()
-              .then(async revision => {
-                this.title = revision.getTitle()
-                this.timestamp = new Date(revision.getTimestamp() * 1000).toLocaleString()
-                this.body = revision.getImage(512)
-                this.description = revision.getDescription()
-
-                if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
-                  this.isProfile = true
-                  this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(account.contractAddress)
-                }
-
-                var id
-                this.$db.get('/historyCount')
-                .then(count => {
-                  id = parseInt(count)
-                })
-                .catch(err => {
-                  id = 0
-                })
-                .then(() => {
-                  return this.$db.get('/historyIndex/' + this.$route.params.itemId)
-                  .then(id => {
-                    this.$db.del('/history/' + id)
-                  })
-                  .catch(err => {})
-                })
-                .then(() => {
-                  this.$db.batch()
-                  .put('/history/' + id, JSON.stringify({
-                    itemId: this.$route.params.itemId,
-                    timestamp: Date.now(),
-                    title: this.title,
-                    owner: this.owner,
-                    ownerRoute: this.ownerRoute,
-                  }))
-                  .put('/historyIndex/' + this.$route.params.itemId, id)
-                  .put('/historyCount', id + 1)
-                  .write()
-                })
+              return this.$db.get('/historyIndex/' + this.$route.params.itemId)
+              .then(id => {
+                this.$db.del('/history/' + id)
               })
+              .catch(err => {})
+            })
+            .then(() => {
+              this.$db.batch()
+              .put('/history/' + id, JSON.stringify({
+                itemId: this.$route.params.itemId,
+                timestamp: Date.now(),
+                title: this.title,
+                owner: this.owner,
+                ownerRoute: this.ownerRoute,
+              }))
+              .put('/historyIndex/' + this.$route.params.itemId, id)
+              .put('/historyCount', id + 1)
+              .write()
             })
           })
         })
+      },
+      async toggleEdit(event) {
+        this.editing = !this.editing
+        if (!this.editing) {
+          this.loadData()
+        }
+      },
+      async publish(event) {
+        let item = await new MixItem(this.$root, this.itemId).init()
+        let revision = await item.latestRevision().load()
+
+        // Title
+        let titleMessage = new titleProto.TitleMixin()
+        titleMessage.setTitle(this.title)
+        revision.content.removeMixins(0x24da6114)
+        revision.content.addMixin(0x24da6114, titleMessage.serializeBinary())
+
+        // Description
+        let descriptionMessage = new descriptionProto.DescriptionMixin()
+        descriptionMessage.setDescription(this.description)
+        revision.content.removeMixins(0x5a474550)
+        revision.content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
+
+        let ipfsHash = await revision.content.save()
+        this.editing = false
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(this.itemId, ipfsHash), 0, 'Update item')
       },
       async publishReply(event) {
         let content = new MixContent(this.$root)
@@ -223,7 +280,7 @@
 </script>
 
 <style scoped>
-  .shield {
+  .clickable {
     cursor: pointer;
     user-select: none;
   }
