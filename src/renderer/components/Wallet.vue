@@ -18,7 +18,22 @@
 
       <b-tabs>
         <b-tab-item label="Transactions">
-          <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc"></b-table>
+          <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc">
+            <template slot-scope="props">
+              <b-table-column label="When">
+                <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true"></timeago>
+                <span v-else>pending</span>
+              </b-table-column>
+
+              <b-table-column label="Who">
+                <code>{{ props.row.who }}</code>
+              </b-table-column>
+
+              <b-table-column label="Amount" :numeric="true">
+                {{ props.row.amount }}
+              </b-table-column>
+            </template>
+          </b-table>
         </b-tab-item>
 
         <b-tab-item label="Send">
@@ -60,20 +75,6 @@
             field: 'timestamp',
             sortable: true,
             visible: false,
-          },
-          {
-            field: 'when',
-            label: 'When',
-          },
-          {
-            field: 'who',
-            label: 'Who',
-            renderHtml: true,
-          },
-          {
-            field: 'amount',
-            label: 'Amount',
-            numeric: true
           },
         ],
       }
@@ -130,8 +131,9 @@
             if (results[i]) {
               data.push({
                 'timestamp': results[i].timestamp ? results[i].timestamp : 4000000000,
-                'when': results[i].timestamp ? new Date(results[i].timestamp * 1000).toLocaleString() : 'pending',
-                'who': '<code>' + results[i].sender + '</code>',
+                'confirmed': results[i].timestamp != null,
+                'when': results[i].timestamp ? new Date(results[i].timestamp * 1000) : null,
+                'who': results[i].sender,
                 'amount': this.$web3.utils.fromWei(results[i].amount),
               })
             }
@@ -153,8 +155,9 @@
               if (results[i] && results[i].transaction.value != 0) {
                 data.push({
                   'timestamp': results[i].block ? results[i].block.timestamp : 4000000000,
-                  'when': results[i].block ? new Date(results[i].block.timestamp * 1000).toLocaleString() : 'pending',
-                  'who': '<code>' + results[i].to + '</code>',
+                  'confirmed': results[i].block != null,
+                  'when': results[i].block ? new Date(results[i].block.timestamp * 1000) : null,
+                  'who': results[i].to,
                   'amount': '-' + this.$web3.utils.fromWei(results[i].transaction.value),
                 })
               }

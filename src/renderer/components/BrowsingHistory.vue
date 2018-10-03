@@ -8,7 +8,7 @@
       <b-table :data="data">
         <template slot-scope="props">
           <b-table-column field="when" label="Last access">
-            {{ props.row.when }}
+            <timeago :datetime="props.row.when" :autoUpdate="true"></timeago>
           </b-table-column>
 
           <b-table-column field="item" label="Item">
@@ -66,7 +66,7 @@
             var item = JSON.parse(json)
             this.data.push({
               timestamp: item.timestamp,
-              when: new Date(item.timestamp).toLocaleString(),
+              when: new Date(item.timestamp),
               route: '/item/' + item.itemId,
               title: item.title,
               owner: item.owner ? item.owner : '',

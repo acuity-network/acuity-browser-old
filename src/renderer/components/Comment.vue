@@ -2,7 +2,7 @@
   <div v-if="trusted" class="comment">
     <div class="profile is-clearfix">
       <div class="avatar is-pulled-left" v-html="avatar"></div>
-      <span class="author">{{ author }}, {{ timestamp }}</span>
+      <span class="author">{{ author }}, <timeago :datetime="timestamp" :autoUpdate="true"></timeago></span>
     </div>
     <vue-markdown class="markdown" v-bind:source="bodyText"></vue-markdown>
     <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
@@ -53,7 +53,7 @@
         this.author = revision.getTitle()
 
         var commentRevision = await item.latestRevision().load()
-        this.timestamp = new Date(commentRevision.getTimestamp() * 1000).toLocaleString()
+        this.timestamp = new Date(commentRevision.getTimestamp() * 1000)
         this.bodyText = commentRevision.getBodyText()
         this.childIds = item.childIds()
       },

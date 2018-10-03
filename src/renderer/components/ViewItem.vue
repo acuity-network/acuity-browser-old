@@ -16,7 +16,7 @@
         v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         v-on:click="toggleTrust"></span><br />
-        {{ timestamp }}
+        <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
     </template>
 
     <template slot="body">
@@ -166,7 +166,7 @@
           item.latestRevision().load()
           .then(async revision => {
             this.title = revision.getTitle()
-            this.timestamp = new Date(revision.getTimestamp() * 1000).toLocaleString()
+            this.timestamp = new Date(revision.getTimestamp() * 1000)
             this.body = revision.getImage(512)
             this.description = revision.getDescription()
 

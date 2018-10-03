@@ -9,6 +9,10 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 Vue.use(Buefy)
 
+import VueTimeago from 'vue-timeago'
+Vue.use(VueTimeago)
+
+
 import '@mdi/font/css/materialdesignicons.min.css'
 import 'notosans-fontface/css/notosans-fontface.css'
 import 'typeface-montserrat/index.css'
