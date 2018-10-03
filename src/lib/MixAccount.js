@@ -193,29 +193,20 @@ export default class MixAccount {
     })
   }
 
-  getTransactionInfo(nonce) {
-    return this.vue.$db.get('/account/controller/' + this.controllerAddress + '/transaction/' + nonce)
-    .then(infoJson => {
-      var info = JSON.parse(infoJson)
-      return Promise.all([
-        this.vue.$web3.eth.getTransaction(info.hash),
-        this.vue.$web3.eth.getTransactionReceipt(info.hash),
-      ])
-      .then(results => {
-        info.transaction = results[0]
-        info.receipt = results[1]
-        if (info.receipt) {
-          return this.vue.$web3.eth.getBlock(info.receipt.blockNumber)
-          .then(block => {
-            info.block = block
-            return info
-          })
-        }
-        else {
-          return info
-        }
-      })
-    })
+  async getTransactionInfo(nonce) {
+    let infoJson = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/transaction/' + nonce)
+    let info = JSON.parse(infoJson)
+
+    let receipt = this.vue.$web3.eth.getTransactionReceipt(info.hash)
+    let transaction = this.vue.$web3.eth.getTransaction(info.hash)
+    info.receipt = await receipt
+
+    if (info.receipt)  {
+      info.block = await this.vue.$web3.eth.getBlock(info.receipt.blockNumber)
+    }
+
+    info.transaction = await transaction
+    return info
   }
 
   async getTrustedThatTrust(address) {
