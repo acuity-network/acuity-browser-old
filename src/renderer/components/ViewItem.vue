@@ -37,7 +37,7 @@
           </b-field>
 
           <b-field label="Description">
-            <b-input v-model="description" type="textarea"></b-input>
+            <b-input v-model="description" type="textarea" rows="20"></b-input>
           </b-field>
 
           <button class="button is-primary" v-on:click="publish">Publish</button>

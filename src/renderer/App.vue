@@ -132,8 +132,15 @@
 
 <style>
   html body, html button, html textarea, html input {
-    font-family: "Noto Sans";
     -webkit-font-smoothing: subpixel-antialiased;
+  }
+
+  html body, html button, html input {
+    font-family: "Noto Sans";
+  }
+
+  html textarea {
+    font-family: "Noto Mono";
   }
 
   html button {
