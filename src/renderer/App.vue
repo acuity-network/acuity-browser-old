@@ -139,8 +139,9 @@
     font-family: "Noto Sans";
   }
 
-  html textarea {
+  html textarea.textarea {
     font-family: "Noto Mono";
+    font-size: 0.8rem;
   }
 
   html button {
