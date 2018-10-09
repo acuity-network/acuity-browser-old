@@ -40,64 +40,53 @@
         type: '',
       }
     },
-    created() {
+    async created() {
       if (!window.activeAccount) {
         return
       }
-      window.activeAccount.call(this.$accountProfile.methods.getProfile())
-      .then(itemId => {
-        var item = new MixItem(this, itemId)
+      let itemId = await window.activeAccount.getProfile()
+      let item = await new MixItem(this, itemId).init()
+      let revision = await item.latestRevision().load()
+      this.title = revision.getTitle()
+      this.bio = revision.getBodyText()
+      this.image = revision.getImage(256)
+      let profile = revision.getProfile()
+      this.location = profile.location
 
-        item.init()
-        .then(item => {
-          return item.latestRevision().load()
-        })
-        .then(revision => {
-          this.title = revision.getTitle()
-          this.bio = revision.getBodyText()
-          this.image = revision.getImage(256)
-          var profile = revision.getProfile()
-          this.location = profile.location
+      switch (profile.type) {
+        case 0:
+          this.type = 'Anon'
+          break
 
-          switch (profile.type) {
-            case 0:
-              this.type = 'Anon'
-              break
+        case 1:
+          this.type = 'Person'
+          break
 
-            case 1:
-              this.type = 'Person'
-              break
+        case 2:
+          this.type = 'Project'
+          break
 
-            case 2:
-              this.type = 'Project'
-              break
+        case 3:
+          this.type = 'Organization'
+          break
 
-            case 3:
-              this.type = 'Organization'
-              break
+        case 4:
+          this.type = 'Proxy'
+          break
 
-            case 4:
-              this.type = 'Proxy'
-              break
+        case 5:
+          this.type = 'Parody'
+          break
 
-            case 5:
-              this.type = 'Parody'
-              break
+        case 6:
+          this.type = 'Bot'
+          break
 
-            case 6:
-              this.type = 'Bot'
-              break
-
-            case 7:
-              this.type = 'Shill'
-              break
-          }
-        })
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
+        case 7:
+          this.type = 'Shill'
+          break
+      }
+    }
   }
 </script>
 

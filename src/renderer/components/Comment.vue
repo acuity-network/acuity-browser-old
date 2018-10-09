@@ -75,8 +75,8 @@
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, ipfsHash, this.itemId), 0, 'Post comment')
+        let parents = [await window.activeAccount.getProfile(), this.itemId]
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParents(flagsNonce, ipfsHash, parents), 0, 'Post comment')
         this.reply = ''
         this.startReply = false
       },

@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
+      <comment v-if="!isProfile" v-for="childId in childIds" v-bind:itemId="childId"></comment>
 
       <div v-if="startReply">
         <b-input v-model="reply" type="textarea" class="comment-box"></b-input>

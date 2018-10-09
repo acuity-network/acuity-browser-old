@@ -209,8 +209,12 @@ export default class MixAccount {
     return info
   }
 
-  async getTrustedThatTrust(address) {
-    return await this.call(this.vue.$trustedAccounts.methods.getTrustedThatTrustAccount(address))
+  getTrustedThatTrust(address) {
+    return this.call(this.vue.$trustedAccounts.methods.getTrustedThatTrustAccount(address))
+  }
+
+  getProfile() {
+    return this.call(this.vue.$accountProfile.methods.getProfile())
   }
 
 }

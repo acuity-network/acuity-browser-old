@@ -64,29 +64,19 @@
         type: '',
       }
     },
-    created() {
+    async created() {
       if (!window.activeAccount) {
         return
       }
-      window.activeAccount.call(this.$accountProfile.methods.getProfile())
-      .then(itemId => {
-        var item = new MixItem(this, itemId)
-
-        item.init()
-        .then(item => {
-          return item.latestRevision().load()
-        })
-        .then(revision => {
-          this.name = revision.getTitle()
-          this.bio = revision.getBodyText()
-          var profile = revision.getProfile()
-          this.type = profile.type
-          this.location = profile.location
-        })
-      })
-      .catch(error => {
-        console.log(error)
-      })
+      let itemId = await window.activeAccount.getProfile()
+      let item = await new MixItem(this, itemId).init()
+      let revision = await item.latestRevision().load()
+      this.name = revision.getTitle()
+      this.bio = revision.getBodyText()
+      this.image = revision.getImage(256)
+      let profile = revision.getProfile()
+      this.type = profile.type
+      this.location = profile.location
     },
     methods: {
       chooseFile(event) {

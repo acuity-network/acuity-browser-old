@@ -13,10 +13,6 @@
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-      <b-field label="Parent itemId">
-        <b-input v-model="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
-      </b-field>
-
       <button class="button" v-on:click="chooseFile">Choose image</button>
       <button class="button is-primary" v-on:click="publish">Publish</button>
     </template>
@@ -42,7 +38,6 @@
       return {
         title: '',
         description: '',
-        parentId: '',
       }
     },
     methods: {
@@ -56,6 +51,10 @@
         })
       },
       async publish(event) {
+        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(30).substr(2)
+        let itemId = window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+        let profileItemId = window.activeAccount.getProfile()
+
         let content = new MixContent(this.$root)
 
         // Image
@@ -78,23 +77,8 @@
         content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
-
-        let promise
-        if (this.parentId) {
-          promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, ipfsHash, this.parentId), 0, 'Create image')
-        }
-        else {
-          promise = window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
-        }
-        promise
-        .then(() => {
-          this.$router.push({ name: 'item', params: { itemId: itemId }})
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, ipfsHash, await profileItemId), 0, 'Create image')
+        this.$router.push({ name: 'item', params: { itemId: await itemId }})
       }
     },
   }
