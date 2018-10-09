@@ -59,7 +59,7 @@
     "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
     "base-58": "^0.0.1",
-    "buefy": "^0.6.5",
+    "buefy": "^0.7.0",
     "fs-extra": "^6.0.1",
     "google-protobuf": "^3.5.0",
     "iltorb": "^2.4.0",
