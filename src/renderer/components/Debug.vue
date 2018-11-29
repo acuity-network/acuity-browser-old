@@ -77,16 +77,6 @@
                   output.append('Transferable: ' + ((item.flags & 0x08) ? 'true' : 'false') + '\n')
                   output.append('Owner: ' + item.owner + '\n')
                   output.append('Revision count: ' + item.revisionCount + '\n')
-                  output.append('Parent count: ' + item.parentIds.length + '\n')
-                  output.append('Child count: ' + item.childIds.length + '\n\n')
-
-                  for (var i = 0; i < item.parentIds.length; i++) {
-                    output.append('Parent #' + i + ': ' + item.parentIds[i] + '\n')
-                  }
-
-                  for (var i = 0; i < item.childIds.length; i++) {
-                    output.append('Child #' + i + ': ' + item.childIds[i] + '\n')
-                  }
 
                   for (var i = 0; i < item.revisionCount; i++) {
                     const timestamp = new Date(item.timestamps[i] * 1000)

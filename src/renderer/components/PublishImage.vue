@@ -52,8 +52,7 @@
       },
       async publish(event) {
         let flagsNonce = '0x0f' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
-        let profileItemId = window.activeAccount.getProfile()
+        let itemId = window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
 
         let content = new MixContent(this.$root)
 
@@ -77,7 +76,7 @@
         content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParent(flagsNonce, ipfsHash, await profileItemId), 0, 'Create image')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
         this.$router.push({ name: 'item', params: { itemId: await itemId }})
       }
     },

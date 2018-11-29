@@ -32,15 +32,16 @@ Vue.prototype.$db = db
 
 const Web3 = require('web3')
 var net = require('net')
-Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.mix-geth/geth.ipc', net))
-//Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.ethereum/geth.ipc', net))
-//Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/mix-blockchain/mix.ipc', net))
-//Vue.prototype.$web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8645'))
+Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.ethereum/mix/geth.ipc', net))
+//Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.local/share/io.parity.ethereum/jsonrpc.ipc', net))
 Vue.prototype.$web3.eth.defaultBlock = 'pending';
-Vue.prototype.$itemStoreIpfsSha256 = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreIpfsSha256.abi.json'), '0xe059665fe0d226f00c72e3982d54bddf4be19c6c')
-Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('../lib/AccountProfile.abi.json'), '0x72f52ab6b1d15630ee9b2d8763b23478c0327df8')
-Vue.prototype.$itemStoreShortId = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreShortId.abi.json'), '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
-Vue.prototype.$trustedAccounts = new Vue.prototype.$web3.eth.Contract(require('../lib/TrustedAccounts.abi.json'), '0xaae497797e3f9a5ff341225bd9696d9759991418')
+
+Vue.prototype.$itemStoreRegistry = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreRegistry.abi.json'), '0x8928f846012b98aac5cd2f4ef4029097cd4110fc')
+Vue.prototype.$itemStoreIpfsSha256 = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreIpfsSha256.abi.json'), '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e')
+Vue.prototype.$itemStoreShortId = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreShortId.abi.json'), '0xe8912dd1dc35bbd613dbc5f30fe8b20300ec9f79')
+Vue.prototype.$itemDag = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemDag.abi.json'), '0xbd3af0bdcf4c8a6dfd8f6ff2129409632decfc7e')
+Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('../lib/AccountProfile.abi.json'), '0x7855a6b883c39c8e87d51002b064180ddbf16026')
+Vue.prototype.$trustedAccounts = new Vue.prototype.$web3.eth.Contract(require('../lib/TrustedAccounts.abi.json'), '0x11dc5cf838ae3850458f92474dc28d1e47f8e045')
 
 /* eslint-disable no-new */
 new Vue({

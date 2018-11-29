@@ -1,5 +1,3 @@
-const itemStoreRegistryAbi = require('./ItemStoreRegistry.abi.json')
-const itemStoreShortIdAbi = require('./ItemStoreShortId.abi.json')
 const itemStoreAbi = require('./ItemStoreInterface.abi.json')
 import itemProto from './item_pb.js'
 import MixRevision from './MixRevision.js'
@@ -15,10 +13,7 @@ export default class MixItem {
   init() {
     return new Promise((resolve, reject) => {
 
-      this.itemStoreRegistry = new this.vue.$web3.eth.Contract(itemStoreRegistryAbi, '0xa46adddd3105715fa0ea0d4a883d4be99452c3f6')
-      this.itemStoreShortId = new this.vue.$web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
-
-      return this.itemStoreRegistry.methods.getItemStore(this.itemId).call()
+      return this.vue.$itemStoreRegistry.methods.getItemStore(this.itemId).call()
       .then(itemStoreAddress => {
         this.itemStoreAddress = itemStoreAddress
         this.itemStore = new this.vue.$web3.eth.Contract(itemStoreAbi, this.itemStoreAddress)
@@ -33,7 +28,7 @@ export default class MixItem {
         }
       })
       .then(contractId => {
-        if (contractId != "0x2d54bddf4be19c6c") {
+        if (contractId != "0x1f1e136d1003177d") {
           throw 'Unknown item store.'
         }
 
@@ -65,14 +60,6 @@ export default class MixItem {
 
   isUpdatable() {
     return this.item.flags & 1
-  }
-
-  parentIds() {
-    return this.item.parentIds
-  }
-
-  childIds() {
-    return this.item.childIds
   }
 
   revisions() {

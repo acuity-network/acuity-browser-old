@@ -55,7 +55,7 @@
         var commentRevision = await item.latestRevision().load()
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000)
         this.bodyText = commentRevision.getBodyText()
-        this.childIds = item.childIds()
+        this.childIds = await this.$itemDag.methods.getAllChildIds(this.itemId).call()
       },
       async publishReply(event) {
         let content = new MixContent(this.$root)
@@ -75,14 +75,25 @@
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        let parents = [await window.activeAccount.getProfile(), this.itemId]
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParents(flagsNonce, ipfsHash, parents), 0, 'Post comment')
+        await window.activeAccount.sendData(this.$itemDag.methods.addChild(this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce), 0, 'Attach comment')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Post comment')
         this.reply = ''
         this.startReply = false
       },
     },
     created() {
       this.$itemStoreIpfsSha256.events.allEvents({
+        toBlock: 'pending',
+        topics: [, this.itemId],
+      })
+      .on('data', log => {
+        this.loadData()
+      })
+      .on('changed', log => {
+        this.loadData()
+      })
+
+      this.$itemDag.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })

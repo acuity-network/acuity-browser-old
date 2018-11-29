@@ -33,7 +33,7 @@ export default class MixAccount {
       this.contract = new this.vue.$web3.eth.Contract(accountAbi)
       return this.contract.deploy({data: '0x' + accountBytecode}).send({
         from: this.controllerAddress,
-        gas: 500000,
+        gas: 1000000,
         gasPrice: 1
       })
       .on('error', error => {

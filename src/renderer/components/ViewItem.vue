@@ -99,6 +99,21 @@
         }
       })
 
+      this.$itemDag.events.allEvents({
+        toBlock: 'pending',
+        topics: [, this.itemId],
+      })
+      .on('data', log => {
+        if (!this.editing) {
+          this.loadData()
+        }
+      })
+      .on('changed', log => {
+        if (!this.editing) {
+          this.loadData()
+        }
+      })
+
       this.loadData()
     },
     watch: {
@@ -153,8 +168,8 @@
           this.owner = profileRevision.getTitle()
         })
         .catch(() => {})
-        .then(() => {
-          this.childIds = item.childIds()
+        .then(async () => {
+          this.childIds = await this.$itemDag.methods.getAllChildIds(this.itemId).call()
 
           if (!trustLevel) {
             this.title = ''
@@ -250,8 +265,8 @@
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        let parents = [await window.activeAccount.getProfile(), this.itemId]
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createWithParents(flagsNonce, ipfsHash, parents), 0, 'Post comment')
+        await window.activeAccount.sendData(this.$itemDag.methods.addChild(this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce), 0, 'Attach comment')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Post comment')
         this.reply = ''
         this.startReply = false
       },

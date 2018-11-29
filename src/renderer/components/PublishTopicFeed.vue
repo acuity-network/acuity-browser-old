@@ -78,7 +78,7 @@
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(flagsNonce))
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
