@@ -81,6 +81,11 @@
         this.loadData()
       })
 
+      this.$web3.eth.subscribe('syncing')
+      .on('data', sync => {
+        this.loadData()
+      })
+
       this.loadData()
     },
   }
