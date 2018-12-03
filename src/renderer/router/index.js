@@ -55,14 +55,9 @@ export default new Router({
       component: require('@/components/PublishImage').default
     },
     {
-      path: '/publish-item/feed-personal',
+      path: '/publish-item/feed',
       name: 'publish-feed',
-      component: require('@/components/PublishTopicFeed').default
-    },
-    {
-      path: '/publish-item/feed-topic',
-      name: 'publish-feed',
-      component: require('@/components/PublishTopicFeed').default
+      component: require('@/components/PublishFeed').default
     },
     {
       path: '/profile',
