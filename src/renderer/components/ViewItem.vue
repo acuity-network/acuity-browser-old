@@ -16,7 +16,8 @@
         v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         v-on:click="toggleTrust"></span><br />
-        <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
+      <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link></span><br />
+      <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
     </template>
 
     <template slot="body">
@@ -133,6 +134,9 @@
         data.ownerTrustedClass = ''
         data.ownerTrustedClassHover = ''
         data.ownerTrustedClassCurrent = ''
+        data.inFeed = false
+        data.feed = ''
+        data.feedRoute = ''
         data.timestamp = ''
         data.body = ''
         data.description = ''
@@ -156,69 +160,68 @@
           this.editable = item.isUpdatable()
         }
 
-        account.call(this.$accountProfile.methods.getProfile())
-        .then(profileItemId => {
-          this.ownerRoute = '/item/' + profileItemId
-          return new MixItem(this.$root, profileItemId).init()
+        let profileItemId = await account.call(this.$accountProfile.methods.getProfile())
+        this.ownerRoute = '/item/' + profileItemId
+        let profileItem = await new MixItem(this.$root, profileItemId).init()
+        let profileRevision = await profileItem.latestRevision().load()
+        this.owner = profileRevision.getTitle()
+
+        let feedIds = await this.$itemDagFeedItems.methods.getAllParentIds(this.itemId).call()
+        if (feedIds.length > 0) {
+          this.feedRoute = '/item/' + feedIds[0]
+          let feedItem = await new MixItem(this.$root, feedIds[0]).init()
+          let feedRevision = await feedItem.latestRevision().load()
+          this.feed = feedRevision.getTitle()
+          this.inFeed = true
+        }
+
+        this.childIds = await this.$itemDagComments.methods.getAllChildIds(this.itemId).call()
+
+        if (!trustLevel) {
+          this.title = ''
+          this.body = 'Author not trusted.'
+          this.description = ''
+          return
+        }
+
+        let revision = await item.latestRevision().load()
+        this.title = revision.getTitle()
+        this.timestamp = new Date(revision.getTimestamp() * 1000)
+        this.body = revision.getImage(512)
+        this.description = revision.getDescription()
+
+        if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
+          this.isProfile = true
+          this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(account.contractAddress)
+        }
+
+        var id
+        this.$db.get('/historyCount')
+        .then(count => {
+          id = parseInt(count)
         })
-        .then(profileItem => {
-          return profileItem.latestRevision().load()
+        .catch(err => {
+          id = 0
         })
-        .then(profileRevision => {
-          this.owner = profileRevision.getTitle()
-        })
-        .catch(() => {})
-        .then(async () => {
-          this.childIds = await this.$itemDagComments.methods.getAllChildIds(this.itemId).call()
-
-          if (!trustLevel) {
-            this.title = ''
-            this.body = 'Author not trusted.'
-            this.description = ''
-            return
-          }
-
-          item.latestRevision().load()
-          .then(async revision => {
-            this.title = revision.getTitle()
-            this.timestamp = new Date(revision.getTimestamp() * 1000)
-            this.body = revision.getImage(512)
-            this.description = revision.getDescription()
-
-            if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
-              this.isProfile = true
-              this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(account.contractAddress)
-            }
-
-            var id
-            this.$db.get('/historyCount')
-            .then(count => {
-              id = parseInt(count)
-            })
-            .catch(err => {
-              id = 0
-            })
-            .then(() => {
-              return this.$db.get('/historyIndex/' + this.$route.params.itemId)
-              .then(id => {
-                this.$db.del('/history/' + id)
-              })
-              .catch(err => {})
-            })
-            .then(() => {
-              this.$db.batch()
-              .put('/history/' + id, JSON.stringify({
-                itemId: this.$route.params.itemId,
-                timestamp: Date.now(),
-                title: this.title,
-                owner: this.owner,
-                ownerRoute: this.ownerRoute,
-              }))
-              .put('/historyIndex/' + this.$route.params.itemId, id)
-              .put('/historyCount', id + 1)
-              .write()
-            })
+        .then(() => {
+          return this.$db.get('/historyIndex/' + this.$route.params.itemId)
+          .then(id => {
+            this.$db.del('/history/' + id)
           })
+          .catch(err => {})
+        })
+        .then(() => {
+          this.$db.batch()
+          .put('/history/' + id, JSON.stringify({
+            itemId: this.$route.params.itemId,
+            timestamp: Date.now(),
+            title: this.title,
+            owner: this.owner,
+            ownerRoute: this.ownerRoute,
+          }))
+          .put('/historyIndex/' + this.$route.params.itemId, id)
+          .put('/historyCount', id + 1)
+          .write()
         })
       },
       async toggleEdit(event) {

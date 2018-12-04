@@ -13,6 +13,17 @@
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
+      <b-field label="Feed">
+        <b-select v-model="feedId" placeholder="Select a feed">
+          <option
+            v-for="feed in feeds"
+            :value="feed.itemId"
+            :key="feed.itemId">
+            {{ feed.title }}
+          </option>
+        </b-select>
+      </b-field>
+
       <button class="button" v-on:click="chooseFile">Choose image</button>
       <button class="button is-primary" v-on:click="publish">Publish</button>
     </template>
@@ -27,6 +38,7 @@
   import descriptionProto from '../../lib/description_pb.js'
   import jpegImageProto from '../../lib/jpeg-image_pb.js'
   import Image from '../../lib/Image.js'
+  import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
 
   export default {
@@ -38,7 +50,27 @@
       return {
         title: '',
         description: '',
+        feeds: [{itemId: '0', title: 'none'}],
+        feedId: '0',
       }
+    },
+    created() {
+      this.$db.createValueStream({
+        'gte': '/accountFeeds/' + window.activeAccount.contractAddress + '/',
+        'lt': '/accountFeeds/' + window.activeAccount.contractAddress + '/z',
+      })
+      .on('data', async itemId => {
+        try {
+          let item = await new MixItem(this.$root, itemId).init()
+          let revision = await item.latestRevision().load()
+
+          this.feeds.push({
+            itemId: itemId,
+            title: revision.getTitle(),
+          })
+        }
+        catch (e) {}
+      })
     },
     methods: {
       chooseFile(event) {
@@ -52,7 +84,7 @@
       },
       async publish(event) {
         let flagsNonce = '0x0f' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
 
         let content = new MixContent(this.$root)
 
@@ -76,8 +108,13 @@
         content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
 
         let ipfsHash = await content.save()
+
+        if (this.feedId != '0') {
+          await window.activeAccount.sendData(this.$itemDagFeedItems.methods.addChild(this.feedId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce), 0, 'Attach feed item')
+        }
+
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
-        this.$router.push({ name: 'item', params: { itemId: await itemId }})
+        this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },
   }
