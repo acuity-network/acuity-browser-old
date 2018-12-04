@@ -47,6 +47,8 @@
 
       <comment v-if="!isProfile" v-for="childId in childIds" v-bind:itemId="childId"></comment>
 
+      <view-item v-for="feedId in feedItemIds" v-bind:itemId="feedId"></view-item>
+
       <div v-if="startReply">
         <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
         <button class="button is-primary" v-on:click="publishReply">Reply</button>
@@ -143,6 +145,7 @@
         data.isProfile = ''
         data.trustedThatTrust = []
         data.childIds = []
+        data.feedItemIds = []
         data.reply = ''
         data.startReply = false
       },
@@ -176,6 +179,7 @@
         }
 
         this.childIds = await this.$itemDagComments.methods.getAllChildIds(this.itemId).call()
+        this.feedItemIds = await this.$itemDagFeedItems.methods.getAllChildIds(this.itemId).call()
 
         if (!trustLevel) {
           this.title = ''
