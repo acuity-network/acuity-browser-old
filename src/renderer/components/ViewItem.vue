@@ -16,7 +16,7 @@
         v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         v-on:click="toggleTrust"></span><br />
-      <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link></span><br />
+      <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
       <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
     </template>
 
