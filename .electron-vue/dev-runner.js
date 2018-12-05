@@ -115,7 +115,7 @@ function startMain () {
 
 function startElectron () {
   var args = [
-    '--inspect=5858',
+    '--inspect=5858 --disable-gpu-driver-bug-workarounds',
     path.join(__dirname, '../dist/electron/main.js')
   ]
 
