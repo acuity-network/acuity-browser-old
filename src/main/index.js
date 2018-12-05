@@ -22,6 +22,7 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, '/mix-logo-filled.png'),
+    backgroundColor: '#191919',
   })
 
   mainWindow.loadURL(winURL)
