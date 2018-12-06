@@ -8,6 +8,7 @@
       </p>
       <ul class="menu-list">
         <li><router-link to="/feeds">Feeds</router-link>
+        <li><router-link to="/subscriptions">Subscriptions</router-link>
         <li><router-link to="/interactions">Interactions</router-link>
         <li><router-link to="/browsing-history">Browsing History</router-link></li>
         <li><router-link to="/publish-item">Publish Item</router-link></li>

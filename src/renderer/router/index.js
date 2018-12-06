@@ -25,6 +25,11 @@ export default new Router({
       component: require('@/components/Feeds').default
     },
     {
+      path: '/subscriptions',
+      name: 'subscriptions',
+      component: require('@/components/Subscriptions').default
+    },
+    {
       path: '/interactions',
       name: 'interactions',
       component: require('@/components/Interactions').default

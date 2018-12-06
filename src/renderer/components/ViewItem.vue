@@ -7,6 +7,10 @@
         v-on:click="toggleEdit"
         class="clickable mdi mdi-24px mdi-square-edit-outline">
       </span>
+      <span v-if="isFeed">
+        <button v-if="!isSubscribed" class="button is-primary" v-on:click="subscribe">Subscribe</button>
+        <button v-if="isSubscribed" class="button is-primary" v-on:click="unsubscribe">Unsubscribe</button>
+      </span>
     </template>
 
     <template slot="subtitle">
@@ -131,6 +135,7 @@
         data.editable = false
         data.editing = false
         data.editForm = ''
+        data.isSubscribed = false
         data.owner = ''
         data.ownerRoute = ''
         data.ownerTrustedClass = ''
@@ -143,6 +148,7 @@
         data.body = ''
         data.description = ''
         data.isProfile = ''
+        data.isFeed = false
         data.trustedThatTrust = []
         data.childIds = []
         data.feedItemIds = []
@@ -150,6 +156,11 @@
         data.startReply = false
       },
       async loadData() {
+        try {
+          await this.$db.get('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
+          this.isSubscribed = true
+        }
+        catch (e) {}
         let item = await new MixItem(this.$root, this.itemId).init()
         let account = await item.account()
         let trustLevel = await item.getTrustLevel()
@@ -198,6 +209,9 @@
           this.isProfile = true
           this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(account.contractAddress)
         }
+        else if (revision.content.getPrimaryMixinId() == '0xbcec8faa') {
+          this.isFeed = true
+        }
 
         var id
         this.$db.get('/historyCount')
@@ -233,6 +247,14 @@
         if (!this.editing) {
           this.loadData()
         }
+      },
+      async subscribe(event) {
+        await this.$db.put('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId, this.itemId)
+        this.isSubscribed = true
+      },
+      async unsubscribe(event) {
+        await this.$db.del('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
+        this.isSubscribed = false
       },
       async publish(event) {
         let item = await new MixItem(this.$root, this.itemId).init()
