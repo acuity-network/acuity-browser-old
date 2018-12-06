@@ -138,10 +138,23 @@
   $body-background-color: $black-bis;
   $table-background-color: $black-bis;
   $background: $black-bis;
-  $primary: #8c67ef;
+  $body-color: $grey-lighter;
+  $text: $grey-lighter;
+  $title-color: $grey-lighter;
+  $subtitle-color: $grey-lighter;
+  $table-color: $grey-lighter;
+  $table-head-cell-color: $grey-lighter;
+  $code-background: $black-bis;
+  $code: $grey-lighter;
+  $label-color: $grey-lighter;
+  $input-background-color: $black-ter;
+  $input-border-color: $grey-dark;
+  $button-background-color: $grey-lighter;
+  $input-color: $grey-lighter;
+  $input-disabled-color: $grey-lighter;
+  $menu-item-hover-color: $grey;
+  $primary: $blue;
   $primary-invert: findColorInvert($primary);
-  $twitter: #4099FF;
-  $twitter-invert: findColorInvert($twitter);
 
   // Setup $colors to use as bulma classes (e.g. 'is-twitter')
   $colors: (
@@ -154,7 +167,6 @@
     "success": ($success, $success-invert),
     "warning": ($warning, $warning-invert),
     "danger": ($danger, $danger-invert),
-    "twitter": ($twitter, $twitter-invert)
   );
 
   // Links
@@ -166,11 +178,11 @@
   @import "~bulma";
   @import "~buefy/src/scss/buefy";
 
-  html body, html button, html textarea, html input {
+  html body, html button, html textarea, html input, html select {
     -webkit-font-smoothing: subpixel-antialiased;
   }
 
-  html body, html button, html input {
+  html body, html button, html input, html select {
     font-family: "Noto Sans";
   }
 
