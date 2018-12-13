@@ -7,6 +7,7 @@
         General
       </p>
       <ul class="menu-list">
+        <li><router-link to="/home">Home</router-link>
         <li><router-link to="/feeds">Feeds</router-link>
         <li><router-link to="/subscriptions">Subscriptions</router-link>
         <li><router-link to="/interactions">Interactions</router-link>
