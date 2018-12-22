@@ -1,4 +1,4 @@
-# d-web
+# Acquity
 
 > Reference application for MIX Blockchain.
 
