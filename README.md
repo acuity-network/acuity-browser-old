@@ -1,4 +1,4 @@
-# Acquity
+# Acuity
 
 > Reference application for MIX Blockchain.
 
