@@ -9,7 +9,7 @@
         <template slot-scope="props">
 
           <b-table-column field="account" label="Account" sortable>
-            {{ props.row.name }}
+            <span class="clickable">{{ props.row.name }}</span>
           </b-table-column>
 
           <b-table-column field="balance" label="Balance">
@@ -17,8 +17,8 @@
           </b-table-column>
 
           <b-table-column field="lock" label="">
-            <a v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</a>
-            <a v-else v-on:click="unlock" :data-address="props.row.account">unlock</a>
+            <span class="clickable" v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</span>
+            <span class="clickable" v-else v-on:click="unlock" :data-address="props.row.account">unlock</span>
           </b-table-column>
 
           <b-table-column field="manage" label=" ">
@@ -144,3 +144,10 @@
     },
   }
 </script>
+
+<style scoped>
+  .clickable {
+    cursor: pointer;
+    user-select: none;
+  }
+</style>
