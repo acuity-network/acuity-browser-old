@@ -13,7 +13,6 @@
         <li><router-link to="/interactions">Interactions</router-link>
         <li><router-link to="/browsing-history">Browsing History</router-link></li>
         <li><router-link to="/publish-item">Publish Item</router-link></li>
-        <li><router-link to="/search">Search</router-link></li>
       </ul>
       <p class="menu-label">
         Account
@@ -23,7 +22,6 @@
         <li><router-link to="/profile">Profile</router-link></li>
         <li><router-link to="/trusted-accounts">Trusted Accounts</router-link></li>
         <li><router-link to="/wallet">Wallet</router-link></li>
-        <li><router-link to="/video">Video</router-link></li>
       </ul>
       <p class="menu-label">
         Administration
@@ -33,7 +31,6 @@
         <li><router-link to="/node-status">Node Status</router-link></li>
         <li><router-link to="/settings">Settings</router-link></li>
         <li><router-link to="/debug">Debug</router-link></li>
-        <li><router-link to="/block-explorer">Block Explorer</router-link></li>
       </ul>
     </div>
     <div class="column router-view">
