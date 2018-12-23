@@ -46,35 +46,18 @@
       }
     },
     methods: {
-      loadData() {
-        this.$web3.eth.getBlockNumber()
-        .then(blockNumber => {
-          this.blockNumber = blockNumber.toLocaleString()
-        })
-
-        this.$web3.eth.isSyncing()
-        .then(isSyncing => {
-          this.isSyncing = isSyncing
-        })
-
-        this.$web3.eth.net.getPeerCount()
-        .then(peerCount => {
-          this.peerCount = peerCount
-        })
+      async loadData() {
+        let blockNumber = await this.$web3.eth.getBlockNumber()
+        this.blockNumber = blockNumber.toLocaleString()
+        this.isSyncing = await this.$web3.eth.isSyncing()
+        this.peerCount = await this.$web3.eth.net.getPeerCount()
       }
     },
-    created() {
+    async created() {
       this.web3Version = this.$web3.version
-
-      this.$web3.eth.getProtocolVersion()
-      .then(protocolVersion => {
-        this.protocolVersion = this.$web3.utils.hexToNumber(protocolVersion)
-      })
-
-      this.$web3.eth.net.getId()
-      .then(networkId => {
-        this.networkId = networkId
-      })
+      let protocolVersion = await this.$web3.eth.getProtocolVersion()
+      this.protocolVersion = this.$web3.utils.hexToNumber(protocolVersion)
+      this.networkId = await this.$web3.eth.net.getId()
 
       this.$web3.eth.subscribe('newBlockHeaders')
       .on('data', block => {
