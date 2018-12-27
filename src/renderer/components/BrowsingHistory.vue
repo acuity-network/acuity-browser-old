@@ -35,47 +35,27 @@
     data() {
       return {
         data: [],
-        columns: [
-          {
-            field: 'timestamp',
-            sortable: true,
-            visible: false,
-          },
-          {
-            field: 'when',
-            label: 'Last access',
-          },
-          {
-            field: 'item',
-            label: 'Item',
-            renderHtml: true,
-          },
-          {
-            field: 'author',
-            label: 'Author',
-          },
-        ],
       }
     },
-    created() {
-      this.$db.get('/historyCount')
-      .then(count => {
-        for (var i = count - 1; i >= 0; i--) {
-          this.$db.get('/history/' + i)
-          .then(json => {
-            var item = JSON.parse(json)
-            this.data.push({
-              timestamp: item.timestamp,
-              when: new Date(item.timestamp),
-              route: '/item/' + item.itemId,
-              title: item.title,
-              owner: item.owner ? item.owner : '',
-              ownerRoute: item.ownerRoute ? item.ownerRoute : '',
-            })
+    async created() {
+      let data = []
+      let count = await this.$db.get('/historyCount')
+      for (var i = count - 1; i >= 0; i--) {
+        try {
+          let json = await this.$db.get('/history/' + i)
+          var item = JSON.parse(json)
+          data.push({
+            timestamp: item.timestamp,
+            when: new Date(item.timestamp),
+            route: '/item/' + item.itemId,
+            title: item.title,
+            owner: item.owner ? item.owner : '',
+            ownerRoute: item.ownerRoute ? item.ownerRoute : '',
           })
-          .catch(() => {})
         }
-      })
+        catch (e) {}
+      }
+      this.data = data
     },
   }
 </script>

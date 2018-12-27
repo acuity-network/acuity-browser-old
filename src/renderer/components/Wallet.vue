@@ -18,8 +18,12 @@
 
       <b-tabs>
         <b-tab-item label="Transactions">
-          <b-table :data="data" :columns="columns" default-sort="timestamp" default-sort-direction="desc">
+          <b-table :data="data" default-sort="timestamp" default-sort-direction="desc">
             <template slot-scope="props">
+              <b-table-column field="timestamp" :visible="false" sortable>
+                {{ props.row.timestamp }}
+              </b-table-column>
+
               <b-table-column label="When">
                 <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true"></timeago>
                 <span v-else>pending</span>
@@ -29,7 +33,7 @@
                 <code>{{ props.row.who }}</code>
               </b-table-column>
 
-              <b-table-column label="Amount" :numeric="true">
+              <b-table-column label="Amount" numeric>
                 {{ props.row.amount }}
               </b-table-column>
             </template>
@@ -70,13 +74,6 @@
         to: '',
         amount: '',
         data: [],
-        columns: [
-          {
-            field: 'timestamp',
-            sortable: true,
-            visible: false,
-          },
-        ],
       }
     },
     methods: {
