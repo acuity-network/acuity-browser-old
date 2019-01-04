@@ -42,6 +42,7 @@ Vue.prototype.$itemDagComments = new Vue.prototype.$web3.eth.Contract(require('.
 Vue.prototype.$itemDagFeedItems = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemDag.abi.json'), '0xd6cc1712b46a599f87f023fad83bc06473bb2b8d')
 Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('../lib/AccountProfile.abi.json'), '0x7855a6b883c39c8e87d51002b064180ddbf16026')
 Vue.prototype.$trustedAccounts = new Vue.prototype.$web3.eth.Contract(require('../lib/TrustedAccounts.abi.json'), '0x11dc5cf838ae3850458f92474dc28d1e47f8e045')
+Vue.prototype.$reactions = new Vue.prototype.$web3.eth.Contract(require('../lib/MixReactions.abi.json'), '0xc66af5a7e3699d5b9f03a6031ca8568dae7b6bd1')
 
 /* eslint-disable no-new */
 new Vue({

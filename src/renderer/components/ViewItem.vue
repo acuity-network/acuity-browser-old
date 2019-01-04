@@ -49,6 +49,8 @@
         </div>
       </div>
 
+      <reactions v-bind:itemId="itemId"></reactions>
+
       <comment v-if="!isProfile" v-for="childId in childIds" v-bind:itemId="childId"></comment>
 
       <view-item v-for="feedId in feedItemIds" v-bind:itemId="feedId"></view-item>
@@ -70,6 +72,7 @@
   import Comment from './Comment.vue'
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
+  import Reactions from './Reactions.vue'
   import VueMarkdown from 'vue-markdown'
   import titleProto from '../../lib/title_pb.js'
   import descriptionProto from '../../lib/description_pb.js'
@@ -84,6 +87,7 @@
       Comment,
       ProfileLink,
       VueMarkdown,
+      Reactions,
     },
     data() {
       let data = {}

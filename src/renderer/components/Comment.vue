@@ -5,6 +5,7 @@
       <span class="author">{{ author }}, <timeago :datetime="timestamp" :autoUpdate="true"></timeago></span>
     </div>
     <vue-markdown class="markdown" v-bind:source="bodyText"></vue-markdown>
+    <reactions v-bind:itemId="itemId"></reactions>
     <comment v-for="childId in childIds" v-bind:itemId="childId"></comment>
     <div v-if="startReply">
       <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
@@ -22,12 +23,14 @@
   import VueMarkdown from 'vue-markdown'
   import bodyTextProto from '../../lib/body_pb.js'
   import languageProto from '../../lib/language_pb.js'
+  import Reactions from './Reactions.vue'
 
   export default {
     name: 'comment',
     props: ['itemId'],
     components: {
       VueMarkdown,
+      Reactions,
     },
     data() {
       return {
