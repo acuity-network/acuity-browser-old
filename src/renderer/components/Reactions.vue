@@ -42,13 +42,6 @@
 
       this.plus = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'})
 
-      let emojis = ['1f44d', '1f44e', '1f60d', '1f618', '1f61c', '1f911', '1f92b', '1f914', '1f910', '1f62c', '1f925', '1f915', '1f922', '1f603', '1f60e', '1f913', '1f9d0', '1f62d', '1f621', '1f4af', '1f4a4', '1f44c', '1f91e', '1f44f', '1f64f', '1f9d9']
-
-      for (let emoji of emojis) {
-        let binary = twemoji.convert.fromCodePoint(emoji);
-        let html = twemoji.parse(binary, {folder: 'svg', ext: '.svg'})
-        this.available.push({html, binary})
-      }
     },
     methods: {
       async loadData() {
@@ -89,6 +82,16 @@
           }
           else {
             processedReactions[emoji] = {count: 1, current: true}
+          }
+        }
+
+        let emojis = ['1f44d', '1f44e', '1f60d', '1f618', '1f61c', '1f911', '1f92b', '1f914', '1f910', '1f62c', '1f925', '1f915', '1f922', '1f603', '1f60e', '1f913', '1f9d0', '1f62d', '1f621', '1f4af', '1f4a4', '1f44c', '1f91e', '1f44f', '1f64f', '1f9d9']
+        this.available = []
+        for (let emoji of emojis) {
+          let binary = twemoji.convert.fromCodePoint(emoji);
+          if (!(binary in processedReactions && processedReactions[binary].current)) {
+            let html = twemoji.parse(binary, {folder: 'svg', ext: '.svg'})
+            this.available.push({html, binary})
           }
         }
 
