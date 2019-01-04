@@ -1,8 +1,9 @@
 <template>
 
   <div>
-    <span class="reactions" v-for="reaction in reactions" v-html="reaction.html + ' ' + reaction.count" v-on:click="toggle(reaction)"></span>
+    <span class="reactions" v-for="reaction in reactions" v-html="reaction.html + ' ' + reaction.count" v-on:mouseenter="setWho(reaction)" v-on:mouseleave="who = '&nbsp;'"  v-on:click="toggle(reaction)"></span>
     <span class="reactions" v-html="plus" v-on:click="react = !react"></span>
+    <div v-html="who"></div>
     <div v-if="react" class="available">
       <span v-for="emoji in available" v-html="emoji.html" v-on:click="addReaction(emoji.binary)"></span>
     </div>
@@ -12,6 +13,8 @@
 
 <script>
   let twemoji = require('twemoji')
+  import MixAccount from '../../lib/MixAccount.js'
+  import MixItem from '../../lib/MixItem.js'
 
   export default {
     name: 'reactions',
@@ -22,6 +25,7 @@
       return {
         reactions: [],
         plus: '',
+        who: '&nbsp;',
         available: [],
         react: false,
       }
@@ -61,10 +65,11 @@
             let emoji = buf.toString('utf8', j, j + 4)
 
             if (emoji in processedReactions) {
+              processedReactions[emoji].addresses.push(trustedReactions.itemReactionAccounts[i])
               processedReactions[emoji].count++
             }
             else {
-              processedReactions[emoji] = {count: 1, current: false}
+              processedReactions[emoji] = {addresses: [trustedReactions.itemReactionAccounts[i]], count: 1, current: false}
             }
           }
         }
@@ -77,11 +82,12 @@
           }
           let emoji = buf.toString('utf8', i, i + 4)
           if (emoji in processedReactions) {
+            processedReactions[emoji].addresses.push(window.activeAccount.contractAddress)
             processedReactions[emoji].count++
             processedReactions[emoji].current = true
           }
           else {
-            processedReactions[emoji] = {count: 1, current: true}
+            processedReactions[emoji] = {addresses: [window.activeAccount.contractAddress], count: 1, current: true}
           }
         }
 
@@ -101,6 +107,7 @@
             html: twemoji.parse(emoji, {folder: 'svg', ext: '.svg'}),
             count: processedReactions[emoji].count,
             current: processedReactions[emoji].current,
+            addresses: processedReactions[emoji].addresses,
           })
         }
       },
@@ -115,6 +122,20 @@
           window.activeAccount.sendData(this.$reactions.methods.addReaction(this.itemId, Buffer.from(reaction.emoji, "utf8")), 0, 'Add reaction')
         }
       },
+      async setWho(reaction) {
+        let who = ''
+
+        for(let address of reaction.addresses) {
+          let controller = await this.$db.get('/account/contract/' + address + '/controller')
+          let account = await new MixAccount(this.$root, controller).init()
+          let itemId = await account.call(this.$accountProfile.methods.getProfile())
+          let profile = await new MixItem(this.$root, itemId).init()
+          let revision = await profile.latestRevision().load()
+          who += revision.getTitle() + ' '
+        }
+
+        this.who = who
+      }
     },
   }
 
@@ -126,7 +147,6 @@
     cursor: pointer;
     height: 1.2em;
     width: 1.2em;
-    margin: 0 .05em 0 .1em;
     vertical-align: -0.1em;
   }
 
