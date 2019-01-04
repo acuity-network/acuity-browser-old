@@ -52,28 +52,18 @@
     },
     methods: {
       async loadData() {
-        let accountReactions = await window.activeAccount.call(this.$reactions.methods.getReactions(this.itemId))
         let trustedReactions = await window.activeAccount.call(this.$reactions.methods.getTrustedReactions(this.itemId))
+        let accountReactions = await window.activeAccount.call(this.$reactions.methods.getReactions(this.itemId))
         this.reactions = []
 
         let processedReactions = {}
-
-        let buf = Buffer.from(accountReactions.substr(2), 'hex')
-
-        for (let i = 0; i < 32; i += 4) {
-          if (buf.readUInt32LE(i) == 0) {
-            break
-          }
-          let emoji = buf.toString('utf8', i, i + 4)
-          processedReactions[emoji] = {count: 1, current: true}
-        }
 
         for (let i = 0; i < trustedReactions.itemReactions.length; i++) {
           let buf = Buffer.from(trustedReactions.itemReactions[i].substr(2), 'hex')
 
           for (let j = 0; j < 32; j += 4) {
             if (buf.readUInt32LE(j) == 0) {
-              break
+              continue
             }
             let emoji = buf.toString('utf8', j, j + 4)
 
@@ -83,6 +73,22 @@
             else {
               processedReactions[emoji] = {count: 1, current: false}
             }
+          }
+        }
+
+        let buf = Buffer.from(accountReactions.substr(2), 'hex')
+
+        for (let i = 0; i < 32; i += 4) {
+          if (buf.readUInt32LE(i) == 0) {
+            continue
+          }
+          let emoji = buf.toString('utf8', i, i + 4)
+          if (emoji in processedReactions) {
+            processedReactions[emoji].count++
+            processedReactions[emoji].current = true
+          }
+          else {
+            processedReactions[emoji] = {count: 1, current: true}
           }
         }
 
