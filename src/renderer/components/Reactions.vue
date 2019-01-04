@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <span class="reactions" v-for="reaction in reactions" v-html="reaction.html + 'x' + reaction.count" v-on:click="toggle(reaction)"></span>
+    <span class="reactions" v-for="reaction in reactions" v-html="reaction.html + ' ' + reaction.count" v-on:click="toggle(reaction)"></span>
     <span class="reactions" v-html="plus" v-on:click="react = !react"></span>
     <div v-if="react" class="available">
       <span v-for="emoji in available" v-html="emoji.html" v-on:click="addReaction(emoji.binary)"></span>
