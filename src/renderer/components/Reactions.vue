@@ -45,7 +45,6 @@
       this.loadData()
 
       this.plus = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'})
-
     },
     methods: {
       async loadData() {
@@ -123,18 +122,18 @@
         }
       },
       async setWho(reaction) {
-        let who = ''
+        let who = []
 
-        for(let address of reaction.addresses) {
+        for (let address of reaction.addresses) {
           let controller = await this.$db.get('/account/contract/' + address + '/controller')
           let account = await new MixAccount(this.$root, controller).init()
           let itemId = await account.call(this.$accountProfile.methods.getProfile())
           let profile = await new MixItem(this.$root, itemId).init()
           let revision = await profile.latestRevision().load()
-          who += revision.getTitle() + ' '
+          who.push(revision.getTitle())
         }
 
-        this.who = who
+        this.who = who.join(', ')
       }
     },
   }
