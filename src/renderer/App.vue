@@ -41,6 +41,7 @@
 
 <script>
   import MixAccount from '../lib/MixAccount.js'
+  import MixPinner from '../lib/MixPinner.js'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
 
@@ -51,6 +52,9 @@
       ActiveAccount,
     },
     created() {
+      // Start the pinner.
+      let pinner = new MixPinner(this.$root)
+      pinner.start()
       // Load previous active account.
       this.$db.get('/active-account')
       .then(controller => {
