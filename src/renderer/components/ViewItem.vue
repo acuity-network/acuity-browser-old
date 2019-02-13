@@ -204,10 +204,14 @@
         }
 
         let revision = await item.latestRevision().load()
-        this.title = revision.getTitle()
-        this.timestamp = new Date(revision.getTimestamp() * 1000)
-        this.body = revision.getImage(512)
-        this.description = revision.getDescription()
+
+        try {
+          this.title = revision.getTitle()
+          this.timestamp = new Date(revision.getTimestamp() * 1000)
+          this.body = revision.getImage(512)
+          this.description = revision.getDescription()
+        }
+        catch (e) {}
 
         if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
           this.isProfile = true
@@ -302,6 +306,7 @@
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Post comment')
         this.reply = ''
         this.startReply = false
+        this.loadData()
       },
       toggleTrust(event) {
         new MixItem(this.$root, this.itemId).init()

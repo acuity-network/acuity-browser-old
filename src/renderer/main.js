@@ -31,8 +31,8 @@ Vue.prototype.$db = db
 
 const Web3 = require('web3')
 var net = require('net')
-Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.ethereum/mix/geth.ipc', net))
-//Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.local/share/io.parity.ethereum/jsonrpc.ipc', net))
+//Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.ethereum/mix/geth.ipc', net))
+Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.local/share/io.parity.ethereum/jsonrpc.ipc', net))
 Vue.prototype.$web3.eth.defaultBlock = 'pending';
 
 Vue.prototype.$itemStoreRegistry = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreRegistry.abi.json'), '0x8928f846012b98aac5cd2f4ef4029097cd4110fc')

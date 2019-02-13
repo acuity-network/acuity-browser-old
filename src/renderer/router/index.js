@@ -90,6 +90,11 @@ export default new Router({
       component: require('@/components/ManageAccounts').default
     },
     {
+      path: '/manage-accounts/new',
+      name: 'manage-accounts-new',
+      component: require('@/components/ManageAccountsNew').default
+    },
+    {
       path: '/manage-accounts/controller/:address',
       name: 'manage-account-controller',
       component: require('@/components/ManageAccountController').default

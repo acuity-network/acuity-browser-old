@@ -82,6 +82,7 @@
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Post comment')
         this.reply = ''
         this.startReply = false
+        this.loadData()
       },
     },
     created() {

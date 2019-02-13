@@ -27,7 +27,7 @@
 
         </template>
         <template slot="footer">
-          <a v-on:click="create">Create account</a>
+          <router-link :to="{ name: 'manage-accounts-new' }">Create account</router-link>
         </template>
       </b-table>
     </template>
@@ -56,61 +56,51 @@
     },
     methods: {
       loadAccounts() {
-        this.$web3.eth.personal.getAccounts()
-        .then (accounts => {
-          this.data = []
-          for (let address of accounts) {
-            Promise.all([
-              this.$web3.eth.getBalance(address),
-              this.$web3.eth.sign('', address)
-              .then(() => {
-                return true
-              })
-              .catch(() => {
-                return false
-              }),
-              new MixAccount(this.$root, address).init()
-              .then(account => {
-                return account.call(this.$accountProfile.methods.getProfile())
-              })
-              .then(itemId => {
-                return new MixItem(this, itemId).init()
-              })
-              .then(item => {
-                return item.latestRevision().load()
-              })
-              .then(revision => {
-                return revision.getTitle()
-              })
-              .catch(() => {
-                return false
-              }),
-            ])
-            .then(result => {
-              var row = {
-                account: address,
-                name: result[2] ? result[2] : address,
-                balance: this.$web3.utils.fromWei(result[0]),
-                unlocked: result[1],
-                action: (result[1] == false) ? 'unlock' : ((result[2] == false) ? 'deploy' : 'lock'),
-                route: (result[1] == false) ? 'manage-account-unlock' : 'manage-account-controller',
-              }
-              this.data.push(row)
-              if (window.activeAccount && address == window.activeAccount.controllerAddress) {
-                this.selected = row
-              }
+        this.$db.createValueStream({
+          'gt': '/account/controllerAddress/',
+          'lt': '/account/controllerAddress/z',
+        })
+        .on('data', async address => {
+          let result = await Promise.all([
+            this.$web3.eth.getBalance(address),
+            true,
+            new MixAccount(this.$root, address).init()
+            .then(account => {
+              return account.call(this.$accountProfile.methods.getProfile())
             })
+            .then(itemId => {
+              return new MixItem(this, itemId).init()
+            })
+            .then(item => {
+              return item.latestRevision().load()
+            })
+            .then(revision => {
+              return revision.getTitle()
+            })
+            .catch(() => {
+              return false
+            }),
+          ])
+          var row = {
+            account: address,
+            name: result[2] ? result[2] : address,
+            balance: this.$web3.utils.fromWei(result[0]),
+            unlocked: result[1],
+            action: (result[1] == false) ? 'unlock' : ((result[2] == false) ? 'deploy' : 'lock'),
+            route: (result[1] == false) ? 'manage-account-unlock' : 'manage-account-controller',
+          }
+          this.data.push(row)
+          if (window.activeAccount && address == window.activeAccount.controllerAddress) {
+            this.selected = row
           }
         })
       },
-      select(event) {
-        new MixAccount(this.$root, event.account).init()
-        .then(account => {
-          window.activeAccount = account
-          this.$db.put('/active-account', event.account)
-          this.$root.$emit('change-active-account', event.account)
-        })
-        .catch(() => {})
+      async select(event) {
+        console.log(event)
+        let account = await new MixAccount(this.$root, event.account).init()
+        window.activeAccount = account
+        this.$db.put('/active-account', event.account)
+        this.$root.$emit('change-active-account', event.account)
       },
       unlock(event) {
         this.$modal.open({
@@ -129,13 +119,6 @@
         })
         .catch(error => {
           console.log(error)
-        })
-      },
-      create(event) {
-        this.$modal.open({
-          parent: this,
-          component: ManageAccountsNew,
-          hasModalCard: true,
         })
       },
     },

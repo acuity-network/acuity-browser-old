@@ -110,15 +110,18 @@
           })
         }
       },
-      addReaction(emoji) {
-        window.activeAccount.sendData(this.$reactions.methods.addReaction(this.itemId, Buffer.from(emoji, "utf8")), 0, 'Add reaction')
+      async addReaction(emoji) {
+        await window.activeAccount.sendData(this.$reactions.methods.addReaction(this.itemId, Buffer.from(emoji, "utf8")), 0, 'Add reaction')
+        this.loadData()
       },
-      toggle(reaction) {
+      async toggle(reaction) {
         if (reaction.current) {
-          window.activeAccount.sendData(this.$reactions.methods.removeReaction(this.itemId, Buffer.from(reaction.emoji, "utf8")), 0, 'Remove reaction')
+          await window.activeAccount.sendData(this.$reactions.methods.removeReaction(this.itemId, Buffer.from(reaction.emoji, "utf8")), 0, 'Remove reaction')
+          this.loadData()
         }
         else {
-          window.activeAccount.sendData(this.$reactions.methods.addReaction(this.itemId, Buffer.from(reaction.emoji, "utf8")), 0, 'Add reaction')
+          await window.activeAccount.sendData(this.$reactions.methods.addReaction(this.itemId, Buffer.from(reaction.emoji, "utf8")), 0, 'Add reaction')
+          this.loadData()
         }
       },
       async setWho(reaction) {
