@@ -6,22 +6,24 @@
 
     <template slot="body">
       <img :src="qrcode" />
-      <h2>Balance</h2>
-      {{ balance }}
-      <h2>Contract</h2>
-      {{ contract }}
-      <div>
-        <button class="button is-primary" v-on:click="activate">Activate account</button>
-      </div>
+      <b-field label="Balance">
+        {{ balance }}
+      </b-field>
+      <b-field label="Controller">
+        {{ controller }}
+      </b-field>
+      <b-field label="Contract">
+        {{ contract }}
+      </b-field>
+
+      <button class="button is-primary" v-on:click="activate">Activate account</button>
     </template>
   </page>
 </template>
 
 <script>
   import Page from './Page.vue'
-
   var QRCode = require('qrcode')
-
   import MixAccount from '../../lib/MixAccount.js'
 
   export default {
@@ -32,6 +34,7 @@
     data() {
       return {
         qrcode: '',
+        controller: '',
         contract: '',
         balance: '',
       }
@@ -42,24 +45,15 @@
         return account.deploy()
       }
     },
-    created() {
-      QRCode.toDataURL(this.$route.params.address, {
+    async created() {
+      this.qrcode = await QRCode.toDataURL(this.$route.params.address, {
         mode: 'alphanumeric',
         errorCorrectionLevel: 'H'
       })
-      .then(qrcode => {
-        this.qrcode = qrcode
-      })
 
-      this.$db.get('/account/controller/' + this.$route.params.address + '/contract')
-      .then(contractAddress => {
-        this.contract = contractAddress
-      })
-
-      this.$web3.eth.getBalance(this.$route.params.address, 'pending')
-      .then(balance => {
-        this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
-      })
+      this.controller = this.$route.params.address
+      this.contract = await this.$db.get('/account/controller/' + this.$route.params.address + '/contract')
+      this.balance = this.$web3.utils.fromWei(await this.$web3.eth.getBalance(this.$route.params.address, 'pending')) + ' MIX'
     },
   }
 </script>
