@@ -21,7 +21,12 @@
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         v-on:click="toggleTrust"></span><br />
       <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
-      <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
+      <span v-if="timestamp > 0">
+        <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
+      </span>
+      <span v-else>
+        Just now
+      </span>
     </template>
 
     <template slot="body">

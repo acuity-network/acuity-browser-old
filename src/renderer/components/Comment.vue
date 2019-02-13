@@ -2,7 +2,14 @@
   <div v-if="trusted" class="comment">
     <div class="profile is-clearfix">
       <div class="avatar is-pulled-left" v-html="avatar"></div>
-      <span class="author">{{ author }}, <timeago :datetime="timestamp" :autoUpdate="true"></timeago></span>
+      <span class="author">{{ author }},
+        <span v-if="timestamp > 0">
+          <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
+        </span>
+        <span v-else>
+          just now
+        </span>
+      </span>
     </div>
     <vue-markdown class="markdown" v-bind:source="bodyText"></vue-markdown>
     <reactions v-bind:itemId="itemId"></reactions>
