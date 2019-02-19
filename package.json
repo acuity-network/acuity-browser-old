@@ -1,5 +1,5 @@
 {
-  "name": "d-web",
+  "name": "acuity",
   "version": "0.0.0",
   "author": "Jonathan Brown <jbrown@mix-blockchain.org>",
   "description": "Reference application for MIX Blockchain.",
@@ -20,11 +20,6 @@
     "unit": "karma start test/unit/karma.conf.js"
   },
   "build": {
-    "productName": "d-web",
-    "appId": "org.simulatedgreg.electron-vue",
-    "directories": {
-      "output": "build"
-    },
     "files": [
       "dist/electron/**/*"
     ],
@@ -45,13 +40,17 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/icon.icns",
+      "target": "zip"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "target": "nsis"
     },
     "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons",
+      "target": ["AppImage", "snap"],
+      "category": "Network"
     }
   },
   "dependencies": {
