@@ -149,7 +149,7 @@
           Promise.all(transactions)
           .then(results => {
             for (var i = 0; i < results.length; i++) {
-              if (results[i] && results[i].transaction.value != 0) {
+              if (results[i] && results[i].transaction && results[i].transaction.value != 0) {
                 data.push({
                   'timestamp': results[i].block ? results[i].block.timestamp : 4000000000,
                   'confirmed': results[i].block != null,
