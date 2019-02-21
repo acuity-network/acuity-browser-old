@@ -96,7 +96,6 @@
         })
       },
       async select(event) {
-        console.log(event)
         let account = await new MixAccount(this.$root, event.account).init()
         window.activeAccount = account
         this.$db.put('/active-account', event.account)

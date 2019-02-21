@@ -70,64 +70,63 @@
         'lt': '/account/controllerAddress/z',
       })
       .on('data', async controller => {
-        var account = new MixAccount(this, controller)
-        account.init()
-        .then(() => {
-          return account.contract.events.Receive({
-            fromBlock: 0,
-            toBlock: 'pending',
-          })
-          .on('data', log => {
-            var payment = {
-              transaction: log.transactionHash,
-              sender: log.returnValues.from,
-              amount: log.returnValues.value,
-            }
+        let account = await new MixAccount(this, controller).init()
+        if (!account.contract) {
+          return;
+        }
+        account.contract.events.Receive({
+          fromBlock: 0,
+          toBlock: 'pending',
+        })
+        .on('data', log => {
+          var payment = {
+            transaction: log.transactionHash,
+            sender: log.returnValues.from,
+            amount: log.returnValues.value,
+          }
 
-            this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-            .then(id => {
-              return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+          this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+          .then(id => {
+            return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+          })
+          .catch(error => {
+            var id
+            return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
+            .then(count => {
+              id = parseInt(count)
             })
-            .catch(error => {
-              var id
-              return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
-              .then(count => {
-                id = parseInt(count)
-              })
-              .catch(err => {
-                id = 0
-              })
-              .then(() => {
-                return this.$db.batch()
-                .put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
-                .put('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex, id)
-                .put('/account/contract/' + account.contractAddress + '/receivedCount', id + 1)
-                .write()
-              })
+            .catch(err => {
+              id = 0
             })
             .then(() => {
-              this.$root.$emit('account-receive', account.contractAddress)
-              account.isUnlocked()
-              .then(unlocked => {
-                if (unlocked) {
-                  account.consolidateMix()
-                }
-              })
-            })
-          })
-          .on('changed', log => {
-            this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-            .then(id => {
               return this.$db.batch()
-              .del('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-              .del('/account/contract/' + account.contractAddress + '/received/' + id)
+              .put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+              .put('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex, id)
+              .put('/account/contract/' + account.contractAddress + '/receivedCount', id + 1)
               .write()
             })
-            .then(() => {
-              this.$root.$emit('account-receive', account.contractAddress)
+          })
+          .then(() => {
+            this.$root.$emit('account-receive', account.contractAddress)
+            account.isUnlocked()
+            .then(unlocked => {
+              if (unlocked) {
+                account.consolidateMix()
+              }
             })
           })
-          .catch(() => {})
+        })
+        .on('changed', log => {
+          this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+          .then(id => {
+            return this.$db.batch()
+            .del('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+            .del('/account/contract/' + account.contractAddress + '/received/' + id)
+            .write()
+          })
+          .then(() => {
+            this.$root.$emit('account-receive', account.contractAddress)
+          })
         })
       })
     },
