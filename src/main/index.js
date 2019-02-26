@@ -23,6 +23,9 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, '/mix-logo-filled.png'),
     backgroundColor: '#191919',
+    webPreferences: {
+      nodeIntegration: true,
+    },
   })
 
   mainWindow.loadURL(winURL)
