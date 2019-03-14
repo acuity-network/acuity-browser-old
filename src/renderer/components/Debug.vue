@@ -32,141 +32,123 @@
       Page,
     },
     methods: {
-      read(event) {
+      async read(event) {
         const output = document.getElementById('output')
         output.innerHTML = ''
         const itemId = document.getElementById('itemId').value
 
-        const itemStoreShortIdAbi = require('../../lib/ItemStoreShortId.abi.json')
-        const itemStoreShortId = new this.$web3.eth.Contract(itemStoreShortIdAbi, '0xd02ee768718b41a8cea9350d7c4c443727da5c7b')
+        let shortId = await this.$itemStoreShortId.methods.getShortId(itemId).call()
+        output.appendChild(document.createTextNode('shortId: '  + shortId + '\n'))
 
-        itemStoreShortId.methods.getShortId(itemId).call()
-        .then(shortId => {
-          output.appendChild(document.createTextNode('shortId: '  + shortId + '\n'))
+        let itemStoreAddress = await this.$itemStoreRegistry.methods.getItemStore(itemId).call()
+        output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
 
-          const itemStoreRegistryAbi = require('../../lib/ItemStoreRegistry.abi.json')
-          const itemStoreRegistry = new this.$web3.eth.Contract(itemStoreRegistryAbi, '0xa46adddd3105715fa0ea0d4a883d4be99452c3f6')
+        const itemStoreAbi = require('../../lib/ItemStoreInterface.abi.json')
+        const itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
-          itemStoreRegistry.methods.getItemStore(itemId).call()
-          .then(itemStoreAddress => {
-            output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
+        let inUse = await itemStore.methods.getInUse(itemId).call()
+        if (!inUse) {
+          output.append('Item not found.\n')
+          return
+        }
 
-            const itemStoreAbi = require('../../lib/ItemStoreInterface.abi.json')
-            const itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
+        let contractId = await itemStore.methods.getContractId().call()
+        if (contractId != "0x1f1e136d1003177d") {
+          output.append('Unknown item store.\n')
+          return
+        }
+        output.append('itemStore: ItemStoreIpfsSha256\n')
 
-            itemStore.methods.getInUse(itemId).call()
-            .then(inUse => {
-              if (!inUse) {
-                output.append('Item not found.\n')
-                return
-              }
+        let item = await this.$itemStoreIpfsSha256.methods.getItem(itemId).call()
+        output.append('Updatable: ' + ((item.flags & 0x01) ? 'true' : 'false') + '\n')
+        output.append('Enforce revisions: ' + ((item.flags & 0x02) ? 'true' : "false") + '\n')
+        output.append('Retractable: ' + ((item.flags & 0x04) ? 'true' : 'false') + '\n')
+        output.append('Transferable: ' + ((item.flags & 0x08) ? 'true' : 'false') + '\n')
+        output.append('Owner: ' + item.owner + '\n')
+        output.append('Revision count: ' + item.revisionCount + '\n')
 
-              itemStore.methods.getContractId().call()
-              .then(contractId => {
-                if (contractId != "0x2d54bddf4be19c6c") {
-                  output.append('Unknown item store.\n')
-                  return
+        for (var i = 0; i < item.revisionCount; i++) {
+          const timestamp = new Date(item.timestamps[i] * 1000)
+          output.append('\nRevision ' + i + ' timestamp: ' + timestamp + '\n')
+
+          const multihashes = require('multihashes')
+          const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
+          output.append('Revision ' + i + ' IPFS hash: ' + ipfsHash + '\n')
+
+          let response = await this.$http.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
+          const containerPayload = Buffer.from(response.data, "binary")
+          output.append('Compressed length: ' + containerPayload.length + '\n')
+
+          const itemPayload = await brotli.decompress(Buffer.from(containerPayload))
+          output.append('Uncompressed length: ' + itemPayload.length + '\n')
+
+          const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
+          const mixins = itemMessage.getMixinList()
+
+          output.append('Mixin count: ' + mixins.length + '\n')
+
+          for (var i = 0; i < mixins.length; i++) {
+            output.append('\nMixin ' + i + '\n')
+            var mixinId = '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8)
+            output.append('mixinId: ' + mixinId + '\n')
+
+            var mixinPayload = mixins[i].getPayload()
+
+            switch (mixinId) {
+              case '0x51c32e3a':
+                output.append('Mixin type: Mixin type\n')
+                break
+
+              case '0x4e4e06c4':
+                output.append('Mixin type: Language\n')
+                var languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
+                output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
+                break
+
+              case '0x24da6114':
+                output.append('Mixin type: Title\n')
+                var titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
+                output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
+                break
+
+              case '0x34a9a6ec':
+                output.append('Mixin type: Body text\n')
+                var bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
+                output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
+                break
+
+              case '0x5a474550':
+                output.append('Mixin type: Description\n')
+                var descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
+                output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
+                break
+
+              case '0x12745469':
+                output.append('Mixin type: Image\n')
+                var imageMessage = jpegImageProto.JpegMipmap.deserializeBinary(mixinPayload)
+                var width = imageMessage.getWidth()
+                output.append('Original width: ' + width + '\n')
+                var height = imageMessage.getHeight()
+                output.append('Original height: ' + height + '\n')
+                var mipmaps = imageMessage.getMipmapLevelList()
+                output.append('Mipmap levels: ' + mipmaps.length + '\n')
+                var renderHeight = Math.round(256 * height / width)
+                for (var j = 0; j < mipmaps.length; j++) {
+                  output.append('\nMipmap level: ' + j + '\n')
+                  output.append('Mipmap filesize: ' + mipmaps[j].getFilesize() + '\n')
+                  var el = document.createElement('img')
+                  var domString = '<img src="http://localhost:8081/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
+                  el.innerHTML = domString
+                  output.appendChild(el.firstChild)
                 }
-                output.append('itemStore: ItemStoreIpfsSha256\n')
+                break
 
-                this.$itemStoreIpfsSha256.methods.getItem(itemId).call()
-                .then(item => {
-                  output.append('Updatable: ' + ((item.flags & 0x01) ? 'true' : 'false') + '\n')
-                  output.append('Enforce revisions: ' + ((item.flags & 0x02) ? 'true' : "false") + '\n')
-                  output.append('Retractable: ' + ((item.flags & 0x04) ? 'true' : 'false') + '\n')
-                  output.append('Transferable: ' + ((item.flags & 0x08) ? 'true' : 'false') + '\n')
-                  output.append('Owner: ' + item.owner + '\n')
-                  output.append('Revision count: ' + item.revisionCount + '\n')
-
-                  for (var i = 0; i < item.revisionCount; i++) {
-                    const timestamp = new Date(item.timestamps[i] * 1000)
-                    output.append('\nRevision ' + i + ' timestamp: ' + timestamp + '\n')
-
-                    const multihashes = require('multihashes')
-                    const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
-                    output.append('Revision ' + i + ' IPFS hash: ' + ipfsHash + '\n')
-
-                    this.$http.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
-                    .then(async response => {
-                      const containerPayload = Buffer.from(response.data, "binary")
-                      output.append('Compressed length: ' + containerPayload.length + '\n')
-
-                      const itemPayload = await brotli.decompress(Buffer.from(containerPayload))
-                      output.append('Uncompressed length: ' + itemPayload.length + '\n')
-
-                      const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
-                      const mixins = itemMessage.getMixinList()
-
-                      output.append('Mixin count: ' + mixins.length + '\n')
-
-                      for (var i = 0; i < mixins.length; i++) {
-                        output.append('\nMixin ' + i + '\n')
-                        var mixinId = '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8)
-                        output.append('mixinId: ' + mixinId + '\n')
-
-                        var mixinPayload = mixins[i].getPayload()
-
-                        switch (mixinId) {
-                          case '0x51c32e3a':
-                            output.append('Mixin type: Mixin type\n')
-                            break
-
-                          case '0x4e4e06c4':
-                            output.append('Mixin type: Language\n')
-                            var languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
-                            output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
-                            break
-
-                          case '0x24da6114':
-                            output.append('Mixin type: Title\n')
-                            var titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
-                            output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
-                            break
-
-                          case '0x34a9a6ec':
-                            output.append('Mixin type: Body text\n')
-                            var bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
-                            output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
-                            break
-
-                          case '0x5a474550':
-                            output.append('Mixin type: Description\n')
-                            var descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
-                            output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
-                            break
-
-                          case '0x12745469':
-                            output.append('Mixin type: Image\n')
-                            var imageMessage = jpegImageProto.JpegMipmap.deserializeBinary(mixinPayload)
-                            var width = imageMessage.getWidth()
-                            output.append('Original width: ' + width + '\n')
-                            var height = imageMessage.getHeight()
-                            output.append('Original height: ' + height + '\n')
-                            var mipmaps = imageMessage.getMipmapLevelList()
-                            output.append('Mipmap levels: ' + mipmaps.length + '\n')
-                            var renderHeight = Math.round(256 * height / width)
-                            for (var j = 0; j < mipmaps.length; j++) {
-                              output.append('\nMipmap level: ' + j + '\n')
-                              output.append('Mipmap filesize: ' + mipmaps[j].getFilesize() + '\n')
-                              var el = document.createElement('img')
-                              var domString = '<img src="http://localhost:8081/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
-                              el.innerHTML = domString
-                              output.appendChild(el.firstChild)
-                            }
-                            break
-
-                          case '0xbcec8faa':
-                            output.append('Mixin type: Topic Feed\n')
-                            break
-                        }
-                      }
-                    })
-                  }
-                })
-              })
-            })
-          })
-        })
+              case '0xbcec8faa':
+                output.append('Mixin type: Topic Feed\n')
+                break
+            }
+          }
+        }
       }
     }
   }
