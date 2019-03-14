@@ -152,6 +152,7 @@
     "webpack-merge": "^4.1.2"
   },
   "resolutions": {
-    "ajv": "6.8.1"
+    "ajv": "6.8.1",
+    "nan": "2.12.1"
   }
 }
