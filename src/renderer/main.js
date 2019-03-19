@@ -44,6 +44,9 @@ Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('..
 Vue.prototype.$trustedAccounts = new Vue.prototype.$web3.eth.Contract(require('../lib/TrustedAccounts.abi.json'), '0x11dc5cf838ae3850458f92474dc28d1e47f8e045')
 Vue.prototype.$reactions = new Vue.prototype.$web3.eth.Contract(require('../lib/MixReactions.abi.json'), '0xc66af5a7e3699d5b9f03a6031ca8568dae7b6bd1')
 
+Vue.prototype.$tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
+Vue.prototype.$tokenRegistry = new Vue.prototype.$web3.eth.Contract(require('../lib/MixTokenRegistry.abi.json'), Vue.prototype.$tokenRegistryAddress)
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },

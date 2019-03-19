@@ -85,6 +85,11 @@ export default new Router({
       component: require('@/components/Wallet').default
     },
     {
+      path: '/tokens',
+      name: 'tokens',
+      component: require('@/components/CreateToken').default
+    },
+    {
       path: '/manage-accounts',
       name: 'manage-accounts',
       component: require('@/components/ManageAccounts').default

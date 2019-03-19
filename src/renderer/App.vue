@@ -22,6 +22,7 @@
         <li><router-link to="/profile">Profile</router-link></li>
         <li><router-link to="/trusted-accounts">Trusted Accounts</router-link></li>
         <li><router-link to="/wallet">Wallet</router-link></li>
+        <li><router-link to="/tokens">Tokens</router-link></li>
       </ul>
       <p class="menu-label">
         Administration

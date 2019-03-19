@@ -35,7 +35,7 @@ export default class MixAccount {
       nonce: this.vue.$web3.utils.toHex(nonce),
       from: this.controllerAddress,
       gas: this.vue.$web3.utils.toHex(1000000),
-      gasPrice: '0x01',
+      gasPrice: '0xBA43B7400',
       data: '0x' + accountBytecode,
     }
 
@@ -87,7 +87,7 @@ export default class MixAccount {
         from: this.controllerAddress,
         to: transaction._parent._address,
         gas: this.vue.$web3.utils.toHex(gas),
-        gasPrice: '0x01',
+        gasPrice: '0xBA43B7400',
         data: data,
         value: this.vue.$web3.utils.toHex(value),
       }
