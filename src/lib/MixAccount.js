@@ -35,7 +35,7 @@ export default class MixAccount {
       nonce: this.vue.$web3.utils.toHex(nonce),
       from: this.controllerAddress,
       gas: this.vue.$web3.utils.toHex(1000000),
-      gasPrice: '0xBA43B7400',
+      gasPrice: '0x3b9aca00',
       data: '0x' + accountBytecode,
     }
 
@@ -87,7 +87,7 @@ export default class MixAccount {
         from: this.controllerAddress,
         to: transaction._parent._address,
         gas: this.vue.$web3.utils.toHex(gas),
-        gasPrice: '0xBA43B7400',
+        gasPrice: '0x3b9aca00',
         data: data,
         value: this.vue.$web3.utils.toHex(value),
       }
@@ -138,7 +138,7 @@ export default class MixAccount {
           from: this.controllerAddress,
           to: to,
           gas: 21000,
-          gasPrice: 1,
+          gasPrice: '0x3b9aca00',
           value: this.vue.$web3.utils.toHex(value),
         }
         let ethTx = require('ethereumjs-tx')

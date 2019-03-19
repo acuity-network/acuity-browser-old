@@ -102,7 +102,7 @@
           nonce: this.$web3.utils.toHex(nonce),
           from: window.activeAccount.controllerAddress,
           gas: this.$web3.utils.toHex(2000000),
-          gasPrice: '0xBA43B7400',
+          gasPrice: '0x3b9aca00',
           data: '0x' + accountBytecode + paramsBytecode,
         }
 
