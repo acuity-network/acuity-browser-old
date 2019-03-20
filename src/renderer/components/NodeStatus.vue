@@ -23,7 +23,7 @@
       <b-field label="Syncing">
         {{ isSyncing }}
       </b-field>
-      <b-field label="Clock synched">
+      <b-field label="Clock synced">
         {{ isClockSync }}
       </b-field>
       <b-field label="Time drift">
