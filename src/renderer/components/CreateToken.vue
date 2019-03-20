@@ -29,7 +29,6 @@
   import languageProto from '../../lib/language_pb.js'
   import titleProto from '../../lib/title_pb.js'
   import descriptionProto from '../../lib/description_pb.js'
-  import tokenProto from '../../lib/token_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
 
