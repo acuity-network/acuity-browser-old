@@ -23,12 +23,19 @@
       <b-field label="Syncing">
         {{ isSyncing }}
       </b-field>
+      <b-field label="Clock synched">
+        {{ isClockSync }}
+      </b-field>
+      <b-field label="Time drift">
+        {{ timeDrift }} ms
+      </b-field>
     </template>
   </page>
 </template>
 
 <script>
   import Page from './Page.vue'
+  import { checkClockSync } from '@parity/electron'
 
   export default {
     name: 'node-status',
@@ -43,6 +50,8 @@
         blockNumber: '',
         peerCount: '',
         isSyncing: '',
+        isClockSync: '',
+        timeDrift: '',
       }
     },
     methods: {
@@ -51,6 +60,10 @@
         this.blockNumber = blockNumber.toLocaleString()
         this.isSyncing = await this.$web3.eth.isSyncing()
         this.peerCount = await this.$web3.eth.net.getPeerCount()
+
+        let clockSync = await checkClockSync()
+        this.isClockSync = clockSync.isClockSync
+        this.timeDrift = clockSync.timeDrift
       }
     },
     async created() {
