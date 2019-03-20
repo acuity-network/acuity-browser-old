@@ -36,6 +36,7 @@
 <script>
   import Page from './Page.vue'
   import { checkClockSync } from '@parity/electron'
+  import throttle from 'just-throttle'
 
   export default {
     name: 'node-status',
@@ -72,17 +73,19 @@
       this.protocolVersion = this.$web3.utils.hexToNumber(protocolVersion)
       this.networkId = await this.$web3.eth.net.getId()
 
+      let loadData = throttle(this.loadData, 1000, true)
+
       this.$web3.eth.subscribe('newBlockHeaders')
       .on('data', block => {
-        this.loadData()
+        loadData()
       })
 
       this.$web3.eth.subscribe('syncing')
       .on('data', sync => {
-        this.loadData()
+        loadData()
       })
 
-      this.loadData()
+      loadData()
     },
   }
 </script>

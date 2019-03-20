@@ -4264,9 +4264,9 @@ electron-rebuild@^1.8.2:
     yargs "^12.0.5"
 
 electron-to-chromium@^1.3.47:
-  version "1.3.116"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.116.tgz#1dbfee6a592a0c14ade77dbdfe54fef86387d702"
-  integrity sha512-NKwKAXzur5vFCZYBHpdWjTMO8QptNLNP80nItkSIgUOapPAo9Uia+RvkCaZJtO7fhQaVElSvBPWEc2ku6cKsPA==
+  version "1.3.117"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.117.tgz#4155184de82a284b8a598eab8e37b5875280c363"
+  integrity sha512-BxNTJ9Zu+WW5hbBg0fnjGfS1X8AOfJEtBmYlVDenPmkmkXmt3WgbPw7y/47mAZomcVB4F2/NZQB/KNz7OdCC2g==
 
 electron@^4.0.0:
   version "4.1.0"
@@ -7446,6 +7446,11 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
+
+just-throttle@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/just-throttle/-/just-throttle-1.1.0.tgz#178d305ece9876a8a0759abd8d403aafcc6e4849"
+  integrity sha512-iePC/13XYX1Tyn9C6jY+DG3UEejkDvrKsw5xxgGhtGUwYWmoJm4CoKexscBKELOu3FTyCDzjr21ZJ67AXnz+bg==
 
 karma-chai@^0.1.0:
   version "0.1.0"
