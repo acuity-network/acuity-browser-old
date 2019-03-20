@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow } from 'electron'
 var path = require('path')
+import launchParity from '../lib/Parity.js'
 
 /**
  * Set `__static` path to static files in production
@@ -29,6 +30,9 @@ function createWindow () {
   })
 
   mainWindow.loadURL(winURL)
+
+  launchParity(mainWindow)
+
 //  mainWindow.webContents.openDevTools()
   mainWindow.on('closed', () => {
     mainWindow = null
