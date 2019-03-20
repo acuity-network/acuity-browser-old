@@ -11415,9 +11415,9 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     inherits "^2.0.1"
 
 rlp@^2.0.0:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.2.2.tgz#e6677b83cca9105371d930e01d8ffc1263139d05"
-  integrity sha512-Ng2kJEN731Sfv4ZAY2i0ytPMc0BbJKBsVNl0QZY8LxOWSwd+1xpg+fpSRfaMn0heHU447s6Kgy8qfHZR0XTyVw==
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.2.3.tgz#7f94aef86cec412df87d5ea1d8cb116a47d45f0e"
+  integrity sha512-l6YVrI7+d2vpW6D6rS05x2Xrmq8oW7v3pieZOJKBEdjuTF4Kz/iwk55Zyh1Zaz+KOB2kC8+2jZlp2u9L4tTzCQ==
   dependencies:
     bn.js "^4.11.1"
     safe-buffer "^5.1.1"
@@ -13551,9 +13551,9 @@ vue-template-es2015-compiler@^1.9.0:
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
 vue-timeago@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/vue-timeago/-/vue-timeago-5.0.0.tgz#e9633c28f923b380518f91305a6477e2712f1c0a"
-  integrity sha512-C+EqTlfHE9nO6FOQIS6q5trAZ0WIgNz/eydTvsanPRsLVV1xqNiZirTG71d9nl/LjfNETwaktnBlgP8adCc37A==
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/vue-timeago/-/vue-timeago-5.1.1.tgz#382d3be0694bf88f088d72f5eb84429465ac643a"
+  integrity sha512-xj9FwWgW7c+qvBYUygUkewdbmTXvEgvAh6tXeDrha2HZJlUr3vfM+GiPgqgmgGkbKsmpfzIZgrj2NpXNzHNq2Q==
   dependencies:
     date-fns "^1.29.0"
 

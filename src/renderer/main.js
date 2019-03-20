@@ -9,8 +9,7 @@ import Buefy from 'buefy'
 Vue.use(Buefy)
 
 import VueTimeago from 'vue-timeago'
-Vue.use(VueTimeago)
-
+Vue.use(VueTimeago, { locale: 'en' })
 
 import '@mdi/font/css/materialdesignicons.min.css'
 import 'notosans-fontface/css/notosans-fontface.css'
