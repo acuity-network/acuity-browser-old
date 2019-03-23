@@ -12,7 +12,19 @@ export default async function launchParity(window) {
 	}
 
 	let flags = [
+		'--no-download',
+		'--no-consensus',
 		'--chain=mix',
+		'--no-jsonrpc',
+		'--no-ws',
+		'--no-secretstore',
+		'--force-sealing',
+		'--infinite-pending-block',
+		'--reseal-on-txs=all',
+		'--can-restart',
+		'--pruning=fast',
+		'--pruning-history=64',
+		'--pruning-memory=0',
 	]
 
 	parity.runParity({parityPath: parityPath, flags: flags, onParityError: (error) => console.error(error)})
