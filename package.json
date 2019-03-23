@@ -23,7 +23,6 @@
     "files": [
       "dist/electron/**/*"
     ],
-    "asar": false,
     "dmg": {
       "contents": [
         {
@@ -53,7 +52,8 @@
         "AppImage",
         "snap"
       ],
-      "category": "Network"
+      "category": "Network",
+      "asar": false
     }
   },
   "dependencies": {
