@@ -23,6 +23,9 @@
     "files": [
       "dist/electron/**/*"
     ],
+    "asarUnpack": [
+      "**/node_modules/sharp/**/*"
+    ],
     "dmg": {
       "contents": [
         {
@@ -49,11 +52,9 @@
     "linux": {
       "icon": "build/icons",
       "target": [
-        "AppImage",
-        "snap"
+        "AppImage"
       ],
-      "category": "Network",
-      "asar": false
+      "category": "Network"
     }
   },
   "dependencies": {
