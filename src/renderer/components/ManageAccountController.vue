@@ -41,8 +41,12 @@
     },
     methods: {
       activate() {
-        var account = new MixAccount(this, this.$route.params.address)
-        return account.deploy()
+        if(this.balance > 0) {
+          var account = new MixAccount(this, this.$route.params.address)
+          return account.deploy()
+        } else {
+          new Notification(this.$notifications.fundAccount.title, this.$notifications.fundAccount)
+        }
       }
     },
     async created() {
