@@ -3,6 +3,7 @@
 import { app, BrowserWindow } from 'electron'
 var path = require('path')
 import launchParity from '../lib/Parity.js'
+import launchIpfs from '../lib/Ipfs.js'
 
 /**
  * Set `__static` path to static files in production
@@ -32,6 +33,7 @@ function createWindow () {
   mainWindow.loadURL(winURL)
 
   launchParity(mainWindow)
+  launchIpfs()
 
 //  mainWindow.webContents.openDevTools()
   mainWindow.on('closed', () => {

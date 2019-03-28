@@ -21,6 +21,8 @@ export default async function launchParity(window) {
 		'--force-sealing',
 		'--infinite-pending-block',
 		'--reseal-on-txs=all',
+		'--reseal-min-period=0',
+		'--reseal-max-period=600000',
 		'--can-restart',
 		'--pruning=fast',
 		'--pruning-history=64',
