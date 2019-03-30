@@ -1,4 +1,6 @@
 import * as parity from '@parity/electron';
+import { app } from 'electron'
+import path from 'path'
 
 export default async function launchParity(window) {
 
@@ -17,6 +19,7 @@ export default async function launchParity(window) {
 		'--chain=mix',
 		'--no-jsonrpc',
 		'--no-ws',
+		'--ipc-path=' + path.join(app.getPath('userData'), '/parity.ipc'),
 		'--no-secretstore',
 		'--force-sealing',
 		'--infinite-pending-block',
