@@ -111,15 +111,17 @@
             this.startingBlock = isSyncing.currentBlock
           }
 
-          if (isSyncing.highestBlock != 0) {
+          if (isSyncing.highestBlock == 0) {
+            this.syncTotal = 1
+            this.syncProgress = 0
+          }
+          else {
             let startingBlock = isSyncing.startingBlock ? isSyncing.startingBlock : this.startingBlock
             this.syncTotal = isSyncing.highestBlock - startingBlock
             this.syncProgress = isSyncing.currentBlock - startingBlock
-            this.isSyncing = true
           }
-          else {
-            this.isSyncing = false
-          }
+
+          this.isSyncing = true
         }
         else {
           this.isSyncing = false
