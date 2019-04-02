@@ -7,11 +7,17 @@
 
 /* eslint-disable */
 
+import {app} from 'electron'
+import path from 'path'
+
+app.setName('Acuity')
+app.setPath('userData', path.join(app.getPath('appData'), app.getName()))
+
 // Install `electron-debug` with `devtron`
 require('electron-debug')({ showDevTools: true })
 
 // Install `vue-devtools`
-require('electron').app.on('ready', () => {
+app.on('ready', () => {
   let installExtension = require('electron-devtools-installer')
   installExtension.default(installExtension.VUEJS_DEVTOOLS)
     .then(() => {})
