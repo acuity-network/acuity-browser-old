@@ -2,7 +2,9 @@ import { app } from 'electron'
 import path from 'path'
 import { spawn } from 'child_process'
 
-export default async function launchIpfs() {
+let ipfsProcess
+
+async function launch() {
 
 	let os = require('os')
 	let isWindows = os.platform() === 'win32'
@@ -32,17 +34,17 @@ export default async function launchIpfs() {
 		}
 	}
 
-	let ipfs = spawn(commandPath, args, options)
+	ipfsProcess = spawn(commandPath, args, options)
 
-	ipfs.stdout.on('data', (data) => {
+	ipfsProcess.stdout.on('data', (data) => {
 	  console.log(`stdout: ${data}`)
 	})
 
-	ipfs.stderr.on('data', (data) => {
+	ipfsProcess.stderr.on('data', (data) => {
 	  console.log(`stderr: ${data}`)
 	})
 
-	ipfs.on('close', (code) => {
+	ipfsProcess.on('close', (code) => {
 	  console.log(`child process exited with code ${code}`)
 
 		let args = [
@@ -50,19 +52,20 @@ export default async function launchIpfs() {
 				'--routing=dhtclient',
 		]
 
-		ipfs = spawn(commandPath, args, options)
+		ipfsProcess = spawn(commandPath, args, options)
 
-		ipfs.stdout.on('data', (data) => {
+		ipfsProcess.stdout.on('data', (data) => {
 		  console.log(`stdout: ${data}`)
 		})
 
-		ipfs.stderr.on('data', (data) => {
+		ipfsProcess.stderr.on('data', (data) => {
 		  console.log(`stderr: ${data}`)
 		})
-
-		ipfs.on('close', (code) => {
-		  console.log(`child process exited with code ${code}`)
-		})
-
 	})
 }
+
+async function kill() {
+	ipfsProcess.kill()
+}
+
+export default { launch, kill }
