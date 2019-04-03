@@ -1,5 +1,6 @@
 {
   "name": "acuity",
+  "productName": "Acuity",
   "version": "0.0.0",
   "author": "Jonathan Brown <jbrown@mix-blockchain.org>",
   "description": "Reference application for MIX Blockchain.",
@@ -20,8 +21,18 @@
     "unit": "karma start test/unit/karma.conf.js"
   },
   "build": {
+    "productName": "Acuity",
     "files": [
       "dist/electron/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "./src/extraResources/",
+        "to": "extraResources",
+        "filter": [
+          "**/*"
+        ]
+      }
     ],
     "asarUnpack": [
       "**/node_modules/sharp/**/*"
@@ -84,6 +95,7 @@
     "vue-electron": "^1.0.6",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.1",
+    "vue-simple-progress": "^1.1.0",
     "vue-timeago": "^5.0.0",
     "vuex": "^3.0.0",
     "web3": "1.0.0-beta.37"

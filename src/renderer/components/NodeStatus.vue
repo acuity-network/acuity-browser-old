@@ -5,30 +5,42 @@
     </template>
 
     <template slot="body">
-      <b-field label="Web3 version">
-        {{ web3Version }}
-      </b-field>
-      <b-field label="Protocol version">
-        {{ protocolVersion }}
-      </b-field>
-      <b-field label="Network ID">
-        {{ networkId }}
-      </b-field>
-      <b-field label="Block number">
-        {{ blockNumber }}
-      </b-field>
-      <b-field label="Peer count">
-        {{ peerCount }}
-      </b-field>
-      <b-field label="Syncing">
-        {{ isSyncing }}
-      </b-field>
-      <b-field label="Clock synced">
-        {{ isClockSync }}
-      </b-field>
-      <b-field label="Time drift">
-        {{ timeDrift }} ms
-      </b-field>
+      <div v-if="downloadingParity === true">
+        <b-field label="Parity downloading">
+          <progress-bar size="tiny" :val="parityDownloadProgress" max="1000" bar-transition="none" />
+        </b-field>
+      </div>
+      <div v-if="downloadingParity === false">
+        <b-field label="Web3 version">
+          {{ web3Version }}
+        </b-field>
+        <b-field label="Protocol version">
+          {{ protocolVersion }}
+        </b-field>
+        <b-field label="Network ID">
+          {{ networkId }}
+        </b-field>
+        <b-field label="Block number">
+          {{ blockNumber }}
+        </b-field>
+        <b-field label="Peer count">
+          {{ peerCount }}
+        </b-field>
+        <b-field label="Syncing">
+          <div v-if="isSyncing">
+            <progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
+          </div>
+          <div v-else>
+            false
+          </div>
+        </b-field>
+        <b-field label="Clock synced">
+          {{ isClockSync }}
+        </b-field>
+        <b-field label="Time drift">
+          {{ timeDrift }} ms
+        </b-field>
+      </div>
     </template>
   </page>
 </template>
@@ -37,55 +49,102 @@
   import Page from './Page.vue'
   import { checkClockSync } from '@parity/electron'
   import throttle from 'just-throttle'
+  import { ipcRenderer } from 'electron'
+  import ProgressBar from 'vue-simple-progress'
 
   export default {
     name: 'node-status',
     components: {
       Page,
+      ProgressBar,
     },
     data() {
       return {
+        downloadingParity: null,
+        parityDownloadProgress: '',
         web3Version: '',
         protocolVersion: '',
         networkId: '',
         blockNumber: '',
         peerCount: '',
-        isSyncing: '',
+        isSyncing: false,
         isClockSync: '',
         timeDrift: '',
+        startingBlock: 0,
+        highestBlock: 0,
+        syncTotal: 0,
+        syncProgress: 0,
       }
     },
     methods: {
+      async start() {
+        this.downloadingParity = false
+        this.web3Version = this.$web3.version
+        let protocolVersion = await this.$web3.eth.getProtocolVersion()
+        this.protocolVersion = this.$web3.utils.hexToNumber(protocolVersion)
+        this.networkId = await this.$web3.eth.net.getId()
+        let clockSync = await checkClockSync()
+        this.isClockSync = clockSync.isClockSync
+        this.timeDrift = Math.round(clockSync.timeDrift)
+
+        let loadData = throttle(this.loadData, 500, true)
+
+        this.$web3.eth.subscribe('newBlockHeaders')
+        .on('data', block => {
+          loadData()
+        })
+
+        this.$web3.eth.subscribe('syncing')
+        .on('data', sync => {
+          loadData()
+        })
+
+        loadData()
+      },
       async loadData() {
         let blockNumber = await this.$web3.eth.getBlockNumber()
         this.blockNumber = blockNumber.toLocaleString()
-        this.isSyncing = await this.$web3.eth.isSyncing()
-        this.peerCount = await this.$web3.eth.net.getPeerCount()
+        let isSyncing = await this.$web3.eth.isSyncing()
 
-        let clockSync = await checkClockSync()
-        this.isClockSync = clockSync.isClockSync
-        this.timeDrift = clockSync.timeDrift
+        if (isSyncing !== false) {
+          if (this.startingBlock == 0) {
+            this.startingBlock = isSyncing.currentBlock
+          }
+
+          if (isSyncing.highestBlock == 0) {
+            this.syncTotal = 1
+            this.syncProgress = 0
+          }
+          else {
+            let startingBlock = isSyncing.startingBlock ? isSyncing.startingBlock : this.startingBlock
+            this.syncTotal = isSyncing.highestBlock - startingBlock
+            this.syncProgress = isSyncing.currentBlock - startingBlock
+          }
+
+          this.isSyncing = true
+        }
+        else {
+          this.isSyncing = false
+        }
+
+        this.peerCount = await this.$web3.eth.net.getPeerCount()
       }
     },
     async created() {
-      this.web3Version = this.$web3.version
-      let protocolVersion = await this.$web3.eth.getProtocolVersion()
-      this.protocolVersion = this.$web3.utils.hexToNumber(protocolVersion)
-      this.networkId = await this.$web3.eth.net.getId()
+      try {
+        await this.$web3.eth.getProtocolVersion()
+        this.start()
+      }
+      catch (e) {
+        this.downloadingParity = true
+        ipcRenderer.on('parity-download-progress', (event, progress) => {
+          this.parityDownloadProgress = progress * 1000
+        })
 
-      let loadData = throttle(this.loadData, 1000, true)
-
-      this.$web3.eth.subscribe('newBlockHeaders')
-      .on('data', block => {
-        loadData()
-      })
-
-      this.$web3.eth.subscribe('syncing')
-      .on('data', sync => {
-        loadData()
-      })
-
-      loadData()
+        ipcRenderer.on('parity-running', async (event) => {
+          this.start()
+        })
+      }
     },
   }
 </script>
