@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-    
+
     accountCreated: {
         title: "Account Created",
         body: "Mix Account Created!",
@@ -20,6 +20,14 @@ module.exports = {
             body: "Account " + account + " received " + amount + " MIX.",
             icon: path.join(__dirname, '../main/AcuityWebclip.png')
         })
-    }
+    },
+
+    itemIdCopied: (title) => {
+      return ({
+        title: "itemId copied",
+        body: title,
+        icon: path.join(__dirname, '../main/AcuityWebclip.png')
+      })
+    },
 
 }
