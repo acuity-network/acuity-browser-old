@@ -4,6 +4,7 @@ import { app, BrowserWindow } from 'electron'
 var path = require('path')
 import launchParity from '../lib/Parity.js'
 import ipfs from '../lib/Ipfs.js'
+import { shell } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -39,6 +40,12 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  // Force links to open in web browser.
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    event.preventDefault()
+    shell.openExternal(url)
+  });
 }
 
 app.on('ready', createWindow)
