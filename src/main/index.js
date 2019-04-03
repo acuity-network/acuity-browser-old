@@ -5,6 +5,7 @@ import path from 'path'
 import parity from '../lib/Parity.js'
 import ipfs from '../lib/Ipfs.js'
 import { shell } from 'electron'
+import windowStateKeeper from 'electron-window-state'
 
 /**
  * Set `__static` path to static files in production
@@ -20,27 +21,37 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`
 
 function createWindow () {
+  // Load the previous state with fallback to defaults
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 800,
+  });
+
   /**
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, '/mix-logo-filled.png'),
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    icon: path.join(__dirname, '/logo.png'),
     backgroundColor: '#191919',
     webPreferences: {
       nodeIntegration: true,
     },
   })
 
+  mainWindowState.manage(mainWindow);
+
   mainWindow.loadURL(winURL)
 
   parity.launch(mainWindow)
   ipfs.launch()
 
-//  mainWindow.webContents.openDevTools()
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-
   // Force links to open in web browser.
   mainWindow.webContents.on('will-navigate', (event, url) => {
     event.preventDefault()
