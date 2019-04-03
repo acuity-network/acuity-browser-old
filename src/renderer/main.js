@@ -46,6 +46,8 @@ Vue.prototype.$reactions = new Vue.prototype.$web3.eth.Contract(require('../lib/
 Vue.prototype.$tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
 Vue.prototype.$tokenRegistry = new Vue.prototype.$web3.eth.Contract(require('../lib/MixTokenRegistry.abi.json'), Vue.prototype.$tokenRegistryAddress)
 
+Vue.prototype.$notifications = require('../lib/notifications.js')
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },
