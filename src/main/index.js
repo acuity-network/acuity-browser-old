@@ -1,8 +1,8 @@
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
-var path = require('path')
-import launchParity from '../lib/Parity.js'
+import path from 'path'
+import parity from '../lib/Parity.js'
 import ipfs from '../lib/Ipfs.js'
 import { shell } from 'electron'
 
@@ -33,7 +33,7 @@ function createWindow () {
 
   mainWindow.loadURL(winURL)
 
-  launchParity(mainWindow)
+  parity.launch(mainWindow)
   ipfs.launch()
 
 //  mainWindow.webContents.openDevTools()
@@ -63,6 +63,7 @@ app.on('activate', () => {
 })
 
 app.on('will-quit', () => {
+  parity.kill()
   ipfs.kill()
 })
 
