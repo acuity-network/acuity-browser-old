@@ -2,6 +2,8 @@
   <page>
     <template slot="title">
       {{ title }}
+      <span v-on:click="copyItemId" class="clickable mdi mdi-24px mdi-link">
+      </span>
       <span
         v-if="editable"
         v-on:click="toggleEdit"
@@ -107,6 +109,7 @@
   import descriptionProto from '../../lib/description_pb.js'
   import bodyTextProto from '../../lib/body_pb.js'
   import languageProto from '../../lib/language_pb.js'
+  import { clipboard } from 'electron'
 
   export default {
     name: 'view-item',
@@ -297,6 +300,9 @@
           .put('/historyCount', id + 1)
           .write()
         })
+      },
+      async copyItemId(event) {
+        clipboard.writeText(this.itemId)
       },
       async toggleEdit(event) {
         this.editing = !this.editing

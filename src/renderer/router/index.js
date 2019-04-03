@@ -35,6 +35,11 @@ export default new Router({
       component: require('@/components/Interactions').default
     },
     {
+      path: '/goto',
+      name: 'goto',
+      component: require('@/components/Goto').default
+    },
+    {
       path: '/transaction-history',
       name: 'transaction-history',
       component: require('@/components/TransactionHistory').default

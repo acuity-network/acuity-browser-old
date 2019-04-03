@@ -3,7 +3,8 @@
 import { app, BrowserWindow } from 'electron'
 var path = require('path')
 import launchParity from '../lib/Parity.js'
-import launchIpfs from '../lib/Ipfs.js'
+import ipfs from '../lib/Ipfs.js'
+import { shell } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -23,7 +24,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, '/AcuityWebclip.png'),
+    icon: path.join(__dirname, '/mix-logo-filled.png'),
     backgroundColor: '#191919',
     webPreferences: {
       nodeIntegration: true,
@@ -33,12 +34,18 @@ function createWindow () {
   mainWindow.loadURL(winURL)
 
   launchParity(mainWindow)
-  launchIpfs()
+  ipfs.launch()
 
 //  mainWindow.webContents.openDevTools()
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  // Force links to open in web browser.
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    event.preventDefault()
+    shell.openExternal(url)
+  });
 }
 
 app.on('ready', createWindow)
@@ -53,6 +60,10 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+app.on('will-quit', () => {
+  ipfs.kill()
 })
 
 /**
