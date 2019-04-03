@@ -28,7 +28,7 @@ console.log('Initializing database: ' + dbPath)
 var db = level(dbPath)
 Vue.prototype.$db = db
 
-const Web3 = require('web3')
+import Web3 from 'web3'
 var net = require('net')
 //Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.ethereum/mix/geth.ipc', net))
 Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider(path.join(remote.app.getPath('userData'), '/parity.ipc'), net), {})
