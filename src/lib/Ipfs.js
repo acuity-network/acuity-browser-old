@@ -6,23 +6,24 @@ export default async function launchIpfs() {
 
 	let os = require('os')
 	let isWindows = os.platform() === 'win32'
+	let appPath = app.getAppPath()
+	let configPath
 
-	let appRoot = process.cwd()
-  // If inside <appname>.asar try to load from .asar.unpacked
-  // this only works if asar was built with
-  // asar --unpack-dir=node_modules/go-ipfs-dep/* (not tested)
-  // or
-  // electron-packager ./ --asar.unpackDir=node_modules/go-ipfs-dep
-  if (appRoot.includes(`.asar${path.sep}`)) {
-    appRoot = appRoot.replace(`.asar${path.sep}`, `.asar.unpacked${path.sep}`)
+	if (process.env.NODE_ENV !== 'development') {
+    appPath = path.join(appPath, '..', 'app.asar.unpacked')
+		configPath = path.join(appPath, '..', 'extraResources', 'ipfs-config.json')
+	}
+	else {
+		appPath = path.join(appPath, '..', '..', '..', '..', '..')
+		configPath = path.join(appPath, 'src', 'extraResources', 'ipfs-config.json')
 	}
 
-	let command = path.join(appRoot, 'node_modules', 'go-ipfs-dep', 'go-ipfs', isWindows ? 'ipfs.exe' : 'ipfs')
+	let commandPath = path.join(appPath, 'node_modules', 'go-ipfs-dep', 'go-ipfs', isWindows ? 'ipfs.exe' : 'ipfs')
 
 	let args = [
       'init',
 			'--empty-repo',
-      path.join(appRoot, 'src', 'lib', 'IpfsConfig.json')
+			configPath,
 	]
 
 	let options = {
@@ -31,7 +32,7 @@ export default async function launchIpfs() {
 		}
 	}
 
-	let ipfs = spawn(command, args, options)
+	let ipfs = spawn(commandPath, args, options)
 
 	ipfs.stdout.on('data', (data) => {
 	  console.log(`stdout: ${data}`)
@@ -49,7 +50,7 @@ export default async function launchIpfs() {
 				'--routing=dhtclient',
 		]
 
-		ipfs = spawn(command, args, options)
+		ipfs = spawn(commandPath, args, options)
 
 		ipfs.stdout.on('data', (data) => {
 		  console.log(`stdout: ${data}`)

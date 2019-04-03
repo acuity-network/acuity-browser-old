@@ -25,6 +25,15 @@
     "files": [
       "dist/electron/**/*"
     ],
+    "extraResources": [
+      {
+        "from": "./src/extraResources/",
+        "to": "extraResources",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
     "asarUnpack": [
       "**/node_modules/sharp/**/*"
     ],
