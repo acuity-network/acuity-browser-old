@@ -68,6 +68,7 @@
       if (!window.activeAccount) {
         return
       }
+      delete window.fileNames
       let itemId = await window.activeAccount.getProfile()
       let item = await new MixItem(this, itemId).init()
       let revision = await item.latestRevision().load()

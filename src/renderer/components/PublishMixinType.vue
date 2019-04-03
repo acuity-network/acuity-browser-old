@@ -47,6 +47,9 @@
         parentId: '',
       }
     },
+    created() {
+      delete window.fileNames
+    },
     methods: {
       async publish(event) {
         let content = new MixContent(this.$root)

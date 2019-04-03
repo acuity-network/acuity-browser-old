@@ -39,6 +39,9 @@
         description: '',
       }
     },
+    created() {
+      delete window.fileNames
+    },
     methods: {
       chooseFile(event) {
         const {dialog} = require('electron').remote
