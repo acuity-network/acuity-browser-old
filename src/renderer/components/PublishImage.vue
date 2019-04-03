@@ -55,6 +55,7 @@
       }
     },
     created() {
+      delete window.fileNames
       this.$db.createValueStream({
         'gte': '/accountFeeds/' + window.activeAccount.contractAddress + '/',
         'lt': '/accountFeeds/' + window.activeAccount.contractAddress + '/z',

@@ -4,7 +4,7 @@ import path from 'path'
 import Web3 from 'web3'
 var net = require('net')
 
-export default async function launchParity(window) {
+async function launch(window) {
 
 	let parityPath
 	let ipcPath = path.join(app.getPath('userData'), '/parity.ipc')
@@ -51,3 +51,9 @@ export default async function launchParity(window) {
 
 	window.webContents.send('parity-running')
 }
+
+async function kill() {
+	parity.killParity()
+}
+
+export default { launch, kill }

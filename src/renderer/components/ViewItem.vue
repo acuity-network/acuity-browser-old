@@ -303,6 +303,8 @@
       },
       async copyItemId(event) {
         clipboard.writeText(this.itemId)
+        let itemIdCopied = this.$notifications.itemIdCopied(this.title)
+        new Notification(itemIdCopied.title, itemIdCopied);
       },
       async toggleEdit(event) {
         this.editing = !this.editing
