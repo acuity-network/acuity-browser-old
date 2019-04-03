@@ -13,7 +13,7 @@ export default async function launchParity(window) {
 		parityPath = await parity.getParityPath()
 	}
 	catch (e) {
-		parityPath = await parity.fetchParity(window, { parityChannel: 'v2.3.8', onProgress: (progress) => {
+		parityPath = await parity.fetchParity(window, { parityChannel: 'v2.3.9', onProgress: (progress) => {
 			window.webContents.send('parity-download-progress', progress)
 		}})
 	}
