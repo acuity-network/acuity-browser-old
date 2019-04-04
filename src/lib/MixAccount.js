@@ -1,4 +1,6 @@
 const accountAbi = require('./Account.abi.json')
+import ethTx from 'ethereumjs-tx'
+import { remote } from 'electron'
 import path from 'path'
 import fs from 'fs'
 
@@ -29,8 +31,14 @@ export default class MixAccount {
   }
 
   async deploy() {
-    let ethTx = require('ethereumjs-tx')
-    let byteCodePath = path.join('src', 'lib', 'Account.bin')
+    let byteCodePath
+	  if (process.env.NODE_ENV !== 'development') {
+      byteCodePath = path.join(remote.app.getAppPath(), 'src', 'lib', 'Account.bin')
+    }
+    else {
+      byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'lib', 'Account.bin')
+    }
+
     let accountBytecode = fs.readFileSync(byteCodePath, 'ascii')
     let nonce = await this.vue.$web3.eth.getTransactionCount(this.controllerAddress)
     let rawTx = {
