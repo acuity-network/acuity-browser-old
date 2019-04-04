@@ -31,6 +31,8 @@
   import descriptionProto from '../../lib/description_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
+  import path from 'path'
+  import fs from 'fs'
 
   export default {
     name: 'create-token',
@@ -90,9 +92,9 @@
 
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
 
-        let fs = require('fs-extra')
         let ethTx = require('ethereumjs-tx')
-        let accountBytecode = await fs.readFile('./src/lib/CreatorToken.bin', 'ascii')
+        let byteCodePath = path.join('src', 'lib', 'CreatorToken.bin')
+        let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii')
         let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
         let params = [this.symbol, this.name, 18, this.payout, this.$tokenRegistryAddress, itemId]
         let paramsBytecode = this.$web3.eth.abi.encodeParameters(types, params).slice(2)
@@ -102,7 +104,7 @@
           from: window.activeAccount.controllerAddress,
           gas: this.$web3.utils.toHex(2000000),
           gasPrice: '0x3b9aca00',
-          data: '0x' + accountBytecode + paramsBytecode,
+          data: '0x' + tokenBytecode + paramsBytecode,
         }
 
         let tx = new ethTx(rawTx)
