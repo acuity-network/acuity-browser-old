@@ -35,13 +35,13 @@ function createWindow () {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    icon: path.join(__dirname, '/logo.png'),
+    icon: path.join(__dirname, 'logo.png'),
     backgroundColor: '#191919',
     webPreferences: {
       nodeIntegration: true,
     },
   })
-
+  mainWindow.webContents.openDevTools()
   mainWindowState.manage(mainWindow);
 
   mainWindow.loadURL(winURL)
