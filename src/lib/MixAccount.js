@@ -33,10 +33,10 @@ export default class MixAccount {
   async deploy() {
     let byteCodePath
 	  if (process.env.NODE_ENV !== 'development') {
-      byteCodePath = path.join(remote.app.getAppPath(), 'src', 'lib', 'Account.bin')
+      byteCodePath = path.join(remote.app.getAppPath(), '..', 'extraResources', 'Account.bin')
     }
     else {
-      byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'lib', 'Account.bin')
+      byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'Account.bin')
     }
 
     let accountBytecode = fs.readFileSync(byteCodePath, 'ascii')

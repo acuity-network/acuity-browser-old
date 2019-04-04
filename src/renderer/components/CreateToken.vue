@@ -31,6 +31,7 @@
   import descriptionProto from '../../lib/description_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
+  import ethTx from 'ethereumjs-tx'
   import path from 'path'
   import fs from 'fs'
 
@@ -92,8 +93,14 @@
 
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
 
-        let ethTx = require('ethereumjs-tx')
-        let byteCodePath = path.join('src', 'lib', 'CreatorToken.bin')
+        let byteCodePath
+    	  if (process.env.NODE_ENV !== 'development') {
+          byteCodePath = path.join(remote.app.getAppPath(), '..', 'extraResources', 'CreatorToken.bin')
+        }
+        else {
+          byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'CreatorToken.bin')
+        }
+
         let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii')
         let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
         let params = [this.symbol, this.name, 18, this.payout, this.$tokenRegistryAddress, itemId]
