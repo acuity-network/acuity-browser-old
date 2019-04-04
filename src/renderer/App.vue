@@ -76,6 +76,7 @@
         if (!account.contract) {
           return;
         }
+        let startingBlock = await this.$web3.eth.getBlockNumber();
         account.contract.events.Receive({
           fromBlock: 0,
           toBlock: 'pending',
@@ -86,10 +87,11 @@
             sender: log.returnValues.from,
             amount: log.returnValues.value,
           }
-
-          let mixReceivedMsg = this.$notifications.mixReceived(account.contractAddress, this.$web3.utils.fromWei(payment.amount, 'Ether'));
-          new Notification(mixReceivedMsg.title, mixReceivedMsg);
-
+          //only show notifications for TX that occurred since logging in.
+          if(log.blockNumber >= startingBlock) {
+            let mixReceivedMsg = this.$notifications.mixReceived(account.contractAddress, this.$web3.utils.fromWei(payment.amount, 'Ether'));
+            new Notification(mixReceivedMsg.title, mixReceivedMsg);
+          }
           this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
           .then(id => {
             return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
