@@ -30,4 +30,12 @@ module.exports = {
       })
     },
 
+    accountRecovered: (address) => {
+        return ({
+            title: "Account Recovered",
+            body: "Account " + address + " successfully recovered!",
+            icon: path.join(__dirname, '../main/AcuityWebclip.png')
+          })
+    },
+
 }

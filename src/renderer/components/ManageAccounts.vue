@@ -27,7 +27,8 @@
 
         </template>
         <template slot="footer">
-          <router-link :to="{ name: 'manage-accounts-new' }">Create account</router-link>
+          <router-link class="footer-link" :to="{ name: 'manage-accounts-new' }">Create account</router-link>
+          <router-link class="footer-link" :to="{ name: 'recover-account' }">Recover account</router-link>
         </template>
       </b-table>
     </template>
@@ -131,5 +132,9 @@
   .clickable {
     cursor: pointer;
     user-select: none;
+  }
+
+  .footer-link {
+    padding-right: 20px;
   }
 </style>
