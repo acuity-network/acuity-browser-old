@@ -133,6 +133,12 @@ export default new Router({
       path: '/block-explorer',
       name: 'block-explorer',
       component: require('@/components/BlockExplorer').default
+    },
+    {
+      path: '/recover-account',
+      name: 'recover-account',
+      component: require('@/components/RecoverAccount').default
     }
+
   ]
 })
