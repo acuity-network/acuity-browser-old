@@ -93,8 +93,8 @@ function createWindow () {
       }]
     }];
 
-    var osxMenu = menu.buildFromTemplate(template);
-    menu.setApplicationMenu(osxMenu);
+    var osxMenu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(osxMenu);
   }
 
   // Force links to open in web browser.
