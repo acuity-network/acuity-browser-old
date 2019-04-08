@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 import path from 'path'
 import parity from '../lib/Parity.js'
 import ipfs from '../lib/Ipfs.js'
@@ -41,7 +41,6 @@ function createWindow () {
       nodeIntegration: true,
     },
   })
-  mainWindow.webContents.openDevTools()
   mainWindowState.manage(mainWindow);
 
   mainWindow.loadURL(winURL)
@@ -52,6 +51,52 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  if (process.platform === 'darwin') {
+    var template = [{
+      label: 'FromScratch',
+      submenu: [{
+        label: 'Quit',
+        accelerator: 'CmdOrCtrl+Q',
+        click: function() {
+          app.quit();
+        }
+      }]
+    }, {
+      label: 'Edit',
+      submenu: [{
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        selector: 'undo:'
+      }, {
+        label: 'Redo',
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        selector: 'redo:'
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        selector: 'cut:'
+      }, {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        selector: 'copy:'
+      }, {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        selector: 'paste:'
+      }, {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        selector: 'selectAll:'
+      }]
+    }];
+
+    var osxMenu = menu.buildFromTemplate(template);
+    menu.setApplicationMenu(osxMenu);
+  }
+
   // Force links to open in web browser.
   mainWindow.webContents.on('will-navigate', (event, url) => {
     event.preventDefault()
