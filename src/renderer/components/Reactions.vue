@@ -128,8 +128,7 @@
         let who = []
 
         for (let address of reaction.addresses) {
-          let controller = await this.$db.get('/account/contract/' + address + '/controller')
-          let account = await new MixAccount(this.$root, controller).init()
+          let account = await new MixAccount(this.$root, address, true).init()
           let itemId = await account.call(this.$accountProfile.methods.getProfile())
           let profile = await new MixItem(this.$root, itemId).init()
           let revision = await profile.latestRevision().load()

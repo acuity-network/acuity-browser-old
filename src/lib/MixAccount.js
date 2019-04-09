@@ -6,18 +6,26 @@ import fs from 'fs'
 
 export default class MixAccount {
 
-  constructor(vue, controllerAddress) {
+  constructor(vue, address, isContract = false) {
     this.vue = vue
-    this.controllerAddress = controllerAddress
+    if (isContract) {
+      this.contractAddress = address
+    }
+    else {
+      this.controllerAddress = address
+    }
   }
 
   async init() {
-    try {
-      let contractAddress = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/contract')
-      this.contractAddress = contractAddress
-      this.contract = new this.vue.$web3.eth.Contract(accountAbi, contractAddress)
+    if (this.contractAddress) {
+      try {
+        this.controllerAddress = await this.vue.$db.get('/account/contract/' + this.contractAddress + '/controller')
+      } catch (e) {}
     }
-    catch (e) {}
+    else {
+      this.contractAddress = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/contract')
+    }
+    this.contract = new this.vue.$web3.eth.Contract(accountAbi, this.contractAddress)
     return this
   }
 
