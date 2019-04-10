@@ -55,17 +55,18 @@
     },
     "mac": {
       "icon": "build/icons/icon.icns",
-      "target": "zip"
+      "target": "dmg"
     },
     "win": {
       "icon": "build/icons/icon.ico",
-      "target": "nsis"
+      "target": [
+        "nsis",
+        "portable"
+      ]
     },
     "linux": {
       "icon": "build/icons",
-      "target": [
-        "AppImage"
-      ],
+      "target": "AppImage",
       "category": "Network"
     }
   },
