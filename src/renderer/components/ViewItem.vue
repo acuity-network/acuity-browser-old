@@ -303,8 +303,8 @@
       },
       async copyItemId(event) {
         clipboard.writeText(this.itemId)
-        let itemIdCopied = this.$notifications.itemIdCopied(this.title)
-        new Notification(itemIdCopied.title, itemIdCopied);
+        let notification = this.$notifications.itemIdCopied(this.title)
+        new Notification(notification.title, notification)
       },
       async toggleEdit(event) {
         this.editing = !this.editing

@@ -27,20 +27,30 @@ function createWindow () {
     defaultHeight: 800,
   });
 
-  /**
-   * Initial window options
-   */
-  mainWindow = new BrowserWindow({
+  let windowOptions = {
     x: mainWindowState.x,
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    icon: path.join(__dirname, 'logo.png'),
     backgroundColor: '#191919',
     webPreferences: {
       nodeIntegration: true,
     },
-  })
+  }
+
+  if (process.platform === 'linux') {
+    if (process.env.NODE_ENV !== 'development') {
+      windowOptions.icon = path.join(app.getAppPath(), '..', 'extraResources', 'icon.png')
+    }
+    else {
+      windowOptions.icon = path.join(app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'icon.png')
+    }
+  }
+
+  /**
+   * Initial window options
+   */
+  mainWindow = new BrowserWindow(windowOptions)
   mainWindowState.manage(mainWindow);
 
   mainWindow.loadURL(winURL)

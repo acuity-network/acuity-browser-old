@@ -45,7 +45,8 @@
           let account = new MixAccount(this, this.$route.params.address)
           return account.deploy()
 //        } else {
-//          new Notification(this.$notifications.fundAccount.title, this.$notifications.fundAccount)
+//            let notification = this.$notifications.fundAccount()
+//            new Notification(notification.title, notification)
 //        }
       }
     },

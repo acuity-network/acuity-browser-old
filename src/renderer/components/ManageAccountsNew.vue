@@ -42,6 +42,8 @@
         this.$db.put('/account/controllerAddress/' + this.controllerAddress, this.controllerAddress)
         this.$db.put('/account/controller/' + this.controllerAddress + '/privateKey', this.privateKey)
         this.$router.push({ name: 'manage-account-controller', params: { address: this.controllerAddress } })
+        let notification = this.$notifications.accountCreated()
+        new Notification(notification.title, notification)
       },
     },
     async created() {
@@ -49,7 +51,6 @@
       let pk = bip39.mnemonicToSeedHex(this.recoveryPhrase).substr(0, 64)
       this.privateKey = '0x' + pk
       this.controllerAddress = '0x' + ethUtil.privateToAddress(new Buffer.from(pk, 'hex')).toString('hex')
-      new Notification(this.$notifications.accountCreated.title, this.$notifications.accountCreated);
     },
   }
 </script>
