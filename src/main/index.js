@@ -108,7 +108,7 @@ function createWindow () {
   }
 
   // Force links to open in web browser.
-  mainWindow.webContents.on('will-navigate', (event, url) => {
+  mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault()
     shell.openExternal(url)
   });
