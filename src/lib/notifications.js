@@ -7,13 +7,6 @@ export default {
       icon: 'static/icon.png',
     }
   },
-  fundAccount() {
-    return {
-      title: "Insufficient Funds",
-      body: "You must fund your Mix Account before doing this.",
-      icon: 'static/icon.png',
-    }
-  },
   mixReceived(account, amount) {
     return {
       title: "Mix Received",

@@ -22,7 +22,7 @@
           </b-table-column>
 
           <b-table-column field="manage" label=" ">
-            <router-link :to="{ name: 'manage-account-controller', params: { address: props.row.account }}">manage</router-link>
+            <router-link :to="{ name: 'manage-account-activate', params: { controllerAddress: props.row.account }}">activate</router-link>
           </b-table-column>
 
         </template>

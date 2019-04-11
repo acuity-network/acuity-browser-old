@@ -105,9 +105,10 @@ export default new Router({
       component: require('@/components/ManageAccountsNew').default
     },
     {
-      path: '/manage-accounts/controller/:address',
-      name: 'manage-account-controller',
-      component: require('@/components/ManageAccountController').default
+      path: '/manage-accounts/controller/:controllerAddress',
+      name: 'manage-account-activate',
+      component: require('@/components/ManageAccountActivate').default,
+      props: true,
     },
     {
       path: '/node-status',
