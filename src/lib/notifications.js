@@ -1,12 +1,5 @@
 
 export default {
-  accountCreated() {
-    return {
-      title: "Account Created",
-      body: "Mix Account Created!",
-      icon: 'static/icon.png',
-    }
-  },
   mixReceived(account, amount) {
     return {
       title: "Mix Received",

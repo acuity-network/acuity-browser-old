@@ -8,12 +8,6 @@
       <b-field label="Recovery phrase">
         {{ recoveryPhrase }}
       </b-field>
-      <b-field label="Private key">
-        {{ privateKey }}
-      </b-field>
-      <b-field label="Controller address">
-        {{ controllerAddress }}
-      </b-field>
 
       <button class="button" v-on:click="create">Create</button>
     </template>
@@ -41,9 +35,7 @@
       create(event) {
         this.$db.put('/account/controllerAddress/' + this.controllerAddress, this.controllerAddress)
         this.$db.put('/account/controller/' + this.controllerAddress + '/privateKey', this.privateKey)
-        this.$router.push({ name: 'manage-account-controller', params: { address: this.controllerAddress } })
-        let notification = this.$notifications.accountCreated()
-        new Notification(notification.title, notification)
+        this.$router.push({ name: 'manage-account-activate', params: { controllerAddress: this.controllerAddress } })
       },
     },
     async created() {

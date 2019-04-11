@@ -98,9 +98,7 @@
       },
       async select(event) {
         let account = await new MixAccount(this.$root, event.account).init()
-        window.activeAccount = account
-        this.$db.put('/active-account', event.account)
-        this.$root.$emit('change-active-account', event.account)
+        account.select()
       },
       unlock(event) {
         this.$modal.open({
