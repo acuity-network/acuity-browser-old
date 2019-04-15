@@ -131,6 +131,7 @@
           await window.activeAccount.sendData(this.$accountProfile.methods.setProfile(itemId), 0, 'Set profile item')
         }
 
+        this.$root.$emit('change-active-account', window.activeAccount)
         this.$router.push({ name: 'profile' })
       }
     }

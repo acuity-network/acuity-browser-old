@@ -48,10 +48,7 @@ export default class MixItem {
   }
 
   account() {
-    return this.vue.$db.get('/account/contract/' + this.item.owner + '/controller')
-    .then(controller => {
-      return new MixAccount(this.vue, controller).init()
-    })
+    return new MixAccount(this.vue, this.item.owner, true).init()
   }
 
   itemId() {

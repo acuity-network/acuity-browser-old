@@ -44,8 +44,8 @@
                     output.innerHTML = 'This account has already been added.'
                 } else {
                     this.addAccount(pk, address);
-                    let notficationText = this.$notifications.accountRecovered(address);
-                    new Notification(notficationText.title, notficationText);
+                    let notification = this.$notifications.accountRecovered(address)
+                    new Notification(notification.title, notification)
                     this.$router.push({ name: 'manage-account-controller', params: { address: address } });
                 }
             } else {
@@ -66,11 +66,11 @@
                 return false;
             }
         }
-      
+
     },
     created() {
-      
+
     },
   }
-  
+
 </script>

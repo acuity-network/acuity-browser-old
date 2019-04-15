@@ -2,12 +2,12 @@ import * as parity from '@parity/electron';
 import { app } from 'electron'
 import path from 'path'
 import Web3 from 'web3'
-var net = require('net')
+import net from 'net'
 
 async function launch(window) {
 
 	let parityPath
-	let ipcPath = path.join(app.getPath('userData'), '/parity.ipc')
+	let ipcPath = path.join(app.getPath('userData'), 'parity.ipc')
 
 	try {
 		parityPath = await parity.getParityPath()
@@ -40,7 +40,7 @@ async function launch(window) {
 	await parity.runParity({parityPath: parityPath, flags: flags, onParityError: (error) => console.error(error)})
 	// Wait for IPC to come up.
 	let success = false
-	let web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net), {})
+	let web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
 	do {
 		try {
 			await web3.eth.getProtocolVersion()

@@ -16,8 +16,7 @@
       }
     },
     async created() {
-      var controller = await this.$db.get('/account/contract/' + this.address + '/controller')
-      var account = await new MixAccount(this.$root, controller).init()
+      var account = await new MixAccount(this.$root, this.address, true).init()
       var itemId = await account.call(this.$accountProfile.methods.getProfile())
       var profile = await new MixItem(this.$root, itemId).init()
       var revision = await profile.latestRevision().load()

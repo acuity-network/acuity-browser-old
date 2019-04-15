@@ -1,6 +1,9 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
+import electronDebug from 'electron-debug'
+electronDebug({ enabled: true, showDevTools: false })
+
 import path from 'path'
 import parity from '../lib/Parity.js'
 import ipfs from '../lib/Ipfs.js'
@@ -17,7 +20,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
+  ? `http://127.0.0.1:9080`
   : `file://${__dirname}/index.html`
 
 function createWindow () {
@@ -27,21 +30,30 @@ function createWindow () {
     defaultHeight: 800,
   });
 
-  /**
-   * Initial window options
-   */
-  mainWindow = new BrowserWindow({
+  let windowOptions = {
     x: mainWindowState.x,
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    icon: path.join(__dirname, 'logo.png'),
     backgroundColor: '#191919',
     webPreferences: {
       nodeIntegration: true,
     },
-  })
-  mainWindow.webContents.openDevTools()
+  }
+
+  if (process.platform === 'linux') {
+    if (process.env.NODE_ENV !== 'development') {
+      windowOptions.icon = path.join(app.getAppPath(), '..', 'extraResources', 'icon.png')
+    }
+    else {
+      windowOptions.icon = path.join(app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'icon.png')
+    }
+  }
+
+  /**
+   * Initial window options
+   */
+  mainWindow = new BrowserWindow(windowOptions)
   mainWindowState.manage(mainWindow);
 
   mainWindow.loadURL(winURL)
@@ -52,20 +64,60 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  if (process.platform === 'darwin') {
+    var template = [{
+      label: 'FromScratch',
+      submenu: [{
+        label: 'Quit',
+        accelerator: 'CmdOrCtrl+Q',
+        click: function() {
+          app.quit();
+        }
+      }]
+    }, {
+      label: 'Edit',
+      submenu: [{
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        selector: 'undo:'
+      }, {
+        label: 'Redo',
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        selector: 'redo:'
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        selector: 'cut:'
+      }, {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        selector: 'copy:'
+      }, {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        selector: 'paste:'
+      }, {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        selector: 'selectAll:'
+      }]
+    }];
+
+    var osxMenu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(osxMenu);
+  }
+
   // Force links to open in web browser.
-  mainWindow.webContents.on('will-navigate', (event, url) => {
+  mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault()
     shell.openExternal(url)
   });
 }
 
 app.on('ready', createWindow)
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
 
 app.on('activate', () => {
   if (mainWindow === null) {

@@ -26,16 +26,17 @@
         <b-field label="Peer count">
           {{ peerCount }}
         </b-field>
-        <b-field label="Syncing">
+        <b-field label="Catching up">
           <div v-if="isSyncing">
             <progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
           </div>
           <div v-else>
-            false
+            no
           </div>
         </b-field>
         <b-field label="Clock synced">
-          {{ isClockSync }}
+          <span v-if="isClockSync">yes</span>
+          <span v-else>no</span>
         </b-field>
         <b-field label="Time drift">
           {{ timeDrift }} ms

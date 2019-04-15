@@ -22,7 +22,7 @@
           </b-table-column>
 
           <b-table-column field="manage" label=" ">
-            <router-link :to="{ name: 'manage-account-controller', params: { address: props.row.account }}">manage</router-link>
+            <router-link :to="{ name: 'manage-account-activate', params: { controllerAddress: props.row.account }}">activate</router-link>
           </b-table-column>
 
         </template>
@@ -98,9 +98,7 @@
       },
       async select(event) {
         let account = await new MixAccount(this.$root, event.account).init()
-        window.activeAccount = account
-        this.$db.put('/active-account', event.account)
-        this.$root.$emit('change-active-account', event.account)
+        account.select()
       },
       unlock(event) {
         this.$modal.open({

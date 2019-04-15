@@ -41,10 +41,7 @@
         window.activeAccount.call(this.$trustedAccounts.methods.getAllTrusted())
         .then(trusted => {
           for (var account of trusted) {
-            this.$db.get('/account/contract/' + account + '/controller')
-            .then(controller => {
-              return new MixAccount(this.$root, controller).init()
-            })
+            new MixAccount(this.$root, account, true).init()
             .then(account => {
               account.call(this.$accountProfile.methods.getProfile())
               .then(profileItemId => {

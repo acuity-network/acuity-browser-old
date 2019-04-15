@@ -6,18 +6,30 @@ import fs from 'fs'
 
 export default class MixAccount {
 
-  constructor(vue, controllerAddress) {
+  constructor(vue, address, isContract = false) {
     this.vue = vue
-    this.controllerAddress = controllerAddress
+    if (isContract) {
+      this.contractAddress = address
+    }
+    else {
+      this.controllerAddress = address
+    }
   }
 
   async init() {
-    try {
-      let contractAddress = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/contract')
-      this.contractAddress = contractAddress
-      this.contract = new this.vue.$web3.eth.Contract(accountAbi, contractAddress)
+    if (this.contractAddress) {
+      try {
+        this.controllerAddress = await this.vue.$db.get('/account/contract/' + this.contractAddress + '/controller')
+      } catch (e) {}
     }
-    catch (e) {}
+    else {
+      try {
+        this.contractAddress = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/contract')
+      } catch (e) {}
+    }
+    if (this.contractAddress) {
+      this.contract = new this.vue.$web3.eth.Contract(accountAbi, this.contractAddress)
+    }
     return this
   }
 
@@ -31,40 +43,48 @@ export default class MixAccount {
   }
 
   async deploy() {
-    let byteCodePath
-	  if (process.env.NODE_ENV !== 'development') {
-      byteCodePath = path.join(remote.app.getAppPath(), '..', 'extraResources', 'Account.bin')
-    }
-    else {
-      byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'Account.bin')
-    }
+    return new Promise(async (resolve, reject) => {
+      let byteCodePath
+      if (process.env.NODE_ENV !== 'development') {
+        byteCodePath = path.join(remote.app.getAppPath(), '..', 'extraResources', 'Account.bin')
+      }
+      else {
+        byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'Account.bin')
+      }
 
-    let accountBytecode = fs.readFileSync(byteCodePath, 'ascii')
-    let nonce = await this.vue.$web3.eth.getTransactionCount(this.controllerAddress)
-    let rawTx = {
-      nonce: this.vue.$web3.utils.toHex(nonce),
-      from: this.controllerAddress,
-      gas: this.vue.$web3.utils.toHex(1000000),
-      gasPrice: '0x3b9aca00',
-      data: '0x' + accountBytecode,
-    }
+      let accountBytecode = fs.readFileSync(byteCodePath, 'ascii')
+      let nonce = await this.vue.$web3.eth.getTransactionCount(this.controllerAddress)
+      let rawTx = {
+        nonce: this.vue.$web3.utils.toHex(nonce),
+        from: this.controllerAddress,
+        gas: this.vue.$web3.utils.toHex(1000000),
+        gasPrice: '0x3b9aca00',
+        data: '0x' + accountBytecode,
+      }
 
-    let tx = new ethTx(rawTx)
-    let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
-    tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
-    let serializedTx = tx.serialize()
+      let tx = new ethTx(rawTx)
+      let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
+      tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
+      let serializedTx = tx.serialize()
 
-    this.vue.$web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-    .on('error', console.log)
-    .on('transactionHash', console.log)
-    .on('receipt', receipt => {
-      console.log(receipt)
-      this.contractAddress = receipt.contractAddress
-      this.vue.$db.batch()
-      .put('/account/controller/' + this.controllerAddress + '/contract', this.contractAddress)
-      .put('/account/contract/' + this.contractAddress + '/controller', this.controllerAddress)
-      .write()
+      this.vue.$web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+      .on('error', reject)
+      .on('receipt', async receipt => {
+        this.contractAddress = receipt.contractAddress
+        await this.vue.$db.batch()
+        .put('/account/controller/' + this.controllerAddress + '/contract', this.contractAddress)
+        .put('/account/contract/' + this.contractAddress + '/controller', this.controllerAddress)
+        .write()
+        this.contract = new this.vue.$web3.eth.Contract(accountAbi, this.contractAddress)
+        resolve()
+      })
     })
+  }
+
+  select() {
+    window.activeAccount = this
+    this.vue.$db.put('/active-account', this)
+    this.vue.$root.$emit('change-active-account', this)
   }
 
   call(transaction) {
@@ -189,6 +209,14 @@ export default class MixAccount {
         return transaction
       })
     })
+  }
+
+  getControllerBalance() {
+    return this.vue.$web3.eth.getBalance(this.controllerAddress, 'latest')
+  }
+
+  getUnconfirmedControllerBalance() {
+    return this.vue.$web3.eth.getBalance(this.controllerAddress, 'pending')
   }
 
   getBalance() {

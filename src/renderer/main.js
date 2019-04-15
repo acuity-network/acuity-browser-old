@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import axios from 'axios'
 
 import App from './App'
 import router from './router'
@@ -15,23 +14,24 @@ import '@mdi/font/css/materialdesignicons.min.css'
 import 'notosans-fontface/css/notosans-fontface.css'
 import 'typeface-montserrat/index.css'
 
-if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
-Vue.http = Vue.prototype.$http = axios
-Vue.config.productionTip = false
-Vue.config.debug = true
+import VueElectron from 'vue-electron'
+Vue.use(VueElectron)
 
-var level = require('level')
+let axios = require('axios')
+// Attempt to use http adapter (this doesn't work).
+axios.defaults.adapter = require('axios/lib/adapters/http');
+Vue.http = Vue.prototype.$http = axios
+
+import level from 'level'
 import { remote } from 'electron'
 import path from 'path'
-var dbPath = path.join(remote.app.getPath('userData'), '/state.db')
+let dbPath = path.join(remote.app.getPath('userData'), 'state.db')
 console.log('Initializing database: ' + dbPath)
-var db = level(dbPath)
-Vue.prototype.$db = db
+Vue.prototype.$db = level(dbPath)
 
 import Web3 from 'web3'
-var net = require('net')
-//Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.ethereum/mix/geth.ipc', net))
-Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider(path.join(remote.app.getPath('userData'), '/parity.ipc'), net), {})
+import net from 'net'
+Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider(path.join(remote.app.getPath('userData'), 'parity.ipc'), net))
 Vue.prototype.$web3.eth.defaultBlock = 'pending';
 
 Vue.prototype.$itemStoreRegistry = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreRegistry.abi.json'), '0x8928f846012b98aac5cd2f4ef4029097cd4110fc')
@@ -46,7 +46,8 @@ Vue.prototype.$reactions = new Vue.prototype.$web3.eth.Contract(require('../lib/
 Vue.prototype.$tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
 Vue.prototype.$tokenRegistry = new Vue.prototype.$web3.eth.Contract(require('../lib/MixTokenRegistry.abi.json'), Vue.prototype.$tokenRegistryAddress)
 
-Vue.prototype.$notifications = require('../lib/notifications.js')
+import notifications from '../lib/notifications.js'
+Vue.prototype.$notifications = notifications
 
 /* eslint-disable no-new */
 new Vue({
