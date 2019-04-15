@@ -1,6 +1,9 @@
 'use strict'
 
 import { app, BrowserWindow, Menu } from 'electron'
+import electronDebug from 'electron-debug'
+electronDebug({ enabled: true, showDevTools: false })
+
 import path from 'path'
 import parity from '../lib/Parity.js'
 import ipfs from '../lib/Ipfs.js'
