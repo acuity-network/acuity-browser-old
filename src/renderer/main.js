@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import axios from 'axios'
 
 import App from './App'
 import router from './router'
@@ -15,18 +14,18 @@ import '@mdi/font/css/materialdesignicons.min.css'
 import 'notosans-fontface/css/notosans-fontface.css'
 import 'typeface-montserrat/index.css'
 
-if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
-Vue.http = Vue.prototype.$http = axios
-Vue.config.productionTip = false
-Vue.config.debug = true
+import VueElectron from 'vue-electron'
+Vue.use(VueElectron)
 
-var level = require('level')
+Vue.http = Vue.prototype.$http = axios
+import axios from 'axios'
+
+import level from 'level'
 import { remote } from 'electron'
 import path from 'path'
-var dbPath = path.join(remote.app.getPath('userData'), 'state.db')
+let dbPath = path.join(remote.app.getPath('userData'), 'state.db')
 console.log('Initializing database: ' + dbPath)
-var db = level(dbPath)
-Vue.prototype.$db = db
+Vue.prototype.$db = level(dbPath)
 
 import Web3 from 'web3'
 import net from 'net'
