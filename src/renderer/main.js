@@ -17,8 +17,8 @@ import 'typeface-montserrat/index.css'
 import VueElectron from 'vue-electron'
 Vue.use(VueElectron)
 
-Vue.http = Vue.prototype.$http = axios
 import axios from 'axios'
+Vue.http = Vue.prototype.$http = axios
 
 import level from 'level'
 import { remote } from 'electron'
