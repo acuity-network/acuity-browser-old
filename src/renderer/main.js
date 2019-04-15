@@ -23,15 +23,14 @@ Vue.config.debug = true
 var level = require('level')
 import { remote } from 'electron'
 import path from 'path'
-var dbPath = path.join(remote.app.getPath('userData'), '/state.db')
+var dbPath = path.join(remote.app.getPath('userData'), 'state.db')
 console.log('Initializing database: ' + dbPath)
 var db = level(dbPath)
 Vue.prototype.$db = db
 
 import Web3 from 'web3'
-var net = require('net')
-//Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider('/home/jbrown/.ethereum/mix/geth.ipc', net))
-Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider(path.join(remote.app.getPath('userData'), '/parity.ipc'), net), {})
+import net from 'net'
+Vue.prototype.$web3 = new Web3(new Web3.providers.IpcProvider(path.join(remote.app.getPath('userData'), 'parity.ipc'), net))
 Vue.prototype.$web3.eth.defaultBlock = 'pending';
 
 Vue.prototype.$itemStoreRegistry = new Vue.prototype.$web3.eth.Contract(require('../lib/ItemStoreRegistry.abi.json'), '0x8928f846012b98aac5cd2f4ef4029097cd4110fc')

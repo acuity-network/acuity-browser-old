@@ -21,7 +21,7 @@ async function launch() {
 
 	let options = {
 		env: {
-			'IPFS_PATH': path.join(app.getPath('userData'), '/ipfs'),
+			'IPFS_PATH': path.join(app.getPath('userData'), 'ipfs'),
 		}
 	}
 
