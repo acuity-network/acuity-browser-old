@@ -27,7 +27,9 @@ export default class MixAccount {
         this.contractAddress = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/contract')
       } catch (e) {}
     }
-    this.contract = new this.vue.$web3.eth.Contract(accountAbi, this.contractAddress)
+    if (this.contractAddress) {
+      this.contract = new this.vue.$web3.eth.Contract(accountAbi, this.contractAddress)
+    }
     return this
   }
 
