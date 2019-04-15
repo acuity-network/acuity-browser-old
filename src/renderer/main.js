@@ -17,7 +17,9 @@ import 'typeface-montserrat/index.css'
 import VueElectron from 'vue-electron'
 Vue.use(VueElectron)
 
-import axios from 'axios'
+let axios = require('axios')
+// Attempt to use http adapter (this doesn't work).
+axios.defaults.adapter = require('axios/lib/adapters/http');
 Vue.http = Vue.prototype.$http = axios
 
 import level from 'level'
