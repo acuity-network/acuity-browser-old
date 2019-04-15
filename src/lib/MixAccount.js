@@ -57,16 +57,14 @@ export default class MixAccount {
       let rawTx = {
         nonce: this.vue.$web3.utils.toHex(nonce),
         from: this.controllerAddress,
-        gas: this.vue.$web3.utils.toHex(1000000),
         gasPrice: '0x3b9aca00',
         data: '0x' + accountBytecode,
       }
-
+      rawTx.gas = this.vue.$web3.utils.toHex(await this.vue.$web3.eth.estimateGas(rawTx))
       let tx = new ethTx(rawTx)
       let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
-
       this.vue.$web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
       .on('error', reject)
       .on('receipt', async receipt => {
@@ -106,23 +104,16 @@ export default class MixAccount {
   _send(transaction, value) {
     return new Promise(async (resolve, reject) => {
       let nonce = await this.vue.$web3.eth.getTransactionCount(this.controllerAddress)
-/*      let gas = await transaction.estimateGas({
-        from: this.controllerAddress,
-        value: value,
-      })
-*/    let gas = 500000
       let data = await transaction.encodeABI()
       let rawTx = {
         nonce: nonce,
         from: this.controllerAddress,
         to: transaction._parent._address,
-        gas: this.vue.$web3.utils.toHex(gas),
         gasPrice: '0x3b9aca00',
         data: data,
         value: this.vue.$web3.utils.toHex(value),
       }
-
-      let ethTx = require('ethereumjs-tx')
+      rawTx.gas = this.vue.$web3.utils.toHex(await this.vue.$web3.eth.estimateGas(rawTx))
       let tx = new ethTx(rawTx)
       let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
@@ -171,7 +162,6 @@ export default class MixAccount {
           gasPrice: '0x3b9aca00',
           value: this.vue.$web3.utils.toHex(value),
         }
-        let ethTx = require('ethereumjs-tx')
         let tx = new ethTx(rawTx)
         let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
         tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
