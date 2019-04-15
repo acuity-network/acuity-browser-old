@@ -2,7 +2,7 @@ import * as parity from '@parity/electron';
 import { app } from 'electron'
 import path from 'path'
 import Web3 from 'web3'
-import net from 'net')
+import net from 'net'
 
 async function launch(window) {
 
