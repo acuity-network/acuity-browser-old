@@ -39,7 +39,7 @@
 
           <div v-if="isProfile">
             <b-field label="Trusted that trust">
-              <profile-link v-for="address in trustedThatTrust" v-bind:address="address"></profile-link>
+              <profile-link v-for="address in trustedThatTrust" v-bind:address="address" :key="address"></profile-link>
             </b-field>
           </div>
         </div>
@@ -82,9 +82,9 @@
 
       <reactions v-bind:itemId="itemId"></reactions>
 
-      <comment v-if="!isProfile" v-for="childId in childIds" v-bind:itemId="childId"></comment>
+      <comment v-if="!isProfile" v-for="childId in childIds" v-bind:itemId="childId" :key="childId"></comment>
 
-      <view-item v-for="feedId in feedItemIds" v-bind:itemId="feedId"></view-item>
+      <view-item v-for="feedId in feedItemIds" v-bind:itemId="feedId" :key="feedId"></view-item>
 
       <div v-if="startReply">
         <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
