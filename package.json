@@ -90,7 +90,7 @@
     "notosans-fontface": "^1.1.0",
     "qrcode": "^1.2.0",
     "sharp": "^0.20.8",
-    "twemoji": "^11.2.0",
+    "twemoji": "^12.0.0",
     "typeface-montserrat": "^0.0.54",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
