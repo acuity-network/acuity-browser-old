@@ -3,19 +3,35 @@ import { app } from 'electron'
 import path from 'path'
 import Web3 from 'web3'
 import net from 'net'
+import os from 'os'
 
 async function launch(window) {
 
 	let parityPath
-	let ipcPath = path.join(app.getPath('userData'), 'parity.ipc')
+	let ipcPath
+
+	if (os.platform() === 'win32') {
+		ipcPath = '\\\\.\\pipe\\mix.ipc'
+	}
+	else {
+		ipcPath = path.join(app.getPath('userData'), 'parity.ipc')
+	}
+
+	console.log('Parity IPC path: ' + ipcPath)
 
 	try {
 		parityPath = await parity.getParityPath()
 	}
 	catch (e) {
-		parityPath = await parity.fetchParity(window, { parityChannel: 'v2.4.5', onProgress: (progress) => {
-			window.webContents.send('parity-download-progress', progress)
-		}})
+		try {
+			parityPath = await parity.fetchParity(window, { parityChannel: 'v2.4.5', onProgress: (progress) => {
+				window.webContents.send('parity-download-progress', progress)
+			}})
+		}
+		catch (e) {
+			console.error(e)
+			return
+		}
 	}
 
 	let flags = [
@@ -37,7 +53,13 @@ async function launch(window) {
 		'--pruning-memory=0',
 	]
 
-	await parity.runParity({parityPath: parityPath, flags: flags, onParityError: (error) => console.error(error)})
+	try {
+		await parity.runParity({parityPath: parityPath, flags: flags, onParityError: (error) => console.error(error)})
+	}
+	catch (e) {
+		console.error(e)
+		return
+	}
 	// Wait for IPC to come up.
 	let success = false
 	let web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
