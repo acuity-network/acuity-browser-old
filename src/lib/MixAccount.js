@@ -105,15 +105,25 @@ export default class MixAccount {
     return new Promise(async (resolve, reject) => {
       let nonce = await this.vue.$web3.eth.getTransactionCount(this.controllerAddress)
       let data = await transaction.encodeABI()
+      let gas = 200000 //await this.vue.$web3.eth.estimateGas(rawTx)
+      // Check if there is sufficient balance.
+      let BN = this.vue.$web3.utils.BN
+      let controllerBalance = new BN(await this.getUnconfirmedControllerBalance())
+      let requiredBalance = new BN(gas).mul(new BN('1000000000'))
+      if (controllerBalance.lt(requiredBalance)) {
+        let notification = this.vue.$notifications.insufficientMix(this.title)
+        new Notification(notification.title, notification)
+        reject()
+      }
       let rawTx = {
         nonce: nonce,
         from: this.controllerAddress,
         to: transaction._parent._address,
+        gas: this.vue.$web3.utils.toHex(gas),
         gasPrice: '0x3b9aca00',
         data: data,
         value: this.vue.$web3.utils.toHex(value),
       }
-      rawTx.gas = this.vue.$web3.utils.toHex(await this.vue.$web3.eth.estimateGas(rawTx))
       let tx = new ethTx(rawTx)
       let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
