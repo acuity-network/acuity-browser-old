@@ -5,11 +5,34 @@
     </template>
 
     <template slot="body">
-      <b-field label="Recovery Passphrase">
-        <b-input id="phrase" autocomplete="off" inputmode="verbatim" placeholder="" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
-      </b-field>
-    <code id="output" style="display: block; color:red; font-size:small"></code>
-      <button class="button is-primary" v-on:click="submit">Submit</button>
+
+      <div class="block">
+        <b-radio v-model="recoveryType"
+            native-value="phrase">
+            Recovery Phrases
+        </b-radio>
+        <b-radio v-model="recoveryType"
+            native-value="privateKey">
+            Private Key
+        </b-radio>
+      </div>
+      
+      <div v-if="recoveryType == 'phrase'">
+        <b-field label="Recovery Passphrase">
+          <b-input id="phrase" autocomplete="off" inputmode="verbatim" placeholder="" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+        </b-field>
+        <code id="output" style="display: block; color:red; font-size:small"></code>
+        <button class="button is-primary" v-on:click="submitPhrase">Submit</button>
+      </div>
+
+      <div v-else-if="recoveryType == 'privateKey'">
+        <b-field label="Mix Private Key">
+          <b-input id="pk" autocomplete="off" inputmode="verbatim" placeholder="" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+        </b-field>
+        <code id="output2" style="display: block; color:red; font-size:small"></code>
+        <button class="button is-primary" v-on:click="submitPk">Submit</button>
+      </div>
+
     </template>
   </page>
 </template>
@@ -27,11 +50,12 @@
     data() {
       return {
         data: [],
-        selected: {}
+        selected: {},
+        recoveryType:"phrase"
       }
     },
     methods: {
-        async submit() {
+        async submitPhrase() {
             const output = document.getElementById('output');
             output.innerHTML = '';
             const phrase = document.getElementById('phrase').value;
@@ -53,6 +77,32 @@
             }
 
         },
+
+        async submitPk() {
+          const output = document.getElementById('output2');
+          output.innerHTML = '';
+          let pk = document.getElementById('pk').value;
+
+          if(pk.substring(0,2) == '0x') {
+            pk = pk.substring(2);
+          }
+
+          try{
+            let address = '0x' + ethUtil.privateToAddress(new Buffer.from(pk, 'hex')).toString('hex');
+            let exist = await this.accountExist(address);
+            if(exist){
+              output.innerHTML = 'This account has already been added.'
+            } else {
+              this.addAccount(pk, address);
+              let notification = this.$notifications.accountRecovered(address)
+              new Notification(notification.title, notification)
+              this.$router.push({ name: 'manage-account-controller', params: { address: address } });
+            }
+          } catch(e) {
+            output.innerHTML = 'Please enter a valid Mix private key.'
+          }
+        },
+
         async addAccount(pk, address) {
             this.$db.put('/account/controllerAddress/' + address, address)
             this.$db.put('/account/controller/' + address + '/privateKey', pk)
