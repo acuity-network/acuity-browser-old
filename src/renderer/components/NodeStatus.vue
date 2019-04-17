@@ -180,7 +180,7 @@
         for (let address of ipfsId.data.Addresses) {
           addresses.push(address.split('/ipfs/')[0])
         }
-        this.ipfsAddresses = addresses;
+        this.ipfsAddresses = addresses.sort();
 
         let peers = await this.$http.get('http://127.0.0.1:5001/api/v0/swarm/peers')
         this.ipfsPeerCount = peers.data.Peers.length
