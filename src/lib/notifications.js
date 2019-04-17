@@ -21,4 +21,11 @@ export default {
       icon: 'static/icon.png',
     }
   },
+  insufficientMix() {
+    return {
+      title: "Insufficient MIX",
+      body: "Deposit more MIX into your account.",
+      icon: 'static/icon.png',
+    }
+  },
 }
