@@ -53,33 +53,13 @@ async function launch(window) {
 		'--pruning-memory=0',
 	]
 
-	await new Promise(async (resolve, reject) => {
-		function onParityError(error) {
-			// Check if failed to run due to executable not being ready.
-			if (error.code == 'ETXTBSY') {
-				console.log('Parity ETXTBSY')
-				runParity()
-			}
-			else {
-				console.error(error)
-				reject()
-			}
-		}
-
-		async function runParity() {
-			try {
-				await parity.runParity({parityPath: parityPath, flags: flags, onParityError: onParityError})
-			}
-			catch (e) {
-				console.error(e)
-				return
-			}
-			resolve()
-		}
-
-		runParity()
-	})
-
+	try {
+		await parity.runParity({parityPath: parityPath, flags: flags, onParityError: (error) => console.error(error)})
+	}
+	catch (e) {
+		console.error(e)
+		return
+	}
 	// Wait for IPC to come up.
 	let success = false
 	let web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
