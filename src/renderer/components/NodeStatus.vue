@@ -183,7 +183,7 @@
         this.ipfsAddresses = addresses.sort();
 
         let peers = await this.$http.get('http://127.0.0.1:5001/api/v0/swarm/peers')
-        this.ipfsPeerCount = ('Peers' in peers.data) ? peers.data.Peers.length : 0
+        this.ipfsPeerCount = (peers.data.Peers === null) ? 0 : peers.data.Peers.length
 
         let repoStat = await this.$http.get('http://127.0.0.1:5001/api/v0/repo/stat')
         this.ipfsRepoSize = formatByteCount(repoStat.data.RepoSize)
