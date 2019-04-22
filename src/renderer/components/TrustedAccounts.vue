@@ -36,37 +36,24 @@
       }
     },
     methods: {
-      loadData() {
+      async loadData() {
         this.data = []
-        window.activeAccount.call(this.$trustedAccounts.methods.getAllTrusted())
-        .then(trusted => {
-          for (var account of trusted) {
-            new MixAccount(this.$root, account, true).init()
-            .then(account => {
-              account.call(this.$accountProfile.methods.getProfile())
-              .then(profileItemId => {
-                var route = '/item/' + profileItemId
-                new MixItem(this.$root, profileItemId).init()
-                .then(profileItem => {
-                  return profileItem.latestRevision().load()
-                })
-                .then(profileRevision => {
-                  this.data.push({
-                    account: account.contractAddress,
-                    title: profileRevision.getTitle(),
-                    route: route,
-                  })
-                })
-              })
-            })
-          }
+        let trusted = await window.activeAccount.call(this.$trustedAccounts.methods.getAllTrusted())
+        trusted.forEach(async contractAddress => {
+          let account = await new MixAccount(this.$root, contractAddress, true).init()
+          let profileItemId = await account.call(this.$accountProfile.methods.getProfile())
+          let profileItem = await new MixItem(this.$root, profileItemId).init()
+          let profileRevision = await profileItem.latestRevision().load()
+          this.data.push({
+            account: account.contractAddress,
+            title: profileRevision.getTitle(),
+            route: '/item/' + profileItemId,
+          })
         })
       },
-      remove(event) {
-        window.activeAccount.sendData(this.$trustedAccounts.methods.untrustAccount(event.target.dataset.address), 0, 'Untrust account')
-        .then(() => {
-          this.loadData()
-        })
+      async remove(event) {
+        await window.activeAccount.sendData(this.$trustedAccounts.methods.untrustAccount(event.target.dataset.address), 0, 'Untrust account')
+        this.loadData()
       },
     },
     created() {
