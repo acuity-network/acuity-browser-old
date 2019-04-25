@@ -78,8 +78,6 @@
     },
     methods: {
       loadData() {
-        var BN = this.$web3.utils.BN
-
         window.activeAccount.getBalance()
         .then(balance => {
           this.balance = this.$web3.utils.fromWei(balance) + ' MIX'

@@ -107,9 +107,9 @@ export default class MixAccount {
       let data = await transaction.encodeABI()
       let gas = 200000 //await this.vue.$web3.eth.estimateGas(rawTx)
       // Check if there is sufficient balance.
-      let BN = this.vue.$web3.utils.BN
-      let controllerBalance = new BN(await this.getUnconfirmedControllerBalance())
-      let requiredBalance = new BN(gas).mul(new BN('1000000000'))
+      let toBN = this.vue.$web3.utils.toBN
+      let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
+      let requiredBalance = toBN(gas).mul(toBN('1000000000'))
       if (controllerBalance.lt(requiredBalance)) {
         let notification = this.vue.$notifications.insufficientMix(this.title)
         new Notification(notification.title, notification)
@@ -220,24 +220,24 @@ export default class MixAccount {
   }
 
   getBalance() {
-    var BN = this.vue.$web3.utils.BN
+    let toBN = this.vue.$web3.utils.toBN
     return Promise.all([
       this.vue.$web3.eth.getBalance(this.controllerAddress, 'latest'),
       this.vue.$web3.eth.getBalance(this.contractAddress, 'latest'),
     ])
     .then(balances => {
-      return new BN(balances[0]).add(new BN(balances[1]))
+      return toBN(balances[0]).add(toBN(balances[1]))
     })
   }
 
   getUnconfirmedBalance() {
-    var BN = this.vue.$web3.utils.BN
+    let toBN = this.vue.$web3.utils.toBN
     return Promise.all([
       this.vue.$web3.eth.getBalance(this.controllerAddress, 'pending'),
       this.vue.$web3.eth.getBalance(this.contractAddress, 'pending'),
     ])
     .then(balances => {
-      return new BN(balances[0]).add(new BN(balances[1]))
+      return toBN(balances[0]).add(toBN(balances[1]))
     })
   }
 
