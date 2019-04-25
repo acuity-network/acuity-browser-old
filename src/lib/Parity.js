@@ -4,6 +4,9 @@ import path from 'path'
 import Web3 from 'web3'
 import net from 'net'
 import os from 'os'
+import { spawn } from 'child_process'
+
+let parityProcess
 
 async function launch(window) {
 
@@ -34,7 +37,7 @@ async function launch(window) {
 		}
 	}
 
-	let flags = [
+	let args = [
 		'--no-download',
 		'--no-consensus',
 		'--chain=mix',
@@ -51,15 +54,19 @@ async function launch(window) {
 		'--pruning=fast',
 		'--pruning-history=64',
 		'--pruning-memory=0',
+		'--logging=error',
 	]
 
-	try {
-		await parity.runParity({parityPath: parityPath, flags: flags, onParityError: (error) => console.error(error)})
-	}
-	catch (e) {
-		console.error(e)
-		return
-	}
+	parityProcess = spawn(parityPath, args)
+
+	parityProcess.on('error', (err) => {
+		window.webContents.send('parity-error', 'Failed to start (' + err + ')')
+	});
+
+	parityProcess.stderr.on('data', (data) => {
+		window.webContents.send('parity-error', data.toString())
+	})
+
 	// Wait for IPC to come up.
 	let success = false
 	let web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
@@ -75,7 +82,7 @@ async function launch(window) {
 }
 
 async function kill() {
-	parity.killParity()
+	parityProcess.kill()
 }
 
 export default { launch, kill }
