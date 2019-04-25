@@ -23,7 +23,7 @@ const winURL = process.env.NODE_ENV === 'development'
   ? `http://127.0.0.1:9080`
   : `file://${__dirname}/index.html`
 
-function createWindow () {
+async function createWindow () {
   // Load the previous state with fallback to defaults
   let mainWindowState = windowStateKeeper({
     defaultWidth: 1000,
@@ -58,8 +58,9 @@ function createWindow () {
 
   mainWindow.loadURL(winURL)
 
+  // Make sure IPFS is launched before downloading Parity to prevent ETXTBSY.
+  await ipfs.launch()
   parity.launch(mainWindow)
-  ipfs.launch()
 
   mainWindow.on('closed', () => {
     mainWindow = null

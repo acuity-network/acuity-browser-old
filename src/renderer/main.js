@@ -3,6 +3,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import { ipcRenderer } from 'electron'
 
 import Buefy from 'buefy'
 Vue.use(Buefy)
@@ -58,6 +59,10 @@ Vue.prototype.$reactions = new Vue.prototype.$web3.eth.Contract(require('../lib/
 
 Vue.prototype.$tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
 Vue.prototype.$tokenRegistry = new Vue.prototype.$web3.eth.Contract(require('../lib/MixTokenRegistry.abi.json'), Vue.prototype.$tokenRegistryAddress)
+
+ipcRenderer.on('parity-error', (event, error) => {
+  console.log('Parity error: ' + error)
+})
 
 import notifications from '../lib/notifications.js'
 Vue.prototype.$notifications = notifications
