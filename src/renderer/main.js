@@ -2,7 +2,6 @@ import Vue from 'vue'
 
 import App from './App'
 import router from './router'
-import store from './store'
 import { ipcRenderer } from 'electron'
 
 import Buefy from 'buefy'
@@ -69,6 +68,5 @@ Vue.prototype.$notifications = notifications
 new Vue({
   components: { App },
   router,
-  store,
   template: '<App/>'
 }).$mount('#app')
