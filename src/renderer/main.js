@@ -10,6 +10,8 @@ Vue.use(Buefy)
 import VueTimeago from 'vue-timeago'
 Vue.use(VueTimeago, { locale: 'en' })
 
+import i18n from './plugins/i18n';
+
 import '@mdi/font/css/materialdesignicons.min.css'
 import 'notosans-fontface/css/notosans-fontface.css'
 import 'typeface-montserrat/index.css'
@@ -65,5 +67,6 @@ new Vue({
   components: { App },
   router,
   store,
+  i18n,
   template: '<App/>'
 }).$mount('#app')

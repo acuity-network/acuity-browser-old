@@ -4,35 +4,35 @@
       <active-account></active-account>
       <navigation></navigation>
       <p class="menu-label">
-        General
+       {{ $t('general') }}
       </p>
       <ul class="menu-list">
-        <li><router-link to="/home">Home</router-link>
-        <li><router-link to="/feeds">Feeds</router-link>
-        <li><router-link to="/subscriptions">Subscriptions</router-link>
-        <li><router-link to="/interactions">Interactions</router-link>
-        <li><router-link to="/browsing-history">Browsing History</router-link></li>
-        <li><router-link to="/publish-item">Publish Item</router-link></li>
-        <li><router-link to="/goto">Goto</router-link></li>
+        <li><router-link to="/home">{{ $t('home') }}</router-link>
+        <li><router-link to="/feeds">{{ $t('feeds') }}</router-link>
+        <li><router-link to="/subscriptions">{{ $t('subscriptions') }}</router-link>
+        <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
+        <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
+        <li><router-link to="/publish-item">{{ $t('publishItem') }}</router-link></li>
+        <li><router-link to="/goto">{{ $t('goTo') }}</router-link></li>
       </ul>
       <p class="menu-label">
-        Account
+        {{ $t('account') }}
       </p>
       <ul class="menu-list">
-        <li><router-link to="/transaction-history">Transaction History</router-link></li>
-        <li><router-link to="/profile">Profile</router-link></li>
-        <li><router-link to="/trusted-accounts">Trusted Accounts</router-link></li>
-        <li><router-link to="/wallet">Wallet</router-link></li>
-        <li><router-link to="/tokens">Tokens</router-link></li>
+        <li><router-link to="/transaction-history">{{ $t('transactionHistory') }}</router-link></li>
+        <li><router-link to="/profile">{{ $t('profile') }}</router-link></li>
+        <li><router-link to="/trusted-accounts">{{ $t('trustedAccounts') }}</router-link></li>
+        <li><router-link to="/wallet">{{ $t('wallet') }}</router-link></li>
+        <li><router-link to="/tokens">{{ $t('tokens') }}</router-link></li>
       </ul>
       <p class="menu-label">
-        Administration
+        {{ $t('administration') }}
       </p>
       <ul class="menu-list">
-        <li><router-link to="/manage-accounts">Accounts</router-link></li>
-        <li><router-link to="/node-status">Node Status</router-link></li>
-        <li><router-link to="/settings">Settings</router-link></li>
-        <li><router-link to="/debug">Debug</router-link></li>
+        <li><router-link to="/manage-accounts">{{ $t('accounts') }}</router-link></li>
+        <li><router-link to="/node-status">{{ $t('nodeStatus') }}</router-link></li>
+        <li><router-link to="/settings">{{ $t('settings') }}</router-link></li>
+        <li><router-link to="/debug">{{ $t('debug') }}</router-link></li>
       </ul>
     </div>
     <div class="column router-view">
@@ -46,6 +46,7 @@
   import MixPinner from '../lib/MixPinner.js'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
+  import i18n from './plugins/i18n'
 
   export default {
     name: 'd-web',
@@ -67,6 +68,17 @@
       })
       .catch(() => {})
 
+      //load previous selected language
+      this.$db.get('/locale')
+      .then(_locale => {
+        i18n.locale = _locale;
+      })
+      .catch(() => {
+        //initalize locale as default locale, since DB record doesnt exist.
+        this.$db.put('/locale', 'en');
+        i18n.locale = 'en';
+      })
+      
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',
         'lt': '/account/controllerAddress/z',
