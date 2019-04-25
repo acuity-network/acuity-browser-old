@@ -97,7 +97,6 @@
   "devDependencies": {
     "ajv": "^6.5.0",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
     "babel-minify-webpack-plugin": "^0.3.1",
     "babel-plugin-istanbul": "^4.1.6",
