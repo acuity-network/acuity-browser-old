@@ -6,7 +6,7 @@
 
     <template slot="body">
 
-      <b-field label="Languge">
+      <b-field label="Language">
         <b-select v-model="locale">
           <option value="en">English - en</option>
           <option value="ru">Russian - ru</option>
