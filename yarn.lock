@@ -9013,6 +9013,11 @@ vue-html-loader@^1.2.4:
     loader-utils "^1.0.2"
     object-assign "^4.1.0"
 
+vue-i18n@^8.10.0:
+  version "8.11.1"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.11.1.tgz#1a17792d6d2d7abf41444c256f232507a91cbd30"
+  integrity sha512-WYya3lQRpopoeTHfXbBsb6awRUknoka2ZzrrOI1BlmT4GXQF3iaflaCXNmGUhKJIvqPB/HszYgz4p5qSw97DMw==
+
 vue-loader@^15.4.2:
   version "15.7.0"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.7.0.tgz#27275aa5a3ef4958c5379c006dd1436ad04b25b3"
