@@ -56,8 +56,8 @@
     },
     created() {
       // Start the pinner.
-      let pinner = new MixPinner(this.$root)
-      pinner.start()
+      this.pinner = new MixPinner(this.$root)
+      this.pinner.start()
       // Load previous active account.
       this.$db.get('/active-account')
       .then(controller => {
@@ -78,7 +78,7 @@
         this.$db.put('/locale', 'en');
         i18n.locale = 'en';
       })
-      
+
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',
         'lt': '/account/controllerAddress/z',
@@ -148,6 +148,9 @@
           })
         })
       })
+    },
+    destroyed() {
+      this.pinner.stop()
     },
   }
 </script>

@@ -76,7 +76,7 @@
     },
     destroyed() {
       window.clearInterval(this.intervalId)
-    }
+    },
   }
 </script>
 

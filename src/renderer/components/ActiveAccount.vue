@@ -29,13 +29,17 @@
           this.title = ''
           this.image = ''
         }
-      }
+      },
+      changeActiveAccount() {
+        this.loadData()
+      },
     },
     created() {
-      this.$root.$on('change-active-account', accountAddress => {
-        this.loadData()
-      })
+      this.$root.$on('change-active-account', this.changeActiveAccount)
       this.loadData()
+    },
+    destroyed() {
+      this.$root.$off('change-active-account', this.changeActiveAccount)
     },
   }
 </script>
