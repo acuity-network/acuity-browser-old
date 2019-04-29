@@ -54,7 +54,7 @@
       Navigation,
       ActiveAccount,
     },
-    created() {
+    async created() {
       // Start the pinner.
       this.pinner = new MixPinner(this.$root)
       this.pinner.start()
@@ -67,17 +67,9 @@
         })
       })
       .catch(() => {})
-
-      //load previous selected language
-      this.$db.get('/locale')
-      .then(_locale => {
-        i18n.locale = _locale;
-      })
-      .catch(() => {
-        //initalize locale as default locale, since DB record doesnt exist.
-        this.$db.put('/locale', 'en');
-        i18n.locale = 'en';
-      })
+      await this.$settings.init(this.$db)
+      // Load previous selected language.
+      i18n.locale = this.$settings.get('locale')
 
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',
