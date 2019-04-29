@@ -101,7 +101,7 @@ export default class MixAccount {
     return true
   }
 
-  _send(transaction, value) {
+  _send(transaction, value = 0, checkBalance = true) {
     return new Promise(async (resolve, reject) => {
       let nonce = await this.vue.$web3.eth.getTransactionCount(this.controllerAddress)
       let data = await transaction.encodeABI()
@@ -109,8 +109,8 @@ export default class MixAccount {
       // Check if there is sufficient balance.
       let toBN = this.vue.$web3.utils.toBN
       let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
-      let requiredBalance = toBN(gas).mul(toBN('1000000000'))
-      if (controllerBalance.lt(requiredBalance)) {
+      let requiredBalance = toBN(gas * 2).mul(toBN('1000000000'))
+      if (checkBalance && controllerBalance.lt(requiredBalance)) {
         let notification = this.vue.$notifications.insufficientMix(this.title)
         new Notification(notification.title, notification)
         reject()
@@ -129,6 +129,7 @@ export default class MixAccount {
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
       this.vue.$web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+      .on('error', reject)
       .on('transactionHash', transactionHash => {
         this.vue.$web3.eth.getTransaction(transactionHash)
         .then(resolve)
@@ -145,7 +146,7 @@ export default class MixAccount {
       this.vue.$web3.eth.getBalance(this.contractAddress, 'pending')
       .then(balance => {
         if (balance > 0) {
-          this._send(this.contract.methods.withdraw())
+          this._send(this.contract.methods.withdraw(), 0, false)
           .then(tx => {
             resolve()
           })
