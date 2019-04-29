@@ -130,3 +130,7 @@ app.on('will-quit', () => {
   parity.kill()
   ipfs.kill()
 })
+
+app.on('window-all-closed', () => {
+  app.quit()
+})
