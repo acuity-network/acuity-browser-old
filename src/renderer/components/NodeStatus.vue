@@ -146,7 +146,7 @@
         loadData()
       },
       async loadData() {
-          let blockNumber = await this.$web3.eth.getBlockNumber()     
+        let blockNumber = await this.$web3.eth.getBlockNumber()     
         this.blockNumber = blockNumber.toLocaleString()
         let isSyncing = await this.$web3.eth.isSyncing()
 
