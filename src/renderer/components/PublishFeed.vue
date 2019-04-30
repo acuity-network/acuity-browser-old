@@ -13,7 +13,10 @@
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-      <button class="button" v-on:click="chooseFile">Choose image</button>
+      <b-field label="Image" :message="filepath">
+        <button class="button" v-on:click="chooseFile">Choose image</button>
+      </b-field>
+
       <button class="button is-primary" v-on:click="publish">Publish</button>
     </template>
   </page>
@@ -37,6 +40,7 @@
       return {
         title: '',
         description: '',
+        filepath: '',
       }
     },
     created() {
@@ -49,7 +53,7 @@
           title: 'Choose image',
           filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
-          window.fileNames = fileNames
+          this.filepath = fileNames[0]
         })
       },
       async publish(event) {
@@ -77,8 +81,8 @@
         content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
 
         // Image
-        if (window.fileNames) {
-          let image = new Image(this.$root, window.fileNames[0])
+        if (this.filepath != '') {
+          let image = new Image(this.$root, this.filepath)
           content.addMixin(0x12745469, await image.createMixin())
         }
 
