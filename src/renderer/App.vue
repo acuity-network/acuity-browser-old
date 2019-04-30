@@ -4,35 +4,35 @@
       <active-account></active-account>
       <navigation></navigation>
       <p class="menu-label">
-        General
+       {{ $t('general') }}
       </p>
       <ul class="menu-list">
-        <li><router-link to="/home">Home</router-link>
-        <li><router-link to="/feeds">Feeds</router-link>
-        <li><router-link to="/subscriptions">Subscriptions</router-link>
-        <li><router-link to="/interactions">Interactions</router-link>
-        <li><router-link to="/browsing-history">Browsing History</router-link></li>
-        <li><router-link to="/publish-item">Publish Item</router-link></li>
-        <li><router-link to="/goto">Goto</router-link></li>
+        <li><router-link to="/home">{{ $t('home') }}</router-link>
+        <li><router-link to="/feeds">{{ $t('feeds') }}</router-link>
+        <li><router-link to="/subscriptions">{{ $t('subscriptions') }}</router-link>
+        <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
+        <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
+        <li><router-link to="/publish-item">{{ $t('publishItem') }}</router-link></li>
+        <li><router-link to="/goto">{{ $t('goTo') }}</router-link></li>
       </ul>
       <p class="menu-label">
-        Account
+        {{ $t('account') }}
       </p>
       <ul class="menu-list">
-        <li><router-link to="/transaction-history">Transaction History</router-link></li>
-        <li><router-link to="/profile">Profile</router-link></li>
-        <li><router-link to="/trusted-accounts">Trusted Accounts</router-link></li>
-        <li><router-link to="/wallet">Wallet</router-link></li>
-        <li><router-link to="/tokens">Tokens</router-link></li>
+        <li><router-link to="/transaction-history">{{ $t('transactionHistory') }}</router-link></li>
+        <li><router-link to="/profile">{{ $t('profile') }}</router-link></li>
+        <li><router-link to="/trusted-accounts">{{ $t('trustedAccounts') }}</router-link></li>
+        <li><router-link to="/wallet">{{ $t('wallet') }}</router-link></li>
+        <li><router-link to="/tokens">{{ $t('tokens') }}</router-link></li>
       </ul>
       <p class="menu-label">
-        Administration
+        {{ $t('administration') }}
       </p>
       <ul class="menu-list">
-        <li><router-link to="/manage-accounts">Accounts</router-link></li>
-        <li><router-link to="/node-status">Node Status</router-link></li>
-        <li><router-link to="/settings">Settings</router-link></li>
-        <li><router-link to="/debug">Debug</router-link></li>
+        <li><router-link to="/manage-accounts">{{ $t('accounts') }}</router-link></li>
+        <li><router-link to="/node-status">{{ $t('nodeStatus') }}</router-link></li>
+        <li><router-link to="/settings">{{ $t('settings') }}</router-link></li>
+        <li><router-link to="/debug">{{ $t('debug') }}</router-link></li>
       </ul>
     </div>
     <div class="column router-view">
@@ -46,6 +46,7 @@
   import MixPinner from '../lib/MixPinner.js'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
+  import i18n from './plugins/i18n'
 
   export default {
     name: 'd-web',
@@ -53,19 +54,19 @@
       Navigation,
       ActiveAccount,
     },
-    created() {
+    async created() {
       // Start the pinner.
-      let pinner = new MixPinner(this.$root)
-      pinner.start()
+      this.pinner = new MixPinner(this.$root)
+      this.pinner.start()
       // Load previous active account.
-      this.$db.get('/active-account')
-      .then(controller => {
-        new MixAccount(this.$root, controller).init()
-        .then(account => {
-          window.activeAccount = account
-        })
-      })
-      .catch(() => {})
+      try {
+        let controller = await this.$db.get('/active-account')
+        window.activeAccount = await new MixAccount(this.$root, controller).init()
+      }
+      catch(e) {}
+      await this.$settings.init(this.$db)
+      // Load previous selected language.
+      i18n.locale = this.$settings.get('locale')
 
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',
@@ -136,6 +137,9 @@
           })
         })
       })
+    },
+    destroyed() {
+      this.pinner.stop()
     },
   }
 </script>

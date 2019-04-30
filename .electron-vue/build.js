@@ -103,9 +103,9 @@ function greeting () {
 
   if (text && !isCI) {
     say(text, {
-      colors: ['yellow'],
-      font: 'simple3d',
-      space: false
+      colors: ['blue'],
+      font: 'block',
+      space: true
     })
   } else console.log(chalk.yellow.bold('\n  lets-build'))
   console.log()

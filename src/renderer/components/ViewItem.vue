@@ -127,7 +127,7 @@
       return data
     },
     created() {
-      this.$itemStoreIpfsSha256.events.allEvents({
+      this.itemStoreIpfsSha256Emitter = this.$itemStoreIpfsSha256.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })
@@ -142,7 +142,7 @@
         }
       })
 
-      this.$itemDagComments.events.allEvents({
+      this.itemDagCommentsEmitter = this.$itemDagComments.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })
@@ -158,6 +158,10 @@
       })
 
       this.loadData()
+    },
+    destroyed() {
+      this.itemStoreIpfsSha256Emitter.unsubscribe()
+      this.itemDagCommentsEmitter.unsubscribe()
     },
     watch: {
       itemId() {

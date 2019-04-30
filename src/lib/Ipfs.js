@@ -59,7 +59,6 @@ function launch() {
 
 		let argss = [
 			['init', '--empty-repo'],
-			['bootstrap', 'rm', '--all'],
 			['bootstrap', 'add', '/ip4/172.104.175.158/tcp/4001/ipfs/QmQ38hetbvfJwhDXvXxyxT8reydNwPq6n9eXzEB11cwsji'],
 			['bootstrap', 'add', '/ip6/2400:8901::f03c:91ff:fe46:1815/tcp/4001/ipfs/QmQ38hetbvfJwhDXvXxyxT8reydNwPq6n9eXzEB11cwsji'],
 			['bootstrap', 'add', '/ip4/74.207.240.177/tcp/4001/ipfs/QmTdLvqQxAexuJAbSv8MnD3gK5DcscL15WWA8sYUH4vMvi'],
@@ -108,7 +107,11 @@ function launch() {
 		ipfsProcess = spawn(commandPath, ['daemon'], options)
 
 		ipfsProcess.stdout.on('data', (data) => {
-			console.log(data.toString())
+			let string = data.toString()
+			console.log(string)
+			if (string.includes('Daemon is ready')) {
+				resolve()
+			}
 		})
 
 		ipfsProcess.stderr.on('data', (data) => {
@@ -116,8 +119,6 @@ function launch() {
 		})
 
 		ipfsInterval = setInterval(connect, 30000)
-
-		resolve()
 	})
 }
 

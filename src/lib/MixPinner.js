@@ -73,7 +73,7 @@ export default class MixPinner {
     await this.vue.$db.put('/pinBlock', toBlock)
 
     // Start watching.
-    this.vue.$itemStoreIpfsSha256.events.allEvents({
+    this.itemStoreIpfsSha256Emitter = this.vue.$itemStoreIpfsSha256.events.allEvents({
       fromBlock: toBlock + 1,
       toBlock: 'pending',
       topics: ['0x0dbe5761780bd3332f4349220012aa42519557f909b3bfa059ada108fd6b6561',, Array.from(this.accountsToWatch)], // PublishRevision
@@ -85,6 +85,10 @@ export default class MixPinner {
     })
     .on('changed', log => {
     })
+  }
+
+  stop() {
+    this.itemStoreIpfsSha256Emitter.unsubscribe()
   }
 
 }

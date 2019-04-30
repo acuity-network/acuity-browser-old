@@ -93,7 +93,7 @@
       },
     },
     created() {
-      this.$itemStoreIpfsSha256.events.allEvents({
+      this.itemStoreIpfsSha256EventsEmitter = this.$itemStoreIpfsSha256.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })
@@ -104,7 +104,7 @@
         this.loadData()
       })
 
-      this.$itemDagComments.events.allEvents({
+      this.itemDagCommentsEmitter = this.$itemDagComments.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })
@@ -116,6 +116,10 @@
       })
 
       this.loadData()
+    },
+    destroyed() {
+      this.itemStoreIpfsSha256EventsEmitter.unsubscribe()
+      this.itemDagCommentsEmitter.unsubscribe()
     },
   }
 
