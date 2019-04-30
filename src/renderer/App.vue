@@ -59,14 +59,11 @@
       this.pinner = new MixPinner(this.$root)
       this.pinner.start()
       // Load previous active account.
-      this.$db.get('/active-account')
-      .then(controller => {
-        new MixAccount(this.$root, controller).init()
-        .then(account => {
-          window.activeAccount = account
-        })
-      })
-      .catch(() => {})
+      try {
+        let controller = await this.$db.get('/active-account')
+        window.activeAccount = await new MixAccount(this.$root, controller).init()
+      }
+      catch(e) {}
       await this.$settings.init(this.$db)
       // Load previous selected language.
       i18n.locale = this.$settings.get('locale')

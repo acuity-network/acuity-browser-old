@@ -81,7 +81,7 @@ export default class MixAccount {
 
   select() {
     window.activeAccount = this
-    this.vue.$db.put('/active-account', this)
+    this.vue.$db.put('/active-account', this.controllerAddress)
     this.vue.$root.$emit('change-active-account', this)
   }
 
