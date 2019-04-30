@@ -13,16 +13,11 @@
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-<<<<<<< HEAD
-      <button class="button" v-on:click="chooseFile">{{ $t('chooseImage') }}</button>
-      <button class="button is-primary" v-on:click="publish">{{ $t('publish') }}</button>
-=======
       <b-field label="Image" :message="filepath">
-        <button class="button" v-on:click="chooseFile">Choose image</button>
+        <button class="button" v-on:click="chooseFile">{{ $t('chooseImage') }}</button>
       </b-field>
 
-      <button class="button is-primary" v-on:click="publish">Publish</button>
->>>>>>> 485d7f4a88d1160d490ae1da1f1f2f1d3643c00c
+      <button class="button is-primary" v-on:click="publish">{{ $t('publish') }}</button>
     </template>
   </page>
 </template>
