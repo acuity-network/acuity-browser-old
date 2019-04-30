@@ -31,7 +31,7 @@
       }
     },
     created() {
-      this.$reactions.events.allEvents({
+      this.reactionsEmitter = this.$reactions.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })
@@ -45,6 +45,9 @@
       this.loadData()
 
       this.plus = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'})
+    },
+    destroyed() {
+      this.reactionsEmitter.unsubscribe()
     },
     methods: {
       async loadData() {

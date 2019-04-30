@@ -54,31 +54,20 @@
       Navigation,
       ActiveAccount,
     },
-    created() {
+    async created() {
       // Start the pinner.
-      let pinner = new MixPinner(this.$root)
-      pinner.start()
+      this.pinner = new MixPinner(this.$root)
+      this.pinner.start()
       // Load previous active account.
-      this.$db.get('/active-account')
-      .then(controller => {
-        new MixAccount(this.$root, controller).init()
-        .then(account => {
-          window.activeAccount = account
-        })
-      })
-      .catch(() => {})
+      try {
+        let controller = await this.$db.get('/active-account')
+        window.activeAccount = await new MixAccount(this.$root, controller).init()
+      }
+      catch(e) {}
+      await this.$settings.init(this.$db)
+      // Load previous selected language.
+      i18n.locale = this.$settings.get('locale')
 
-      //load previous selected language
-      this.$db.get('/locale')
-      .then(_locale => {
-        i18n.locale = _locale;
-      })
-      .catch(() => {
-        //initalize locale as default locale, since DB record doesnt exist.
-        this.$db.put('/locale', 'en');
-        i18n.locale = 'en';
-      })
-      
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',
         'lt': '/account/controllerAddress/z',
@@ -148,6 +137,9 @@
           })
         })
       })
+    },
+    destroyed() {
+      this.pinner.stop()
     },
   }
 </script>

@@ -24,7 +24,10 @@
         </b-select>
       </b-field>
 
-      <button class="button" v-on:click="chooseFile">Choose image</button>
+      <b-field label="Image" :message="filepath">
+        <button class="button" v-on:click="chooseFile">Choose image</button>
+      </b-field>
+
       <button class="button is-primary" v-on:click="publish">Publish</button>
     </template>
   </page>
@@ -52,6 +55,7 @@
         description: '',
         feeds: [{itemId: '0', title: 'none'}],
         feedId: '0',
+        filepath: '',
       }
     },
     created() {
@@ -80,7 +84,7 @@
           title: 'Choose image',
           filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
-          window.fileNames = fileNames
+          this.filepath = fileNames[0]
         })
       },
       async publish(event) {
@@ -90,7 +94,7 @@
         let content = new MixContent(this.$root)
 
         // Image
-        let image = new Image(this.$root, window.fileNames[0])
+        let image = new Image(this.$root, this.filepath)
         content.addMixin(0x12745469, await image.createMixin())
 
         // Language
