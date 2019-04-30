@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Publish Feed
+      {{ $t('publishFeed') }}
     </template>
 
     <template slot="body">
@@ -13,8 +13,8 @@
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-      <button class="button" v-on:click="chooseFile">Choose image</button>
-      <button class="button is-primary" v-on:click="publish">Publish</button>
+      <button class="button" v-on:click="chooseFile">{{ $t('chooseImage') }}</button>
+      <button class="button is-primary" v-on:click="publish">{{ $t('publish') }}</button>
     </template>
   </page>
 </template>

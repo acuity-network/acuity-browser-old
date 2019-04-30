@@ -1,53 +1,53 @@
 <template>
   <page>
     <template slot="title">
-      Wallet
+      {{ $t('wallet') }}
     </template>
 
     <template slot="body">
       <div class="is-clearfix">
         <img class="qr is-pulled-right" :src="qrcode" />
 
-        <b-field label="Balance">
+        <b-field :label="$t('balance')">
           {{ balance }}
         </b-field>
-        <b-field label="Unconfirmed Balance">
+        <b-field :label="$t('unconfirmedBalance')">
           {{ unconfirmedBalance }}
         </b-field>
       </div>
 
       <b-tabs>
-        <b-tab-item label="Transactions">
+        <b-tab-item :label="$t('transactions')">
           <b-table :data="data" default-sort="timestamp" default-sort-direction="desc">
             <template slot-scope="props">
               <b-table-column field="timestamp" :visible="false" sortable>
                 {{ props.row.timestamp }}
               </b-table-column>
 
-              <b-table-column label="When">
+              <b-table-column :label="$t('when')">
                 <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true"></timeago>
                 <span v-else>pending</span>
               </b-table-column>
 
-              <b-table-column label="Who">
+              <b-table-column :label="$t('receiver')">
                 <code>{{ props.row.who }}</code>
               </b-table-column>
 
-              <b-table-column label="Amount" numeric>
+              <b-table-column :label="$t('amount')" numeric>
                 {{ props.row.amount }}
               </b-table-column>
             </template>
           </b-table>
         </b-tab-item>
 
-        <b-tab-item label="Send">
-          <b-field label="To">
+        <b-tab-item :label="$t('send')">
+          <b-field :label="$t('to')">
             <b-input v-model="to"></b-input>
           </b-field>
-          <b-field label="Amount">
+          <b-field :label="$t('amount')">
             <b-input v-model="amount"></b-input>
           </b-field>
-          <button type="submit" class="button is-primary" v-on:click="confirm">Send</button>
+          <button type="submit" class="button is-primary" v-on:click="confirm">{{ $t('send') }}</button>
         </b-tab-item>
       </b-tabs>
     </template>

@@ -1,15 +1,15 @@
 <template>
   <page>
     <template slot="title">
-      Edit Profile
+      {{ $t('editProfile') }}
     </template>
 
     <template slot="body">
-      <b-field label="Name">
+      <b-field :label="$t('name')">
         <b-input v-model="name"></b-input>
       </b-field>
 
-      <b-field label="Type">
+      <b-field :label="$t('accountType')">
         <b-select v-model="type">
           <option value="0">Anon</option>
           <option value="1">Person</option>
@@ -22,19 +22,19 @@
         </b-select>
       </b-field>
 
-      <b-field label="Location">
+      <b-field :label="$t('location')">
         <b-input v-model="location"></b-input>
       </b-field>
 
-      <b-field label="Bio">
+      <b-field :label="$t('bio')">
         <b-input v-model="bio" type="textarea"></b-input>
       </b-field>
 
-      <b-field label="Image">
-        <button class="button" v-on:click="chooseFile">Choose image</button>
+      <b-field :label="$t('image')">
+        <button class="button" v-on:click="chooseFile">{{ $t('chooseImage') }}</button>
       </b-field>
 
-      <button class="button is-primary" v-on:click="publish">Publish</button>
+      <button class="button is-primary" v-on:click="publish">{{ $t('publish') }}</button>
     </template>
   </page>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Browsing History
+      {{ $t('browsingHistory') }}
     </template>
 
     <template slot="body">

@@ -1,13 +1,13 @@
 <template>
   <page>
     <template slot="title">
-      Feeds
+      {{ $t('feeds') }}
     </template>
 
     <template slot="body">
       <b-table :data="data">
         <template slot-scope="props">
-          <b-table-column label="Feed">
+          <b-table-column :label="$t('feeds')">
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
         </template>
