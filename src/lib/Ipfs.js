@@ -107,7 +107,11 @@ function launch() {
 		ipfsProcess = spawn(commandPath, ['daemon'], options)
 
 		ipfsProcess.stdout.on('data', (data) => {
-			console.log(data.toString())
+			let string = data.toString()
+			console.log(string)
+			if (string.includes('Daemon is ready')) {
+				resolve()
+			}
 		})
 
 		ipfsProcess.stderr.on('data', (data) => {
@@ -115,8 +119,6 @@ function launch() {
 		})
 
 		ipfsInterval = setInterval(connect, 30000)
-
-		resolve()
 	})
 }
 
