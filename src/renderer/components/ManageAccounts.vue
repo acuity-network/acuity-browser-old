@@ -15,12 +15,12 @@
           <b-table-column field="balance" label="Balance">
             {{ props.row.balance }}
           </b-table-column>
-
+<!--
           <b-table-column field="lock" label="">
             <span class="clickable" v-if="props.row.unlocked" v-on:click="lock" :data-address="props.row.account">lock</span>
             <span class="clickable" v-else v-on:click="unlock" :data-address="props.row.account">unlock</span>
           </b-table-column>
-
+-->
           <b-table-column field="manage" label=" ">
             <router-link :to="{ name: 'manage-account-activate', params: { controllerAddress: props.row.account }}">activate</router-link>
           </b-table-column>
