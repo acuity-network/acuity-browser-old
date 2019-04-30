@@ -133,12 +133,12 @@
 
         let loadData = throttle(this.loadData, 500, true)
 
-        this.$web3.eth.subscribe('newBlockHeaders')
+        this.newBlockHeadersEmitter = this.$web3.eth.subscribe('newBlockHeaders')
         .on('data', block => {
           loadData()
         })
 
-        this.$web3.eth.subscribe('syncing')
+        this.syncingEmitter = this.$web3.eth.subscribe('syncing')
         .on('data', sync => {
           loadData()
         })
@@ -205,6 +205,10 @@
           this.start()
         })
       }
+    },
+    destroyed() {
+      this.newBlockHeadersEmitter.unsubscribe()
+      this.syncingEmitter.unsubscribe()
     },
   }
 </script>

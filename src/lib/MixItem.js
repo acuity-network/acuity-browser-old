@@ -11,39 +11,34 @@ export default class MixItem {
   }
 
   init() {
-    return new Promise((resolve, reject) => {
-
-      return this.vue.$itemStoreRegistry.methods.getItemStore(this.itemId).call()
-      .then(itemStoreAddress => {
-        this.itemStoreAddress = itemStoreAddress
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.itemStoreAddress = await this.vue.$itemStoreRegistry.methods.getItemStore(this.itemId).call()
         this.itemStore = new this.vue.$web3.eth.Contract(itemStoreAbi, this.itemStoreAddress)
-        return this.itemStore.methods.getInUse(this.itemId).call()
-      })
-      .then(inUse => {
+        let inUse = await this.itemStore.methods.getInUse(this.itemId).call()
         if (!inUse) {
-          throw 'Item not found.'
+          reject('Item not found.')
+          return
         }
-        else {
-          return this.itemStore.methods.getContractId().call()
-        }
-      })
-      .then(contractId => {
+
+        let contractId = await this.itemStore.methods.getContractId().call()
         if (contractId != "0x1f1e136d1003177d") {
-          throw 'Unknown item store.'
+          reject('Unknown item store.')
+          return
         }
 
-        return this.vue.$itemStoreIpfsSha256.methods.getItem(this.itemId).call()
-        .then(item => {
-          this.item = item
-          this.revisions = []
+        this.item = await this.vue.$itemStoreIpfsSha256.methods.getItem(this.itemId).call()
+        this.revisions = []
 
-          for (var i = 0; i < item.revisionCount; i++) {
-            this.revisions.push(new MixRevision(this.vue, this, i))
-          }
+        for (let i = 0; i < this.item.revisionCount; i++) {
+          this.revisions.push(new MixRevision(this.vue, this, i))
+        }
 
-          resolve(this)
-        })
-      })
+        resolve(this)
+      }
+      catch (e) {
+        reject(e)
+      }
     })
   }
 

@@ -172,6 +172,11 @@
           },
         })
       },
+      accountReceive(accountAddress) {
+        if (accountAddress == window.activeAccount.contractAddress) {
+          this.loadData()
+        }
+      },
     },
     async created() {
       if (!window.activeAccount) {
@@ -183,18 +188,18 @@
         scale: 1,
       })
 
-      this.$root.$on('account-receive', accountAddress => {
-        if (accountAddress == window.activeAccount.contractAddress) {
-          this.loadData()
-        }
-      })
+      this.$root.$on('account-receive', this.accountReceive)
 
-      this.$web3.eth.subscribe('newBlockHeaders')
+      this.newBlockHeadersEmitter = this.$web3.eth.subscribe('newBlockHeaders')
       .on('data', block => {
         this.loadData()
       })
 
       this.loadData()
+    },
+    destroyed() {
+      this.newBlockHeadersEmitter.unsubscribe()
+      this.$root.$off('account-receive', this.accountReceive)
     },
   }
 </script>

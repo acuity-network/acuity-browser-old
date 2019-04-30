@@ -5,14 +5,17 @@
     </template>
 
     <template slot="body">
-
       <b-field :label="$t('language')">
         <b-select v-model="locale">
           <option value="en">English - en</option>
           <option value="ru">Russian - ru</option>
         </b-select>
       </b-field>
-
+      <b-field label="Advanced">
+        <b-checkbox v-model="development">
+          Development mode
+        </b-checkbox>
+      </b-field>
     </template>
   </page>
 </template>
@@ -20,7 +23,6 @@
 <script>
   import Page from './Page.vue'
   import i18n from '../plugins/i18n'
-
   export default {
     name: 'settings',
     components: {
@@ -28,20 +30,18 @@
     },
     data() {
       return {
-        locale:i18n.locale
+        locale: this.$settings.get('locale'),
+        development: this.$settings.get('development'),
       }
-    },
-    methods: {
-
     },
     watch: {
       locale() {
         i18n.locale = this.locale;
-        this.$db.put('/locale', this.locale);
-      }
+        this.$settings.set('locale', this.locale);
+      },
+      development() {
+        this.$settings.set('development', this.development);
+      },
     },
-    async created() {
-
-    }
   }
 </script>

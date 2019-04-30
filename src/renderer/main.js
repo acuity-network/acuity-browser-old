@@ -66,6 +66,9 @@ ipcRenderer.on('parity-error', (event, error) => {
 import notifications from '../lib/notifications.js'
 Vue.prototype.$notifications = notifications
 
+import Settings from '../lib/Settings.js'
+Vue.prototype.$settings = new Settings()
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },
