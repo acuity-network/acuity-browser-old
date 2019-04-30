@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Home
+      {{ $t('home') }}
     </template>
 
     <template slot="body">

@@ -1,35 +1,35 @@
 <template>
   <page>
     <template slot="title">
-      Node Status
+      {{ $t('nodeStatus') }}
     </template>
 
     <template slot="body">
       <div class="columns">
         <div class="column">
-          <h2 class="subtitle">MIX Blockchain</h2>
+          <h2 class="subtitle">{{ $t('mixBlockchain') }}</h2>
           <div v-if="downloadingParity === true">
             <b-field label="Parity downloading">
               <progress-bar size="tiny" :val="parityDownloadProgress" max="1000" bar-transition="none" />
             </b-field>
           </div>
           <div v-if="downloadingParity === false">
-            <b-field label="Web3 version">
+            <b-field :label="$t('web3Version')">
               {{ web3Version }}
             </b-field>
-            <b-field label="Protocol version">
+            <b-field :label="$t('protocolVersion')">
               {{ protocolVersion }}
             </b-field>
-            <b-field label="Network ID">
+            <b-field :label="$t('networkId')">
               {{ networkId }}
             </b-field>
-            <b-field label="Block number">
+            <b-field :label="$t('blockNumber')">
               {{ blockNumber }}
             </b-field>
-            <b-field label="Peer count">
+            <b-field :label="$t('peerCount')">
               {{ peerCount }}
             </b-field>
-            <b-field label="Catching up">
+            <b-field :label="$t('catchingUp')">
               <div v-if="isSyncing">
                 <progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
               </div>
@@ -37,37 +37,37 @@
                 no
               </div>
             </b-field>
-            <b-field label="Clock synced">
+            <b-field :label="$t('clockSync')">
               <span v-if="isClockSync">yes</span>
               <span v-else>no</span>
             </b-field>
-            <b-field label="Time drift">
+            <b-field :label="$t('timeDrift')">
               {{ timeDrift }} ms
             </b-field>
           </div>
         </div>
         <div class="column">
           <h2 class="subtitle">IPFS</h2>
-          <b-field label="Agent">
+          <b-field :label="$t('agent')">
             {{ ipfsAgent }}
           </b-field>
-          <b-field label="Protocol">
+          <b-field :label="$t('protocol')">
             {{ ipfsProtocol }}
           </b-field>
-          <b-field label="Addresses">
+          <b-field :label="$t('addresses')">
             <ul>
               <li v-for="address in ipfsAddresses">
                 {{ address }}
               </li>
             </ul>
           </b-field>
-          <b-field label="Peer count">
+          <b-field :label="$t('peerCount')">
             {{ ipfsPeerCount }}
           </b-field>
-          <b-field label="Repo size">
+          <b-field :label="$t('repoSize')">
             {{ ipfsRepoSize }}
           </b-field>
-          <b-field label="Repo object count">
+          <b-field :label="$t('repoObjectCount')">
             {{ ipfsRepoObjectCount }}
           </b-field>
         </div>
@@ -146,7 +146,7 @@
         loadData()
       },
       async loadData() {
-        let blockNumber = await this.$web3.eth.getBlockNumber()
+          let blockNumber = await this.$web3.eth.getBlockNumber()     
         this.blockNumber = blockNumber.toLocaleString()
         let isSyncing = await this.$web3.eth.isSyncing()
 

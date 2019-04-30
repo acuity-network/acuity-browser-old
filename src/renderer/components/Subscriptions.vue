@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Subscriptions
+      {{ $t('subscriptions') }}
     </template>
 
     <template slot="body">

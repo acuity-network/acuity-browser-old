@@ -1,16 +1,16 @@
 <template>
   <page>
     <template slot="title">
-      Goto
+      {{ $t('goTo') }}
     </template>
 
     <template slot="body">
-      <b-field label="itemId" :message="message">
+      <b-field :label="$t('itemId')" :message="message">
         <b-input v-model="itemId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
 
       </b-field>
 
-      <button class="button is-primary" v-on:click="goto">Goto</button>
+      <button class="button is-primary" v-on:click="goto">{{ $t('goTo') }}</button>
     </template>
   </page>
 </template>

@@ -1,14 +1,14 @@
 <template>
   <page>
     <template slot="title">
-      Publish Item
+      {{ $t('publishItem') }}
     </template>
 
     <template slot="body">
       <ul>
-        <li><router-link to="/publish-item/mixin-type">Publish Mixin Type</router-link></li>
-        <li><router-link to="/publish-item/image">Publish Image</router-link></li>
-        <li><router-link to="/publish-item/feed">Publish Feed</router-link></li>
+        <li><router-link to="/publish-item/mixin-type">{{ $t('publishMixin') }}</router-link></li>
+        <li><router-link to="/publish-item/image">{{ $t('publishImage') }}</router-link></li>
+        <li><router-link to="/publish-item/feed">{{ $t('publishFeed') }}</router-link></li>
       </ul>
     </template>
   </page>

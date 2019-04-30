@@ -5,21 +5,21 @@
     </template>
 
     <template slot="body">
-      <b-field label="Symbol">
+      <b-field :label="$t('symbol')">
         <b-input v-model="symbol"></b-input>
       </b-field>
-      <b-field label="Name">
+      <b-field :label="$t('name')">
         <b-input v-model="name"></b-input>
       </b-field>
-      <b-field label="Description">
+      <b-field :label="$t('description')">
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
-      <b-field label="Daily Payout">
+      <b-field :label="$t('dailyPayout')">
         <b-input v-model="payout"></b-input>
       </b-field>
 
-      <button class="button" v-on:click="chooseFile">Choose image</button>
-      <button class="button is-primary" v-on:click="create">Create</button>
+      <button class="button" v-on:click="chooseFile">{{ $t('chooseImage') }}</button>
+      <button class="button is-primary" v-on:click="create">{{ $t('create') }}</button>
     </template>
   </page>
 </template>

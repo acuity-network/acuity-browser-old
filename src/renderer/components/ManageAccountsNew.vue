@@ -9,7 +9,7 @@
         {{ recoveryPhrase }}
       </b-field>
 
-      <button class="button" v-on:click="create">Create</button>
+      <button class="button" v-on:click="create">{{ $t('create') }}</button>
     </template>
   </page>
 </template>
