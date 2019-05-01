@@ -12,7 +12,7 @@ function get(command, json = true) {
 			path: '/api/v0/' + command,
 		}
 
-		http.request(options)
+		http.get(options)
 		.on('response', res => {
 			let body = ''
 			res.on('data', data => {
@@ -30,7 +30,6 @@ function get(command, json = true) {
 		.on('error', (error) => {
 		  reject(error)
 		})
-		.end()
 	})
 }
 
