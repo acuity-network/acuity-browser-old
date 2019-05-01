@@ -146,7 +146,7 @@
         loadData()
       },
       async loadData() {
-        let blockNumber = await this.$web3.eth.getBlockNumber()     
+        let blockNumber = await this.$web3.eth.getBlockNumber()
         this.blockNumber = blockNumber.toLocaleString()
         let isSyncing = await this.$web3.eth.isSyncing()
 
@@ -172,22 +172,22 @@
         }
 
         this.peerCount = await this.$web3.eth.net.getPeerCount()
-        let ipfsId = await this.$http.get('http://127.0.0.1:5001/api/v0/id')
-        this.ipfsAgent = ipfsId.data.AgentVersion
-        this.ipfsProtocol = ipfsId.data.ProtocolVersion
+        let ipfsId = await this.$ipfsClient.get('id')
+        this.ipfsAgent = ipfsId.AgentVersion
+        this.ipfsProtocol = ipfsId.ProtocolVersion
 
         let addresses = []
-        for (let address of ipfsId.data.Addresses) {
+        for (let address of ipfsId.Addresses) {
           addresses.push(address.split('/ipfs/')[0])
         }
         this.ipfsAddresses = addresses.sort();
 
-        let peers = await this.$http.get('http://127.0.0.1:5001/api/v0/swarm/peers')
-        this.ipfsPeerCount = (peers.data.Peers === null) ? 0 : peers.data.Peers.length
+        let peers = await this.$ipfsClient.get('swarm/peers')
+        this.ipfsPeerCount = (peers.Peers === null) ? 0 : peers.Peers.length
 
-        let repoStat = await this.$http.get('http://127.0.0.1:5001/api/v0/repo/stat')
-        this.ipfsRepoSize = formatByteCount(repoStat.data.RepoSize)
-        this.ipfsRepoObjectCount = repoStat.data.NumObjects
+        let repoStat = await this.$ipfsClient.get('repo/stat')
+        this.ipfsRepoSize = formatByteCount(repoStat.RepoSize)
+        this.ipfsRepoObjectCount = repoStat.NumObjects
       }
     },
     async created() {

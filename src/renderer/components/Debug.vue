@@ -75,8 +75,8 @@
           const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
           output.append('Revision ' + i + ' IPFS hash: ' + ipfsHash + '\n')
 
-          let response = await this.$http.get('http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/' + ipfsHash)
-          const containerPayload = Buffer.from(response.data, "binary")
+          let response = await this.$ipfsClient.get('cat?arg=/ipfs/' + ipfsHash, false)
+          const containerPayload = Buffer.from(response, "binary")
           output.append('Compressed length: ' + containerPayload.length + '\n')
 
           const itemPayload = await brotli.decompress(Buffer.from(containerPayload))
