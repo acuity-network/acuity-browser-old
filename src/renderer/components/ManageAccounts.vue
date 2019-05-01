@@ -8,18 +8,18 @@
       <b-table :data="data" :selected.sync="selected" v-on:click="select" default-sort="account">
         <template slot-scope="props">
 
-          <b-table-column field="account" label="Account" sortable>
+          <b-table-column field="account" :label="$t('account')" sortable>
             <span class="clickable">{{ props.row.name }}</span>
           </b-table-column>
 
-          <b-table-column field="balance" label="Balance">
+          <b-table-column field="balance" :label="$t('balance')">
             {{ props.row.balance }}
           </b-table-column>
 
         </template>
         <template slot="footer">
-          <router-link class="footer-link" :to="{ name: 'manage-accounts-new' }">Create account</router-link>
-          <router-link class="footer-link" :to="{ name: 'recover-account' }">Recover account</router-link>
+          <router-link class="footer-link" :to="{ name: 'manage-accounts-new' }">{{ $t('createAccount') }}</router-link>
+          <router-link class="footer-link" :to="{ name: 'recover-account' }">{{ $t('recoverAccount') }}</router-link>
         </template>
       </b-table>
     </template>

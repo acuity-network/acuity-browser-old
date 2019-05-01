@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Publish Mixin Type
+      {{ $t('publishMixin') }}
     </template>
 
     <template slot="body">
@@ -21,7 +21,7 @@
         <b-input v-model="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
 
-      <button class="button is-primary" v-on:click="publish">Publish</button>
+      <button class="button is-primary" v-on:click="publish">{{ $t('publish') }}</button>
     </template>
   </page>
 </template>

@@ -1,13 +1,13 @@
 <template>
   <page>
     <template slot="title">
-      Trusted Accounts
+      {{ $t('trustedAccounts') }}
     </template>
 
     <template slot="body">
       <b-table :data="data">
         <template slot-scope="props">
-          <b-table-column label="Account">
+          <b-table-column :label="$t('account')">
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
           <b-table-column label="">

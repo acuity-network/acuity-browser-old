@@ -1,11 +1,11 @@
 <template>
   <page>
     <template slot="title">
-      Settings
+      {{ $t('settings') }}
     </template>
 
     <template slot="body">
-      <b-field label="Language">
+      <b-field :label="$t('language')">
         <b-select v-model="locale">
           <option value="en">English - en</option>
           <option value="ru">Russian - ru</option>
@@ -23,7 +23,6 @@
 <script>
   import Page from './Page.vue'
   import i18n from '../plugins/i18n'
-
   export default {
     name: 'settings',
     components: {

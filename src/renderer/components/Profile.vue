@@ -6,16 +6,16 @@
 
     <template slot="body">
       <ul>
-        <li><router-link to="/profile/edit">Edit profile</router-link></li>
+        <li><router-link to="/profile/edit">{{ $t('editProfile') }}</router-link></li>
       </ul>
       <div class="avatar" v-html="image"></div>
-      <b-field label="Account type">
+      <b-field :label="$t('accountType')">
         {{ type }}
       </b-field>
-      <b-field label="Bio">
+      <b-field :label="$t('bio')">
         {{ bio }}
       </b-field>
-      <b-field label="Location">
+      <b-field :label="$t('location')">
         {{ location }}
       </b-field>
     </template>
