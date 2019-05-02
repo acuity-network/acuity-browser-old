@@ -8,7 +8,7 @@ const messages = {
     //Nav Panel
     general: 'General',
     home: 'Home',
-    feeds: 'Feeds',
+    myFeeds: 'My Feeds',
     subscriptions: 'Subscriptions',
     interactions: 'Interactions',
     browsingHistory: 'Browsing History',
@@ -87,7 +87,7 @@ const messages = {
   'ru': {
     general: 'Общие',
     home: 'Домой',
-    feeds: 'Новости',
+    myFeeds: 'Мои каналы',
     subscriptions: 'Подписки',
     interactions: 'Взаимосвязи',
     browsingHistory: 'История браузера',
@@ -171,4 +171,3 @@ const i18n = new VueI18n({
   });
 
 export default i18n;
-  
