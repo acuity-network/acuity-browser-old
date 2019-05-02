@@ -26,7 +26,6 @@
   }
 
   section.is-primary {
-    font-family: "Montserrat";
     margin: 3rem 0;
   }
 
