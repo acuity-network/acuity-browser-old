@@ -14,7 +14,7 @@ export default class MixPinner {
   async pinIpfsHash(ipfsHash) {
     let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), "hex"), 'sha2-256'))
     // Wait for response before continuing to try to avoid DOSing IPFS daemon.
-    await this.vue.$http.get('http://127.0.0.1:5001/api/v0/pin/add?arg=' + encodedIpfsHash)
+    await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
 
     let content = new MixContent(this.vue)
     await content.load(ipfsHash)
@@ -27,7 +27,7 @@ export default class MixPinner {
       for (let mipmap of mipmapList) {
         let encodedIpfsHash = Base58.encode(mipmap.getIpfsHash())
         // Wait for response before continuing to try to avoid DOSing IPFS daemon.
-        await this.vue.$http.get('http://127.0.0.1:5001/api/v0/pin/add?arg=' + encodedIpfsHash)
+        await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
       }
     }
   }
