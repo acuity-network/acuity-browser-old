@@ -13,7 +13,7 @@ Vue.use(VueTimeago, { locale: 'en' })
 import i18n from './plugins/i18n';
 
 import '@mdi/font/css/materialdesignicons.min.css'
-import 'typeface-noto-sans/index.css'
+import 'notosans-fontface/css/notosans-fontface.css'
 import 'typeface-noto-serif/index.css'
 
 import VueElectron from 'vue-electron'
