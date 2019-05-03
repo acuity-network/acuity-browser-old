@@ -30,6 +30,7 @@
   }
 
   h1.title {
+    font-family: "Noto Serif";
     font-weight: bold;
     margin-bottom: 0;
   }

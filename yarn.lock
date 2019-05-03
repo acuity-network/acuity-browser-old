@@ -6352,11 +6352,6 @@ normalize-path@^3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-notosans-fontface@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/notosans-fontface/-/notosans-fontface-1.1.0.tgz#327fd8b54aa3249a44678605d912e31f1449b855"
-  integrity sha512-IhzFGcl0xdFhsDKdpzB4mBB6ScFxKVoK7JNA7eyZ3XCw4/1XV3ZZ2QUql9cGX9rNfQDZjgHLyTOZRkrkd/5YDw==
-
 npm-bundled@^1.0.1:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-1.0.6.tgz#e7ba9aadcef962bb61248f91721cd932b3fe6bdd"
@@ -8735,6 +8730,16 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typeface-noto-sans@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/typeface-noto-sans/-/typeface-noto-sans-0.0.72.tgz#44f1022fe094595240c89f1e362517b1fe35be6c"
+  integrity sha512-a5wI6LUIQ/6XRRf9x/ZXjO4NwfTfcPmkMVe0SoUKVWw/s7GGWERAK73PKFLEmKKGaN59OkwFsotPgYtea0d34A==
+
+typeface-noto-serif@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/typeface-noto-serif/-/typeface-noto-serif-0.0.72.tgz#798e917662322443cec944ac68e2ebd42c2dd2ec"
+  integrity sha512-mhdlDJQF04V50+/mHwiOR+cVV9jl1ITpZhNMnaQF6CqgzS0ujR3+9Alme3OtT1iZd1kp2iM1VxLtzLKhR0Bh3Q==
 
 uc.micro@^1.0.1:
   version "1.0.6"
