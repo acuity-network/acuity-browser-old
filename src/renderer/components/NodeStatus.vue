@@ -131,21 +131,23 @@
         this.isClockSync = clockSync.isClockSync
         this.timeDrift = Math.round(clockSync.timeDrift)
 
-        let loadData = throttle(this.loadData, 500, true)
+        let loadMixData = throttle(this.loadMixData, 500, true)
 
         this.newBlockHeadersEmitter = this.$web3.eth.subscribe('newBlockHeaders')
         .on('data', block => {
-          loadData()
+          loadMixData()
         })
 
         this.syncingEmitter = this.$web3.eth.subscribe('syncing')
         .on('data', sync => {
-          loadData()
+          loadMixData()
         })
 
-        loadData()
+        loadMixData()
+        this.ipfsInterval = setInterval(this.loadIpfsData, 10000)
+        this.loadIpfsData()
       },
-      async loadData() {
+      async loadMixData() {
         let blockNumber = await this.$web3.eth.getBlockNumber()
         this.blockNumber = blockNumber.toLocaleString()
         let isSyncing = await this.$web3.eth.isSyncing()
@@ -172,23 +174,30 @@
         }
 
         this.peerCount = await this.$web3.eth.net.getPeerCount()
-        let ipfsId = await this.$ipfsClient.get('id')
-        this.ipfsAgent = ipfsId.AgentVersion
-        this.ipfsProtocol = ipfsId.ProtocolVersion
+      },
+      async loadIpfsData() {
+        try {
+          let ipfsId = await this.$ipfsClient.get('id')
+          this.ipfsAgent = ipfsId.AgentVersion
+          this.ipfsProtocol = ipfsId.ProtocolVersion
 
-        let addresses = []
-        for (let address of ipfsId.Addresses) {
-          addresses.push(address.split('/ipfs/')[0])
+          let addresses = []
+          for (let address of ipfsId.Addresses) {
+            addresses.push(address.split('/ipfs/')[0])
+          }
+          this.ipfsAddresses = addresses.sort();
+
+          let peers = await this.$ipfsClient.get('swarm/peers')
+          this.ipfsPeerCount = (peers.Peers === null) ? 0 : peers.Peers.length
+
+          let repoStat = await this.$ipfsClient.get('repo/stat')
+          this.ipfsRepoSize = formatByteCount(repoStat.RepoSize)
+          this.ipfsRepoObjectCount = repoStat.NumObjects
         }
-        this.ipfsAddresses = addresses.sort();
-
-        let peers = await this.$ipfsClient.get('swarm/peers')
-        this.ipfsPeerCount = (peers.Peers === null) ? 0 : peers.Peers.length
-
-        let repoStat = await this.$ipfsClient.get('repo/stat')
-        this.ipfsRepoSize = formatByteCount(repoStat.RepoSize)
-        this.ipfsRepoObjectCount = repoStat.NumObjects
-      }
+        catch (e) {
+          setTimeout(this.loadIpfsData, 500)
+        }
+      },
     },
     async created() {
       try {
@@ -209,6 +218,7 @@
     destroyed() {
       this.newBlockHeadersEmitter.unsubscribe()
       this.syncingEmitter.unsubscribe()
+      clearInterval(this.ipfsInterval)
     },
   }
 </script>
