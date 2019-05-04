@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('feeds') }}
+      {{ $t('myFeeds') }}
     </template>
 
     <template slot="body">

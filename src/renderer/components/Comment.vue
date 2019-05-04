@@ -11,7 +11,7 @@
         </span>
       </span>
     </div>
-    <vue-markdown class="markdown" v-bind:source="bodyText"></vue-markdown>
+    <vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" v-bind:source="bodyText"></vue-markdown>
     <reactions v-bind:itemId="itemId"></reactions>
     <comment v-for="childId in childIds" v-bind:itemId="childId" :key="childId"></comment>
     <div v-if="startReply">

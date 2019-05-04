@@ -26,11 +26,11 @@
   }
 
   section.is-primary {
-    font-family: "Montserrat";
     margin: 3rem 0;
   }
 
   h1.title {
+    font-family: "Noto Serif";
     font-weight: bold;
     margin-bottom: 0;
   }

@@ -1,7 +1,7 @@
 {
   "name": "acuity",
   "productName": "Acuity",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "author": "Jonathan Brown <jbrown@mix-blockchain.org>",
   "description": "Reference application for MIX Blockchain.",
   "license": "Apache-2.0",
@@ -85,7 +85,7 @@
     "qrcode": "^1.2.0",
     "sharp": "^0.20.8",
     "twemoji": "^12.0.0",
-    "typeface-montserrat": "^0.0.54",
+    "typeface-noto-serif": "^0.0.72",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-i18n": "^8.10.0",

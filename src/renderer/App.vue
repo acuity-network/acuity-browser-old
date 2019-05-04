@@ -8,7 +8,7 @@
       </p>
       <ul class="menu-list">
         <li><router-link to="/home">{{ $t('home') }}</router-link>
-        <li><router-link to="/feeds">{{ $t('feeds') }}</router-link>
+        <li><router-link to="/feeds">{{ $t('myFeeds') }}</router-link>
         <li><router-link to="/subscriptions">{{ $t('subscriptions') }}</router-link>
         <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
         <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
