@@ -16,7 +16,7 @@
     </template>
 
     <template slot="subtitle">
-      by <router-link :to="ownerRoute">{{ owner }}</router-link>&ensp;
+      by <profile-link :address="ownerAddress"></profile-link>&ensp;
       <span
         v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
         v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
@@ -177,6 +177,7 @@
         data.editing = false
         data.editForm = ''
         data.isSubscribed = false
+        data.ownerAddress = null
         data.owner = ''
         data.ownerRoute = ''
         data.ownerTrustedClass = ''
@@ -212,6 +213,7 @@
         catch (e) {}
         let item = await new MixItem(this.$root, this.itemId).init()
         let account = await item.account()
+        this.ownerAddress = account.contractAddress
         let trustLevel = await item.getTrustLevel()
         if (trustLevel != 1) {
           var trustLevelToggled = await item.getTrustLevelToggled()

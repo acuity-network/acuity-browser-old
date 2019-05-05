@@ -2,7 +2,7 @@
   <div v-if="trusted" class="comment">
     <div class="profile is-clearfix">
       <div class="avatar is-pulled-left" v-html="avatar"></div>
-      <router-link :to="ownerRoute">{{ author }}</router-link>,
+      <profile-link :address="ownerAddress"></profile-link>
         <span v-if="timestamp > 0">
           <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
         </span>
@@ -32,6 +32,7 @@
   import bodyTextProto from '../../lib/body_pb.js'
   import languageProto from '../../lib/language_pb.js'
   import Reactions from './Reactions.vue'
+  import ProfileLink from './ProfileLink.vue'
 
   export default {
     name: 'comment',
@@ -39,17 +40,17 @@
     components: {
       VueMarkdown,
       Reactions,
+      ProfileLink,
     },
     data() {
       return {
         trusted: false,
         avatar: '',
-        author: '',
+        ownerAddress: null,
         timestamp: '',
         bodyText: '',
         childIds: [],
         reply: '',
-        ownerRoute: '',
         startReply: false,
       }
     },
@@ -58,12 +59,11 @@
         var item = await new MixItem(this.$root, this.itemId).init()
         this.trusted = await item.isTrusted()
         var account = await item.account()
+        this.ownerAddress = account.contractAddress
         var itemId = await account.call(this.$accountProfile.methods.getProfile())
         var profile = await new MixItem(this.$root, itemId).init()
         var revision = await profile.latestRevision().load()
         this.avatar = revision.getImage(32, 32)
-        this.author = revision.getTitle()
-        this.ownerRoute = '/item/' + itemId
 
         var commentRevision = await item.latestRevision().load()
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000)
@@ -136,7 +136,7 @@
     height: 32px;
   }
 
-  .author {
+  .profile {
     line-height: 32px;
   }
 
