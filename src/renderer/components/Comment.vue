@@ -131,6 +131,9 @@
 <style scoped>
   .avatar {
     margin-right: 10px;
+  }
+
+  .avatar >>> img {
     object-fit: cover;
     width: 32px;
     height: 32px;

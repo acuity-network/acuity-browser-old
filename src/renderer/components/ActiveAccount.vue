@@ -45,10 +45,15 @@
 </script>
 
 <style scoped>
+
   .avatar {
     margin-right: 10px;
+  }
+
+  .avatar >>> img {
     object-fit: cover;
     width: 64px;
     height: 64px;
   }
+
 </style>
