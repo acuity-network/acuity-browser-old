@@ -9,7 +9,7 @@
         <b-input v-model="itemId" @keydown.native.enter="goto" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
 
-      <button class="button is-primary" @click="goto">{{ $t('goTo') }}</button>
+      <button class="button is-primary" @click="goto">{{ $t('goto') }}</button>
     </template>
   </page>
 </template>
