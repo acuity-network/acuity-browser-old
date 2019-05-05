@@ -11,9 +11,9 @@
         </span>
       </span>
     </div>
-    <vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" v-bind:source="bodyText"></vue-markdown>
-    <reactions v-bind:itemId="itemId"></reactions>
-    <comment v-for="childId in childIds" v-bind:itemId="childId" :key="childId"></comment>
+    <vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="bodyText"></vue-markdown>
+    <reactions :itemId="itemId"></reactions>
+    <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
     <div v-if="startReply">
       <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
       <button class="button is-primary" v-on:click="publishReply">Reply</button>

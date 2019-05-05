@@ -5,7 +5,7 @@
     </template>
 
     <template slot="body">
-      <view-item v-for="itemId in itemIds" v-bind:itemId="itemId" :key="itemId"></view-item>
+      <view-item v-for="itemId in itemIds" :itemId="itemId" :key="itemId"></view-item>
     </template>
 
   </page>
