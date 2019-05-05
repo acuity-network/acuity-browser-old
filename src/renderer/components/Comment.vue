@@ -2,7 +2,7 @@
   <div v-if="trusted" class="comment">
     <div class="profile is-clearfix">
       <div class="avatar is-pulled-left" v-html="avatar"></div>
-      <span class="author">{{ author }},
+      <router-link :to="ownerRoute">{{ author }}</router-link>,
         <span v-if="timestamp > 0">
           <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
         </span>
@@ -17,6 +17,7 @@
     <div v-if="startReply">
       <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
       <button class="button is-primary" v-on:click="publishReply">Reply</button>
+      <button class="button" v-on:click="startReply = false">Close</button>
     </div>
     <div v-else>
       <button class="button is-primary" v-on:click="startReply = true">Reply</button>
@@ -48,6 +49,7 @@
         bodyText: '',
         childIds: [],
         reply: '',
+        ownerRoute: '',
         startReply: false,
       }
     },
@@ -61,6 +63,7 @@
         var revision = await profile.latestRevision().load()
         this.avatar = revision.getImage(32, 32)
         this.author = revision.getTitle()
+        this.ownerRoute = '/item/' + itemId
 
         var commentRevision = await item.latestRevision().load()
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000)
@@ -146,5 +149,9 @@
 
   .comment-box {
     margin: 10px 0;
+  }
+
+  .button {
+    margin-right:10px;
   }
 </style>

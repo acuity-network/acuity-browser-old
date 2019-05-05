@@ -89,6 +89,7 @@
       <div v-if="startReply">
         <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
         <button class="button is-primary" v-on:click="publishReply">Reply</button>
+        <button class="button" v-on:click="startReply = false">Close</button>
       </div>
       <div v-else>
         <button class="button is-primary" v-on:click="startReply = true">Reply</button>
@@ -404,5 +405,9 @@
 
   .comment-box {
     margin: 10px 0;
+  }
+
+  .button {
+    margin-right:10px;
   }
 </style>
