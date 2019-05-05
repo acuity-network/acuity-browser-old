@@ -13,7 +13,7 @@
         <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
         <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
         <li><router-link to="/publish-item">{{ $t('publishItem') }}</router-link></li>
-        <li><router-link to="/goto">{{ $t('goTo') }}</router-link></li>
+        <li><router-link to="/goto">{{ $t('gotoItem') }}</router-link></li>
       </ul>
       <p class="menu-label">
         {{ $t('account') }}
