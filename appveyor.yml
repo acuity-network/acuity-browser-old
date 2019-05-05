@@ -20,7 +20,7 @@ init:
   - git config --global core.autocrlf input
 
 install:
-  - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild 12) x64
+  - ps: Install-Product node 11 x64
   - choco install yarn --ignore-dependencies
   - git reset --hard HEAD
   - yarn
