@@ -11,7 +11,7 @@
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
           <b-table-column label="">
-            <span class="remove" v-on:click="remove" :data-address="props.row.account">remove</span>
+            <span class="remove" @click="remove" :data-address="props.row.account">remove</span>
           </b-table-column>
         </template>
       </b-table>

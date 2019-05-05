@@ -2,26 +2,26 @@
   <page>
     <template slot="title">
       {{ title }}
-      <span v-on:click="copyItemId" class="clickable mdi mdi-24px mdi-link">
+      <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
       </span>
       <span
         v-if="editable"
-        v-on:click="toggleEdit"
+        @click="toggleEdit"
         class="clickable mdi mdi-24px mdi-square-edit-outline">
       </span>
       <span v-if="isFeed">
-        <button v-if="!isSubscribed" class="button is-primary" v-on:click="subscribe">Subscribe</button>
-        <button v-if="isSubscribed" class="button is-primary" v-on:click="unsubscribe">Unsubscribe</button>
+        <button v-if="!isSubscribed" class="button is-primary" @click="subscribe">Subscribe</button>
+        <button v-if="isSubscribed" class="button is-primary" @click="unsubscribe">Unsubscribe</button>
       </span>
     </template>
 
     <template slot="subtitle">
       by <profile-link :address="ownerAddress"></profile-link>&ensp;
       <span
-        v-on:mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
-        v-on:mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
+        @mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
+        @mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
-        v-on:click="toggleTrust"></span><br />
+        @click="toggleTrust"></span><br />
       <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
       <span v-if="timestamp > 0">
         <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
@@ -52,7 +52,7 @@
             <b-input v-model="description" type="textarea" rows="20"></b-input>
           </b-field>
 
-          <button class="button is-primary" v-on:click="publish">Publish</button>
+          <button class="button is-primary" @click="publish">Publish</button>
         </div>
       </div>
 
@@ -88,11 +88,11 @@
 
       <div v-if="startReply">
         <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
-        <button class="button is-primary" v-on:click="publishReply">Reply</button>
-        <button class="button" v-on:click="startReply = false">Close</button>
+        <button class="button is-primary" @click="publishReply">Reply</button>
+        <button class="button" @click="startReply = false">Close</button>
       </div>
       <div v-else>
-        <button class="button is-primary" v-on:click="startReply = true">Reply</button>
+        <button class="button is-primary" @click="startReply = true">Reply</button>
       </div>
     </template>
   </page>

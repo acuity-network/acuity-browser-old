@@ -16,11 +16,11 @@
     <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
     <div v-if="startReply">
       <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
-      <button class="button is-primary" v-on:click="publishReply">Reply</button>
-      <button class="button" v-on:click="startReply = false">Close</button>
+      <button class="button is-primary" @click="publishReply">Reply</button>
+      <button class="button" @click="startReply = false">Close</button>
     </div>
     <div v-else>
-      <button class="button is-primary" v-on:click="startReply = true">Reply</button>
+      <button class="button is-primary" @click="startReply = true">Reply</button>
     </div>
   </div>
 </template>

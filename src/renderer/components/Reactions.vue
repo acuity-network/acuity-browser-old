@@ -1,11 +1,11 @@
 <template>
 
   <div>
-    <span class="reactions" v-for="reaction in reactions" v-html="reaction.html + ' ' + reaction.count" v-on:mouseenter="setWho(reaction)" v-on:mouseleave="who = '&nbsp;'"  v-on:click="toggle(reaction)"></span>
-    <span class="reactions" v-html="plus" v-on:click="react = !react"></span>
+    <span class="reactions" v-for="reaction in reactions" v-html="reaction.html + ' ' + reaction.count" @mouseenter="setWho(reaction)" @mouseleave="who = '&nbsp;'"  @click="toggle(reaction)"></span>
+    <span class="reactions" v-html="plus" @click="react = !react"></span>
     <div v-html="who"></div>
     <div v-if="react" class="available">
-      <span v-for="emoji in available" v-html="emoji.html" v-on:click="addReaction(emoji.binary)"></span>
+      <span v-for="emoji in available" v-html="emoji.html" @click="addReaction(emoji.binary)"></span>
     </div>
   </div>
 

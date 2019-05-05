@@ -47,7 +47,7 @@
           <b-field :label="$t('amount')">
             <b-input v-model="amount"></b-input>
           </b-field>
-          <button type="submit" class="button is-primary" v-on:click="confirm">{{ $t('send') }}</button>
+          <button type="submit" class="button is-primary" @click="confirm">{{ $t('send') }}</button>
         </b-tab-item>
       </b-tabs>
     </template>

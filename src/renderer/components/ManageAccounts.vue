@@ -5,7 +5,7 @@
     </template>
 
     <template slot="body">
-      <b-table :data="data" :selected.sync="selected" v-on:click="select" default-sort="account">
+      <b-table :data="data" :selected.sync="selected" @click="select" default-sort="account">
         <template slot-scope="props">
 
           <b-table-column field="account" :label="$t('account')" sortable>

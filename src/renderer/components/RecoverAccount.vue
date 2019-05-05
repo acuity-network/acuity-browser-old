@@ -9,7 +9,7 @@
         <b-input id="phrase" autocomplete="off" inputmode="verbatim" placeholder="" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
     <code id="output" style="display: block; color:red; font-size:small"></code>
-      <button class="button is-primary" v-on:click="submit">Submit</button>
+      <button class="button is-primary" @click="submit">Submit</button>
     </template>
   </page>
 </template>

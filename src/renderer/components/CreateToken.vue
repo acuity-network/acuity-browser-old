@@ -18,8 +18,8 @@
         <b-input v-model="payout"></b-input>
       </b-field>
 
-      <button class="button" v-on:click="chooseFile">{{ $t('chooseImage') }}</button>
-      <button class="button is-primary" v-on:click="create">{{ $t('create') }}</button>
+      <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
+      <button class="button is-primary" @click="create">{{ $t('create') }}</button>
     </template>
   </page>
 </template>

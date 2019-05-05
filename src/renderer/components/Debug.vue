@@ -9,7 +9,7 @@
         <b-input id="itemId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
 
-      <button class="button is-primary" v-on:click="read">{{ $t('readItem') }}</button>
+      <button class="button is-primary" @click="read">{{ $t('readItem') }}</button>
       <code id="output" style="display: block; white-space: pre;"></code>
     </template>
   </page>

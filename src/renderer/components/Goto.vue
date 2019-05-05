@@ -10,7 +10,7 @@
 
       </b-field>
 
-      <button class="button is-primary" v-on:click="goto">{{ $t('goTo') }}</button>
+      <button class="button is-primary" @click="goto">{{ $t('goTo') }}</button>
     </template>
   </page>
 </template>

@@ -31,10 +31,10 @@
       </b-field>
 
       <b-field label="Image" :message="filepath">
-        <button class="button" v-on:click="chooseFile">{{ $t('chooseImage') }}</button>
+        <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
       </b-field>
 
-      <button class="button is-primary" v-on:click="publish">{{ $t('publish') }}</button>
+      <button class="button is-primary" @click="publish">{{ $t('publish') }}</button>
     </template>
   </page>
 </template>
