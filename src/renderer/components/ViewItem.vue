@@ -241,7 +241,7 @@
         }
 
         this.childIds = await this.$itemDagComments.methods.getAllChildIds(this.itemId).call()
-        this.feedItemIds = await this.$itemDagFeedItems.methods.getAllChildIds(this.itemId).call()
+        this.feedItemIds = (await this.$itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 
         if (!trustLevel) {
           this.title = ''
