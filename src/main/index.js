@@ -2,7 +2,7 @@
 
 import { app, BrowserWindow, Menu } from 'electron'
 import electronDebug from 'electron-debug'
-electronDebug({ enabled: true, showDevTools: false })
+electronDebug({ enabled: true, showDevTools: false, devToolsMode: 'right' })
 
 import path from 'path'
 import parity from '../lib/Parity.js'
