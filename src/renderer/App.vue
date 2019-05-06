@@ -209,8 +209,7 @@
     font-weight: bold;
   }
 
-  .menu-list {
-    //spacing on nav panel -- default was 1.25
+  .menu-label, .menu-list {
     line-height: .85;
   }
 
@@ -323,12 +322,13 @@
 <style scoped>
   .is-narrow {
     position: fixed;
-    padding: 2.3rem;
+    padding: 1.5rem;
+    width: 240px;
     background-color: rgb(32,32,32);
     padding-bottom:3000px;
   }
 
   .router-view {
-    margin-left: 250px;
+    margin-left: 240px;
   }
 </style>

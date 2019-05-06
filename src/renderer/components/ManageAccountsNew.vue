@@ -16,8 +16,8 @@
 
 <script>
   import Page from './Page.vue'
-  let bip39 = require('bip39')
-  let ethUtil = require('ethereumjs-util')
+  import bip39 from 'bip39'
+  import ethUtil from 'ethereumjs-util'
 
   export default {
     name: 'manage-accounts-new',

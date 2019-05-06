@@ -15,15 +15,23 @@
         title: '',
       }
     },
-    watch: {
-      address: async function (val, oldVal) {
-        let account = await new MixAccount(this.$root, val, true).init()
+    methods: {
+      async loadData() {
+        let account = await new MixAccount(this.$root, this.address, true).init()
         let itemId = await account.call(this.$accountProfile.methods.getProfile())
         let profile = await new MixItem(this.$root, itemId).init()
         let revision = await profile.latestRevision().load()
         this.route = '/item/' + itemId
         this.title = await revision.getTitle()
-      }
+      },
+    },
+    created() {
+      this.loadData()
+    },
+    watch: {
+      address(val, oldVal) {
+        this.loadData()
+      },
     }
   }
 

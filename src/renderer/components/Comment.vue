@@ -36,9 +36,9 @@
   import languageProto from '../../lib/language_pb.js'
   import Reactions from './Reactions.vue'
   import ProfileLink from './ProfileLink.vue'
-  let twemoji = require('twemoji')
-  let plusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'}) 
-  let minusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2796'), {folder: 'svg', ext: '.svg'}) 
+  import twemoji from 'twemoji'
+  let plusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'})
+  let minusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2796'), {folder: 'svg', ext: '.svg'})
 
   export default {
     name: 'comment',
