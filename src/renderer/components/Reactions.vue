@@ -1,9 +1,12 @@
 <template>
 
   <div>
-    <span class="reactions" v-for="reaction in reactions" v-html="reaction.html + ' ' + reaction.count" @mouseenter="setWho(reaction)" @mouseleave="who = '&nbsp;'"  @click="toggle(reaction)"></span>
+    <span class="reactions" v-for="reaction in reactions" v-html="reaction.html + ' ' + reaction.count" @mouseenter="setWho(reaction)" @click="toggle(reaction)"></span>
     <span class="reactions" v-html="plus" @click="react = !react"></span>
-    <div v-html="who"></div>
+    <div class="who">
+      <profile-link v-for="address in addresses" :address="address" :key="address"></profile-link>
+      &nbsp;
+    </div>
     <div v-if="react" class="available">
       <span v-for="emoji in available" v-html="emoji.html" @click="addReaction(emoji.binary)"></span>
     </div>
@@ -15,17 +18,19 @@
   import twemoji from 'twemoji'
   import MixAccount from '../../lib/MixAccount.js'
   import MixItem from '../../lib/MixItem.js'
+  import ProfileLink from './ProfileLink.vue'
 
   export default {
     name: 'reactions',
     props: ['itemId'],
     components: {
+      ProfileLink,
     },
     data() {
       return {
         reactions: [],
         plus: '',
-        who: '&nbsp;',
+        addresses: [],
         available: [],
         react: false,
       }
@@ -128,18 +133,8 @@
         }
       },
       async setWho(reaction) {
-        let who = []
-
-        for (let address of reaction.addresses) {
-          let account = await new MixAccount(this.$root, address, true).init()
-          let itemId = await account.call(this.$accountProfile.methods.getProfile())
-          let profile = await new MixItem(this.$root, itemId).init()
-          let revision = await profile.latestRevision().load()
-          who.push(revision.getTitle())
-        }
-
-        this.who = who.join(', ')
-      }
+        this.addresses = reaction.addresses
+      },
     },
   }
 
@@ -164,6 +159,14 @@
     width: 2em;
     margin: 0 .05em 0 .1em;
     vertical-align: -0.1em;
+  }
+
+  .who >>> a::after {
+    content: ", ";
+  }
+
+  .who >>> a:last-child::after {
+    content: "";
   }
 
 </style>
