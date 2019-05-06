@@ -10,17 +10,20 @@
           just now
         </span>
       </span>
+      <span class="collapse" v-html="collapseIcon" v-on:click="toggleCollapse"></span>
     </div>
-    <vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="bodyText"></vue-markdown>
-    <reactions :itemId="itemId"></reactions>
-    <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
-    <div v-if="startReply">
-      <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
-      <button class="button is-primary" @click="publishReply">Reply</button>
-      <button class="button" @click="startReply = false">Close</button>
-    </div>
-    <div v-else>
-      <button class="button is-primary" @click="startReply = true">Reply</button>
+    <div v-if="visible">
+      <vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="bodyText"></vue-markdown>
+      <reactions :itemId="itemId"></reactions>
+      <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
+      <div v-if="startReply">
+        <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
+        <button class="button is-primary" @click="publishReply">Reply</button>
+        <button class="button" @click="startReply = false">Close</button>
+      </div>
+      <div v-else>
+        <button class="button is-primary" @click="startReply = true">Reply</button>
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +36,9 @@
   import languageProto from '../../lib/language_pb.js'
   import Reactions from './Reactions.vue'
   import ProfileLink from './ProfileLink.vue'
+  let twemoji = require('twemoji')
+  let plusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'}) 
+  let minusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2796'), {folder: 'svg', ext: '.svg'}) 
 
   export default {
     name: 'comment',
@@ -52,6 +58,8 @@
         childIds: [],
         reply: '',
         startReply: false,
+        visible: true,
+        collapseIcon: ''
       }
     },
     methods: {
@@ -69,6 +77,7 @@
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000)
         this.bodyText = commentRevision.getBodyText()
         this.childIds = await this.$itemDagComments.methods.getAllChildIds(this.itemId).call()
+        this.collapseIcon = this.visible ? minusIcon : plusIcon
       },
       async publishReply(event) {
         let content = new MixContent(this.$root)
@@ -93,6 +102,10 @@
         this.reply = ''
         this.startReply = false
         this.loadData()
+      },
+      toggleCollapse() {
+        this.visible = !this.visible
+        this.collapseIcon = this.visible ? minusIcon : plusIcon
       },
     },
     created() {
@@ -157,4 +170,13 @@
   .button {
     margin-right:10px;
   }
+
+  .collapse >>> img {
+    cursor: pointer;
+    height: 1.2em;
+    width: 1.2em;
+    vertical-align: -0.2em;
+    margin-left: 0.25em;
+  }
+
 </style>
