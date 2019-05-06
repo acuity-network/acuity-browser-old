@@ -1,6 +1,6 @@
-const sharp = require('sharp')
+import sharp from 'sharp'
 import jpegImageProto from './jpeg-image_pb.js'
-const Base58 = require("base-58")
+import Base58 from 'base-58'
 
 export default class Image {
 

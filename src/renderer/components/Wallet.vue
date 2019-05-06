@@ -56,7 +56,7 @@
 
 <script>
   import Page from './Page.vue'
-  var QRCode = require('qrcode')
+  import QRCode from 'qrcode'
   import WalletConfirmSend from './WalletConfirmSend.vue'
 
   export default {

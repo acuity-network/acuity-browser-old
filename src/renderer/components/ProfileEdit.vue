@@ -46,7 +46,7 @@
   import titleProto from '../../lib/title_pb.js'
   import bodyTextProto from '../../lib/body_pb.js'
   import languageProto from '../../lib/language_pb.js'
-  const multihash = require('multihashes')
+  import multihash from 'multihashes'
   import MixItem from '../../lib/MixItem.js'
   import Image from '../../lib/Image.js'
   import MixContent from '../../lib/MixContent.js'

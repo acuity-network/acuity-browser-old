@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  let twemoji = require('twemoji')
+  import twemoji from 'twemoji'
   import MixAccount from '../../lib/MixAccount.js'
   import MixItem from '../../lib/MixItem.js'
 

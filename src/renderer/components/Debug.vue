@@ -23,8 +23,9 @@
   import bodyTextProto from '../../lib/body_pb.js'
   import descriptionProto from '../../lib/description_pb.js'
   import jpegImageProto from '../../lib/jpeg-image_pb.js'
-  let brotli = require('iltorb')
-  const Base58 = require("base-58")
+  import brotli from 'iltorb'
+  import Base58 from 'base-58'
+  import multihashes from 'multihashes'
 
   export default {
     name: 'debug',
@@ -71,7 +72,6 @@
           const timestamp = new Date(item.timestamps[i] * 1000)
           output.append('\nRevision ' + i + ' timestamp: ' + timestamp + '\n')
 
-          const multihashes = require('multihashes')
           const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
           output.append('Revision ' + i + ' IPFS hash: ' + ipfsHash + '\n')
 

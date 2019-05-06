@@ -2,8 +2,8 @@ import MixAccount from '../lib/MixAccount.js'
 import MixItem from '../lib/MixItem.js'
 import MixContent from '../lib/MixContent.js'
 import jpegImageProto from './jpeg-image_pb.js'
-let multihashes = require('multihashes')
-let Base58 = require("base-58")
+import multihashes from 'multihashes'
+import Base58 from 'base-58'
 
 export default class MixPinner {
 
