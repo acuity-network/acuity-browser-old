@@ -1,6 +1,6 @@
 <template>
   <div class="is-clearfix">
-    <div v-html="image" class="avatar is-pulled-left"></div>
+    <div v-html="image" class="avatar"></div>
     {{ title }}
   </div>
 </template>
