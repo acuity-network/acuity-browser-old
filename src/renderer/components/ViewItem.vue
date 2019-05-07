@@ -82,7 +82,7 @@
 
       <reactions :itemId="itemId"></reactions>
 
-      <comment v-if="!isProfile" v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
+      <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
 
       <view-item v-for="feedId in feedItemIds" :itemId="feedId" :key="feedId"></view-item>
 
