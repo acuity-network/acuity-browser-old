@@ -222,3 +222,12 @@
     },
   }
 </script>
+
+
+<style scoped>
+
+  .field >>> .label:not(:last-child) {
+    margin-bottom: 0;
+  }
+
+</style>
