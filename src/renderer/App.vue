@@ -328,6 +328,10 @@
     padding-bottom:3000px;
   }
 
+  .is-narrow >>> a:focus {
+    outline: none;
+  }
+
   .router-view {
     margin-left: 240px;
   }
