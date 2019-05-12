@@ -36,7 +36,7 @@ export default class MixRevision {
 
     let i, scale
     for (i = 0; i < mipmapList.length; i++) {
-      scale = Math.pow(2, i)
+      scale = 2 ** i
       if (width / scale < widthMin * 4 || height / scale < heightMin * 4) {
         break
       }

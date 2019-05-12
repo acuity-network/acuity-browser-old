@@ -44,7 +44,7 @@ export default class Image {
 
       var level = 1
       do {
-        var scale = Math.pow(2, level)
+        var scale = 2 ** level
         var outWidth = Math.round(width / scale)
         var outHeight = Math.round(height / scale)
         mipmaps.push(source

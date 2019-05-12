@@ -87,7 +87,7 @@
     if (bytes == 0) return '0 B'
     let units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
     let i = Math.floor(Math.log(bytes) / Math.log(1000))
-    return (bytes / Math.pow(1000, i)).toFixed(digits) + ' ' + units[i]
+    return (bytes / (1000 ** i)).toFixed(digits) + ' ' + units[i]
   }
 
   export default {
