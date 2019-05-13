@@ -36,12 +36,7 @@
         <div class="column">
           <div class="image" v-html="body"></div>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
-
-          <div v-if="isProfile">
-            <b-field label="Trusted that trust">
-              <profile-link v-for="address in trustedThatTrust" :address="address" :key="address"></profile-link>
-            </b-field>
-          </div>
+          <account-trusts v-if="isProfile" :address="ownerAddress"></account-trusts>
         </div>
         <div v-if="editing" class="column">
           <b-field label="Title">
@@ -102,6 +97,7 @@
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
   import Comment from './Comment.vue'
+  import AccountTrusts from './AccountTrusts.vue'
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
@@ -118,6 +114,7 @@
     components: {
       Page,
       Comment,
+      AccountTrusts,
       ProfileLink,
       VueMarkdown,
       Reactions,
@@ -199,7 +196,6 @@
         data.tokenPayout = ''
         data.tokenSupply = ''
         data.tokenAddress = ''
-        data.trustedThatTrust = []
         data.childIds = []
         data.feedItemIds = []
         data.reply = ''
@@ -262,7 +258,6 @@
 
         if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
           this.isProfile = true
-          this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(account.contractAddress)
         }
         else if (revision.content.getPrimaryMixinId() == '0xbcec8faa') {
           this.isFeed = true
