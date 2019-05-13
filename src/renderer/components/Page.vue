@@ -21,12 +21,8 @@
 
 <style scoped>
   .section {
-    padding: 0 1.5rem;
-    margin: 1.5rem 0;
-  }
-
-  section.is-primary {
-    margin: 3rem 0;
+    padding: 0;
+    margin-bottom: 1.5rem;
   }
 
   h1.title {
