@@ -1,15 +1,15 @@
 <template>
   <div>
-    <b-field label="Trusts">
+    <b-field label="Trusted that trust">
       <ul>
-        <li v-for="address in trusted" :key="address">
+        <li v-for="address in trustedThatTrust" :key="address">
           <profile-link :address="address"></profile-link>
         </li>
       </ul>
     </b-field>
-    <b-field label="Trusted that trust">
+    <b-field label="Trusts">
       <ul>
-        <li v-for="address in trustedThatTrust" :key="address">
+        <li v-for="address in trusted" :key="address">
           <profile-link :address="address"></profile-link>
         </li>
       </ul>
