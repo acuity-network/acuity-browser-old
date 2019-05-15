@@ -27,7 +27,7 @@ async function launch(window) {
 	}
 	catch (e) {
 		try {
-			parityPath = await parity.fetchParity(window, { parityChannel: 'v2.4.5', onProgress: (progress) => {
+			parityPath = await parity.fetchParity(window, { parityChannel: 'v2.4.6', onProgress: (progress) => {
 				window.webContents.send('parity-download-progress', progress)
 			}})
 		}
