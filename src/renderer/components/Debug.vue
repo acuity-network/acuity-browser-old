@@ -26,6 +26,7 @@
   import brotli from 'iltorb'
   import Base58 from 'base-58'
   import multihashes from 'multihashes'
+  import formatByteCount from '../../lib/formatByteCount.js'
 
   export default {
     name: 'debug',
@@ -77,10 +78,10 @@
 
           let response = await this.$ipfsClient.get('cat?arg=/ipfs/' + ipfsHash, false)
           const containerPayload = Buffer.from(response, "binary")
-          output.append('Compressed length: ' + containerPayload.length + '\n')
+          output.append('Compressed length: ' + formatByteCount(containerPayload.length) + '\n')
 
           const itemPayload = await brotli.decompress(Buffer.from(containerPayload))
-          output.append('Uncompressed length: ' + itemPayload.length + '\n')
+          output.append('Uncompressed length: ' + formatByteCount(itemPayload.length) + '\n')
 
           const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
           const mixins = itemMessage.getMixinList()
@@ -135,7 +136,7 @@
                 var renderHeight = Math.round(256 * height / width)
                 for (var j = 0; j < mipmaps.length; j++) {
                   output.append('\nMipmap level: ' + j + '\n')
-                  output.append('Mipmap filesize: ' + mipmaps[j].getFilesize() + '\n')
+                  output.append('Mipmap filesize: ' + formatByteCount(mipmaps[j].getFilesize()) + '\n')
                   var el = document.createElement('img')
                   var domString = '<img src="http://127.0.0.1:8080/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
                   el.innerHTML = domString
