@@ -2,7 +2,7 @@ import { app } from 'electron'
 import path from 'path'
 import { spawn } from 'child_process'
 import os from 'os'
-import axios from 'axios'
+import ipfsClient from './IpfsClient.js'
 
 let ipfsProcess
 let ipfsInterval
@@ -31,7 +31,7 @@ function connect() {
 
 	bootnodes.forEach(async bootnode => {
 		try {
-			await axios.get('http://127.0.0.1:5001/api/v0/swarm/connect?arg=' + bootnode)
+			await ipfsClient.get('swarm/connect?arg=' + bootnode)
 		}
 		catch (e) {
 			console.error('Failed to connect to boot node ' + bootnode)
