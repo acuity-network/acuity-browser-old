@@ -5,6 +5,9 @@
     </template>
 
     <template slot="body">
+      <b-field :label="$t('acuityVersion')">
+        {{ acuityVersion }}
+      </b-field>
       <div class="columns">
         <div class="column">
           <h2 class="subtitle">{{ $t('mixBlockchain') }}</h2>
@@ -98,6 +101,7 @@
     },
     data() {
       return {
+        acuityVersion: '',
         downloadingParity: null,
         parityDownloadProgress: '',
         web3Version: '',
@@ -122,6 +126,7 @@
     },
     methods: {
       async start() {
+        this.acuityVersion = process.env.npm_package_version
         this.downloadingParity = false
         this.web3Version = this.$web3.version
         let protocolVersion = await this.$web3.eth.getProtocolVersion()
