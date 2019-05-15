@@ -5,6 +5,9 @@
     </template>
 
     <template slot="body">
+      <b-field :label="$t('acuityVersion')">
+        {{ acuityVersion }}
+      </b-field>
       <div class="columns">
         <div class="column">
           <h2 class="subtitle">{{ $t('mixBlockchain') }}</h2>
@@ -82,13 +85,7 @@
   import throttle from 'just-throttle'
   import { ipcRenderer } from 'electron'
   import ProgressBar from 'vue-simple-progress'
-
-  function formatByteCount(bytes, digits = 2) {
-    if (bytes == 0) return '0 B'
-    let units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    let i = Math.floor(Math.log(bytes) / Math.log(1000))
-    return (bytes / (1000 ** i)).toFixed(digits) + ' ' + units[i]
-  }
+  import formatByteCount from '../../lib/formatByteCount.js'
 
   export default {
     name: 'node-status',
@@ -98,6 +95,7 @@
     },
     data() {
       return {
+        acuityVersion: '',
         downloadingParity: null,
         parityDownloadProgress: '',
         web3Version: '',
@@ -122,6 +120,7 @@
     },
     methods: {
       async start() {
+        this.acuityVersion = process.env.npm_package_version
         this.downloadingParity = false
         this.web3Version = this.$web3.version
         let protocolVersion = await this.$web3.eth.getProtocolVersion()

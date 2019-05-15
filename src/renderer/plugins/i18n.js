@@ -65,6 +65,7 @@ const messages = {
     createAccount: 'Create account',
     recoverAccount: 'Recover account',
     //Node Status
+    acuityVersion: 'Acuity Version',
     mixBlockchain: 'MIX Blockchain',
     web3Version: 'Web3 version',
     protocolVersion: 'Protocol version',
