@@ -25,6 +25,8 @@ function connect() {
 		'/ip6/2a01:7e01::f03c:91ff:fed5:2a00/tcp/4001/ipfs/Qmar9pZaQPaMisc1x1LstphJV1jJiPrv21Edig93bz6oh8',
 		'/ip4/172.104.68.7/tcp/4001/ipfs/QmPe3zVKqnwPyBDf51zg6XkKTLz2tx4iW3DtCtK6ojm6er',
 		'/ip6/2400:8902::f03c:91ff:fed5:2ac0/tcp/4001/ipfs/QmPe3zVKqnwPyBDf51zg6XkKTLz2tx4iW3DtCtK6ojm6er',
+		'/ip4/172.105.16.240/tcp/4001/ipfs/Qmex27aG4LYeArEHBViQ52KN9coEwmwwsaRNKzTSbdBMSy',
+		'/ip6/2600:3c04::f03c:91ff:fec3:c620/tcp/4001/ipfs/Qmex27aG4LYeArEHBViQ52KN9coEwmwwsaRNKzTSbdBMSy',
 	]
 
 	bootnodes.forEach(async bootnode => {
@@ -75,6 +77,8 @@ function launch() {
 			['bootstrap', 'add', '/ip6/2a01:7e01::f03c:91ff:fed5:2a00/tcp/4001/ipfs/Qmar9pZaQPaMisc1x1LstphJV1jJiPrv21Edig93bz6oh8'],
 			['bootstrap', 'add', '/ip4/172.104.68.7/tcp/4001/ipfs/QmPe3zVKqnwPyBDf51zg6XkKTLz2tx4iW3DtCtK6ojm6er'],
 			['bootstrap', 'add', '/ip6/2400:8902::f03c:91ff:fed5:2ac0/tcp/4001/ipfs/QmPe3zVKqnwPyBDf51zg6XkKTLz2tx4iW3DtCtK6ojm6er'],
+			['bootstrap', 'add', '/ip4/172.105.16.240/tcp/4001/ipfs/Qmex27aG4LYeArEHBViQ52KN9coEwmwwsaRNKzTSbdBMSy'],
+			['bootstrap', 'add', '/ip6/2600:3c04::f03c:91ff:fec3:c620/tcp/4001/ipfs/Qmex27aG4LYeArEHBViQ52KN9coEwmwwsaRNKzTSbdBMSy'],
 			['config', '--json', 'Routing.Type', '"dhtclient"'],
 			['config', '--json', 'Swarm.DisableBandwidthMetrics', 'true'],
 			['config', '--json', 'Swarm.EnableAutoRelay', 'true'],
