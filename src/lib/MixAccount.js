@@ -1,4 +1,4 @@
-const accountAbi = require('./Account.abi.json')
+const accountAbi = require('./contracts/Account.abi.json')
 import ethTx from 'ethereumjs-tx'
 import { remote } from 'electron'
 import path from 'path'

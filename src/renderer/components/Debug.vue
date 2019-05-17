@@ -16,12 +16,12 @@
 
 <script>
   import Page from './Page.vue'
-  import itemProto from '../../lib/item_pb.js'
-  import languageProto from '../../lib/language_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
-  import jpegImageProto from '../../lib/jpeg-image_pb.js'
+  import itemProto from '../../lib/protobuf/item_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
+  import jpegImageProto from '../../lib/protobuf/jpeg-image_pb.js'
   import brotli from 'iltorb'
   import Base58 from 'base-58'
   import multihashes from 'multihashes'
@@ -60,7 +60,7 @@
         let itemStoreAddress = await this.$itemStoreRegistry.methods.getItemStore(this.itemId).call()
         output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
 
-        const itemStoreAbi = require('../../lib/ItemStoreInterface.abi.json')
+        const itemStoreAbi = require('../../lib/contracts/ItemStoreInterface.abi.json')
         const itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
         let inUse = await itemStore.methods.getInUse(this.itemId).call()

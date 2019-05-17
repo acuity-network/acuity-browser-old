@@ -1,7 +1,7 @@
 import MixAccount from '../lib/MixAccount.js'
 import MixItem from '../lib/MixItem.js'
 import MixContent from '../lib/MixContent.js'
-import jpegImageProto from './jpeg-image_pb.js'
+import jpegImageProto from './protobuf/jpeg-image_pb.js'
 import multihashes from 'multihashes'
 import Base58 from 'base-58'
 

@@ -1,8 +1,8 @@
 import multihashes from 'multihashes'
-import titleProto from './title_pb.js'
-import jpegImageProto from './jpeg-image_pb.js'
-import bodyTextProto from './body_pb.js'
-import profileProto from './account-profile_pb.js'
+import titleProto from './protobuf/title_pb.js'
+import jpegImageProto from './protobuf/jpeg-image_pb.js'
+import bodyTextProto from './protobuf/body_pb.js'
+import profileProto from './protobuf/account-profile_pb.js'
 import MixContent from './MixContent.js'
 import Base58 from 'base-58'
 

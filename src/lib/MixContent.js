@@ -1,6 +1,6 @@
 import multihashes from 'multihashes'
 import brotli from 'iltorb'
-import itemProto from './item_pb.js'
+import itemProto from './protobuf/item_pb.js'
 
 export default class MixContent {
 

@@ -41,11 +41,11 @@
 
 <script>
   import Page from './Page.vue'
-  import itemProto from '../../lib/item_pb.js'
-  import profileProto from '../../lib/account-profile_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import languageProto from '../../lib/language_pb.js'
+  import itemProto from '../../lib/protobuf/item_pb.js'
+  import profileProto from '../../lib/protobuf/account-profile_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
   import multihash from 'multihashes'
   import MixItem from '../../lib/MixItem.js'
   import Image from '../../lib/Image.js'

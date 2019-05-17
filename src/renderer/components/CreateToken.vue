@@ -26,9 +26,9 @@
 
 <script>
   import Page from './Page.vue'
-  import languageProto from '../../lib/language_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
   import ethTx from 'ethereumjs-tx'

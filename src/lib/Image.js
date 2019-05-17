@@ -1,5 +1,5 @@
 import sharp from 'sharp'
-import jpegImageProto from './jpeg-image_pb.js'
+import jpegImageProto from './protobuf/jpeg-image_pb.js'
 import Base58 from 'base-58'
 
 export default class Image {

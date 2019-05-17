@@ -102,10 +102,10 @@
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
   import VueMarkdown from 'vue-markdown'
-  import titleProto from '../../lib/title_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import languageProto from '../../lib/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
   import { clipboard } from 'electron'
 
   export default {
@@ -265,7 +265,7 @@
         else if (revision.content.getPrimaryMixinId() == '0x9fbbfaad') {
           this.isToken = true
           this.tokenAddress = await this.$tokenRegistry.methods.getToken(this.itemId).call()
-          let token = new this.$web3.eth.Contract(require('../../lib/CreatorToken.abi.json'), this.tokenAddress)
+          let token = new this.$web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
           this.tokenSymbol = await token.methods.symbol().call()
           this.tokenName = await token.methods.name().call()
           this.tokenStart = await token.methods.tokenStart().call()
