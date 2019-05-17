@@ -2,7 +2,7 @@ syntax = "proto3";
 
 message MipmapLevel {
   uint64 filesize = 1;    // Size of the file addressed by ipfs_hash (bytes).
-  bytes ipfs_hash = 2;    // IPFS multihash of the JPEG file of this mipmap level.
+  bytes ipfs_hash = 2;    // Base58 decoded IPFS multihash of the JPEG file of this mipmap level.
 }
 
 message JpegMipmap {
