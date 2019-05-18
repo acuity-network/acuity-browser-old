@@ -221,7 +221,7 @@
           this.editable = item.isUpdatable()
         }
 
-        let profileItemId = await account.call(this.$accountProfile.methods.getProfile())
+        let profileItemId = await account.call(this.$accountProfile, 'getProfile')
         this.ownerRoute = '/item/' + profileItemId
         let profileItem = await new MixItem(this.$root, profileItemId).init()
         let profileRevision = await profileItem.latestRevision().load()
@@ -340,7 +340,7 @@
 
         let ipfsHash = await revision.content.save()
         this.editing = false
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(this.itemId, ipfsHash), 0, 'Update item')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
       },
       async publishReply(event) {
         let content = new MixContent(this.$root)
@@ -359,9 +359,9 @@
         content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        await window.activeAccount.sendData(this.$itemDagComments.methods.addChild(this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce), 0, 'Attach comment')
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Post comment')
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(31).substr(2)
+        await window.activeAccount.sendData(this.$itemDagComments, 'addChild', [this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach comment')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
         this.reply = ''
         this.startReply = false
         this.loadData()
@@ -372,13 +372,13 @@
           return item.account()
         })
         .then(account => {
-          window.activeAccount.call(this.$trustedAccounts.methods.getIsTrusted(account.contractAddress))
+          window.activeAccount.call(this.$trustedAccounts, 'getIsTrusted', [account.contractAddress])
           .then(trusted => {
             if (trusted) {
-              return window.activeAccount.sendData(this.$trustedAccounts.methods.untrustAccount(account.contractAddress), 0, 'Untrust account')
+              return window.activeAccount.sendData(this.$trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
             }
             else {
-              return window.activeAccount.sendData(this.$trustedAccounts.methods.trustAccount(account.contractAddress), 0, 'Trust account')
+              return window.activeAccount.sendData(this.$trustedAccounts, 'trustAccount', [account.contractAddress], 0, 'Trust account')
             }
           })
           .then(() => {

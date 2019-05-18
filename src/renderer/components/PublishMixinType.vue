@@ -80,10 +80,10 @@
         }
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
-        await window.activeAccount.sendData(this.$itemStoreShortId.methods.createShortId(itemId), 0, 'Create short ID')
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create mixin type')
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(31).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+        await window.activeAccount.sendData(this.$itemStoreShortId, 'createShortId', [itemId], 0, 'Create short ID')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create mixin type')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

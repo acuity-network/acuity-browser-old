@@ -68,7 +68,7 @@
         this.trusted = await item.isTrusted()
         var account = await item.account()
         this.ownerAddress = account.contractAddress
-        var itemId = await account.call(this.$accountProfile.methods.getProfile())
+        var itemId = await account.call(this.$accountProfile, 'getProfile')
         var profile = await new MixItem(this.$root, itemId).init()
         var revision = await profile.latestRevision().load()
         this.avatar = revision.getImage(32, 32)
@@ -96,9 +96,9 @@
         content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        await window.activeAccount.sendData(this.$itemDagComments.methods.addChild(this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce), 0, 'Attach comment')
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Post comment')
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(31).substr(2)
+        await window.activeAccount.sendData(this.$itemDagComments, 'addChild', [this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach comment')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
         this.reply = ''
         this.startReply = false
         this.loadData()

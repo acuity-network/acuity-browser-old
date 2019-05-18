@@ -43,8 +43,8 @@
       }
     },
     async created() {
-      this.feeds = await window.activeAccount.call(this.$accountFeeds.methods.getAllItemsByAccount(this.address))
-      this.trusted = await window.activeAccount.call(this.$trustedAccounts.methods.getAllTrustedByAccount(this.address))
+      this.feeds = await window.activeAccount.call(this.$accountFeeds, 'getAllItemsByAccount', [this.address])
+      this.trusted = await window.activeAccount.call(this.$trustedAccounts, 'getAllTrustedByAccount', [this.address])
       this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(this.address)
     },
   }

@@ -52,7 +52,7 @@
         })
         .on('data', async address => {
           let account = await new MixAccount(this.$root, address).init()
-          let itemId = await account.call(this.$accountProfile.methods.getProfile())
+          let itemId = await account.call(this.$accountProfile, 'getProfile')
           let item = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
 
