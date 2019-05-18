@@ -36,7 +36,7 @@
         <div class="column">
           <div class="image" v-html="body"></div>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
-          <account-trusts v-if="isProfile" :address="ownerAddress"></account-trusts>
+          <account-info v-if="isProfile" :address="ownerAddress"></account-info>
         </div>
         <div v-if="editing" class="column">
           <b-field label="Title">
@@ -97,7 +97,7 @@
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
   import Comment from './Comment.vue'
-  import AccountTrusts from './AccountTrusts.vue'
+  import AccountInfo from './AccountInfo.vue'
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
@@ -114,7 +114,7 @@
     components: {
       Page,
       Comment,
-      AccountTrusts,
+      AccountInfo,
       ProfileLink,
       VueMarkdown,
       Reactions,

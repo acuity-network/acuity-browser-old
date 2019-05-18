@@ -88,6 +88,7 @@
 
         let ipfsHash = await content.save()
         await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create feed')
+        await window.activeAccount.sendData(this.$accountFeeds.methods.addItem(itemId), 0, 'Add feed to account')
         await this.$db.put('/accountFeeds/' + window.activeAccount.contractAddress + '/' + itemId, itemId)
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }

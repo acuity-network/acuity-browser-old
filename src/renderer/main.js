@@ -51,7 +51,7 @@ Vue.prototype.$itemStoreShortId = new Vue.prototype.$web3.eth.Contract(require('
 Vue.prototype.$itemDagComments = new Vue.prototype.$web3.eth.Contract(require('../lib/contracts/ItemDagOneParent.abi.json'), '0x8e7f6a1696b0e702ac1701b9048c47783483330e')
 Vue.prototype.$itemDagFeedItems = new Vue.prototype.$web3.eth.Contract(require('../lib/contracts/ItemDag.abi.json'), '0xd6cc1712b46a599f87f023fad83bc06473bb2b8d')
 Vue.prototype.$accountProfile = new Vue.prototype.$web3.eth.Contract(require('../lib/contracts/AccountProfile.abi.json'), '0x7855a6b883c39c8e87d51002b064180ddbf16026')
-Vue.prototype.$accountItems = new Vue.prototype.$web3.eth.Contract(require('../lib/contracts/MixAccountItems.abi.json'), '0x988e19f9c1a004612b64ab100008897bbebc2470')
+Vue.prototype.$accountFeeds = new Vue.prototype.$web3.eth.Contract(require('../lib/contracts/MixAccountItems.abi.json'), '0x988e19f9c1a004612b64ab100008897bbebc2470')
 Vue.prototype.$trustedAccounts = new Vue.prototype.$web3.eth.Contract(require('../lib/contracts/TrustedAccounts.abi.json'), '0x11dc5cf838ae3850458f92474dc28d1e47f8e045')
 Vue.prototype.$reactions = new Vue.prototype.$web3.eth.Contract(require('../lib/contracts/MixReactions.abi.json'), '0xc66af5a7e3699d5b9f03a6031ca8568dae7b6bd1')
 
