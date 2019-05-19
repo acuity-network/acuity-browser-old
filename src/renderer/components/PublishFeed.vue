@@ -24,10 +24,10 @@
 
 <script>
   import Page from './Page.vue'
-  import languageProto from '../../lib/language_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
 
@@ -57,8 +57,8 @@
         })
       },
       async publish(event) {
-        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
+        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(31).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
 
         let content = new MixContent(this.$root)
 
@@ -87,7 +87,8 @@
         }
 
         let ipfsHash = await content.save()
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create feed')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create feed')
+        await window.activeAccount.sendData(this.$accountFeeds, 'addItem', [itemId], 0, 'Add feed to account')
         await this.$db.put('/accountFeeds/' + window.activeAccount.contractAddress + '/' + itemId, itemId)
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }

@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message DescriptionMixin {
+  string description = 1;    // Description of the item.
+}

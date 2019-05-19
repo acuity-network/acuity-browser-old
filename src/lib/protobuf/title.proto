@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message TitleMixin {
+  string title = 1;   // Title of the item.
+}

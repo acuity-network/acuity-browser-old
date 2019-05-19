@@ -36,7 +36,7 @@
         <div class="column">
           <div class="image" v-html="body"></div>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
-          <account-trusts v-if="isProfile" :address="ownerAddress"></account-trusts>
+          <account-info v-if="isProfile" :address="ownerAddress"></account-info>
         </div>
         <div v-if="editing" class="column">
           <b-field label="Title">
@@ -97,15 +97,15 @@
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
   import Comment from './Comment.vue'
-  import AccountTrusts from './AccountTrusts.vue'
+  import AccountInfo from './AccountInfo.vue'
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
   import VueMarkdown from 'vue-markdown'
-  import titleProto from '../../lib/title_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import languageProto from '../../lib/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
   import { clipboard } from 'electron'
 
   export default {
@@ -114,7 +114,7 @@
     components: {
       Page,
       Comment,
-      AccountTrusts,
+      AccountInfo,
       ProfileLink,
       VueMarkdown,
       Reactions,
@@ -221,7 +221,7 @@
           this.editable = item.isUpdatable()
         }
 
-        let profileItemId = await account.call(this.$accountProfile.methods.getProfile())
+        let profileItemId = await account.call(this.$accountProfile, 'getProfile')
         this.ownerRoute = '/item/' + profileItemId
         let profileItem = await new MixItem(this.$root, profileItemId).init()
         let profileRevision = await profileItem.latestRevision().load()
@@ -265,7 +265,7 @@
         else if (revision.content.getPrimaryMixinId() == '0x9fbbfaad') {
           this.isToken = true
           this.tokenAddress = await this.$tokenRegistry.methods.getToken(this.itemId).call()
-          let token = new this.$web3.eth.Contract(require('../../lib/CreatorToken.abi.json'), this.tokenAddress)
+          let token = new this.$web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
           this.tokenSymbol = await token.methods.symbol().call()
           this.tokenName = await token.methods.name().call()
           this.tokenStart = await token.methods.tokenStart().call()
@@ -340,7 +340,7 @@
 
         let ipfsHash = await revision.content.save()
         this.editing = false
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(this.itemId, ipfsHash), 0, 'Update item')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
       },
       async publishReply(event) {
         let content = new MixContent(this.$root)
@@ -359,9 +359,9 @@
         content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        await window.activeAccount.sendData(this.$itemDagComments.methods.addChild(this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce), 0, 'Attach comment')
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Post comment')
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(31).substr(2)
+        await window.activeAccount.sendData(this.$itemDagComments, 'addChild', [this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach comment')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
         this.reply = ''
         this.startReply = false
         this.loadData()
@@ -372,13 +372,13 @@
           return item.account()
         })
         .then(account => {
-          window.activeAccount.call(this.$trustedAccounts.methods.getIsTrusted(account.contractAddress))
+          window.activeAccount.call(this.$trustedAccounts, 'getIsTrusted', [account.contractAddress])
           .then(trusted => {
             if (trusted) {
-              return window.activeAccount.sendData(this.$trustedAccounts.methods.untrustAccount(account.contractAddress), 0, 'Untrust account')
+              return window.activeAccount.sendData(this.$trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
             }
             else {
-              return window.activeAccount.sendData(this.$trustedAccounts.methods.trustAccount(account.contractAddress), 0, 'Trust account')
+              return window.activeAccount.sendData(this.$trustedAccounts, 'trustAccount', [account.contractAddress], 0, 'Trust account')
             }
           })
           .then(() => {

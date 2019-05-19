@@ -35,11 +35,11 @@
 
 <script>
   import Page from './Page.vue'
-  import languageProto from '../../lib/language_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
-  import jpegImageProto from '../../lib/jpeg-image_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
+  import jpegImageProto from '../../lib/protobuf/jpeg-image_pb.js'
   import Image from '../../lib/Image.js'
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
@@ -88,8 +88,8 @@
         })
       },
       async publish(event) {
-        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
+        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(31).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
 
         let content = new MixContent(this.$root)
 
@@ -115,10 +115,10 @@
         let ipfsHash = await content.save()
 
         if (this.feedId != '0') {
-          await window.activeAccount.sendData(this.$itemDagFeedItems.methods.addChild(this.feedId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce), 0, 'Attach feed item')
+          await window.activeAccount.sendData(this.$itemDagFeedItems, 'addChild', [this.feedId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach feed item')
         }
 
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

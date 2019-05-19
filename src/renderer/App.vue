@@ -32,7 +32,7 @@
         <li><router-link to="/manage-accounts">{{ $t('accounts') }}</router-link></li>
         <li><router-link to="/node-status">{{ $t('nodeStatus') }}</router-link></li>
         <li><router-link to="/settings">{{ $t('settings') }}</router-link></li>
-        <li><router-link to="/debug">{{ $t('debug') }}</router-link></li>
+        <li><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
       </ul>
     </div>
     <div class="column router-view">

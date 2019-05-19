@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message LanguageMixin {
+  string language_tag = 1;    // IETF language tag.
+}

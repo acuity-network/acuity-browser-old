@@ -56,8 +56,8 @@
     },
     methods: {
       async loadData() {
-        let trustedReactions = await window.activeAccount.call(this.$reactions.methods.getTrustedReactions(this.itemId))
-        let accountReactions = await window.activeAccount.call(this.$reactions.methods.getReactions(this.itemId))
+        let trustedReactions = await window.activeAccount.call(this.$reactions, 'getTrustedReactions', [this.itemId])
+        let accountReactions = await window.activeAccount.call(this.$reactions, 'getReactions', [this.itemId])
         this.reactions = []
 
         let processedReactions = {}
@@ -119,16 +119,16 @@
         }
       },
       async addReaction(emoji) {
-        await window.activeAccount.sendData(this.$reactions.methods.addReaction(this.itemId, Buffer.from(emoji, "utf8")), 0, 'Add reaction')
+        await window.activeAccount.sendData(this.$reactions, 'addReaction', [this.itemId, Buffer.from(emoji, "utf8")], 0, 'Add reaction')
         this.loadData()
       },
       async toggle(reaction) {
         if (reaction.current) {
-          await window.activeAccount.sendData(this.$reactions.methods.removeReaction(this.itemId, Buffer.from(reaction.emoji, "utf8")), 0, 'Remove reaction')
+          await window.activeAccount.sendData(this.$reactions, 'removeReaction', [this.itemId, Buffer.from(reaction.emoji, "utf8")], 0, 'Remove reaction')
           this.loadData()
         }
         else {
-          await window.activeAccount.sendData(this.$reactions.methods.addReaction(this.itemId, Buffer.from(reaction.emoji, "utf8")), 0, 'Add reaction')
+          await window.activeAccount.sendData(this.$reactions, 'addReaction', [this.itemId, Buffer.from(reaction.emoji, "utf8")], 0, 'Add reaction')
           this.loadData()
         }
       },

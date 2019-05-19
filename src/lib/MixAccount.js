@@ -1,4 +1,4 @@
-const accountAbi = require('./Account.abi.json')
+const accountAbi = require('./contracts/Account.abi.json')
 import ethTx from 'ethereumjs-tx'
 import { remote } from 'electron'
 import path from 'path'
@@ -85,8 +85,8 @@ export default class MixAccount {
     this.vue.$root.$emit('change-active-account', this)
   }
 
-  call(transaction) {
-    return transaction.call({
+  call(contract, method, params = []) {
+    return contract.methods[method].apply(this, params).call({
       from: this.contractAddress
     })
   }
@@ -118,7 +118,7 @@ export default class MixAccount {
       let rawTx = {
         nonce: nonce,
         from: this.controllerAddress,
-        to: transaction._parent._address,
+        to: this.contractAddress,
         gas: this.vue.$web3.utils.toHex(gas),
         gasPrice: '0x3b9aca00',
         data: data,
@@ -201,9 +201,10 @@ export default class MixAccount {
     }
   }
 
-  sendData(transaction, value, description) {
-    var to = transaction._parent._address
-    return this._send(this.contract.methods.sendData(to, transaction.encodeABI()), value)
+  sendData(contract, method, params, value, description) {
+    let to = contract.options.address
+    let data = contract.methods[method].apply(this, params).encodeABI()
+    return this._send(this.contract.methods.sendData(to, data), value)
     .then(transaction => {
       return this._logTransaction(transaction, to, description)
       .then(() => {

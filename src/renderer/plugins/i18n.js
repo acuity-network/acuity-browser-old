@@ -25,7 +25,7 @@ const messages = {
     accounts: 'Accounts',
     nodeStatus: 'Node Status',
     settings: 'Settings',
-    debug: 'Debug',
+    debugItem: 'Debug Item',
     //Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -106,7 +106,7 @@ const messages = {
     accounts: 'Аккаунт',
     nodeStatus: 'Статус подключения',
     settings: 'Настройки',
-    debug: 'Отладка',
+    debugItem: 'Отладка',
     //Publish Item
     publishMixin: 'Опубликовать смешанный тип',
     publishImage: 'Опубликовать картинку',

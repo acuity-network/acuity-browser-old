@@ -1,7 +1,7 @@
 import MixAccount from '../lib/MixAccount.js'
 import MixItem from '../lib/MixItem.js'
 import MixContent from '../lib/MixContent.js'
-import jpegImageProto from './jpeg-image_pb.js'
+import jpegImageProto from './protobuf/jpeg-image_pb.js'
 import multihashes from 'multihashes'
 import Base58 from 'base-58'
 
@@ -40,7 +40,7 @@ export default class MixPinner {
       try {
         let account = await new MixAccount(this.vue, controller).init()
         this.accountsToWatch.add(this.vue.$web3.utils.padLeft(account.contractAddress, 64))
-        let trustedList = await account.call(this.vue.$trustedAccounts.methods.getAllTrusted())
+        let trustedList = await account.call(this.vue.$trustedAccounts, 'getAllTrusted')
         for (let trusted of trustedList) {
           this.accountsToWatch.add(this.vue.$web3.utils.padLeft(trusted, 64))
         }
