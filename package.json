@@ -95,7 +95,7 @@
     "vue-router": "^3.0.1",
     "vue-simple-progress": "^1.1.0",
     "vue-timeago": "^5.0.0",
-    "web3": "1.0.0-beta.37"
+    "web3": "^1.0.0-beta.55"
   },
   "devDependencies": {
     "ajv": "^6.5.0",

@@ -26,9 +26,9 @@
 
 <script>
   import Page from './Page.vue'
-  import languageProto from '../../lib/language_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
   import ethTx from 'ethereumjs-tx'
@@ -62,8 +62,8 @@
         })
       },
       async create(event) {
-        let flagsNonce = '0x03' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
+        let flagsNonce = '0x03' + this.$web3.utils.randomHex(31).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
 
         let content = new MixContent(this.$root)
 
@@ -91,7 +91,7 @@
 
         let ipfsHash = await content.save()
 
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create image')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
 
         let byteCodePath
     	  if (process.env.NODE_ENV !== 'development') {

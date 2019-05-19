@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message BodyTextMixin {
+  string body_text = 1;   // Body text of the item.
+}

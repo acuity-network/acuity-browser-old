@@ -1,14 +1,13 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('debug') }}
+      {{ $t('debugItem') }}
     </template>
 
     <template slot="body">
-      <b-field :label="$t('itemId')">
-        <b-input id="itemId" @keydown.native.enter="read" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+      <b-field :label="$t('itemId')" :message="message">
+        <b-input v-model="itemId" @keydown.native.enter="read" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
-
       <button class="button is-primary" @click="read">{{ $t('readItem') }}</button>
       <code id="output" style="display: block; white-space: pre;"></code>
     </template>
@@ -17,38 +16,54 @@
 
 <script>
   import Page from './Page.vue'
-  import itemProto from '../../lib/item_pb.js'
-  import languageProto from '../../lib/language_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
-  import jpegImageProto from '../../lib/jpeg-image_pb.js'
+  import itemProto from '../../lib/protobuf/item_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
+  import jpegImageProto from '../../lib/protobuf/jpeg-image_pb.js'
   import brotli from 'iltorb'
   import Base58 from 'base-58'
   import multihashes from 'multihashes'
   import formatByteCount from '../../lib/formatByteCount.js'
+  import MixItem from '../../lib/MixItem.js'
 
   export default {
     name: 'debug',
     components: {
       Page,
     },
+    data() {
+      return {
+        itemId: '',
+        message: '',
+      }
+    },
     methods: {
       async read(event) {
         const output = document.getElementById('output')
         output.innerHTML = ''
-        const itemId = document.getElementById('itemId').value
 
-        let shortId = await this.$itemStoreShortId.methods.getShortId(itemId).call()
+        try {
+          let item = await new MixItem(this.$root, this.itemId).init()
+        }
+        catch (e) {
+          this.message = 'Item not found.'
+          return
+        }
+
+        this.message = ''
+
+        let shortId = await this.$itemStoreShortId.methods.getShortId(this.itemId).call()
         output.appendChild(document.createTextNode('shortId: '  + shortId + '\n'))
 
-        let itemStoreAddress = await this.$itemStoreRegistry.methods.getItemStore(itemId).call()
+        let itemStoreAddress = await this.$itemStoreRegistry.methods.getItemStore(this.itemId).call()
         output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
 
-        const itemStoreAbi = require('../../lib/ItemStoreInterface.abi.json')
+        const itemStoreAbi = require('../../lib/contracts/ItemStoreInterface.abi.json')
         const itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
-        let inUse = await itemStore.methods.getInUse(itemId).call()
+        let inUse = await itemStore.methods.getInUse(this.itemId).call()
         if (!inUse) {
           output.append('Item not found.\n')
           return
@@ -61,7 +76,7 @@
         }
         output.append('itemStore: ItemStoreIpfsSha256\n')
 
-        let item = await this.$itemStoreIpfsSha256.methods.getItem(itemId).call()
+        let item = await this.$itemStoreIpfsSha256.methods.getItem(this.itemId).call()
         output.append('Updatable: ' + ((item.flags & 0x01) ? 'true' : 'false') + '\n')
         output.append('Enforce revisions: ' + ((item.flags & 0x02) ? 'true' : "false") + '\n')
         output.append('Retractable: ' + ((item.flags & 0x04) ? 'true' : 'false') + '\n')

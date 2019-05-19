@@ -80,6 +80,7 @@
 </template>
 
 <script>
+  import { remote } from 'electron'
   import Page from './Page.vue'
   import { checkClockSync } from '@parity/electron'
   import throttle from 'just-throttle'
@@ -120,7 +121,12 @@
     },
     methods: {
       async start() {
-        this.acuityVersion = process.env.npm_package_version
+        if (process.env.NODE_ENV == 'development') {
+          this.acuityVersion = process.env.npm_package_version
+        }
+        else {
+          this.acuityVersion = remote.app.getVersion()
+        }
         this.downloadingParity = false
         this.web3Version = this.$web3.version
         let protocolVersion = await this.$web3.eth.getProtocolVersion()

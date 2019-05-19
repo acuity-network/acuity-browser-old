@@ -41,11 +41,11 @@
 
 <script>
   import Page from './Page.vue'
-  import itemProto from '../../lib/item_pb.js'
-  import profileProto from '../../lib/account-profile_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import languageProto from '../../lib/language_pb.js'
+  import itemProto from '../../lib/protobuf/item_pb.js'
+  import profileProto from '../../lib/protobuf/account-profile_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
   import multihash from 'multihashes'
   import MixItem from '../../lib/MixItem.js'
   import Image from '../../lib/Image.js'
@@ -122,14 +122,14 @@
 
         let ipfsHash = await content.save()
         try {
-          let itemId = await window.activeAccount.call(this.$accountProfile.methods.getProfile())
-          await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.createNewRevision(itemId, ipfsHash), 0, 'Update profile')
+          let itemId = await window.activeAccount.call(this.$accountProfile, 'getProfile')
+          await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'createNewRevision', [itemId, ipfsHash], 0, 'Update profile')
         }
         catch(e) {
-          let flagsNonce = '0x01' + this.$web3.utils.randomHex(30).substr(2)
-          let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
-          await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create profile item')
-          await window.activeAccount.sendData(this.$accountProfile.methods.setProfile(itemId), 0, 'Set profile item')
+          let flagsNonce = '0x01' + this.$web3.utils.randomHex(31).substr(2)
+          let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+          await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create profile item')
+          await window.activeAccount.sendData(this.$accountProfile, 'setProfile', [itemId], 0, 'Set profile item')
         }
 
         this.$root.$emit('change-active-account', window.activeAccount)

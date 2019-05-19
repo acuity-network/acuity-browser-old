@@ -1,6 +1,8 @@
 import multihashes from 'multihashes'
 import brotli from 'iltorb'
-import itemProto from './item_pb.js'
+import itemProto from './protobuf/item_pb.js'
+
+let contentCache = []
 
 export default class MixContent {
 
@@ -10,6 +12,11 @@ export default class MixContent {
   }
 
   async load(ipfsHash) {
+    if (contentCache[ipfsHash]) {
+      this.mixins = contentCache[ipfsHash]
+      return this
+    }
+
     let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), "hex"), 'sha2-256'))
     let response = await this.vue.$ipfsClient.get('cat?arg=/ipfs/' + encodedIpfsHash, false)
     let itemPayload = await brotli.decompress(Buffer.from(response, "binary"))
@@ -21,6 +28,8 @@ export default class MixContent {
         payload: mixins[i].getPayload(),
       })
     }
+
+    contentCache[ipfsHash] = this.mixins
 
     return this
   }

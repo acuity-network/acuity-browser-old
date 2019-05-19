@@ -3,12 +3,11 @@
 </template>
 
 <script>
-  import MixAccount from '../../lib/MixAccount.js'
   import MixItem from '../../lib/MixItem.js'
 
   export default {
-    name: 'profile-link',
-    props: ['address'],
+    name: 'item-link',
+    props: ['itemId'],
     data() {
       return {
         route: '',
@@ -17,11 +16,9 @@
     },
     methods: {
       async loadData() {
-        let account = await new MixAccount(this.$root, this.address, true).init()
-        let itemId = await account.call(this.$accountProfile, 'getProfile')
-        let profile = await new MixItem(this.$root, itemId).init()
-        let revision = await profile.latestRevision().load()
-        this.route = '/item/' + itemId
+        let item = await new MixItem(this.$root, this.itemId).init()
+        let revision = await item.latestRevision().load()
+        this.route = '/item/' + this.itemId
         this.title = await revision.getTitle()
       },
     },

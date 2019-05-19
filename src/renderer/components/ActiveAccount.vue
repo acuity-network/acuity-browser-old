@@ -19,7 +19,7 @@
     methods: {
       async loadData() {
         try {
-          var itemId = await window.activeAccount.call(this.$accountProfile.methods.getProfile())
+          var itemId = await window.activeAccount.call(this.$accountProfile, 'getProfile')
           var item = await new MixItem(this, itemId).init()
           var revision = await item.latestRevision().load()
           this.title = revision.getTitle()

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+enum AccountType {
+  ANON = 0;
+  PERSON = 1;
+  PROJECT = 2;
+  ORGANIZATION = 3;
+  PROXY = 4;
+  PARODY = 5;
+  BOT = 6;
+  SHILL = 7;
+}
+
+message AccountProfile {
+  AccountType type = 1;
+  string location = 2;
+}

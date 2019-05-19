@@ -29,10 +29,10 @@
 <script>
   import Page from './Page.vue'
   import MixContent from '../../lib/MixContent.js'
-  import languageProto from '../../lib/language_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
 
   export default {
     name: 'publish-mixin-type',
@@ -80,10 +80,10 @@
         }
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
-        await window.activeAccount.sendData(this.$itemStoreShortId.methods.createShortId(itemId), 0, 'Create short ID')
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create mixin type')
+        let flagsNonce = '0x00' + this.$web3.utils.randomHex(31).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+        await window.activeAccount.sendData(this.$itemStoreShortId, 'createShortId', [itemId], 0, 'Create short ID')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create mixin type')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },
