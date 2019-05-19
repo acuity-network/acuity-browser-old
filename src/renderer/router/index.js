@@ -70,6 +70,11 @@ export default new Router({
       component: require('@/components/PublishFeed').default
     },
     {
+      path: '/publish-item/file',
+      name: 'publish-file',
+      component: require('@/components/PublishFile').default
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: require('@/components/Profile').default
