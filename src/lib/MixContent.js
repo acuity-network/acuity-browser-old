@@ -17,17 +17,20 @@ export default class MixContent {
       return this
     }
 
-    let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), "hex"), 'sha2-256'))
-    let response = await this.vue.$ipfsClient.get('cat?arg=/ipfs/' + encodedIpfsHash, false)
-    let itemPayload = await brotli.decompress(Buffer.from(response, "binary"))
-    let mixins = itemProto.Item.deserializeBinary(itemPayload).getMixinList()
+    try {
+      let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), "hex"), 'sha2-256'))
+      let response = await this.vue.$ipfsClient.get('cat?arg=/ipfs/' + encodedIpfsHash, false)
+      let itemPayload = await brotli.decompress(Buffer.from(response, "binary"))
+      let mixins = itemProto.Item.deserializeBinary(itemPayload).getMixinList()
 
-    for (let i = 0; i < mixins.length; i++) {
-      this.mixins.push({
-        mixinId: '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8),
-        payload: mixins[i].getPayload(),
-      })
+      for (let i = 0; i < mixins.length; i++) {
+        this.mixins.push({
+          mixinId: '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8),
+          payload: mixins[i].getPayload(),
+        })
+      }
     }
+    catch (e) {}
 
     contentCache[ipfsHash] = this.mixins
 
