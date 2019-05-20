@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="route">{{ title }}</router-link>
+  <router-link v-if="itemId" :to="route">{{ title }}</router-link>
 </template>
 
 <script>
@@ -16,10 +16,12 @@
     },
     methods: {
       async loadData() {
-        let item = await new MixItem(this.$root, this.itemId).init()
-        let revision = await item.latestRevision().load()
-        this.route = '/item/' + this.itemId
-        this.title = await revision.getTitle()
+        if (this.itemId) {
+          let item = await new MixItem(this.$root, this.itemId).init()
+          let revision = await item.latestRevision().load()
+          this.route = '/item/' + this.itemId
+          this.title = await revision.getTitle()
+        }
       },
     },
     created() {
