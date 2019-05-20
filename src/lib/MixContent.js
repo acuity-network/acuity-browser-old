@@ -50,10 +50,8 @@ export default class MixContent {
     }
 
     let payload = await brotli.compress(Buffer.from(itemMessage.serializeBinary()))
-    let data = new FormData()
-    data.append('', new File([payload.toString('binary')], {type: 'application/octet-stream'}))
-    let response = await this.vue.$http.post('http://127.0.0.1:5001/api/v0/add', data)
-    let decodedHash = multihashes.decode(multihashes.fromB58String(response.data.Hash))
+    let response = await this.vue.$ipfsClient.post('add', payload)
+    let decodedHash = multihashes.decode(multihashes.fromB58String(response.Hash))
 
     if (decodedHash.name != 'sha2-256') {
       throw 'Wrong type of multihash.'
