@@ -2,19 +2,19 @@
 
 process.env.NODE_ENV = 'production'
 
-const { say } = require('cfonts')
-const chalk = require('chalk')
-const del = require('del')
-const webpack = require('webpack')
-const Multispinner = require('multispinner')
+let { say } = require('cfonts')
+let chalk = require('chalk')
+let del = require('del')
+let webpack = require('webpack')
+let Multispinner = require('multispinner')
 
-const mainConfig = require('./webpack.main.config')
-const rendererConfig = require('./webpack.renderer.config')
+let mainConfig = require('./webpack.main.config')
+let rendererConfig = require('./webpack.renderer.config')
 
-const doneLog = chalk.bgGreen.white(' DONE ') + ' '
-const errorLog = chalk.bgRed.white(' ERROR ') + ' '
-const okayLog = chalk.bgBlue.white(' OKAY ') + ' '
-const isCI = process.env.CI || false
+let doneLog = chalk.bgGreen.white(' DONE ') + ' '
+let errorLog = chalk.bgRed.white(' ERROR ') + ' '
+let okayLog = chalk.bgBlue.white(' OKAY ') + ' '
+let isCI = process.env.CI || false
 
 if (process.env.BUILD_TARGET === 'clean') clean()
 else build()
@@ -30,8 +30,8 @@ function build () {
 
   del.sync(['dist/electron/*', '!.gitkeep'])
 
-  const tasks = ['main', 'renderer']
-  const m = new Multispinner(tasks, {
+  let tasks = ['main', 'renderer']
+  let m = new Multispinner(tasks, {
     preText: 'building',
     postText: 'process'
   })
@@ -94,7 +94,7 @@ function pack (config) {
 }
 
 function greeting () {
-  const cols = process.stdout.columns
+  let cols = process.stdout.columns
   let text = ''
 
   if (cols > 85) text = 'lets-build'

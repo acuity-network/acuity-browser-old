@@ -19,7 +19,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
-const winURL = process.env.NODE_ENV === 'development'
+let winURL = process.env.NODE_ENV === 'development'
   ? `http://127.0.0.1:9080`
   : `file://${__dirname}/index.html`
 
@@ -68,7 +68,7 @@ async function createWindow () {
   })
 
   if (process.platform === 'darwin') {
-    var template = [{
+    let template = [{
       label: 'FromScratch',
       submenu: [{
         label: 'Quit',
@@ -108,7 +108,7 @@ async function createWindow () {
       }]
     }];
 
-    var osxMenu = Menu.buildFromTemplate(template);
+    let osxMenu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(osxMenu);
   }
 

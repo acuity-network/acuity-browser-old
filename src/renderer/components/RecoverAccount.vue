@@ -32,9 +32,9 @@
     },
     methods: {
         async submit() {
-            const output = document.getElementById('output');
+            let output = document.getElementById('output');
             output.innerHTML = '';
-            const phrase = document.getElementById('phrase').value;
+            let phrase = document.getElementById('phrase').value;
 
             if(phrase && bip39.validateMnemonic(phrase)) {
                 let pk = bip39.mnemonicToSeedHex(phrase).substr(0, 64);

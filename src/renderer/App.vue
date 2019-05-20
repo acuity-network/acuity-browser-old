@@ -83,7 +83,7 @@
           toBlock: 'pending',
         })
         .on('data', log => {
-          var payment = {
+          let payment = {
             transaction: log.transactionHash,
             sender: log.returnValues.from,
             amount: log.returnValues.value,
@@ -98,7 +98,7 @@
             return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
           })
           .catch(error => {
-            var id
+            let id
             return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
             .then(count => {
               id = parseInt(count)

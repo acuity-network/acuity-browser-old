@@ -88,16 +88,16 @@
           this.unconfirmedBalance = this.$web3.utils.fromWei(balance) + ' MIX'
         })
 
-        var data = []
+        let data = []
 
         this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/receivedCount')
         .then(count => {
-          var payments = []
+          let payments = []
 
-          for (var i = 0; i < count; i++) {
+          for (let i = 0; i < count; i++) {
             payments.push(this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/received/' + i)
               .then(json => {
-                var payment = JSON.parse(json)
+                let payment = JSON.parse(json)
                 return this.$web3.eth.getTransaction(payment.transaction)
                 .then(tx => {
                   return this.$web3.eth.getBlock(tx.blockNumber)
@@ -122,7 +122,7 @@
           return []
         })
         .then(results => {
-          for (var i = 0; i < results.length; i++) {
+          for (let i = 0; i < results.length; i++) {
             if (results[i]) {
               data.push({
                 'timestamp': results[i].timestamp ? results[i].timestamp : 4000000000,
@@ -136,8 +136,8 @@
           return this.$web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
         })
         .then(nonce => {
-          var transactions = []
-          for (var i = 0; i < nonce; i++) {
+          let transactions = []
+          for (let i = 0; i < nonce; i++) {
             transactions.push(window.activeAccount.getTransactionInfo(i)
               .catch(err => {
                 return false
@@ -146,7 +146,7 @@
           }
           Promise.all(transactions)
           .then(results => {
-            for (var i = 0; i < results.length; i++) {
+            for (let i = 0; i < results.length; i++) {
               if (results[i] && results[i].transaction && results[i].transaction.value != 0) {
                 data.push({
                   'timestamp': results[i].block ? results[i].block.timestamp : 4000000000,

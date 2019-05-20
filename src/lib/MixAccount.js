@@ -1,4 +1,4 @@
-const accountAbi = require('./contracts/Account.abi.json')
+let accountAbi = require('./contracts/Account.abi.json')
 import ethTx from 'ethereumjs-tx'
 import { remote } from 'electron'
 import path from 'path'
@@ -34,7 +34,7 @@ export default class MixAccount {
   }
 
   _logTransaction(transaction, to, description) {
-    var info = {
+    let info = {
       hash: transaction.hash,
       to: to,
       description: description,
