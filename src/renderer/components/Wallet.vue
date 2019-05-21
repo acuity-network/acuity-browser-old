@@ -124,13 +124,15 @@
         .then(results => {
           for (let i = 0; i < results.length; i++) {
             if (results[i]) {
-              data.push({
-                'timestamp': results[i].timestamp ? results[i].timestamp : 4000000000,
-                'confirmed': results[i].timestamp != null,
-                'when': results[i].timestamp ? new Date(results[i].timestamp * 1000) : null,
-                'who': results[i].sender,
-                'amount': this.$web3.utils.fromWei(results[i].amount),
-              })
+              try {
+                data.push({
+                  'timestamp': results[i].timestamp ? results[i].timestamp : 4000000000,
+                  'confirmed': results[i].timestamp != null,
+                  'when': results[i].timestamp ? new Date(results[i].timestamp * 1000) : null,
+                  'who': results[i].sender,
+                  'amount': this.$web3.utils.fromWei(results[i].amount),
+                })
+              } catch (e) {}
             }
           }
           return this.$web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
