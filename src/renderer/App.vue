@@ -86,13 +86,13 @@
           toBlock: 'pending',
         })
         .on('data', log => {
-          var payment = {
+          let payment = {
             transaction: log.transactionHash,
             sender: log.returnValues.from,
-            amount: log.returnValues.value,
+            amount: log.returnValues.value.toString(),
           }
-          //only show notifications for TX that occurred since logging in.
-          if(log.blockNumber >= startingBlock) {
+          // Only show notifications for TX that occurred since logging in.
+          if (log.blockNumber >= startingBlock) {
             let notification = this.$notifications.mixReceived(account.contractAddress, this.$web3.utils.fromWei(payment.amount, 'Ether'))
             new Notification(notification.title, notification)
           }
@@ -101,7 +101,7 @@
             return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
           })
           .catch(error => {
-            var id
+            let id
             return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
             .then(count => {
               id = parseInt(count)

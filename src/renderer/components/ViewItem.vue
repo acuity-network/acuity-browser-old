@@ -224,7 +224,7 @@
         this.ownerAddress = account.contractAddress
         let trustLevel = await item.getTrustLevel()
         if (trustLevel != 1) {
-          var trustLevelToggled = await item.getTrustLevelToggled()
+          let trustLevelToggled = await item.getTrustLevelToggled()
           this.ownerTrustedClass = trustLevel ? (trustLevel == 2 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
           this.ownerTrustedClassHover = trustLevelToggled ? (trustLevelToggled == 2 ? 'mdi-verified' : 'mdi-shield') : 'mdi-shield-outline'
           this.ownerTrustedClassCurrent = this.ownerTrustedClass
@@ -293,7 +293,7 @@
           this.tokenSupply = await token.methods.totalSupply().call()
         }
 
-        var id
+        let id
         this.$db.get('/historyCount')
         .then(count => {
           id = parseInt(count)

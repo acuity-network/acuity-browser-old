@@ -19,9 +19,9 @@
     methods: {
       async loadData() {
         try {
-          var itemId = await window.activeAccount.call(this.$accountProfile, 'getProfile')
-          var item = await new MixItem(this, itemId).init()
-          var revision = await item.latestRevision().load()
+          let itemId = await window.activeAccount.call(this.$accountProfile, 'getProfile')
+          let item = await new MixItem(this, itemId).init()
+          let revision = await item.latestRevision().load()
           this.title = revision.getTitle()
           this.image = revision.getImage(64, 64)
         }

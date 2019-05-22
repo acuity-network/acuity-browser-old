@@ -64,16 +64,16 @@
     },
     methods: {
       async loadData() {
-        var item = await new MixItem(this.$root, this.itemId).init()
+        let item = await new MixItem(this.$root, this.itemId).init()
         this.trusted = await item.isTrusted()
-        var account = await item.account()
+        let account = await item.account()
         this.ownerAddress = account.contractAddress
-        var itemId = await account.call(this.$accountProfile, 'getProfile')
-        var profile = await new MixItem(this.$root, itemId).init()
-        var revision = await profile.latestRevision().load()
+        let itemId = await account.call(this.$accountProfile, 'getProfile')
+        let profile = await new MixItem(this.$root, itemId).init()
+        let revision = await profile.latestRevision().load()
         this.avatar = revision.getImage(32, 32)
 
-        var commentRevision = await item.latestRevision().load()
+        let commentRevision = await item.latestRevision().load()
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000)
         this.bodyText = commentRevision.getBodyText()
         this.childIds = await this.$itemDagComments.methods.getAllChildIds(this.itemId).call()

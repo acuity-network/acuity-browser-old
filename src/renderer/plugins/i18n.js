@@ -3,7 +3,7 @@ import VueI18n from 'vue-i18n';
 
 Vue.use(VueI18n);
 
-const messages = {
+let messages = {
   'en': {
     //Nav Panel
     general: 'General',
@@ -169,7 +169,7 @@ const messages = {
   }
 }
 
-const i18n = new VueI18n({
+let i18n = new VueI18n({
     locale: 'en', // set locale
     fallbackLocale: 'ru', // set fallback locale
     messages, // set locale messages
