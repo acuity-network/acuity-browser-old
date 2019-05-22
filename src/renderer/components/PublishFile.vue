@@ -27,24 +27,29 @@
       <b-field label="File" :message="filepath">
         <button class="button" @click="chooseFile">{{ $t('chooseFile') }}</button>
       </b-field>
-      <button class="button is-primary" @click="publish">{{ $t('publish') }}</button>
+      <code id="output" style="display: block; font-size:small"></code>
+      <button v-if="isDoneUploading" class="button is-primary" @click="publish">{{ $t('publish') }}</button>
     </template>
   </page>
 </template>
 
 <script>
   import Page from './Page.vue'
-  import languageProto from '../../lib/language_pb.js'
-  import titleProto from '../../lib/title_pb.js'
-  import bodyTextProto from '../../lib/body_pb.js'
-  import descriptionProto from '../../lib/description_pb.js'
+  import languageProto from '../../lib/protobuf/language_pb.js'
+  import titleProto from '../../lib/protobuf/title_pb.js'
+  import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import descriptionProto from '../../lib/protobuf/description_pb.js'
+  import fileProto from '../../lib/protobuf/file_pb.js'
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
   import fs from 'fs-extra'
   import request from 'request'
+  import File from '../../lib/File.js'
+  import formatByteCount from '../../lib/formatByteCount.js'
+  import Base58 from 'base-58'
 
   export default {
-    name: 'publish-image',
+    name: 'publish-file',
     components: {
       Page,
     },
@@ -59,7 +64,8 @@
             isUploading: false,
             isDoneUploading: false,
             fileHash:'',
-            fileName:''
+            fileName:'',
+            fileSize:''
         }
     },
     created() {
@@ -93,20 +99,20 @@
             this.filePath = fileNames[0];
             let stats = fs.statSync(fileNames[0])
             this.fileTotalSize = stats.size;
-            console.log(this.fileTotalSize);
+            output.innerHTML = 'Uploading file...'
             let req = request.post('http://127.0.0.1:5001/api/v0/add', (err, res, body) => {
                 if (err) {
                     console.log(err);
                 } else {
                     console.log(JSON.parse(body));
+                    
                     let jsonBody = JSON.parse(body);
-                    //const file = fs.createWriteStream("test1.jpg");
-                    // let req2 = request.get("http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/"+jsonBody.Hash, (err, res) => {
-                    //     res.pipe(file);
-                    // });
-                    console.log(jsonBody.Hash)
                     this.fileHash = jsonBody.Hash;
-                    request("http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/"+jsonBody.Hash).pipe(fs.createWriteStream(jsonBody.Name));
+                    this.fileName = jsonBody.Name;
+                    this.fileSize = jsonBody.Size;
+                    this.isDoneUploading = true;
+                    output.innerHTML = 'Name: '+ this.fileName + '<br/>' + 'Hash: '+ this.fileHash + '<br/>' + 'Size: ' +  formatByteCount(this.fileSize)
+
 
                 }
             });
@@ -123,9 +129,8 @@
         })
       },
       async publish(event) {
-        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(30).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256.methods.getNewItemId(window.activeAccount.contractAddress, flagsNonce))
-
+        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(31).substr(2)
+        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
         let content = new MixContent(this.$root)
 
         // Language
@@ -142,14 +147,23 @@
         let descriptionMessage = new descriptionProto.DescriptionMixin()
         descriptionMessage.setDescription(this.description)
         content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
+        console.log(content)
+        // File
+        let fileMessage = new fileProto.File()
+        //console.log('decodedhash',Base58.decode(this.fileHash));
+        fileMessage.setFilename(this.fileName);
+        console.log(this.fileHash)
+        fileMessage.setIpfsHash(Base58.decode(this.fileHash));
+        fileMessage.setFilesize(this.fileSize);
+        content.addMixin(0x0b62637e, fileMessage.serializeBinary())
 
         let ipfsHash = await content.save()
 
         if (this.feedId != '0') {
-          await window.activeAccount.sendData(this.$itemDagFeedItems.methods.addChild(this.feedId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce), 0, 'Attach feed item')
+          await window.activeAccount.sendData(this.$itemDagFeedItems, 'addChild', [this.feedId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach feed item')
         }
 
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256.methods.create(flagsNonce, ipfsHash), 0, 'Create file')
+        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

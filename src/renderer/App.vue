@@ -68,6 +68,9 @@
       // Load previous selected language.
       i18n.locale = this.$settings.get('locale')
 
+      //in future load previous downloads
+      window.downloads = [];
+
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',
         'lt': '/account/controllerAddress/z',
