@@ -40,10 +40,10 @@
     async created() {
       let data = []
       let count = await this.$db.get('/historyCount')
-      for (var i = count - 1; i >= 0; i--) {
+      for (let i = count - 1; i >= 0; i--) {
         try {
           let json = await this.$db.get('/history/' + i)
-          var item = JSON.parse(json)
+          let item = JSON.parse(json)
           data.push({
             timestamp: item.timestamp,
             when: new Date(item.timestamp),

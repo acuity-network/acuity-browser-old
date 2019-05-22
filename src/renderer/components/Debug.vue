@@ -41,7 +41,7 @@
     },
     methods: {
       async read(event) {
-        const output = document.getElementById('output')
+        let output = document.getElementById('output')
         output.innerHTML = ''
 
         try {
@@ -60,8 +60,8 @@
         let itemStoreAddress = await this.$itemStoreRegistry.methods.getItemStore(this.itemId).call()
         output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
 
-        const itemStoreAbi = require('../../lib/contracts/ItemStoreInterface.abi.json')
-        const itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
+        let itemStoreAbi = require('../../lib/contracts/ItemStoreInterface.abi.json')
+        let itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
         let inUse = await itemStore.methods.getInUse(this.itemId).call()
         if (!inUse) {
@@ -84,31 +84,31 @@
         output.append('Owner: ' + item.owner + '\n')
         output.append('Revision count: ' + item.revisionCount + '\n')
 
-        for (var i = 0; i < item.revisionCount; i++) {
-          const timestamp = new Date(item.timestamps[i] * 1000)
+        for (let i = 0; i < item.revisionCount; i++) {
+          let timestamp = new Date(item.timestamps[i] * 1000)
           output.append('\nRevision ' + i + ' timestamp: ' + timestamp + '\n')
 
-          const ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
+          let ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
           output.append('Revision ' + i + ' IPFS hash: ' + ipfsHash + '\n')
 
           let response = await this.$ipfsClient.get('cat?arg=/ipfs/' + ipfsHash, false)
-          const containerPayload = Buffer.from(response, "binary")
+          let containerPayload = Buffer.from(response, "binary")
           output.append('Compressed length: ' + formatByteCount(containerPayload.length) + '\n')
 
-          const itemPayload = await brotli.decompress(Buffer.from(containerPayload))
+          let itemPayload = await brotli.decompress(Buffer.from(containerPayload))
           output.append('Uncompressed length: ' + formatByteCount(itemPayload.length) + '\n')
 
-          const itemMessage = itemProto.Item.deserializeBinary(itemPayload)
-          const mixins = itemMessage.getMixinList()
+          let itemMessage = itemProto.Item.deserializeBinary(itemPayload)
+          let mixins = itemMessage.getMixinList()
 
           output.append('Mixin count: ' + mixins.length + '\n')
 
-          for (var i = 0; i < mixins.length; i++) {
+          for (let i = 0; i < mixins.length; i++) {
             output.append('\nMixin ' + i + '\n')
-            var mixinId = '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8)
+            let mixinId = '0x' + ('00000000' + mixins[i].getMixinId().toString(16)).slice(-8)
             output.append('mixinId: ' + mixinId + '\n')
 
-            var mixinPayload = mixins[i].getPayload()
+            let mixinPayload = mixins[i].getPayload()
 
             switch (mixinId) {
               case '0x51c32e3a':
@@ -117,43 +117,43 @@
 
               case '0x4e4e06c4':
                 output.append('Mixin type: Language\n')
-                var languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
+                let languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
                 break
 
               case '0x24da6114':
                 output.append('Mixin type: Title\n')
-                var titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
+                let titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
                 break
 
               case '0x34a9a6ec':
                 output.append('Mixin type: Body text\n')
-                var bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
+                let bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
                 break
 
               case '0x5a474550':
                 output.append('Mixin type: Description\n')
-                var descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
+                let descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
                 break
 
               case '0x12745469':
                 output.append('Mixin type: Image\n')
-                var imageMessage = jpegImageProto.JpegMipmap.deserializeBinary(mixinPayload)
-                var width = imageMessage.getWidth()
+                let imageMessage = jpegImageProto.JpegMipmap.deserializeBinary(mixinPayload)
+                let width = imageMessage.getWidth()
                 output.append('Original width: ' + width + '\n')
-                var height = imageMessage.getHeight()
+                let height = imageMessage.getHeight()
                 output.append('Original height: ' + height + '\n')
-                var mipmaps = imageMessage.getMipmapLevelList()
+                let mipmaps = imageMessage.getMipmapLevelList()
                 output.append('Mipmap levels: ' + mipmaps.length + '\n')
-                var renderHeight = Math.round(256 * height / width)
-                for (var j = 0; j < mipmaps.length; j++) {
+                let renderHeight = Math.round(256 * height / width)
+                for (let j = 0; j < mipmaps.length; j++) {
                   output.append('\nMipmap level: ' + j + '\n')
                   output.append('Mipmap filesize: ' + formatByteCount(mipmaps[j].getFilesize()) + '\n')
-                  var el = document.createElement('img')
-                  var domString = '<img src="http://127.0.0.1:8080/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
+                  let el = document.createElement('img')
+                  let domString = '<img src="http://127.0.0.1:8080/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
                   el.innerHTML = domString
                   output.appendChild(el.firstChild)
                 }

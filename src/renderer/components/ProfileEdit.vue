@@ -82,7 +82,7 @@
     },
     methods: {
       chooseFile(event) {
-        const {dialog} = require('electron').remote
+        let {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose image',
           filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
@@ -94,7 +94,7 @@
         let content = new MixContent(this.$root)
 
         // Account profile
-        var profileMessage = new profileProto.AccountProfile()
+        let profileMessage = new profileProto.AccountProfile()
         profileMessage.setType(this.type)
         profileMessage.setLocation(this.location)
         content.addMixin(0x4bf3ce07, profileMessage.serializeBinary())

@@ -56,7 +56,7 @@
           let item = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
 
-          var row = {
+          let row = {
             account: address,
             name: revision.getTitle(),
             balance: this.$web3.utils.fromWei(await account.getUnconfirmedBalance()),

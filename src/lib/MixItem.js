@@ -1,4 +1,4 @@
-const itemStoreAbi = require('./contracts/ItemStoreInterface.abi.json')
+let itemStoreAbi = require('./contracts/ItemStoreInterface.abi.json')
 import itemProto from './protobuf/item_pb.js'
 import MixRevision from './MixRevision.js'
 import MixAccount from './MixAccount.js'
@@ -89,7 +89,7 @@ export default class MixItem {
   }
 
   async getTrustLevelToggled() {
-    var level = await this.getTrustLevel()
+    let level = await this.getTrustLevel()
 
     switch (level) {
       case 0:

@@ -1,16 +1,16 @@
 'use strict'
 
-const chalk = require('chalk')
-const electron = require('electron')
-const path = require('path')
-const { say } = require('cfonts')
-const { spawn } = require('child_process')
-const webpack = require('webpack')
-const WebpackDevServer = require('webpack-dev-server')
-const webpackHotMiddleware = require('webpack-hot-middleware')
+let chalk = require('chalk')
+let electron = require('electron')
+let path = require('path')
+let { say } = require('cfonts')
+let { spawn } = require('child_process')
+let webpack = require('webpack')
+let WebpackDevServer = require('webpack-dev-server')
+let webpackHotMiddleware = require('webpack-hot-middleware')
 
-const mainConfig = require('./webpack.main.config')
-const rendererConfig = require('./webpack.renderer.config')
+let mainConfig = require('./webpack.main.config')
+let rendererConfig = require('./webpack.renderer.config')
 
 let electronProcess = null
 let manualRestart = false
@@ -42,7 +42,7 @@ function startRenderer () {
   return new Promise((resolve, reject) => {
     rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(rendererConfig.entry.renderer)
     rendererConfig.mode = 'development'
-    const compiler = webpack(rendererConfig)
+    let compiler = webpack(rendererConfig)
     hotMiddleware = webpackHotMiddleware(compiler, {
       log: false,
       heartbeat: 2500,
@@ -59,7 +59,7 @@ function startRenderer () {
       logStats('Renderer', stats)
     })
 
-    const server = new WebpackDevServer(
+    let server = new WebpackDevServer(
       compiler,
       {
         contentBase: path.join(__dirname, '../'),
@@ -81,7 +81,7 @@ function startMain () {
   return new Promise((resolve, reject) => {
     mainConfig.entry.main = [path.join(__dirname, '../src/main/index.dev.js')].concat(mainConfig.entry.main)
     mainConfig.mode = 'development'
-    const compiler = webpack(mainConfig)
+    let compiler = webpack(mainConfig)
 
     compiler.hooks.watchRun.tapAsync('watch-run', (compilation, done) => {
       logStats('Main', chalk.white.bold('compiling...'))
@@ -114,7 +114,7 @@ function startMain () {
 }
 
 function startElectron () {
-  var args = [
+  let args = [
     '--disable-gpu-driver-bug-workarounds --inspect=5858',
     path.join(__dirname, '../dist/electron/main.js')
   ]
@@ -158,7 +158,7 @@ function electronLog (data, color) {
 }
 
 function greeting () {
-  const cols = process.stdout.columns
+  let cols = process.stdout.columns
   let text = ''
 
   if (cols > 104) text = 'mix-acuity'
