@@ -25,7 +25,7 @@
     props: ['to', 'amount'],
     methods: {
       send (event) {
-        window.activeAccount.sendMix(this.to, this.$web3.utils.toWei(this.amount))
+        window.activeAccount.sendMix(this.to, this.$mixClient.web3.utils.toWei(this.amount))
         .then(() => {
           this.$parent.$parent.loadData()
           this.$emit('close')

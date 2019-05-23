@@ -67,17 +67,6 @@ async function launch(window) {
 		window.webContents.send('parity-error', data.toString())
 	})
 
-	// Wait for IPC to come up.
-	let success = false
-	let web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
-	do {
-		try {
-			await web3.eth.getProtocolVersion()
-			success = true
-		}
-		catch (e) {}
-	} while (!success)
-
 	window.webContents.send('parity-running')
 }
 

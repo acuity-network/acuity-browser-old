@@ -122,14 +122,14 @@
 
         let ipfsHash = await content.save()
         try {
-          let itemId = await window.activeAccount.call(this.$accountProfile, 'getProfile')
-          await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'createNewRevision', [itemId, ipfsHash], 0, 'Update profile')
+          let itemId = await window.activeAccount.call(this.$mixClient.accountProfile, 'getProfile')
+          await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [itemId, ipfsHash], 0, 'Update profile')
         }
         catch(e) {
-          let flagsNonce = '0x01' + this.$web3.utils.randomHex(31).substr(2)
-          let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
-          await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create profile item')
-          await window.activeAccount.sendData(this.$accountProfile, 'setProfile', [itemId], 0, 'Set profile item')
+          let flagsNonce = '0x01' + this.$mixClient.web3.utils.randomHex(31).substr(2)
+          let itemId = await window.activeAccount.call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+          await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create profile item')
+          await window.activeAccount.sendData(this.$mixClient.accountProfile, 'setProfile', [itemId], 0, 'Set profile item')
         }
 
         this.$root.$emit('change-active-account', window.activeAccount)
