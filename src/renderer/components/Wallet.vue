@@ -80,12 +80,12 @@
       loadData() {
         window.activeAccount.getBalance()
         .then(balance => {
-          this.balance = this.$web3.utils.fromWei(balance) + ' MIX'
+          this.balance = this.$mixClient.web3.utils.fromWei(balance) + ' MIX'
         })
 
         window.activeAccount.getUnconfirmedBalance()
         .then(balance => {
-          this.unconfirmedBalance = this.$web3.utils.fromWei(balance) + ' MIX'
+          this.unconfirmedBalance = this.$mixClient.web3.utils.fromWei(balance) + ' MIX'
         })
 
         let data = []
@@ -98,9 +98,9 @@
             payments.push(this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/received/' + i)
               .then(json => {
                 let payment = JSON.parse(json)
-                return this.$web3.eth.getTransaction(payment.transaction)
+                return this.$mixClient.web3.eth.getTransaction(payment.transaction)
                 .then(tx => {
-                  return this.$web3.eth.getBlock(tx.blockNumber)
+                  return this.$mixClient.web3.eth.getBlock(tx.blockNumber)
                   .then(block => {
                     payment.timestamp = block.timestamp
                   })
@@ -130,12 +130,12 @@
                   'confirmed': results[i].timestamp != null,
                   'when': results[i].timestamp ? new Date(results[i].timestamp * 1000) : null,
                   'who': results[i].sender,
-                  'amount': this.$web3.utils.fromWei(results[i].amount),
+                  'amount': this.$mixClient.web3.utils.fromWei(results[i].amount),
                 })
               } catch (e) {}
             }
           }
-          return this.$web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+          return this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
         })
         .then(nonce => {
           let transactions = []
@@ -155,7 +155,7 @@
                   'confirmed': results[i].block != null,
                   'when': results[i].block ? new Date(results[i].block.timestamp * 1000) : null,
                   'who': results[i].to,
-                  'amount': '-' + this.$web3.utils.fromWei(results[i].transaction.value),
+                  'amount': '-' + this.$mixClient.web3.utils.fromWei(results[i].transaction.value),
                 })
               }
             }
@@ -192,7 +192,7 @@
 
       this.$root.$on('account-receive', this.accountReceive)
 
-      this.newBlockHeadersEmitter = this.$web3.eth.subscribe('newBlockHeaders')
+      this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
       .on('data', block => {
         this.loadData()
       })

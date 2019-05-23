@@ -46,7 +46,7 @@
     },
     methods: {
       async update() {
-        let balance = this.$web3.utils.fromWei(await this.account.getControllerBalance())
+        let balance = this.$mixClient.web3.utils.fromWei(await this.account.getControllerBalance())
         if (!this.activating && balance >= 0.01) {
           this.activating = true
           window.clearInterval(this.intervalId)
@@ -56,7 +56,7 @@
         }
         else {
           this.balance = balance
-          this.balancePending = this.$web3.utils.fromWei(await this.account.getUnconfirmedControllerBalance())
+          this.balancePending = this.$mixClient.web3.utils.fromWei(await this.account.getUnconfirmedControllerBalance())
         }
       }
     },

@@ -62,8 +62,8 @@
         })
       },
       async create(event) {
-        let flagsNonce = '0x03' + this.$web3.utils.randomHex(31).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+        let flagsNonce = '0x03' + this.$mixClient.web3.utils.randomHex(31).substr(2)
+        let itemId = await window.activeAccount.call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
 
         let content = new MixContent(this.$root)
 
@@ -91,7 +91,7 @@
 
         let ipfsHash = await content.save()
 
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
+        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
 
         let byteCodePath
     	  if (process.env.NODE_ENV !== 'development') {
@@ -104,12 +104,12 @@
         let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii')
         let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
         let params = [this.symbol, this.name, 18, this.payout, this.$tokenRegistryAddress, itemId]
-        let paramsBytecode = this.$web3.eth.abi.encodeParameters(types, params).slice(2)
-        let nonce = await this.$web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+        let paramsBytecode = this.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
+        let nonce = await this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
         let rawTx = {
-          nonce: this.$web3.utils.toHex(nonce),
+          nonce: this.$mixClient.web3.utils.toHex(nonce),
           from: window.activeAccount.controllerAddress,
-          gas: this.$web3.utils.toHex(2000000),
+          gas: this.$mixClient.web3.utils.toHex(2000000),
           gasPrice: '0x3b9aca00',
           data: '0x' + tokenBytecode + paramsBytecode,
         }
@@ -119,7 +119,7 @@
         tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
         let serializedTx = tx.serialize()
 
-        this.$web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+        this.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
         .on('error', console.log)
         .on('transactionHash', () => {
           this.$router.push({ name: 'item', params: { itemId: itemId }})

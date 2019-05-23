@@ -128,22 +128,22 @@
           this.acuityVersion = remote.app.getVersion()
         }
         this.downloadingParity = false
-        this.web3Version = this.$web3.version
-        let protocolVersion = await this.$web3.eth.getProtocolVersion()
-        this.protocolVersion = this.$web3.utils.hexToNumber(protocolVersion)
-        this.networkId = await this.$web3.eth.net.getId()
+        this.web3Version = this.$mixClient.web3.version
+        let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
+        this.protocolVersion = this.$mixClient.web3.utils.hexToNumber(protocolVersion)
+        this.networkId = await this.$mixClient.web3.eth.net.getId()
         let clockSync = await checkClockSync()
         this.isClockSync = clockSync.isClockSync
         this.timeDrift = Math.round(clockSync.timeDrift)
 
         let loadMixData = throttle(this.loadMixData, 500, true)
 
-        this.newBlockHeadersEmitter = this.$web3.eth.subscribe('newBlockHeaders')
+        this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
         .on('data', block => {
           loadMixData()
         })
 
-        this.syncingEmitter = this.$web3.eth.subscribe('syncing')
+        this.syncingEmitter = this.$mixClient.web3.eth.subscribe('syncing')
         .on('data', sync => {
           loadMixData()
         })
@@ -153,9 +153,9 @@
         this.loadIpfsData()
       },
       async loadMixData() {
-        let blockNumber = await this.$web3.eth.getBlockNumber()
+        let blockNumber = await this.$mixClient.web3.eth.getBlockNumber()
         this.blockNumber = blockNumber.toLocaleString()
-        let isSyncing = await this.$web3.eth.isSyncing()
+        let isSyncing = await this.$mixClient.web3.eth.isSyncing()
 
         if (isSyncing !== false) {
           if (this.startingBlock == 0) {
@@ -178,7 +178,7 @@
           this.isSyncing = false
         }
 
-        this.peerCount = await this.$web3.eth.net.getPeerCount()
+        this.peerCount = await this.$mixClient.web3.eth.net.getPeerCount()
       },
       async loadIpfsData() {
         try {
@@ -206,7 +206,7 @@
     },
     async created() {
       try {
-        await this.$web3.eth.getProtocolVersion()
+        await this.$mixClient.web3.eth.getProtocolVersion()
         this.start()
       }
       catch (e) {
@@ -215,7 +215,7 @@
           this.parityDownloadProgress = progress * 1000
         })
 
-        ipcRenderer.on('parity-running', async (event) => {
+        this.$root.$on('mix-client-active', () => {
           this.start()
         })
       }

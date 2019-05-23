@@ -54,14 +54,14 @@
 
         this.message = ''
 
-        let shortId = await this.$itemStoreShortId.methods.getShortId(this.itemId).call()
+        let shortId = await this.$mixClient.itemStoreShortId.methods.getShortId(this.itemId).call()
         output.appendChild(document.createTextNode('shortId: '  + shortId + '\n'))
 
-        let itemStoreAddress = await this.$itemStoreRegistry.methods.getItemStore(this.itemId).call()
+        let itemStoreAddress = await this.$mixClient.itemStoreRegistry.methods.getItemStore(this.itemId).call()
         output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
 
         let itemStoreAbi = require('../../lib/contracts/ItemStoreInterface.abi.json')
-        let itemStore = new this.$web3.eth.Contract(itemStoreAbi, itemStoreAddress)
+        let itemStore = new this.$mixClient.web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
         let inUse = await itemStore.methods.getInUse(this.itemId).call()
         if (!inUse) {
@@ -76,7 +76,7 @@
         }
         output.append('itemStore: ItemStoreIpfsSha256\n')
 
-        let item = await this.$itemStoreIpfsSha256.methods.getItem(this.itemId).call()
+        let item = await this.$mixClient.itemStoreIpfsSha256.methods.getItem(this.itemId).call()
         output.append('Updatable: ' + ((item.flags & 0x01) ? 'true' : 'false') + '\n')
         output.append('Enforce revisions: ' + ((item.flags & 0x02) ? 'true' : "false") + '\n')
         output.append('Retractable: ' + ((item.flags & 0x04) ? 'true' : 'false') + '\n')

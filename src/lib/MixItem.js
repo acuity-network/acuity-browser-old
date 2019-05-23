@@ -13,8 +13,8 @@ export default class MixItem {
   init() {
     return new Promise(async (resolve, reject) => {
       try {
-        this.itemStoreAddress = await this.vue.$itemStoreRegistry.methods.getItemStore(this.itemId).call()
-        this.itemStore = new this.vue.$web3.eth.Contract(itemStoreAbi, this.itemStoreAddress)
+        this.itemStoreAddress = await this.vue.$mixClient.itemStoreRegistry.methods.getItemStore(this.itemId).call()
+        this.itemStore = new this.vue.$mixClient.web3.eth.Contract(itemStoreAbi, this.itemStoreAddress)
         let inUse = await this.itemStore.methods.getInUse(this.itemId).call()
         if (!inUse) {
           reject('Item not found.')
@@ -27,7 +27,7 @@ export default class MixItem {
           return
         }
 
-        this.item = await this.vue.$itemStoreIpfsSha256.methods.getItem(this.itemId).call()
+        this.item = await this.vue.$mixClient.itemStoreIpfsSha256.methods.getItem(this.itemId).call()
         this.revisions = []
 
         for (let i = 0; i < this.item.revisionCount; i++) {
@@ -72,17 +72,17 @@ export default class MixItem {
     if (window.activeAccount.contractAddress == this.item.owner) {
       return true
     }
-    return await window.activeAccount.call(this.vue.$trustedAccounts, 'getIsTrustedDeep', [this.item.owner])
+    return await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedDeep', [this.item.owner])
   }
 
   async getTrustLevel() {
     if (window.activeAccount.contractAddress == this.item.owner) {
       return 1
     }
-    if (await window.activeAccount.call(this.vue.$trustedAccounts, 'getIsTrusted', [this.item.owner])) {
+    if (await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrusted', [this.item.owner])) {
       return 2
     }
-    if (await window.activeAccount.call(this.vue.$trustedAccounts, 'getIsTrustedOnlyDeep', [this.item.owner])) {
+    if (await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedOnlyDeep', [this.item.owner])) {
       return 3
     }
     return 0
@@ -99,7 +99,7 @@ export default class MixItem {
         return 1
 
       case 2:
-        if (await window.activeAccount.call(this.vue.$trustedAccounts, 'getIsTrustedOnlyDeep', [this.item.owner])) {
+        if (await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedOnlyDeep', [this.item.owner])) {
           return 3
         }
         return 0

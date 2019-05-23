@@ -50,7 +50,7 @@
       if (!window.activeAccount) {
         return
       }
-      let nonce = await this.$web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+      let nonce = await this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
       let transactions = []
       let data = []
       for (let i = nonce; i >= 0; i--) {
@@ -62,7 +62,7 @@
             'description': info.description,
             'receiver': info.to,
             'fee': info.receipt ? info.receipt.gasUsed * info.transaction.gasPrice : '?',
-            'amount': this.$web3.utils.fromWei(info.transaction.value),
+            'amount': this.$mixClient.web3.utils.fromWei(info.transaction.value),
           })
         }
         catch (e) {}
