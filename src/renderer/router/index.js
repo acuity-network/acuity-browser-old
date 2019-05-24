@@ -144,6 +144,11 @@ export default new Router({
       path: '/recover-account',
       name: 'recover-account',
       component: require('@/components/RecoverAccount').default
+    },
+    {
+      path: '/downloads',
+      name: 'downloads',
+      component: require('@/components/Downloads').default
     }
 
   ]

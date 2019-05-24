@@ -43,6 +43,12 @@ let messages = {
     updateProfile: 'Update profile',
     setProfileItem: 'Set profile item',
     createProfileItem: 'Create profile item',
+    //Downloads
+    downloads: 'Downloads',
+    fileName: 'File Name',
+    fileSize: 'Size',
+    progress: 'Progress',
+    open_delete: 'Open/Delete',
     //Profile
     editProfile: 'Edit profile',
     accountType: 'Account type',

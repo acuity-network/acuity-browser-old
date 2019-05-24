@@ -21,6 +21,11 @@ export default class File extends EventEmitter {
 
   download() {
 
+    window.downloads.push(this)
+    let notification = this.vue.$notifications.downloadStarted(this.name)
+    new Notification(notification.title, notification)
+    this.vue.$root.$emit('start-download', this)
+    
     let fileUrl = "http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/" + this.hash
     let uncheckedFilePath = path.join(remote.app.getPath('downloads'), this.name)
     
@@ -28,7 +33,6 @@ export default class File extends EventEmitter {
       
       this.filePath = _filePath;
       this.status = 'Downloading'
-
       this.req = request({
           method: 'GET',
           uri: fileUrl
@@ -38,24 +42,23 @@ export default class File extends EventEmitter {
       this.req.pipe(out);
 
       this.req.on('response', (data) => {
-
       });
 
       this.req.on('data', (chunk) => {
-          // Update the received bytes
-          
           this.receivedBytes += chunk.length;
-          this.emit('progress', this.progress());
+          this.emit('progress', this.getProgress());
       });
 
       this.req.on('end', () => {
+          let notification = this.vue.$notifications.downloadComplete(this.name)
+          new Notification(notification.title, notification)
+          this.vue.$root.$emit('stop-download', this)
+          
           this.status = 'Complete'
-          console.log(this.status)
           this.emit('done')
       });
 
       this.req.on('error', (err) => {
-          console.log('File Download Error, '+ err)
           this.status = 'Error'
           this.emit('error', err);
       })
@@ -71,7 +74,10 @@ export default class File extends EventEmitter {
   async stopdeleteFile() {
       try {
         this.req.abort();
-        return await shell.moveItemToTrash(this.filePath)
+        await shell.moveItemToTrash(this.filePath)
+        this.status = 'Deleted'
+        this.vue.$root.$emit('stop-download', this)
+        return true;
       }
       catch(e) {
         return false;
@@ -82,27 +88,27 @@ export default class File extends EventEmitter {
       return await shell.showItemInFolder(this.filePath);
   }
 
-  status() {
-    return this.status;
+  getProgress() {
+    return ( Math.ceil((this.receivedBytes/this.size) * 100) )  
   }
 
-  progress() {
-      return ((this.receivedBytes/this.size) * 100)
+  getStatus() {
+    return this.status
   }
 
   sizeFormatted() {
     return formateByteCount(this.size)
   }
 
-  name() {
+  getName() {
     return this.name
   }
 
-  size() {
+  getSize() {
     return this.size
   }
 
-  hash() {
+  getHash() {
     return this.hash
   }
 

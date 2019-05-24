@@ -24,6 +24,7 @@ export default class Settings {
 		let defaults = {
 			locale: 'en',
 			development: false,
+			maxFileSize: 20000000 //20MB
 		}
 
 		return defaults[key]

@@ -36,9 +36,10 @@
         <div class="column">
           <div class="image" v-html="body"></div>
           <div v-if="hasFile" class="file">
-            <span><button class="button is-primary" @click="downloadFile">Download</button>
-              {{ fileName }}
-              {{ fileSize }}
+            <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
+            <span v-if="hasDownloaded" class="check" v-html="checkIcon" ></span>
+              {{ fileName }} <br/>
+              Size: {{ fileSize }}
             </span>
           </div>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
@@ -113,7 +114,9 @@
   import bodyTextProto from '../../lib/protobuf/body_pb.js'
   import languageProto from '../../lib/protobuf/language_pb.js'
   import { clipboard } from 'electron'
+  import formatByteCount from '../../lib/formatByteCount.js'
   import File from '../../lib/File.js'
+  import twemoji from 'twemoji'
 
   export default {
     name: 'view-item',
@@ -212,6 +215,9 @@
         data.feedItemIds = []
         data.reply = ''
         data.startReply = false
+        data.hasDownloaded = false
+        data.downloadIcon = twemoji.parse(twemoji.convert.fromCodePoint('2B07'), {folder: 'svg', ext: '.svg'})
+        data.checkIcon = twemoji.parse(twemoji.convert.fromCodePoint('2714'), {folder: 'svg', ext: '.svg'})
       },
       async loadData() {
         try {
@@ -271,7 +277,7 @@
           let fileData = revision.getFile();
           this.file = new File(this.$root, fileData.name, fileData.size, fileData.hash)
           this.fileName = fileData.name
-          this.fileSize = fileData.size
+          this.fileSize = formatByteCount(fileData.size)
           this.fileHash = fileData.hash
         }
       
@@ -386,7 +392,10 @@
         this.loadData()
       },
       async downloadFile() {
-          this.file.download();
+          this.file.download()
+          
+
+          this.hasDownloaded = true
       },
       toggleTrust(event) {
         new MixItem(this.$root, this.itemId).init()
@@ -426,7 +435,23 @@
     margin: 10px 0;
   }
 
+  .download >>> img {
+    cursor: pointer;
+    height: 2.5em;
+    width: 2.5em;
+    margin-top: 0.3em;
+    margin-right: 15px;
+  }
+
+  .check >>> img {
+    height: 2.5em;
+    width: 2.5em;
+    margin-top: 0.3em;
+    margin-right: 15px;
+  }
+
   .button {
     margin-right:10px;
+    
   }
 </style>
