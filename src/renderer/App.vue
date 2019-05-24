@@ -48,6 +48,7 @@
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
   import i18n from './plugins/i18n'
+  import { ipcRenderer } from 'electron'
 
   export default {
     name: 'd-web',
@@ -55,89 +56,93 @@
       Navigation,
       ActiveAccount,
     },
+    
     async created() {
-      // Start the pinner.
-      this.pinner = new MixPinner(this.$root)
-      this.pinner.start()
-      // Load previous active account.
-      try {
-        let controller = await this.$db.get('/active-account')
-        window.activeAccount = await new MixAccount(this.$root, controller).init()
-      }
-      catch(e) {}
-      await this.$settings.init(this.$db)
-      // Load previous selected language.
-      i18n.locale = this.$settings.get('locale')
-
-      //in future load previous downloads
-      window.downloads = [];
-
-      this.$db.createValueStream({
-        'gt': '/account/controllerAddress/',
-        'lt': '/account/controllerAddress/z',
+      ipcRenderer.on('parity-error', (event, error) => {
+        console.log('Parity error: ' + error)
       })
-      .on('data', async controller => {
-        let account = await new MixAccount(this, controller).init()
-        if (!account.contract) {
-          return;
+      ipcRenderer.on('parity-running', async (event) => {
+        await this.$mixClient.init(this.$root)
+        // Start the pinner.
+        this.pinner = new MixPinner(this.$root)
+        this.pinner.start()
+        // Load previous active account.
+        try {
+          let controller = await this.$db.get('/active-account')
+          window.activeAccount = await new MixAccount(this.$root, controller).init()
         }
-        let startingBlock = await this.$web3.eth.getBlockNumber();
-        account.contract.events.Receive({
-          fromBlock: 0,
-          toBlock: 'pending',
+        catch(e) {}
+        window.downloads = [];
+        await this.$settings.init(this.$db)
+        // Load previous selected language.
+        i18n.locale = this.$settings.get('locale')
+        this.$db.createValueStream({
+          'gt': '/account/controllerAddress/',
+          'lt': '/account/controllerAddress/z',
         })
-        .on('data', log => {
-          let payment = {
-            transaction: log.transactionHash,
-            sender: log.returnValues.from,
-            amount: log.returnValues.value.toString(),
+        .on('data', async controller => {
+          let account = await new MixAccount(this, controller).init()
+          if (!account.contract) {
+            return;
           }
-          // Only show notifications for TX that occurred since logging in.
-          if (log.blockNumber >= startingBlock) {
-            let notification = this.$notifications.mixReceived(account.contractAddress, this.$web3.utils.fromWei(payment.amount, 'Ether'))
-            new Notification(notification.title, notification)
-          }
-          this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-          .then(id => {
-            return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+          let startingBlock = await this.$mixClient.web3.eth.getBlockNumber();
+          account.contract.events.Receive({
+            fromBlock: 0,
+            toBlock: 'pending',
           })
-          .catch(error => {
-            let id
-            return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
-            .then(count => {
-              id = parseInt(count)
+          .on('data', log => {
+            let payment = {
+              transaction: log.transactionHash,
+              sender: log.returnValues.from,
+              amount: log.returnValues.value.toString(),
+            }
+            // Only show notifications for TX that occurred since logging in.
+            if (log.blockNumber >= startingBlock) {
+              let notification = this.$notifications.mixReceived(account.contractAddress, this.$mixClient.web3.utils.fromWei(payment.amount, 'Ether'))
+              new Notification(notification.title, notification)
+            }
+            this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+            .then(id => {
+              return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
             })
-            .catch(err => {
-              id = 0
+            .catch(error => {
+              let id
+              return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
+              .then(count => {
+                id = parseInt(count)
+              })
+              .catch(err => {
+                id = 0
+              })
+              .then(() => {
+                return this.$db.batch()
+                .put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+                .put('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex, id)
+                .put('/account/contract/' + account.contractAddress + '/receivedCount', id + 1)
+                .write()
+              })
             })
             .then(() => {
+              this.$root.$emit('account-receive', account.contractAddress)
+              account.isUnlocked()
+              .then(unlocked => {
+                if (unlocked) {
+                  account.consolidateMix()
+                }
+              })
+            })
+          })
+          .on('changed', log => {
+            this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+            .then(id => {
               return this.$db.batch()
-              .put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
-              .put('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex, id)
-              .put('/account/contract/' + account.contractAddress + '/receivedCount', id + 1)
+              .del('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+              .del('/account/contract/' + account.contractAddress + '/received/' + id)
               .write()
             })
-          })
-          .then(() => {
-            this.$root.$emit('account-receive', account.contractAddress)
-            account.isUnlocked()
-            .then(unlocked => {
-              if (unlocked) {
-                account.consolidateMix()
-              }
+            .then(() => {
+              this.$root.$emit('account-receive', account.contractAddress)
             })
-          })
-        })
-        .on('changed', log => {
-          this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-          .then(id => {
-            return this.$db.batch()
-            .del('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-            .del('/account/contract/' + account.contractAddress + '/received/' + id)
-            .write()
-          })
-          .then(() => {
-            this.$root.$emit('account-receive', account.contractAddress)
           })
         })
       })
