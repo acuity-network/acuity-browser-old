@@ -260,11 +260,11 @@ export default class MixAccount {
   }
 
   getTrustedThatTrust(address) {
-    return this.call(this.vue.$mixClient.trustedAccounts.methods.getTrustedThatTrustAccount(address))
+    return this.call(this.vue.$mixClient.trustedAccounts, 'getTrustedThatTrustAccount', [address])
   }
 
   getProfile() {
-    return this.call(this.vue.$mixClient.accountProfile.methods.getProfile())
+    return this.call(this.vue.$mixClient.accountProfile, 'getProfile')
   }
 
 }
