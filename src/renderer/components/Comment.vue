@@ -68,7 +68,7 @@
         this.trusted = await item.isTrusted()
         let account = await item.account()
         this.ownerAddress = account.contractAddress
-        let itemId = await account.call(this.$accountProfile, 'getProfile')
+        let itemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
         let profile = await new MixItem(this.$root, itemId).init()
         let revision = await profile.latestRevision().load()
         this.avatar = revision.getImage(32, 32)
@@ -76,7 +76,7 @@
         let commentRevision = await item.latestRevision().load()
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000)
         this.bodyText = commentRevision.getBodyText()
-        this.childIds = await this.$itemDagComments.methods.getAllChildIds(this.itemId).call()
+        this.childIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.collapseIcon = this.visible ? minusIcon : plusIcon
       },
       async publishReply(event) {
@@ -96,9 +96,9 @@
         content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$web3.utils.randomHex(31).substr(2)
-        await window.activeAccount.sendData(this.$itemDagComments, 'addChild', [this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach comment')
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
+        let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)
+        await window.activeAccount.sendData(this.$mixClient.itemDagComments, 'addChild', [this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach comment')
+        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
         this.reply = ''
         this.startReply = false
         this.loadData()
@@ -109,7 +109,7 @@
       },
     },
     created() {
-      this.itemStoreIpfsSha256EventsEmitter = this.$itemStoreIpfsSha256.events.allEvents({
+      this.itemStoreIpfsSha256EventsEmitter = this.$mixClient.itemStoreIpfsSha256.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })
@@ -120,7 +120,7 @@
         this.loadData()
       })
 
-      this.itemDagCommentsEmitter = this.$itemDagComments.events.allEvents({
+      this.itemDagCommentsEmitter = this.$mixClient.itemDagComments.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })

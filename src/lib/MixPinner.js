@@ -34,15 +34,15 @@ export default class MixPinner {
 
   async start() {
     // Get a list of all accounts that should be watched.
-    let localAccounts = await this.vue.$web3.eth.personal.getAccounts()
+    let localAccounts = await this.vue.$mixClient.web3.eth.personal.getAccounts()
     this.accountsToWatch = new Set()
     for (let controller of localAccounts) {
       try {
         let account = await new MixAccount(this.vue, controller).init()
-        this.accountsToWatch.add(this.vue.$web3.utils.padLeft(account.contractAddress, 64))
-        let trustedList = await account.call(this.vue.$trustedAccounts, 'getAllTrusted')
+        this.accountsToWatch.add(this.vue.$mixClient.web3.utils.padLeft(account.contractAddress, 64))
+        let trustedList = await account.call(this.vue.$mixClient.trustedAccounts, 'getAllTrusted')
         for (let trusted of trustedList) {
-          this.accountsToWatch.add(this.vue.$web3.utils.padLeft(trusted, 64))
+          this.accountsToWatch.add(this.vue.$mixClient.web3.utils.padLeft(trusted, 64))
         }
       }
       catch (e) {}
@@ -55,10 +55,10 @@ export default class MixPinner {
       fromBlock = Math.max(await this.vue.$db.get('/pinBlock') - 64, 0)
     }
     catch (e) {}
-    let toBlock = await this.vue.$web3.eth.getBlockNumber()
+    let toBlock = await this.vue.$mixClient.web3.eth.getBlockNumber()
 
     // Find past events.
-    let events = await this.vue.$itemStoreIpfsSha256.getPastEvents('allEvents', {
+    let events = await this.vue.$mixClient.itemStoreIpfsSha256.getPastEvents('allEvents', {
       fromBlock: fromBlock,
       toBlock: toBlock,
       topics: ['0x0dbe5761780bd3332f4349220012aa42519557f909b3bfa059ada108fd6b6561',, Array.from(this.accountsToWatch)], // PublishRevision
@@ -73,7 +73,7 @@ export default class MixPinner {
     await this.vue.$db.put('/pinBlock', toBlock)
 
     // Start watching.
-    this.itemStoreIpfsSha256Emitter = this.vue.$itemStoreIpfsSha256.events.allEvents({
+    this.itemStoreIpfsSha256Emitter = this.vue.$mixClient.itemStoreIpfsSha256.events.allEvents({
       fromBlock: toBlock + 1,
       toBlock: 'pending',
       topics: ['0x0dbe5761780bd3332f4349220012aa42519557f909b3bfa059ada108fd6b6561',, Array.from(this.accountsToWatch)], // PublishRevision

@@ -42,11 +42,11 @@ export default class Image {
         })
       )
 
-      let level = 1
+      let level = 1, outWidth, outHeight
       do {
         let scale = 2 ** level
-        let outWidth = Math.round(width / scale)
-        let outHeight = Math.round(height / scale)
+        outWidth = Math.round(width / scale)
+        outHeight = Math.round(height / scale)
         mipmaps.push(source
           .clone()
           .resize(outWidth, outHeight, {fastShrinkOnLoad: false})

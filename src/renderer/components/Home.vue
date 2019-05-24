@@ -38,10 +38,10 @@
       .on('end', async () => {
         let feeds = {}
         for (let feedId of feedIds) {
-          let count = await this.$itemDagFeedItems.methods.getChildCount(feedId).call()
+          let count = await this.$mixClient.itemDagFeedItems.methods.getChildCount(feedId).call()
           if (count > 0) {
-            let itemId = await this.$itemDagFeedItems.methods.getChildId(feedId, count - 1).call()
-            let timestamp = await this.$itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+            let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(feedId, count - 1).call()
+            let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
             feeds[feedId] = {
               offset: count - 1,
               itemId: itemId,
@@ -64,8 +64,8 @@
           }
           else {
             let offset = feeds[topFeedId].offset - 1
-            let itemId = await this.$itemDagFeedItems.methods.getChildId(topFeedId, offset).call()
-            let timestamp = await this.$itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+            let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(topFeedId, offset).call()
+            let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
             feeds[topFeedId] = {
               offset: offset,
               itemId: itemId,

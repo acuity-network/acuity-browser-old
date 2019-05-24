@@ -132,7 +132,7 @@
       return data
     },
     created() {
-      this.itemStoreIpfsSha256Emitter = this.$itemStoreIpfsSha256.events.allEvents({
+      this.itemStoreIpfsSha256Emitter = this.$mixClient.itemStoreIpfsSha256.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })
@@ -147,7 +147,7 @@
         }
       })
 
-      this.itemDagCommentsEmitter = this.$itemDagComments.events.allEvents({
+      this.itemDagCommentsEmitter = this.$mixClient.itemDagComments.events.allEvents({
         toBlock: 'pending',
         topics: [, this.itemId],
       })
@@ -233,13 +233,13 @@
           this.editable = item.isUpdatable()
         }
 
-        let profileItemId = await account.call(this.$accountProfile, 'getProfile')
+        let profileItemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
         this.ownerRoute = '/item/' + profileItemId
         let profileItem = await new MixItem(this.$root, profileItemId).init()
         let profileRevision = await profileItem.latestRevision().load()
         this.owner = profileRevision.getTitle()
 
-        let feedIds = await this.$itemDagFeedItems.methods.getAllParentIds(this.itemId).call()
+        let feedIds = await this.$mixClient.itemDagFeedItems.methods.getAllParentIds(this.itemId).call()
         if (feedIds.length > 0) {
           this.feedRoute = '/item/' + feedIds[0]
           let feedItem = await new MixItem(this.$root, feedIds[0]).init()
@@ -248,8 +248,8 @@
           this.inFeed = true
         }
 
-        this.childIds = await this.$itemDagComments.methods.getAllChildIds(this.itemId).call()
-        this.feedItemIds = (await this.$itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
+        this.childIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
+        this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 
         if (!trustLevel) {
           this.title = ''
@@ -284,7 +284,7 @@
         else if (revision.content.getPrimaryMixinId() == '0x9fbbfaad') {
           this.isToken = true
           this.tokenAddress = await this.$tokenRegistry.methods.getToken(this.itemId).call()
-          let token = new this.$web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
+          let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
           this.tokenSymbol = await token.methods.symbol().call()
           this.tokenName = await token.methods.name().call()
           this.tokenStart = await token.methods.tokenStart().call()
@@ -359,7 +359,7 @@
 
         let ipfsHash = await revision.content.save()
         this.editing = false
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
+        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
       },
       async publishReply(event) {
         let content = new MixContent(this.$root)
@@ -378,9 +378,9 @@
         content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$web3.utils.randomHex(31).substr(2)
-        await window.activeAccount.sendData(this.$itemDagComments, 'addChild', [this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach comment')
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
+        let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)
+        await window.activeAccount.sendData(this.$mixClient.itemDagComments, 'addChild', [this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach comment')
+        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
         this.reply = ''
         this.startReply = false
         this.loadData()
@@ -394,13 +394,13 @@
           return item.account()
         })
         .then(account => {
-          window.activeAccount.call(this.$trustedAccounts, 'getIsTrusted', [account.contractAddress])
+          window.activeAccount.call(this.$mixClient.trustedAccounts, 'getIsTrusted', [account.contractAddress])
           .then(trusted => {
             if (trusted) {
-              return window.activeAccount.sendData(this.$trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
+              return window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
             }
             else {
-              return window.activeAccount.sendData(this.$trustedAccounts, 'trustAccount', [account.contractAddress], 0, 'Trust account')
+              return window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'trustAccount', [account.contractAddress], 0, 'Trust account')
             }
           })
           .then(() => {

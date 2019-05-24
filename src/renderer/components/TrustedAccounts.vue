@@ -38,10 +38,10 @@
     methods: {
       async loadData() {
         this.data = []
-        let trusted = await window.activeAccount.call(this.$trustedAccounts, 'getAllTrusted')
+        let trusted = await window.activeAccount.call(this.$mixClient.trustedAccounts, 'getAllTrusted')
         trusted.forEach(async contractAddress => {
           let account = await new MixAccount(this.$root, contractAddress, true).init()
-          let profileItemId = await account.call(this.$accountProfile, 'getProfile')
+          let profileItemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
           let profileItem = await new MixItem(this.$root, profileItemId).init()
           let profileRevision = await profileItem.latestRevision().load()
           this.data.push({
@@ -52,7 +52,7 @@
         })
       },
       async remove(event) {
-        await window.activeAccount.sendData(this.$trustedAccounts, 'untrustAccount', [event.target.dataset.address], 0, 'Untrust account')
+        await window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [event.target.dataset.address], 0, 'Untrust account')
         this.loadData()
       },
     },
