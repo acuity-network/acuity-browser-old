@@ -3,6 +3,7 @@ import MixItem from '../lib/MixItem.js'
 import MixContent from '../lib/MixContent.js'
 import jpegImageProto from './protobuf/jpeg-image_pb.js'
 import multihashes from 'multihashes'
+import fileProto from './protobuf/file_pb.js'
 import Base58 from 'base-58'
 
 export default class MixPinner {
@@ -27,6 +28,16 @@ export default class MixPinner {
       for (let mipmap of mipmapList) {
         let encodedIpfsHash = Base58.encode(mipmap.getIpfsHash())
         // Wait for response before continuing to try to avoid DOSing IPFS daemon.
+        await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
+      }
+    }
+    //pinning Files
+    let maxFilePinSize = this.vue.$settings.get('maxFilePinSize')
+    let filePayloads = content.getPayloads('0x0b62637e')
+    for (let payload of filePayloads) {
+      let fileMessage = fileProto.File.deserializeBinary(payload)
+      if(fileMessage.getFilesize() <= maxFilePinSize) {
+        let encodedIpfsHash = Base58.encode(fileMessage.getIpfsHash())
         await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
       }
     }
