@@ -103,29 +103,17 @@
             let req = request.post('http://127.0.0.1:5001/api/v0/add', (err, res, body) => {
                 if (err) {
                     console.log(err);
-                } else {
-                    console.log(JSON.parse(body));
-                    
+                } else {      
                     let jsonBody = JSON.parse(body);
                     this.fileHash = jsonBody.Hash;
                     this.fileName = jsonBody.Name;
                     this.fileSize = jsonBody.Size;
                     this.isDoneUploading = true;
                     output.innerHTML = 'Name: '+ this.fileName + '<br/>' + 'Hash: '+ this.fileHash + '<br/>' + 'Size: ' +  formatByteCount(this.fileSize)
-
-
                 }
             });
             let form = req.form();
             form.append('file', fs.createReadStream(fileNames[0]));
-            // let formData = new FormData();
-            // request.post('http://127.0.0.1:5001/api/v0/add')
-            // .pipe(formData)
-            // .on('progress', prog => {console.log(prog)})
-            // .end(res =>{console.log(res)})
-            // formData.append('file', fs.createReadStream(fileNames[0]));
-            
-            
         })
       },
       async publish(event) {
