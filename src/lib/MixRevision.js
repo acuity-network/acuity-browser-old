@@ -3,7 +3,9 @@ import titleProto from './protobuf/title_pb.js'
 import jpegImageProto from './protobuf/jpeg-image_pb.js'
 import bodyTextProto from './protobuf/body_pb.js'
 import profileProto from './protobuf/account-profile_pb.js'
+import fileProto from './protobuf/file_pb.js'
 import MixContent from './MixContent.js'
+import File from './File.js'
 import Base58 from 'base-58'
 
 export default class MixRevision {
@@ -45,6 +47,15 @@ export default class MixRevision {
     let widthOut = Math.round(width / scale)
     let heightOut = Math.round(height / scale)
     return '<img src="http://127.0.0.1:8080/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash()) + '" width="' + widthOut + '" height="' + heightOut + '">'
+  }
+
+  getFile() {
+    let fileMessage = fileProto.File.deserializeBinary(this.content.getPayloads('0x0b62637e')[0]);
+    return {
+      name: fileMessage.getFilename(),
+      size: fileMessage.getFilesize(),
+      hash: Base58.encode(fileMessage.getIpfsHash())
+    }
   }
 
   getBodyText() {

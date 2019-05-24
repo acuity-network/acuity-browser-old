@@ -55,11 +55,11 @@
       Navigation,
       ActiveAccount,
     },
+    
     async created() {
       ipcRenderer.on('parity-error', (event, error) => {
         console.log('Parity error: ' + error)
       })
-
       ipcRenderer.on('parity-running', async (event) => {
         await this.$mixClient.init(this.$root)
         // Start the pinner.
@@ -71,10 +71,10 @@
           window.activeAccount = await new MixAccount(this.$root, controller).init()
         }
         catch(e) {}
+        window.downloads = [];
         await this.$settings.init(this.$db)
         // Load previous selected language.
         i18n.locale = this.$settings.get('locale')
-
         this.$db.createValueStream({
           'gt': '/account/controllerAddress/',
           'lt': '/account/controllerAddress/z',

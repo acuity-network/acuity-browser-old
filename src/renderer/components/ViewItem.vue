@@ -35,6 +35,12 @@
       <div class="columns">
         <div class="column">
           <div class="image" v-html="body"></div>
+          <div v-if="hasFile" class="file">
+            <span><button class="button is-primary" @click="downloadFile">Download</button>
+              {{ fileName }}
+              {{ fileSize }}
+            </span>
+          </div>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
           <account-info v-if="isProfile" :address="ownerAddress"></account-info>
         </div>
@@ -107,6 +113,7 @@
   import bodyTextProto from '../../lib/protobuf/body_pb.js'
   import languageProto from '../../lib/protobuf/language_pb.js'
   import { clipboard } from 'electron'
+  import File from '../../lib/File.js'
 
   export default {
     name: 'view-item',
@@ -186,6 +193,11 @@
         data.timestamp = ''
         data.body = ''
         data.description = ''
+        data.hasFile = false
+        data.file = null
+        data.fileName = ''
+        data.fileSize = ''
+        data.fileHash = ''
         data.isProfile = ''
         data.isFeed = false
         data.isToken = false
@@ -248,14 +260,21 @@
 
         let revision = await item.latestRevision().load()
 
-        try {
-          this.title = revision.getTitle()
-          this.timestamp = new Date(revision.getTimestamp() * 1000)
-          this.body = revision.getImage(512)
-          this.description = revision.getDescription()
+        //try individually for each type so one not existing doesn't break the others
+        try { this.title = revision.getTitle() } catch (e) {}
+        try { this.timestamp = new Date(revision.getTimestamp() * 1000) } catch (e) {}
+        try { this.body = revision.getImage(512) } catch (e) {}
+        try { this.description = revision.getDescription() } catch (e) {}
+        
+        if(revision.content.existMixin('0x0b62637e')) {
+          this.hasFile = true;
+          let fileData = revision.getFile();
+          this.file = new File(this.$root, fileData.name, fileData.size, fileData.hash)
+          this.fileName = fileData.name
+          this.fileSize = fileData.size
+          this.fileHash = fileData.hash
         }
-        catch (e) {}
-
+      
         if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
           this.isProfile = true
         }
@@ -365,6 +384,9 @@
         this.reply = ''
         this.startReply = false
         this.loadData()
+      },
+      async downloadFile() {
+          this.file.download();
       },
       toggleTrust(event) {
         new MixItem(this.$root, this.itemId).init()

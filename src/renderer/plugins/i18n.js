@@ -30,6 +30,8 @@ let messages = {
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
     publishFeed: 'Publish Feed',
+    publishFile: 'Publish File',
+    chooseFile: 'Choose File',
     //GoTo
     itemId: 'ItemId',
     //Transaction History

@@ -9,6 +9,7 @@
         <li><router-link to="/publish-item/mixin-type">{{ $t('publishMixin') }}</router-link></li>
         <li><router-link to="/publish-item/image">{{ $t('publishImage') }}</router-link></li>
         <li><router-link to="/publish-item/feed">{{ $t('publishFeed') }}</router-link></li>
+        <li><router-link to="/publish-item/file">{{ $t('publishFile') }}</router-link></li>
       </ul>
     </template>
   </page>
