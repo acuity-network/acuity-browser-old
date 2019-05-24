@@ -117,8 +117,9 @@
         })
       },
       async publish(event) {
-        let flagsNonce = '0x0f' + this.$web3.utils.randomHex(31).substr(2)
-        let itemId = await window.activeAccount.call(this.$itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+        let flagsNonce = '0x0f' + this.$mixClient.web3.utils.randomHex(31).substr(2)
+        let itemId = await window.activeAccount.call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+
         let content = new MixContent(this.$root)
 
         // Language
@@ -148,10 +149,10 @@
         let ipfsHash = await content.save()
 
         if (this.feedId != '0') {
-          await window.activeAccount.sendData(this.$itemDagFeedItems, 'addChild', [this.feedId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach feed item')
+          await window.activeAccount.sendData(this.$mixClient.itemDagFeedItems, 'addChild', [this.feedId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach feed item')
         }
 
-        await window.activeAccount.sendData(this.$itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
+        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

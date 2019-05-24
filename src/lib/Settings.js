@@ -24,7 +24,7 @@ export default class Settings {
 		let defaults = {
 			locale: 'en',
 			development: false,
-			maxFileSize: 20000000 //20MB
+			maxFilePinSize: 100000000 //100MB
 		}
 
 		return defaults[key]
