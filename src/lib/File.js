@@ -3,7 +3,7 @@ import request from 'request'
 import { remote, shell } from 'electron'
 import path from 'path'
 import unusedFilename from 'unused-filename'
-import formateByteCount from './formatByteCount.js'
+import formatByteCount from './formatByteCount.js'
 import EventEmitter from 'events'
 import fs from 'fs-extra'
 
@@ -19,8 +19,7 @@ export default class File extends EventEmitter {
     this.receivedBytes = 0
   }
 
-  download() {
-
+  async download() {
     window.downloads.push(this)
     let notification = this.vue.$notifications.downloadStarted(this.name)
     new Notification(notification.title, notification)
@@ -29,42 +28,28 @@ export default class File extends EventEmitter {
     let fileUrl = "http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/" + this.hash
     let uncheckedFilePath = path.join(remote.app.getPath('downloads'), this.name)
 
-    unusedFilename(uncheckedFilePath).then(_filePath => {
-
-      this.filePath = _filePath
-      this.status = 'Downloading'
-      this.req = request({
-          method: 'GET',
-          uri: fileUrl
-      })
-
-      let out = fs.createWriteStream(this.filePath)
-      this.req.pipe(out)
-
-      this.req.on('response', (data) => {
-      })
-
-      this.req.on('data', (chunk) => {
-          this.receivedBytes += chunk.length
-          this.emit('progress', this.getProgress())
-      })
-
-      this.req.on('end', () => {
-          let notification = this.vue.$notifications.downloadComplete(this.name)
-          new Notification(notification.title, notification)
-          this.vue.$root.$emit('stop-download', this)
-
-          this.status = 'Complete'
-          this.emit('done')
-      })
-
-      this.req.on('error', (err) => {
-          this.status = 'Error'
-          this.emit('error', err)
-      })
-
+    this.filePath = await unusedFilename(uncheckedFilePath)
+    this.status = 'Downloading'
+    this.req = request({
+        method: 'GET',
+        uri: fileUrl
     })
-
+    .on('data', (chunk) => {
+      this.receivedBytes += chunk.length
+      this.emit('progress', this.getProgress())
+    })
+    .on('end', () => {
+      let notification = this.vue.$notifications.downloadComplete(this.name)
+      new Notification(notification.title, notification)
+      this.vue.$root.$emit('stop-download', this)
+      this.status = 'Complete'
+      this.emit('done')
+    })
+    .on('error', (err) => {
+      this.status = 'Error'
+      this.emit('error', err)
+    })
+    .pipe(fs.createWriteStream(this.filePath))
   }
 
   async openFile() {
@@ -89,7 +74,7 @@ export default class File extends EventEmitter {
   }
 
   getProgress() {
-    return ( Math.ceil((this.receivedBytes/this.size) * 100) )
+    return Math.ceil((this.receivedBytes / this.size) * 100)
   }
 
   getStatus() {
@@ -97,7 +82,7 @@ export default class File extends EventEmitter {
   }
 
   sizeFormatted() {
-    return formateByteCount(this.size)
+    return formatByteCount(this.size)
   }
 
   getName() {
