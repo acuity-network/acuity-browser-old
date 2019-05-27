@@ -272,7 +272,7 @@
         try { this.body = revision.getImage(512) } catch (e) {}
         try { this.description = revision.getDescription() } catch (e) {}
 
-        if(revision.content.existMixin('0x0b62637e')) {
+        if (revision.content.existMixin('0x0b62637e')) {
           this.hasFile = true;
           let fileData = revision.getFile();
           this.file = new File(this.$root, fileData.name, fileData.size, fileData.hash)
@@ -392,10 +392,8 @@
         this.loadData()
       },
       async downloadFile() {
-          this.file.download()
-
-
-          this.hasDownloaded = true
+        this.file.download()
+        this.hasDownloaded = true
       },
       toggleTrust(event) {
         new MixItem(this.$root, this.itemId).init()

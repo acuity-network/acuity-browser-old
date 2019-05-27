@@ -55,18 +55,18 @@
     },
     data() {
       return {
-            title: '',
-            description: '',
-            feeds: [{itemId: '0', title: 'none'}],
-            feedId: '0',
-            filepath: '',
-            fileTotalSize: 0,
-            isUploading: false,
-            isDoneUploading: false,
-            fileHash:'',
-            fileName:'',
-            fileSize:''
-        }
+        title: '',
+        description: '',
+        feeds: [{itemId: '0', title: 'none'}],
+        feedId: '0',
+        filepath: '',
+        fileTotalSize: 0,
+        isUploading: false,
+        isDoneUploading: false,
+        fileHash:'',
+        fileName:'',
+        fileSize:''
+      }
     },
     created() {
       delete window.fileNames
@@ -94,26 +94,26 @@
           title: 'Choose File',
           //filters: [{name: 'Files', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
-            this.isUploading = true;
-            this.fileUploadedSize = 0;
-            this.filePath = fileNames[0];
-            let stats = fs.statSync(fileNames[0])
-            this.fileTotalSize = stats.size;
-            output.innerHTML = 'Uploading file...'
-            let req = request.post('http://127.0.0.1:5001/api/v0/add', (err, res, body) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    let jsonBody = JSON.parse(body);
-                    this.fileHash = jsonBody.Hash;
-                    this.fileName = jsonBody.Name;
-                    this.fileSize = jsonBody.Size;
-                    this.isDoneUploading = true;
-                    output.innerHTML = 'Name: '+ this.fileName + '<br/>' + 'Hash: '+ this.fileHash + '<br/>' + 'Size: ' +  formatByteCount(this.fileSize)
-                }
-            });
-            let form = req.form();
-            form.append('file', fs.createReadStream(fileNames[0]));
+          this.isUploading = true;
+          this.fileUploadedSize = 0;
+          this.filePath = fileNames[0];
+          let stats = fs.statSync(fileNames[0])
+          this.fileTotalSize = stats.size;
+          output.innerHTML = 'Uploading file...'
+          let req = request.post('http://127.0.0.1:5001/api/v0/add', (err, res, body) => {
+            if (err) {
+              console.log(err);
+            } else {
+              let jsonBody = JSON.parse(body);
+              this.fileHash = jsonBody.Hash;
+              this.fileName = jsonBody.Name;
+              this.fileSize = jsonBody.Size;
+              this.isDoneUploading = true;
+              output.innerHTML = 'Name: '+ this.fileName + '<br/>' + 'Hash: '+ this.fileHash + '<br/>' + 'Size: ' +  formatByteCount(this.fileSize)
+            }
+          });
+          let form = req.form();
+          form.append('file', fs.createReadStream(fileNames[0]));
         })
       },
       async publish(event) {
