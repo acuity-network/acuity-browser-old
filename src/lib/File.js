@@ -9,13 +9,13 @@ import fs from 'fs-extra'
 
 export default class File extends EventEmitter {
 
-  constructor(vue, _name, _size, _hash) {
+  constructor(vue, name, size, hash) {
     super()
     this.vue = vue
     this.status = 'Created'
-    this.name = _name
-    this.size = _size
-    this.hash = _hash
+    this.name = name
+    this.size = size
+    this.hash = hash
     this.receivedBytes = 0
   }
 

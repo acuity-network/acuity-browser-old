@@ -58,8 +58,8 @@
             status: window.downloads[i].getStatus(),
             progress: window.downloads[i].getProgress(),
           })
-          window.downloads[i].on('progress', (_progress) =>{
-            if(_progress > this.data[i].progress + 1) {
+          window.downloads[i].on('progress', (progress) =>{
+            if(progress > this.data[i].progress + 1) {
               this.data[i].progress = window.downloads[i].getProgress()
               this.data[i].status = window.downloads[i].getStatus()
               this.refreshKey++
