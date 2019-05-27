@@ -45,7 +45,7 @@
     data() {
       return {
         refreshKey:0,
-        data: new Array(window.downloads.length)
+        data: new Array(window.downloads.length),
       }
     },
     methods: {
@@ -56,7 +56,7 @@
             name: window.downloads[i].getName(),
             size: window.downloads[i].sizeFormatted(),
             status: window.downloads[i].getStatus(),
-            progress: window.downloads[i].getProgress()
+            progress: window.downloads[i].getProgress(),
           })
           window.downloads[i].on('progress', (_progress) =>{
             if(_progress > this.data[i].progress + 1) {

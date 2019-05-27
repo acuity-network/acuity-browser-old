@@ -65,7 +65,7 @@
         isDoneUploading: false,
         fileHash:'',
         fileName:'',
-        fileSize:''
+        fileSize:'',
       }
     },
     created() {

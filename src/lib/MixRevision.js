@@ -54,7 +54,7 @@ export default class MixRevision {
     return {
       name: fileMessage.getFilename(),
       size: fileMessage.getFilesize(),
-      hash: Base58.encode(fileMessage.getIpfsHash())
+      hash: Base58.encode(fileMessage.getIpfsHash()),
     }
   }
 
