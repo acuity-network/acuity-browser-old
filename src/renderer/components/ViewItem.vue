@@ -266,11 +266,13 @@
 
         let revision = await item.latestRevision().load()
 
-        //try individually for each type so one not existing doesn't break the others
-        try { this.title = revision.getTitle() } catch (e) {}
-        try { this.timestamp = new Date(revision.getTimestamp() * 1000) } catch (e) {}
-        try { this.body = revision.getImage(512) } catch (e) {}
-        try { this.description = revision.getDescription() } catch (e) {}
+        try {
+          this.title = revision.getTitle()
+          this.timestamp = new Date(revision.getTimestamp() * 1000)
+          this.body = revision.getImage(512)
+          this.description = revision.getDescription()
+        }
+        catch (e) {}
 
         if (revision.content.existMixin('0x0b62637e')) {
           this.hasFile = true;
