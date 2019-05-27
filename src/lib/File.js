@@ -25,12 +25,12 @@ export default class File extends EventEmitter {
     let notification = this.vue.$notifications.downloadStarted(this.name)
     new Notification(notification.title, notification)
     this.vue.$root.$emit('start-download', this)
-    
+
     let fileUrl = "http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/" + this.hash
     let uncheckedFilePath = path.join(remote.app.getPath('downloads'), this.name)
-    
+
     unusedFilename(uncheckedFilePath).then(_filePath => {
-      
+
       this.filePath = _filePath;
       this.status = 'Downloading'
       this.req = request({
@@ -53,7 +53,7 @@ export default class File extends EventEmitter {
           let notification = this.vue.$notifications.downloadComplete(this.name)
           new Notification(notification.title, notification)
           this.vue.$root.$emit('stop-download', this)
-          
+
           this.status = 'Complete'
           this.emit('done')
       });
@@ -64,7 +64,7 @@ export default class File extends EventEmitter {
       })
 
     });
-    
+
   }
 
   async openFile() {
@@ -83,13 +83,13 @@ export default class File extends EventEmitter {
         return false;
       }
   }
-  
+
   async openFileLocation() {
       return await shell.showItemInFolder(this.filePath);
   }
 
   getProgress() {
-    return ( Math.ceil((this.receivedBytes/this.size) * 100) )  
+    return ( Math.ceil((this.receivedBytes/this.size) * 100) )
   }
 
   getStatus() {

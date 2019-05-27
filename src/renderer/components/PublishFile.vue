@@ -103,7 +103,7 @@
             let req = request.post('http://127.0.0.1:5001/api/v0/add', (err, res, body) => {
                 if (err) {
                     console.log(err);
-                } else {      
+                } else {
                     let jsonBody = JSON.parse(body);
                     this.fileHash = jsonBody.Hash;
                     this.fileName = jsonBody.Name;

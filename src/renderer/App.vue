@@ -56,7 +56,7 @@
       Navigation,
       ActiveAccount,
     },
-    
+
     async created() {
       ipcRenderer.on('parity-error', (event, error) => {
         console.log('Parity error: ' + error)

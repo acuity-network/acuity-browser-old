@@ -271,7 +271,7 @@
         try { this.timestamp = new Date(revision.getTimestamp() * 1000) } catch (e) {}
         try { this.body = revision.getImage(512) } catch (e) {}
         try { this.description = revision.getDescription() } catch (e) {}
-        
+
         if(revision.content.existMixin('0x0b62637e')) {
           this.hasFile = true;
           let fileData = revision.getFile();
@@ -280,7 +280,7 @@
           this.fileSize = formatByteCount(fileData.size)
           this.fileHash = fileData.hash
         }
-      
+
         if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
           this.isProfile = true
         }
@@ -393,7 +393,7 @@
       },
       async downloadFile() {
           this.file.download()
-          
+
 
           this.hasDownloaded = true
       },
@@ -452,6 +452,6 @@
 
   .button {
     margin-right:10px;
-    
+
   }
 </style>
