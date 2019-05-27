@@ -1,7 +1,8 @@
 <template>
   <page>
     <template slot="title">
-      {{ title }}
+      <item-link v-if="short" :itemId="itemId"></item-link>
+      <span v-else>{{ title }}</span>
       <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
       </span>
       <span
@@ -58,43 +59,45 @@
         </div>
       </div>
 
-      <div v-if="isToken">
-        <b-field label="Token address">
-          {{ tokenAddress }}
-        </b-field>
-        <b-field label="Token symbol">
-          {{ tokenSymbol }}
-        </b-field>
-        <b-field label="Token name">
-          {{ tokenName }}
-        </b-field>
-        <b-field label="Token start">
-          {{ tokenStart }}
-        </b-field>
-        <b-field label="Token owner">
-          {{ tokenOwner }}
-        </b-field>
-        <b-field label="Token payout">
-          {{ tokenPayout }}
-        </b-field>
-        <b-field label="Token supply">
-          {{ tokenSupply }}
-        </b-field>
-      </div>
-
       <reactions :itemId="itemId"></reactions>
 
-      <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
+      <div v-if="!short">
+        <div v-if="isToken">
+          <b-field label="Token address">
+            {{ tokenAddress }}
+          </b-field>
+          <b-field label="Token symbol">
+            {{ tokenSymbol }}
+          </b-field>
+          <b-field label="Token name">
+            {{ tokenName }}
+          </b-field>
+          <b-field label="Token start">
+            {{ tokenStart }}
+          </b-field>
+          <b-field label="Token owner">
+            {{ tokenOwner }}
+          </b-field>
+          <b-field label="Token payout">
+            {{ tokenPayout }}
+          </b-field>
+          <b-field label="Token supply">
+            {{ tokenSupply }}
+          </b-field>
+        </div>
 
-      <view-item v-for="feedId in feedItemIds" :itemId="feedId" :key="feedId"></view-item>
+        <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
 
-      <div v-if="startReply">
-        <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
-        <button class="button is-primary" @click="publishReply">Reply</button>
-        <button class="button" @click="startReply = false">Close</button>
-      </div>
-      <div v-else>
-        <button class="button is-primary" @click="startReply = true">Reply</button>
+        <view-item v-for="feedId in feedItemIds" :itemId="feedId" :key="feedId"></view-item>
+
+        <div v-if="startReply">
+          <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
+          <button class="button is-primary" @click="publishReply">Reply</button>
+          <button class="button" @click="startReply = false">Close</button>
+        </div>
+        <div v-else>
+          <button class="button is-primary" @click="startReply = true">Reply</button>
+        </div>
       </div>
     </template>
   </page>
@@ -105,6 +108,7 @@
   import MixContent from '../../lib/MixContent.js'
   import Comment from './Comment.vue'
   import AccountInfo from './AccountInfo.vue'
+  import ItemLink from './ItemLink.vue'
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
@@ -120,11 +124,22 @@
 
   export default {
     name: 'view-item',
-    props: ['itemId'],
+    props: {
+      itemId: {
+        type: String,
+        required: true,
+      },
+      short: {
+        type: Boolean,
+        default: false,
+        required: false,
+      },
+    },
     components: {
       Page,
       Comment,
       AccountInfo,
+      ItemLink,
       ProfileLink,
       VueMarkdown,
       Reactions,
