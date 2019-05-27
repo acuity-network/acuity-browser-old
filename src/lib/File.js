@@ -5,7 +5,7 @@ import path from 'path'
 import unusedFilename from 'unused-filename'
 import formatByteCount from './formatByteCount.js'
 import EventEmitter from 'events'
-import fs from 'fs-extra'
+import fs from 'fs'
 
 export default class File extends EventEmitter {
 

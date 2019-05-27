@@ -42,7 +42,7 @@
   import fileProto from '../../lib/protobuf/file_pb.js'
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
-  import fs from 'fs-extra'
+  import fs from 'fs'
   import request from 'request'
   import File from '../../lib/File.js'
   import formatByteCount from '../../lib/formatByteCount.js'

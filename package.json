@@ -76,7 +76,6 @@
     "ethereumjs-tx": "^1.3.7",
     "ethereumjs-util": "^6.0.0",
     "events": "^3.0.0",
-    "fs-extra": "^8.0.1",
     "go-ipfs-dep": "^0.4.18",
     "google-protobuf": "^3.5.0",
     "iltorb": "^2.4.0",
