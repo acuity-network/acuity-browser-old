@@ -92,7 +92,6 @@
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose File',
-          //filters: [{name: 'Files', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
           this.isUploading = true;
           this.fileUploadedSize = 0;
@@ -139,7 +138,6 @@
         console.log(content)
         // File
         let fileMessage = new fileProto.File()
-        //console.log('decodedhash',Base58.decode(this.fileHash));
         fileMessage.setFilename(this.fileName);
         console.log(this.fileHash)
         fileMessage.setIpfsHash(Base58.decode(this.fileHash));
