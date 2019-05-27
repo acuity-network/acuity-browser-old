@@ -31,8 +31,8 @@ export default class File extends EventEmitter {
     this.filePath = await unusedFilename(uncheckedFilePath)
     this.status = 'Downloading'
     this.req = request({
-        method: 'GET',
-        uri: fileUrl
+      method: 'GET',
+      uri: fileUrl
     })
     .on('data', (chunk) => {
       this.receivedBytes += chunk.length
@@ -57,20 +57,20 @@ export default class File extends EventEmitter {
   }
 
   async stopdeleteFile() {
-      try {
-        this.req.abort()
-        await shell.moveItemToTrash(this.filePath)
-        this.status = 'Deleted'
-        this.vue.$root.$emit('stop-download', this)
-        return true
-      }
-      catch(e) {
-        return false
-      }
+    try {
+      this.req.abort()
+      await shell.moveItemToTrash(this.filePath)
+      this.status = 'Deleted'
+      this.vue.$root.$emit('stop-download', this)
+      return true
+    }
+    catch(e) {
+      return false
+    }
   }
 
   async openFileLocation() {
-      return await shell.showItemInFolder(this.filePath)
+    return await shell.showItemInFolder(this.filePath)
   }
 
   getProgress() {
