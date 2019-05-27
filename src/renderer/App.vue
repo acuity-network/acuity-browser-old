@@ -72,7 +72,7 @@
           window.activeAccount = await new MixAccount(this.$root, controller).init()
         }
         catch(e) {}
-        window.downloads = [];
+        window.downloads = []
         await this.$settings.init(this.$db)
         // Load previous selected language.
         i18n.locale = this.$settings.get('locale')
@@ -83,9 +83,9 @@
         .on('data', async controller => {
           let account = await new MixAccount(this, controller).init()
           if (!account.contract) {
-            return;
+            return
           }
-          let startingBlock = await this.$mixClient.web3.eth.getBlockNumber();
+          let startingBlock = await this.$mixClient.web3.eth.getBlockNumber()
           account.contract.events.Receive({
             fromBlock: 0,
             toBlock: 'pending',
