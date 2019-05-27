@@ -135,11 +135,10 @@
         let descriptionMessage = new descriptionProto.DescriptionMixin()
         descriptionMessage.setDescription(this.description)
         content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
-        console.log(content)
+
         // File
         let fileMessage = new fileProto.File()
         fileMessage.setFilename(this.fileName)
-        console.log(this.fileHash)
         fileMessage.setIpfsHash(Base58.decode(this.fileHash))
         fileMessage.setFilesize(this.fileSize)
         content.addMixin(0x0b62637e, fileMessage.serializeBinary())
