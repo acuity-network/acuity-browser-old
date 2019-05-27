@@ -1,6 +1,6 @@
 <template>
-  <div class="columns sidebar">
-    <div class="column is-narrow">
+  <div>
+    <div id="sidebar">
       <active-account></active-account>
       <navigation></navigation>
       <p class="menu-label">
@@ -36,7 +36,7 @@
         <li><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
       </ul>
     </div>
-    <div class="column router-view">
+    <div id="router-view" tabindex="0">
       <router-view></router-view>
     </div>
   </div>
@@ -329,21 +329,26 @@
 </style>
 
 <style scoped>
-  .is-narrow {
+  #sidebar {
     position: fixed;
-    padding: 1.5rem;
-    width: 240px;
+    overflow-y: auto;
+    overscroll-behavior: none;
+    width: 220px;
+    height: 100vh;
+    padding: 1rem;
     background-color: rgb(32,32,32);
-    padding-bottom:3000px;
   }
 
-  .is-narrow >>> a:focus {
-    outline: none;
+  #sidebar::-webkit-scrollbar {
+    width: 0 !important
   }
 
-  .router-view {
-    margin-left: 240px;
-    margin-right: 0.75rem;
+  #router-view {
+    margin-left: 220px;
     padding: 2em;
+  }
+
+  :focus {
+    outline: none;
   }
 </style>
