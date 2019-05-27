@@ -1,4 +1,4 @@
-const itemStoreAbi = require('./contracts/ItemStoreInterface.abi.json')
+let itemStoreAbi = require('./contracts/ItemStoreInterface.abi.json')
 import request from 'request'
 import { remote, shell } from 'electron'
 import path from 'path'
