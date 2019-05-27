@@ -11,9 +11,6 @@
           <option value="ru">Russian - ru</option>
         </b-select>
       </b-field>
-      <b-field label="Max File Pin Size (MB)">
-        <b-numberinput rounded v-model="maxFilePinSize"></b-numberinput>
-      </b-field>
       <b-field label="Advanced">
         <b-checkbox v-model="development">
           Development mode
@@ -35,7 +32,6 @@
       return {
         locale: this.$settings.get('locale'),
         development: this.$settings.get('development'),
-        maxFilePinSize: this.$settings.get('maxFilePinSize')/1000000
       }
     },
     watch: {
@@ -46,9 +42,6 @@
       development() {
         this.$settings.set('development', this.development);
       },
-      maxFilePinSize() {
-        this.$settings.set('maxFilePinSize', Math.round(this.maxFilePinSize) * 1000000)
-      }
     },
   }
 </script>
