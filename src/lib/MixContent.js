@@ -78,6 +78,15 @@ export default class MixContent {
     return payloads
   }
 
+  existMixin(mixinId) {
+    for (let i = 0; i < this.mixins.length; i++) {
+      if (this.mixins[i].mixinId == mixinId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   addMixin(mixinId, payload) {
     this.mixins.push({
       mixinId: mixinId,

@@ -12,6 +12,7 @@
         <li><router-link to="/subscriptions">{{ $t('subscriptions') }}</router-link>
         <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
         <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
+        <li><router-link to="/downloads">{{ $t('downloads') }}</router-link></li>
         <li><router-link to="/publish-item">{{ $t('publishItem') }}</router-link></li>
         <li><router-link to="/goto">{{ $t('gotoItem') }}</router-link></li>
       </ul>
@@ -55,11 +56,11 @@
       Navigation,
       ActiveAccount,
     },
+    
     async created() {
       ipcRenderer.on('parity-error', (event, error) => {
         console.log('Parity error: ' + error)
       })
-
       ipcRenderer.on('parity-running', async (event) => {
         await this.$mixClient.init(this.$root)
         // Start the pinner.
@@ -71,10 +72,10 @@
           window.activeAccount = await new MixAccount(this.$root, controller).init()
         }
         catch(e) {}
+        window.downloads = [];
         await this.$settings.init(this.$db)
         // Load previous selected language.
         i18n.locale = this.$settings.get('locale')
-
         this.$db.createValueStream({
           'gt': '/account/controllerAddress/',
           'lt': '/account/controllerAddress/z',

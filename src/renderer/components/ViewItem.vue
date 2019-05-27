@@ -35,6 +35,13 @@
       <div class="columns">
         <div class="column">
           <div class="image" v-html="body"></div>
+          <div v-if="hasFile" class="file">
+            <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
+            <span v-if="hasDownloaded" class="check" v-html="checkIcon" ></span>
+              {{ fileName }} <br/>
+              Size: {{ fileSize }}
+            </span>
+          </div>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
           <account-info v-if="isProfile" :address="ownerAddress"></account-info>
         </div>
@@ -107,6 +114,9 @@
   import bodyTextProto from '../../lib/protobuf/body_pb.js'
   import languageProto from '../../lib/protobuf/language_pb.js'
   import { clipboard } from 'electron'
+  import formatByteCount from '../../lib/formatByteCount.js'
+  import File from '../../lib/File.js'
+  import twemoji from 'twemoji'
 
   export default {
     name: 'view-item',
@@ -186,6 +196,11 @@
         data.timestamp = ''
         data.body = ''
         data.description = ''
+        data.hasFile = false
+        data.file = null
+        data.fileName = ''
+        data.fileSize = ''
+        data.fileHash = ''
         data.isProfile = ''
         data.isFeed = false
         data.isToken = false
@@ -200,6 +215,9 @@
         data.feedItemIds = []
         data.reply = ''
         data.startReply = false
+        data.hasDownloaded = false
+        data.downloadIcon = twemoji.parse(twemoji.convert.fromCodePoint('2B07'), {folder: 'svg', ext: '.svg'})
+        data.checkIcon = twemoji.parse(twemoji.convert.fromCodePoint('2714'), {folder: 'svg', ext: '.svg'})
       },
       async loadData() {
         try {
@@ -248,14 +266,21 @@
 
         let revision = await item.latestRevision().load()
 
-        try {
-          this.title = revision.getTitle()
-          this.timestamp = new Date(revision.getTimestamp() * 1000)
-          this.body = revision.getImage(512)
-          this.description = revision.getDescription()
+        //try individually for each type so one not existing doesn't break the others
+        try { this.title = revision.getTitle() } catch (e) {}
+        try { this.timestamp = new Date(revision.getTimestamp() * 1000) } catch (e) {}
+        try { this.body = revision.getImage(512) } catch (e) {}
+        try { this.description = revision.getDescription() } catch (e) {}
+        
+        if(revision.content.existMixin('0x0b62637e')) {
+          this.hasFile = true;
+          let fileData = revision.getFile();
+          this.file = new File(this.$root, fileData.name, fileData.size, fileData.hash)
+          this.fileName = fileData.name
+          this.fileSize = formatByteCount(fileData.size)
+          this.fileHash = fileData.hash
         }
-        catch (e) {}
-
+      
         if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
           this.isProfile = true
         }
@@ -366,6 +391,12 @@
         this.startReply = false
         this.loadData()
       },
+      async downloadFile() {
+          this.file.download()
+          
+
+          this.hasDownloaded = true
+      },
       toggleTrust(event) {
         new MixItem(this.$root, this.itemId).init()
         .then(item => {
@@ -404,7 +435,23 @@
     margin: 10px 0;
   }
 
+  .download >>> img {
+    cursor: pointer;
+    height: 2.5em;
+    width: 2.5em;
+    margin-top: 0.3em;
+    margin-right: 15px;
+  }
+
+  .check >>> img {
+    height: 2.5em;
+    width: 2.5em;
+    margin-top: 0.3em;
+    margin-right: 15px;
+  }
+
   .button {
     margin-right:10px;
+    
   }
 </style>

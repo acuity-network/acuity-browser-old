@@ -28,4 +28,16 @@ export default {
       icon: 'static/icon.png',
     }
   },
+  downloadComplete(fileName) {
+    return {
+      title: "Download Complete",
+      body: fileName
+    }
+  },
+  downloadStarted(fileName) {
+    return {
+      title: "Download Started",
+      body: fileName
+    }
+  },
 }

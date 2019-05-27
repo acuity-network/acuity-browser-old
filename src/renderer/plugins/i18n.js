@@ -30,6 +30,8 @@ let messages = {
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
     publishFeed: 'Publish Feed',
+    publishFile: 'Publish File',
+    chooseFile: 'Choose File',
     //GoTo
     itemId: 'ItemId',
     //Transaction History
@@ -41,6 +43,12 @@ let messages = {
     updateProfile: 'Update profile',
     setProfileItem: 'Set profile item',
     createProfileItem: 'Create profile item',
+    //Downloads
+    downloads: 'Downloads',
+    fileName: 'File Name',
+    fileSize: 'Size',
+    progress: 'Progress',
+    open_delete: 'Open/Delete',
     //Profile
     editProfile: 'Edit profile',
     accountType: 'Account type',

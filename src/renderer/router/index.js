@@ -70,6 +70,11 @@ export default new Router({
       component: require('@/components/PublishFeed').default
     },
     {
+      path: '/publish-item/file',
+      name: 'publish-file',
+      component: require('@/components/PublishFile').default
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: require('@/components/Profile').default
@@ -139,6 +144,11 @@ export default new Router({
       path: '/recover-account',
       name: 'recover-account',
       component: require('@/components/RecoverAccount').default
+    },
+    {
+      path: '/downloads',
+      name: 'downloads',
+      component: require('@/components/Downloads').default
     }
 
   ]
