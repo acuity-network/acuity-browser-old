@@ -27,12 +27,7 @@
           @click="toggleTrust"></span><br />
         <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
       </div>
-      <span v-if="timestamp > 0">
-        <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
-      </span>
-      <span v-else>
-        Just now
-      </span>
+      {{ published }}
     </template>
 
     <template slot="body">
@@ -214,7 +209,7 @@
         data.inFeed = false
         data.feed = ''
         data.feedRoute = ''
-        data.timestamp = ''
+        data.published = ''
         data.body = ''
         data.description = ''
         data.hasFile = false
@@ -285,11 +280,13 @@
           return
         }
 
+        let firstRevision = await item.firstRevision().load()
         let revision = await item.latestRevision().load()
 
         try {
           this.title = revision.getTitle()
-          this.timestamp = new Date(revision.getTimestamp() * 1000)
+          let timestamp = firstRevision.getTimestamp()
+          this.published = 'Published ' + ((timestamp > 0) ? 'on ' + new Date(timestamp * 1000).toLocaleDateString() : 'just now')
           this.body = revision.getImage(512)
           this.description = revision.getDescription()
         }
