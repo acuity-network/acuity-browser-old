@@ -197,7 +197,7 @@
   $link-invert: $primary-invert;
   $link-focus-border: $primary;
 
-  .router-link-active {
+  #sidebar .router-link-active {
     color: $link-invert;
     background-color: $link;
   }
