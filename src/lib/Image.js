@@ -14,7 +14,6 @@ export default class Image {
     sharp.simd(true)
     let source = sharp(this.filepath)
       .rotate()             // Rotate/flip the image if specified in EXIF.
-      .ignoreAspectRatio()  // Ensure that our predictable dimensions algorithm is used.
 
     let metadata = await source.metadata()
     // Work out correct dimensions if rotation occured.
@@ -48,7 +47,7 @@ export default class Image {
       outHeight = Math.round(height / scale)
       mipmaps.push(source
         .clone()
-        .resize(outWidth, outHeight, {fastShrinkOnLoad: false})
+        .resize(outWidth, outHeight, {fit: 'fill', fastShrinkOnLoad: false})
         .webp()
         .toBuffer()
         .then(data => {

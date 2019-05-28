@@ -85,7 +85,7 @@
     "notosans-fontface": "^1.1.0",
     "qrcode": "^1.2.0",
     "request": "^2.88.0",
-    "sharp": "^0.20.8",
+    "sharp": "^0.22.1",
     "twemoji": "^12.0.0",
     "typeface-noto-serif": "^0.0.72",
     "unused-filename": "^2.1.0",
