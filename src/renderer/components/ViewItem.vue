@@ -1,6 +1,7 @@
 <template>
   <page>
     <template slot="title">
+      <span v-if="isFeed">Feed: </span>
       <item-link v-if="short" :itemId="itemId"></item-link>
       <span v-else>{{ title }}</span>
       <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
@@ -61,7 +62,7 @@
         </div>
       </div>
 
-      <reactions :itemId="itemId"></reactions>
+      <reactions v-if="!isFeed" :itemId="itemId"></reactions>
 
       <div v-if="!short">
         <div v-if="isToken">
@@ -88,17 +89,19 @@
           </b-field>
         </div>
 
-        <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
+        <view-item v-if="isFeed" v-for="feedId in feedItemIds" :short="true" :itemId="feedId" :key="feedId"></view-item>
 
-        <view-item v-for="feedId in feedItemIds" short="true" :itemId="feedId" :key="feedId"></view-item>
-
-        <div v-if="startReply">
-          <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
-          <button class="button is-primary" @click="publishReply">Reply</button>
-          <button class="button" @click="startReply = false">Close</button>
-        </div>
         <div v-else>
-          <button class="button is-primary" @click="startReply = true">Reply</button>
+          <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
+
+          <div v-if="startReply">
+            <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
+            <button class="button is-primary" @click="publishReply">Reply</button>
+            <button class="button" @click="startReply = false">Close</button>
+          </div>
+          <div v-else>
+            <button class="button is-primary" @click="startReply = true">Reply</button>
+          </div>
         </div>
       </div>
     </template>
