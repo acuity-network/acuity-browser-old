@@ -321,34 +321,34 @@
           this.tokenSupply = await token.methods.totalSupply().call()
         }
 
-        let id
-        this.$db.get('/historyCount')
-        .then(count => {
-          id = parseInt(count)
-        })
-        .catch(err => {
-          id = 0
-        })
-        .then(() => {
-          return this.$db.get('/historyIndex/' + this.$route.params.itemId)
-          .then(id => {
-            this.$db.del('/history/' + id)
-          })
-          .catch(err => {})
-        })
-        .then(() => {
+        if (!this.short) {
+          // Try to delete the old entry
+          try {
+            let id = await this.$db.get('/historyIndex/' + this.itemId)
+            await this.$db.del('/history/' + id)
+          }
+          catch (e) {}
+
+          let id
+          try {
+            id = parseInt(await this.$db.get('/historyCount'))
+          }
+          catch (e) {
+            id = 0
+          }
+
           this.$db.batch()
           .put('/history/' + id, JSON.stringify({
-            itemId: this.$route.params.itemId,
+            itemId: this.itemId,
             timestamp: Date.now(),
             title: this.title,
             owner: this.owner,
             ownerRoute: this.ownerRoute,
           }))
-          .put('/historyIndex/' + this.$route.params.itemId, id)
+          .put('/historyIndex/' + this.itemId, id)
           .put('/historyCount', id + 1)
           .write()
-        })
+        }
       },
       async copyItemId(event) {
         clipboard.writeText(this.itemId)
