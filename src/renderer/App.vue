@@ -197,6 +197,11 @@
   $link-invert: $primary-invert;
   $link-focus-border: $primary;
 
+  .router-link-active {
+    color: $link-invert;
+    background-color: $link;
+  }
+
   // Import Bulma and Buefy styles
   @import "~bulma";
   @import "~buefy/src/scss/buefy";
