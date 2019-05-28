@@ -88,7 +88,7 @@
 
         <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
 
-        <view-item v-for="feedId in feedItemIds" :itemId="feedId" :key="feedId"></view-item>
+        <view-item v-for="feedId in feedItemIds" short="true" :itemId="feedId" :key="feedId"></view-item>
 
         <div v-if="startReply">
           <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
