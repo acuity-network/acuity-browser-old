@@ -18,15 +18,13 @@
     </template>
 
     <template slot="subtitle">
-      <div v-if="!short">
-        by <profile-link :address="ownerAddress"></profile-link>&ensp;
-        <span
-          @mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
-          @mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
-          :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
-          @click="toggleTrust"></span><br />
-        <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
-      </div>
+      by <profile-link :address="ownerAddress"></profile-link>&ensp;
+      <span
+        @mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
+        @mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
+        :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
+        @click="toggleTrust"></span><br />
+      <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
       {{ published }}
     </template>
 
