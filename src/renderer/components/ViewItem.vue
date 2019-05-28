@@ -89,8 +89,9 @@
           </b-field>
         </div>
 
-        <view-item v-if="isFeed" v-for="feedId in feedItemIds" :short="true" :itemId="feedId" :key="feedId"></view-item>
-
+        <div v-if="isFeed">
+          <view-item v-for="feedId in feedItemIds" :short="true" :itemId="feedId" :key="feedId"></view-item>
+        </div>
         <div v-else>
           <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
 
