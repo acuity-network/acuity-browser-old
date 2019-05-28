@@ -85,10 +85,10 @@
         </div>
 
         <div v-if="isFeed">
-          <view-item v-for="feedId in feedItemIds" :short="true" :itemId="feedId" :key="feedId"></view-item>
+          <view-item v-for="itemId in feedItemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
         </div>
         <div v-else>
-          <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
+          <comment v-for="itemId in commentIds" :itemId="itemId" :key="itemId"></comment>
 
           <div v-if="startReply">
             <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
@@ -227,7 +227,7 @@
         data.tokenPayout = ''
         data.tokenSupply = ''
         data.tokenAddress = ''
-        data.childIds = []
+        data.commentIds = []
         data.feedItemIds = []
         data.reply = ''
         data.startReply = false
@@ -270,7 +270,7 @@
           this.inFeed = true
         }
 
-        this.childIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
+        this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 
         if (!trustLevel) {
