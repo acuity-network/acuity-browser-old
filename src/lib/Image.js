@@ -64,8 +64,8 @@ export default class Image {
 
     mipmaps = await Promise.all(mipmaps)
     let imageMessage = new jpegImageProto.JpegMipmap()
-    imageMessage.setWidth(metadata.width)
-    imageMessage.setHeight(metadata.height)
+    imageMessage.setWidth(width)
+    imageMessage.setHeight(height)
     mipmaps.forEach(mipmap => {
       let mipmapLevelMessage = new jpegImageProto.MipmapLevel()
       mipmapLevelMessage.setFilesize(mipmap.data.Size)
