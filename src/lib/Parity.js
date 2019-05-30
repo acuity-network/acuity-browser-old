@@ -60,11 +60,21 @@ async function launch(window) {
 	parityProcess = spawn(parityPath, args)
 
 	parityProcess.on('error', (err) => {
-		window.webContents.send('parity-error', 'Failed to start (' + err + ')')
+		try {
+			window.webContents.send('parity-error', 'Failed to start (' + err + ')')
+		} catch (e) {}
 	});
 
+	parityProcess.stdout.on('data', (data) => {
+		try {
+			window.webContents.send('parity-stdout', data.toString())
+		} catch (e) {}
+	})
+
 	parityProcess.stderr.on('data', (data) => {
-		window.webContents.send('parity-error', data.toString())
+		try {
+			window.webContents.send('parity-stderr', data.toString())
+		} catch (e) {}
 	})
 
 	window.webContents.send('parity-running')

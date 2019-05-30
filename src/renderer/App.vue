@@ -58,8 +58,17 @@
     },
 
     async created() {
-      ipcRenderer.on('parity-error', (event, error) => {
-        console.log('Parity error: ' + error)
+      ipcRenderer.on('ipfs-stdout', (event, msg) => {
+        console.log('IPFS: ' + msg)
+      })
+      ipcRenderer.on('ipfs-stderr', (event, msg) => {
+        console.error('IPFS: ' + msg)
+      })
+      ipcRenderer.on('parity-stdout', (event, msg) => {
+        console.log('Parity: ' + msg)
+      })
+      ipcRenderer.on('parity-stderr', (event, msg) => {
+        console.error('Parity: ' + msg)
       })
       ipcRenderer.on('parity-running', async (event) => {
         await this.$mixClient.init(this.$root)
