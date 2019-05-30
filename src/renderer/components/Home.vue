@@ -14,6 +14,7 @@
 <script>
   import Page from './Page.vue'
   import ViewItem from './ViewItem.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'home',
@@ -27,6 +28,7 @@
       }
     },
     async created() {
+      setTitle(this.$t('home'))
       let feedIds = []
       this.$db.createValueStream({
         'gte': '/accountSubscribed/' + window.activeAccount.contractAddress + '/',

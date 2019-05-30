@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Manage accounts
+      {{ $t('accounts') }}
     </template>
 
     <template slot="body">
@@ -31,6 +31,7 @@
   import MixAccount from '../../lib/MixAccount.js'
   import MixItem from '../../lib/MixItem.js'
   import ManageAccountsNew from './ManageAccountsNew.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'manage-accounts',
@@ -73,6 +74,7 @@
       },
     },
     created() {
+      setTitle(this.$t('accounts'))
       this.loadAccounts()
     },
   }

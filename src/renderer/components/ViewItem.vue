@@ -120,6 +120,7 @@
   import formatByteCount from '../../lib/formatByteCount.js'
   import File from '../../lib/File.js'
   import twemoji from 'twemoji'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'view-item',
@@ -283,6 +284,9 @@
 
         try {
           this.title = revision.getTitle()
+          if (!this.short) {
+            setTitle(this.title)
+          }
           let timestamp = firstRevision.getTimestamp()
           this.published = 'Published ' + ((timestamp > 0) ? 'on ' + new Date(timestamp * 1000).toLocaleDateString() : 'just now')
           this.body = revision.getImage(512)

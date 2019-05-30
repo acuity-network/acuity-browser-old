@@ -87,6 +87,7 @@
   import { ipcRenderer } from 'electron'
   import ProgressBar from 'vue-simple-progress'
   import formatByteCount from '../../lib/formatByteCount.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'node-status',
@@ -200,6 +201,7 @@
       },
     },
     async created() {
+      setTitle(this.$t('nodeStatus'))
       try {
         await this.$mixClient.web3.eth.getProtocolVersion()
         this.start()

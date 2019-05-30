@@ -30,6 +30,7 @@
   import descriptionProto from '../../lib/protobuf/description_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'publish-image',
@@ -44,6 +45,7 @@
       }
     },
     created() {
+      setTitle(this.$t('publishFeed'))
       delete window.fileNames
     },
     methods: {

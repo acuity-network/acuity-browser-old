@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Downloads
+      {{ $t('downloads') }}
     </template>
 
     <template slot="body">
@@ -36,6 +36,7 @@
 
 <script>
   import Page from './Page.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'downloads',
@@ -83,6 +84,7 @@
       }
     },
     created() {
+      setTitle(this.$t('downloads'))
       this.loadDownloads()
     },
   }

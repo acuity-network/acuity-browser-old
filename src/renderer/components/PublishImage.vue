@@ -43,6 +43,7 @@
   import Image from '../../lib/Image.js'
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'publish-image',
@@ -59,6 +60,7 @@
       }
     },
     created() {
+      setTitle(this.$t('publishImage'))
       delete window.fileNames
       this.$db.createValueStream({
         'gte': '/accountFeeds/' + window.activeAccount.contractAddress + '/',

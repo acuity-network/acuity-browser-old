@@ -23,6 +23,8 @@
 <script>
   import Page from './Page.vue'
   import i18n from '../plugins/i18n'
+  import setTitle from '../../lib/setTitle.js'
+
   export default {
     name: 'settings',
     components: {
@@ -42,6 +44,9 @@
       development() {
         this.$settings.set('development', this.development);
       },
+    },
+    created() {
+      setTitle(this.$t('settings'))
     },
   }
 </script>

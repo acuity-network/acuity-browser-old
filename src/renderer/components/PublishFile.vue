@@ -47,6 +47,7 @@
   import File from '../../lib/File.js'
   import formatByteCount from '../../lib/formatByteCount.js'
   import Base58 from 'base-58'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'publish-file',
@@ -69,6 +70,7 @@
       }
     },
     created() {
+      setTitle(this.$t('publishFile'))
       delete window.fileNames
       this.$db.createValueStream({
         'gte': '/accountFeeds/' + window.activeAccount.contractAddress + '/',
