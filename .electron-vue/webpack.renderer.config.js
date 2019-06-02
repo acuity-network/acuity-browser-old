@@ -1,5 +1,3 @@
-'use strict'
-
 process.env.BABEL_ENV = 'renderer'
 
 let path = require('path')
@@ -31,17 +29,6 @@ let rendererConfig = {
   ],
   module: {
     rules: [
-/*      {
-        test: /\.(js|vue)$/,
-        enforce: 'pre',
-        exclude: /node_modules/,
-        use: {
-          loader: 'eslint-loader',
-          options: {
-            formatter: require('eslint-friendly-formatter')
-          }
-        }
-      },*/
       {
         test: /\.scss$/,
         use: ['vue-style-loader', 'css-loader', 'sass-loader'],
@@ -86,7 +73,7 @@ let rendererConfig = {
         }
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        test: /\.(webp|png|jpe?g|gif|svg)(\?.*)?$/,
         use: {
           loader: 'url-loader',
           query: {
