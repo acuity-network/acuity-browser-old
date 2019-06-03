@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@mdi/font": "^2.8.94",
-    "@parity/electron": "^5.0.0",
+    "@parity/electron": "^5.1.5",
     "axios": "^0.19.0",
     "babel-runtime": "^6.26.0",
     "base-58": "^0.0.1",
