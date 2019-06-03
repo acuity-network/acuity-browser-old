@@ -68,6 +68,7 @@
             window.downloads[i].on('done', ()=>{
                 this.data[i].status = window.downloads[i].getStatus()
                 this.data[i].progress = 100
+                window.downloads[i].removeAllListeners();
                 this.refreshKey++
             })
           }
@@ -76,6 +77,7 @@
           let i = event.target.dataset.index;
           await window.downloads[i].stopdeleteFile()
           this.data[i].status = window.downloads[i].getStatus()
+          window.downloads[i].removeAllListeners();
           this.refreshKey++
       },
       openFile(event) {
@@ -86,6 +88,15 @@
     created() {
       this.loadDownloads()
     },
+    destroyed() {
+        for (let download of window.downloads) {
+            try{
+                download.removeAllListeners()
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
   }
 </script>
 
