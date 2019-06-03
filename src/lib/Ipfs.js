@@ -39,7 +39,7 @@ function connect() {
 	})
 }
 
-function launch() {
+function launch(window) {
 	return new Promise(async (resolve, reject) => {
 		let isWindows = os.platform() === 'win32'
 		let appPath = app.getAppPath()
@@ -111,11 +111,15 @@ function launch() {
 		ipfsProcess = spawn(commandPath, ['daemon'], options)
 
 		ipfsProcess.stdout.on('data', (data) => {
-			console.log(data.toString())
+			try {
+				window.webContents.send('ipfs-stdout', data.toString())
+			} catch (e) {}
 		})
 
 		ipfsProcess.stderr.on('data', (data) => {
-			console.error(data.toString())
+			try {
+				window.webContents.send('ipfs-stderr', data.toString())
+			} catch (e) {}
 		})
 
 		ipfsInterval = setInterval(connect, 30000)

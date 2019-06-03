@@ -27,6 +27,7 @@
   import multihashes from 'multihashes'
   import formatByteCount from '../../lib/formatByteCount.js'
   import MixItem from '../../lib/MixItem.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'debug',
@@ -38,6 +39,9 @@
         itemId: '',
         message: '',
       }
+    },
+    created() {
+      setTitle(this.$t('debugItem'))
     },
     methods: {
       async read(event) {

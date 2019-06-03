@@ -17,12 +17,15 @@
 
 <script>
   import Page from './Page.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'create-item',
     components: {
       Page,
     },
-    methods: {}
+    created() {
+      setTitle(this.$t('publishItem'))
+    },
   }
 </script>

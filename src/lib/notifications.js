@@ -31,13 +31,13 @@ export default {
   downloadComplete(fileName) {
     return {
       title: "Download Complete",
-      body: fileName
+      body: fileName,
     }
   },
   downloadStarted(fileName) {
     return {
       title: "Download Started",
-      body: fileName
+      body: fileName,
     }
   },
 }

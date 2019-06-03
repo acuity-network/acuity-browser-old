@@ -33,6 +33,7 @@
   import titleProto from '../../lib/protobuf/title_pb.js'
   import descriptionProto from '../../lib/protobuf/description_pb.js'
   import bodyTextProto from '../../lib/protobuf/body_pb.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'publish-mixin-type',
@@ -48,6 +49,7 @@
       }
     },
     created() {
+      setTitle(this.$t('publishMixin'))
       delete window.fileNames
     },
     methods: {

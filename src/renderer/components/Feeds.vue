@@ -19,6 +19,7 @@
 <script>
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'feeds',
@@ -31,6 +32,7 @@
       }
     },
     created() {
+      setTitle(this.$t('myFeeds'))
       this.$db.createValueStream({
         'gte': '/accountFeeds/' + window.activeAccount.contractAddress + '/',
         'lt': '/accountFeeds/' + window.activeAccount.contractAddress + '/z',

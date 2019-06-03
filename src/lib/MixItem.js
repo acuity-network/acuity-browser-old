@@ -58,6 +58,10 @@ export default class MixItem {
     return this.revisions
   }
 
+  firstRevision() {
+    return this.revisions[0]
+  }
+
   latestRevision() {
     return this.revisions[this.item.revisionCount - 1]
   }

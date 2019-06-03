@@ -1,6 +1,6 @@
 <template>
-  <div class="columns sidebar">
-    <div class="column is-narrow">
+  <div>
+    <div id="sidebar">
       <active-account></active-account>
       <navigation></navigation>
       <p class="menu-label">
@@ -36,7 +36,7 @@
         <li><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
       </ul>
     </div>
-    <div class="column router-view">
+    <div id="router-view" tabindex="0">
       <router-view></router-view>
     </div>
   </div>
@@ -56,10 +56,19 @@
       Navigation,
       ActiveAccount,
     },
-    
+
     async created() {
-      ipcRenderer.on('parity-error', (event, error) => {
-        console.log('Parity error: ' + error)
+      ipcRenderer.on('ipfs-stdout', (event, msg) => {
+        console.log('IPFS: ' + msg)
+      })
+      ipcRenderer.on('ipfs-stderr', (event, msg) => {
+        console.error('IPFS: ' + msg)
+      })
+      ipcRenderer.on('parity-stdout', (event, msg) => {
+        console.log('Parity: ' + msg)
+      })
+      ipcRenderer.on('parity-stderr', (event, msg) => {
+        console.error('Parity: ' + msg)
       })
       ipcRenderer.on('parity-running', async (event) => {
         await this.$mixClient.init(this.$root)
@@ -72,7 +81,7 @@
           window.activeAccount = await new MixAccount(this.$root, controller).init()
         }
         catch(e) {}
-        window.downloads = [];
+        window.downloads = []
         await this.$settings.init(this.$db)
         // Load previous selected language.
         i18n.locale = this.$settings.get('locale')
@@ -83,9 +92,9 @@
         .on('data', async controller => {
           let account = await new MixAccount(this, controller).init()
           if (!account.contract) {
-            return;
+            return
           }
-          let startingBlock = await this.$mixClient.web3.eth.getBlockNumber();
+          let startingBlock = await this.$mixClient.web3.eth.getBlockNumber()
           account.contract.events.Receive({
             fromBlock: 0,
             toBlock: 'pending',
@@ -196,6 +205,11 @@
   $link: $primary;
   $link-invert: $primary-invert;
   $link-focus-border: $primary;
+
+  #sidebar .router-link-active {
+    color: $link-invert;
+    background-color: $link;
+  }
 
   // Import Bulma and Buefy styles
   @import "~bulma";
@@ -329,21 +343,26 @@
 </style>
 
 <style scoped>
-  .is-narrow {
+  #sidebar {
     position: fixed;
-    padding: 1.5rem;
-    width: 240px;
+    overflow-y: auto;
+    overscroll-behavior: none;
+    width: 220px;
+    height: 100vh;
+    padding: 1rem;
     background-color: rgb(32,32,32);
-    padding-bottom:3000px;
   }
 
-  .is-narrow >>> a:focus {
-    outline: none;
+  #sidebar::-webkit-scrollbar {
+    width: 0 !important
   }
 
-  .router-view {
-    margin-left: 240px;
-    margin-right: 0.75rem;
+  #router-view {
+    margin-left: 220px;
     padding: 2em;
+  }
+
+  :focus {
+    outline: none;
   }
 </style>

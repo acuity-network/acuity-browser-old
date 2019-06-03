@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Downloads
+      {{ $t('downloads') }}
     </template>
 
     <template slot="body">
@@ -36,6 +36,7 @@
 
 <script>
   import Page from './Page.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'downloads',
@@ -45,45 +46,45 @@
     data() {
       return {
         refreshKey:0,
-        data: new Array(window.downloads.length)
+        data: new Array(window.downloads.length),
       }
     },
     methods: {
       loadDownloads() {
-          for (let i = 0; i < window.downloads.length; i++) {
-            this.data[i] = ({
-                index:i,
-                name: window.downloads[i].getName(),
-                size: window.downloads[i].sizeFormatted(),
-                status: window.downloads[i].getStatus(),
-                progress: window.downloads[i].getProgress()
-            })
-            window.downloads[i].on('progress', (_progress) =>{
-                if(_progress > this.data[i].progress + 1) {
-                    this.data[i].progress = window.downloads[i].getProgress()
-                    this.data[i].status = window.downloads[i].getStatus()
-                    this.refreshKey++
-                }
-            })
-            window.downloads[i].on('done', ()=>{
-                this.data[i].status = window.downloads[i].getStatus()
-                this.data[i].progress = 100
-                this.refreshKey++
-            })
-          }
+        for (let i = 0; i < window.downloads.length; i++) {
+          this.data[i] = ({
+            index:i,
+            name: window.downloads[i].getName(),
+            size: window.downloads[i].sizeFormatted(),
+            status: window.downloads[i].getStatus(),
+            progress: window.downloads[i].getProgress(),
+          })
+          window.downloads[i].on('progress', (progress) =>{
+            if(progress > this.data[i].progress + 1) {
+              this.data[i].progress = window.downloads[i].getProgress()
+              this.data[i].status = window.downloads[i].getStatus()
+              this.refreshKey++
+            }
+          })
+          window.downloads[i].on('done', ()=>{
+            this.data[i].status = window.downloads[i].getStatus()
+            this.data[i].progress = 100
+            this.refreshKey++
+          })
+        }
       },
       async deleteFile(event) {
-          let i = event.target.dataset.index;
-          await window.downloads[i].stopdeleteFile()
-          this.data[i].status = window.downloads[i].getStatus()
-          this.refreshKey++
+        let i = event.target.dataset.index;
+        await window.downloads[i].stopdeleteFile()
+        this.data[i].status = window.downloads[i].getStatus()
+        this.refreshKey++
       },
       openFile(event) {
-          window.downloads[event.target.dataset.index].openFile()
+        window.downloads[event.target.dataset.index].openFile()
       }
-
     },
     created() {
+      setTitle(this.$t('downloads'))
       this.loadDownloads()
     },
   }

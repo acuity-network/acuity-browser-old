@@ -35,6 +35,7 @@
 
 <script>
   import Page from './Page.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'transaction-history',
@@ -47,6 +48,7 @@
       }
     },
     async created() {
+      setTitle(this.$t('transactionHistory'))
       if (!window.activeAccount) {
         return
       }

@@ -26,6 +26,7 @@
 
 <script>
   import Page from './Page.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'browsing-history',
@@ -38,6 +39,7 @@
       }
     },
     async created() {
+      setTitle(this.$t('browsingHistory'))
       let data = []
       let count = await this.$db.get('/historyCount')
       for (let i = count - 1; i >= 0; i--) {

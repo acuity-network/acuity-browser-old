@@ -5,13 +5,14 @@ Vue.use(VueI18n);
 
 let messages = {
   'en': {
-    //Nav Panel
+    // Nav Panel
     general: 'General',
     home: 'Home',
     myFeeds: 'My Feeds',
     subscriptions: 'Subscriptions',
     interactions: 'Interactions',
     browsingHistory: 'Browsing History',
+    downloads: 'Downloads',
     publishItem: 'Publish Item',
     gotoItem: 'Goto Item',
     goto: 'Goto',
@@ -21,20 +22,21 @@ let messages = {
     trustedAccounts: 'Trusted Accounts',
     wallet: 'Wallet',
     tokens: 'Tokens',
+    createToken: 'Create Token',
     administration: 'Administration',
     accounts: 'Accounts',
     nodeStatus: 'Node Status',
     settings: 'Settings',
     debugItem: 'Debug Item',
-    //Publish Item
+    // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
     publishFeed: 'Publish Feed',
     publishFile: 'Publish File',
     chooseFile: 'Choose File',
-    //GoTo
+    // GoTo
     itemId: 'ItemId',
-    //Transaction History
+    // Transaction History
     when: 'When',
     description: 'Description',
     receiver: 'Receiver',
@@ -43,36 +45,36 @@ let messages = {
     updateProfile: 'Update profile',
     setProfileItem: 'Set profile item',
     createProfileItem: 'Create profile item',
-    //Downloads
+    // Downloads
     downloads: 'Downloads',
     fileName: 'File Name',
     fileSize: 'Size',
     progress: 'Progress',
     open_delete: 'Open/Delete',
-    //Profile
+    // Profile
     editProfile: 'Edit profile',
     accountType: 'Account type',
     bio: 'Bio',
     location: 'Location',
     publish: 'Publish',
-    //Wallet
+    // Wallet
     balance: 'Balance',
     unconfirmedBalance: 'Unconfirmed Balance',
     transactions: 'Transactions',
     send: 'Send',
     to: 'To',
-    //Tokens
+    // Tokens
     symbol: 'Symbol',
     name: 'Name',
     dailyPayout: 'Daily Payout',
     chooseImage: 'Choose Image',
     create: 'Create',
-    //Accounts
+    // Accounts
     lock: 'Lock',
     activate: 'Activate',
     createAccount: 'Create account',
     recoverAccount: 'Recover account',
-    //Node Status
+    // Node Status
     acuityVersion: 'Acuity Version',
     mixBlockchain: 'MIX Blockchain',
     web3Version: 'Web3 version',
@@ -88,9 +90,9 @@ let messages = {
     addresses: 'Addresses',
     repoSize: 'Repo size',
     repoObjectCount: 'Repo object count',
-    //Settings
+    // Settings
     language: 'Language',
-    //Debug
+    // Debug
     readItem:'Read item'
 
   },
@@ -115,13 +117,13 @@ let messages = {
     nodeStatus: 'Статус подключения',
     settings: 'Настройки',
     debugItem: 'Отладка',
-    //Publish Item
+    // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
     publishImage: 'Опубликовать картинку',
     publishFeed: 'Опуликовать новость',
-    //GoTo
+    // GoTo
     itemId: 'Идентификатор контента (ItemId)',
-    //Transaction History
+    // Transaction History
     when: 'Когда',
     description: 'Описание',
     receiver: 'Получатель',
@@ -130,30 +132,30 @@ let messages = {
     updateProfile: 'Обновить профиль',
     setProfileItem: 'Настройки  элемента профиля',
     createProfileItem: 'Создать элемент профиля',
-    //Profile
+    // Profile
     editProfile: 'Редактировать профиль',
     accountType: 'Тип аккаунта',
     bio: 'О себе',
     location: 'Местоположение',
     publish: 'Опубликовать',
-    //Wallet
+    // Wallet
     balance: 'Баланс',
     unconfirmedBalance: 'Неподтвержденный баланс',
     transactions: 'Транзакции',
     send: 'Отправить',
     to: 'Куда',
-    //Tokens
+    // Tokens
     symbol: 'Символ',
     name: 'Название',
     dailyPayout: 'Ежедневная выплата',
     chooseImage: 'Выбрать изображение',
     create: 'Создать',
-    //Accounts
+    // Accounts
     lock: 'заблокировать',
     activate: 'активировать',
     createAccount: 'Создать аккаунт',
     recoverAccount: 'Восстановить аккаунт',
-    //Node Status
+    // Node Status
     mixBlockchain: 'MIX Blockchain',
     web3Version: 'Web3 версия',
     protocolVersion: 'Версия протокола',
@@ -168,17 +170,17 @@ let messages = {
     addresses: 'Адреса',
     repoSize: 'Размер хранилища',
     repoObjectCount: 'Количество объектов в хранилище',
-    //Settings
+    // Settings
     language: 'Язык',
-    //Debug
+    // Debug
     readItem:'Получить сведения'
   }
 }
 
 let i18n = new VueI18n({
-    locale: 'en', // set locale
-    fallbackLocale: 'ru', // set fallback locale
-    messages, // set locale messages
+    locale: 'en', // Set locale.
+    fallbackLocale: 'ru', // Set fallback locale.
+    messages, // Set locale messages.
   });
 
 export default i18n;

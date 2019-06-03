@@ -17,9 +17,17 @@ export default class MixContent {
       return this
     }
 
+    let response
+
     try {
       let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), "hex"), 'sha2-256'))
-      let response = await this.vue.$ipfsClient.get('cat?arg=/ipfs/' + encodedIpfsHash, false)
+      response = await this.vue.$ipfsClient.get('cat?arg=/ipfs/' + encodedIpfsHash, false)
+    }
+    catch (e) {
+      return this
+    }
+
+    try {
       let itemPayload = await brotli.decompress(Buffer.from(response, "binary"))
       let mixins = itemProto.Item.deserializeBinary(itemPayload).getMixinList()
 
@@ -81,10 +89,10 @@ export default class MixContent {
   existMixin(mixinId) {
     for (let i = 0; i < this.mixins.length; i++) {
       if (this.mixins[i].mixinId == mixinId) {
-        return true;
+        return true
       }
     }
-    return false;
+    return false
   }
 
   addMixin(mixinId, payload) {
