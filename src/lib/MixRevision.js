@@ -50,11 +50,11 @@ export default class MixRevision {
   }
 
   getFile() {
-    let fileMessage = fileProto.File.deserializeBinary(this.content.getPayloads('0x0b62637e')[0]);
+    let fileMessage = fileProto.File.deserializeBinary(this.content.getPayloads('0x0b62637e')[0])
     return {
       name: fileMessage.getFilename(),
       size: fileMessage.getFilesize(),
-      hash: Base58.encode(fileMessage.getIpfsHash())
+      hash: Base58.encode(fileMessage.getIpfsHash()),
     }
   }
 

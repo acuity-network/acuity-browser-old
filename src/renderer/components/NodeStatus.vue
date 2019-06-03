@@ -87,6 +87,7 @@
   import { ipcRenderer } from 'electron'
   import ProgressBar from 'vue-simple-progress'
   import formatByteCount from '../../lib/formatByteCount.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'node-status',
@@ -140,11 +141,6 @@
 
         this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
         .on('data', block => {
-          loadMixData()
-        })
-
-        this.syncingEmitter = this.$mixClient.web3.eth.subscribe('syncing')
-        .on('data', sync => {
           loadMixData()
         })
 
@@ -205,6 +201,7 @@
       },
     },
     async created() {
+      setTitle(this.$t('nodeStatus'))
       try {
         await this.$mixClient.web3.eth.getProtocolVersion()
         this.start()
@@ -222,7 +219,6 @@
     },
     destroyed() {
       this.newBlockHeadersEmitter.unsubscribe()
-      this.syncingEmitter.unsubscribe()
       clearInterval(this.ipfsInterval)
     },
   }

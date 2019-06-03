@@ -25,6 +25,7 @@
 <script>
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'profile',
@@ -48,6 +49,7 @@
       let item = await new MixItem(this, itemId).init()
       let revision = await item.latestRevision().load()
       this.title = revision.getTitle()
+      setTitle(this.title)
       this.bio = revision.getBodyText()
       this.image = revision.getImage(256)
       let profile = revision.getProfile()

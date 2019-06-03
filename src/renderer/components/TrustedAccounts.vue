@@ -21,9 +21,9 @@
 
 <script>
   import Page from './Page.vue'
-
   import MixAccount from '../../lib/MixAccount.js'
   import MixItem from '../../lib/MixItem.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'trusted-accounts',
@@ -57,6 +57,7 @@
       },
     },
     created() {
+      setTitle(this.$t('transactionHistory'))
       this.loadData()
     },
   }

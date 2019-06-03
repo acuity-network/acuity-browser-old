@@ -58,6 +58,7 @@
   import Page from './Page.vue'
   import QRCode from 'qrcode'
   import WalletConfirmSend from './WalletConfirmSend.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'wallet',
@@ -181,6 +182,7 @@
       },
     },
     async created() {
+      setTitle(this.$t('wallet'))
       if (!window.activeAccount) {
         return
       }

@@ -2,8 +2,8 @@ import MixAccount from '../lib/MixAccount.js'
 import MixItem from '../lib/MixItem.js'
 import MixContent from '../lib/MixContent.js'
 import jpegImageProto from './protobuf/jpeg-image_pb.js'
-import multihashes from 'multihashes'
 import fileProto from './protobuf/file_pb.js'
+import multihashes from 'multihashes'
 import Base58 from 'base-58'
 
 export default class MixPinner {
@@ -19,8 +19,8 @@ export default class MixPinner {
 
     let content = new MixContent(this.vue)
     await content.load(ipfsHash)
+    // Pin images.
     let payloads = content.getPayloads('0x12745469')
-
     for (let payload of payloads) {
       let imageMessage = new jpegImageProto.JpegMipmap.deserializeBinary(payload)
       let mipmapList = imageMessage.getMipmapLevelList()
@@ -31,15 +31,12 @@ export default class MixPinner {
         await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
       }
     }
-    //pinning Files
-    let maxFilePinSize = this.vue.$settings.get('maxFilePinSize')
+    // Pin files.
     let filePayloads = content.getPayloads('0x0b62637e')
     for (let payload of filePayloads) {
-      let fileMessage = fileProto.File.deserializeBinary(payload)
-      if(fileMessage.getFilesize() <= maxFilePinSize) {
-        let encodedIpfsHash = Base58.encode(fileMessage.getIpfsHash())
-        await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
-      }
+      let fileMessage = new fileProto.File.deserializeBinary(payload)
+      let encodedIpfsHash = Base58.encode(fileMessage.getIpfsHash())
+      await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
     }
   }
 

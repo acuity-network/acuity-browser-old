@@ -42,11 +42,12 @@
   import fileProto from '../../lib/protobuf/file_pb.js'
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
-  import fs from 'fs-extra'
+  import fs from 'fs'
   import request from 'request'
   import File from '../../lib/File.js'
   import formatByteCount from '../../lib/formatByteCount.js'
   import Base58 from 'base-58'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'publish-file',
@@ -55,20 +56,21 @@
     },
     data() {
       return {
-            title: '',
-            description: '',
-            feeds: [{itemId: '0', title: 'none'}],
-            feedId: '0',
-            filepath: '',
-            fileTotalSize: 0,
-            isUploading: false,
-            isDoneUploading: false,
-            fileHash:'',
-            fileName:'',
-            fileSize:''
-        }
+        title: '',
+        description: '',
+        feeds: [{itemId: '0', title: 'none'}],
+        feedId: '0',
+        filepath: '',
+        fileTotalSize: 0,
+        isUploading: false,
+        isDoneUploading: false,
+        fileHash:'',
+        fileName:'',
+        fileSize:'',
+      }
     },
     created() {
+      setTitle(this.$t('publishFile'))
       delete window.fileNames
       this.$db.createValueStream({
         'gte': '/accountFeeds/' + window.activeAccount.contractAddress + '/',
@@ -92,28 +94,27 @@
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
           title: 'Choose File',
-          //filters: [{name: 'Files', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
-            this.isUploading = true;
-            this.fileUploadedSize = 0;
-            this.filePath = fileNames[0];
-            let stats = fs.statSync(fileNames[0])
-            this.fileTotalSize = stats.size;
-            output.innerHTML = 'Uploading file...'
-            let req = request.post('http://127.0.0.1:5001/api/v0/add', (err, res, body) => {
-                if (err) {
-                    console.log(err);
-                } else {      
-                    let jsonBody = JSON.parse(body);
-                    this.fileHash = jsonBody.Hash;
-                    this.fileName = jsonBody.Name;
-                    this.fileSize = jsonBody.Size;
-                    this.isDoneUploading = true;
-                    output.innerHTML = 'Name: '+ this.fileName + '<br/>' + 'Hash: '+ this.fileHash + '<br/>' + 'Size: ' +  formatByteCount(this.fileSize)
-                }
-            });
-            let form = req.form();
-            form.append('file', fs.createReadStream(fileNames[0]));
+          this.isUploading = true
+          this.fileUploadedSize = 0
+          this.filePath = fileNames[0]
+          let stats = fs.statSync(fileNames[0])
+          this.fileTotalSize = stats.size
+          output.innerHTML = 'Uploading file...'
+          let req = request.post('http://127.0.0.1:5001/api/v0/add', (err, res, body) => {
+            if (err) {
+              console.log(err)
+            } else {
+              let jsonBody = JSON.parse(body)
+              this.fileHash = jsonBody.Hash
+              this.fileName = jsonBody.Name
+              this.fileSize = jsonBody.Size
+              this.isDoneUploading = true
+              output.innerHTML = 'Name: '+ this.fileName + '<br/>' + 'Hash: '+ this.fileHash + '<br/>' + 'Size: ' +  formatByteCount(this.fileSize)
+            }
+          })
+          let form = req.form()
+          form.append('file', fs.createReadStream(fileNames[0]))
         })
       },
       async publish(event) {
@@ -136,14 +137,12 @@
         let descriptionMessage = new descriptionProto.DescriptionMixin()
         descriptionMessage.setDescription(this.description)
         content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
-        console.log(content)
+
         // File
         let fileMessage = new fileProto.File()
-        //console.log('decodedhash',Base58.decode(this.fileHash));
-        fileMessage.setFilename(this.fileName);
-        console.log(this.fileHash)
-        fileMessage.setIpfsHash(Base58.decode(this.fileHash));
-        fileMessage.setFilesize(this.fileSize);
+        fileMessage.setFilename(this.fileName)
+        fileMessage.setIpfsHash(Base58.decode(this.fileHash))
+        fileMessage.setFilesize(this.fileSize)
         content.addMixin(0x0b62637e, fileMessage.serializeBinary())
 
         let ipfsHash = await content.save()

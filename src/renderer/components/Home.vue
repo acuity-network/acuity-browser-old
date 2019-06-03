@@ -5,7 +5,7 @@
     </template>
 
     <template slot="body">
-      <view-item v-for="itemId in itemIds" :itemId="itemId" :key="itemId"></view-item>
+      <view-item v-for="itemId in itemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
     </template>
 
   </page>
@@ -14,6 +14,7 @@
 <script>
   import Page from './Page.vue'
   import ViewItem from './ViewItem.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'home',
@@ -27,6 +28,7 @@
       }
     },
     async created() {
+      setTitle(this.$t('home'))
       let feedIds = []
       this.$db.createValueStream({
         'gte': '/accountSubscribed/' + window.activeAccount.contractAddress + '/',

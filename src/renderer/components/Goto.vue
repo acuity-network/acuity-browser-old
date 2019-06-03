@@ -17,6 +17,7 @@
 <script>
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'goto',
@@ -28,6 +29,9 @@
         itemId: '',
         message: '',
       }
+    },
+    created() {
+      setTitle(this.$t('gotoItem'))
     },
     methods: {
       async goto(event) {

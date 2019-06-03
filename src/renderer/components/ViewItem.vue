@@ -1,7 +1,9 @@
 <template>
   <page>
     <template slot="title">
-      {{ title }}
+      <span v-if="isFeed">Feed: </span>
+      <item-link v-if="short" :itemId="itemId"></item-link>
+      <span v-else>{{ title }}</span>
       <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
       </span>
       <span
@@ -23,12 +25,7 @@
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         @click="toggleTrust"></span><br />
       <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
-      <span v-if="timestamp > 0">
-        <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
-      </span>
-      <span v-else>
-        Just now
-      </span>
+      {{ published }}
     </template>
 
     <template slot="body">
@@ -58,43 +55,48 @@
         </div>
       </div>
 
-      <div v-if="isToken">
-        <b-field label="Token address">
-          {{ tokenAddress }}
-        </b-field>
-        <b-field label="Token symbol">
-          {{ tokenSymbol }}
-        </b-field>
-        <b-field label="Token name">
-          {{ tokenName }}
-        </b-field>
-        <b-field label="Token start">
-          {{ tokenStart }}
-        </b-field>
-        <b-field label="Token owner">
-          {{ tokenOwner }}
-        </b-field>
-        <b-field label="Token payout">
-          {{ tokenPayout }}
-        </b-field>
-        <b-field label="Token supply">
-          {{ tokenSupply }}
-        </b-field>
-      </div>
+      <reactions v-if="!isFeed" :itemId="itemId"></reactions>
 
-      <reactions :itemId="itemId"></reactions>
+      <div v-if="!short">
+        <div v-if="isToken">
+          <b-field label="Token address">
+            {{ tokenAddress }}
+          </b-field>
+          <b-field label="Token symbol">
+            {{ tokenSymbol }}
+          </b-field>
+          <b-field label="Token name">
+            {{ tokenName }}
+          </b-field>
+          <b-field label="Token start">
+            {{ tokenStart }}
+          </b-field>
+          <b-field label="Token owner">
+            {{ tokenOwner }}
+          </b-field>
+          <b-field label="Token payout">
+            {{ tokenPayout }}
+          </b-field>
+          <b-field label="Token supply">
+            {{ tokenSupply }}
+          </b-field>
+        </div>
 
-      <comment v-for="childId in childIds" :itemId="childId" :key="childId"></comment>
+        <div v-if="isFeed">
+          <view-item v-for="itemId in feedItemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
+        </div>
+        <div v-else>
+          <comment v-for="itemId in commentIds" :itemId="itemId" :key="itemId"></comment>
 
-      <view-item v-for="feedId in feedItemIds" :itemId="feedId" :key="feedId"></view-item>
-
-      <div v-if="startReply">
-        <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
-        <button class="button is-primary" @click="publishReply">Reply</button>
-        <button class="button" @click="startReply = false">Close</button>
-      </div>
-      <div v-else>
-        <button class="button is-primary" @click="startReply = true">Reply</button>
+          <div v-if="startReply">
+            <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
+            <button class="button is-primary" @click="publishReply">Reply</button>
+            <button class="button" @click="startReply = false">Close</button>
+          </div>
+          <div v-else>
+            <button class="button is-primary" @click="startReply = true">Reply</button>
+          </div>
+        </div>
       </div>
     </template>
   </page>
@@ -105,6 +107,7 @@
   import MixContent from '../../lib/MixContent.js'
   import Comment from './Comment.vue'
   import AccountInfo from './AccountInfo.vue'
+  import ItemLink from './ItemLink.vue'
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
@@ -117,14 +120,26 @@
   import formatByteCount from '../../lib/formatByteCount.js'
   import File from '../../lib/File.js'
   import twemoji from 'twemoji'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'view-item',
-    props: ['itemId'],
+    props: {
+      itemId: {
+        type: String,
+        required: true,
+      },
+      short: {
+        type: Boolean,
+        default: false,
+        required: false,
+      },
+    },
     components: {
       Page,
       Comment,
       AccountInfo,
+      ItemLink,
       ProfileLink,
       VueMarkdown,
       Reactions,
@@ -193,7 +208,7 @@
         data.inFeed = false
         data.feed = ''
         data.feedRoute = ''
-        data.timestamp = ''
+        data.published = ''
         data.body = ''
         data.description = ''
         data.hasFile = false
@@ -211,7 +226,7 @@
         data.tokenPayout = ''
         data.tokenSupply = ''
         data.tokenAddress = ''
-        data.childIds = []
+        data.commentIds = []
         data.feedItemIds = []
         data.reply = ''
         data.startReply = false
@@ -254,7 +269,7 @@
           this.inFeed = true
         }
 
-        this.childIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
+        this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 
         if (!trustLevel) {
@@ -264,23 +279,30 @@
           return
         }
 
+        let firstRevision = await item.firstRevision().load()
         let revision = await item.latestRevision().load()
 
-        //try individually for each type so one not existing doesn't break the others
-        try { this.title = revision.getTitle() } catch (e) {}
-        try { this.timestamp = new Date(revision.getTimestamp() * 1000) } catch (e) {}
-        try { this.body = revision.getImage(512) } catch (e) {}
-        try { this.description = revision.getDescription() } catch (e) {}
-        
-        if(revision.content.existMixin('0x0b62637e')) {
-          this.hasFile = true;
-          let fileData = revision.getFile();
+        try {
+          this.title = revision.getTitle()
+          if (!this.short) {
+            setTitle(this.title)
+          }
+          let timestamp = firstRevision.getTimestamp()
+          this.published = 'Published ' + ((timestamp > 0) ? 'on ' + new Date(timestamp * 1000).toLocaleDateString() : 'just now')
+          this.body = revision.getImage(512)
+          this.description = revision.getDescription()
+        }
+        catch (e) {}
+
+        if (revision.content.existMixin('0x0b62637e')) {
+          this.hasFile = true
+          let fileData = revision.getFile()
           this.file = new File(this.$root, fileData.name, fileData.size, fileData.hash)
           this.fileName = fileData.name
           this.fileSize = formatByteCount(fileData.size)
           this.fileHash = fileData.hash
         }
-      
+
         if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
           this.isProfile = true
         }
@@ -299,34 +321,34 @@
           this.tokenSupply = await token.methods.totalSupply().call()
         }
 
-        let id
-        this.$db.get('/historyCount')
-        .then(count => {
-          id = parseInt(count)
-        })
-        .catch(err => {
-          id = 0
-        })
-        .then(() => {
-          return this.$db.get('/historyIndex/' + this.$route.params.itemId)
-          .then(id => {
-            this.$db.del('/history/' + id)
-          })
-          .catch(err => {})
-        })
-        .then(() => {
+        if (!this.short) {
+          // Try to delete the old entry
+          try {
+            let id = await this.$db.get('/historyIndex/' + this.itemId)
+            await this.$db.del('/history/' + id)
+          }
+          catch (e) {}
+
+          let id
+          try {
+            id = parseInt(await this.$db.get('/historyCount'))
+          }
+          catch (e) {
+            id = 0
+          }
+
           this.$db.batch()
           .put('/history/' + id, JSON.stringify({
-            itemId: this.$route.params.itemId,
+            itemId: this.itemId,
             timestamp: Date.now(),
             title: this.title,
             owner: this.owner,
             ownerRoute: this.ownerRoute,
           }))
-          .put('/historyIndex/' + this.$route.params.itemId, id)
+          .put('/historyIndex/' + this.itemId, id)
           .put('/historyCount', id + 1)
           .write()
-        })
+        }
       },
       async copyItemId(event) {
         clipboard.writeText(this.itemId)
@@ -392,10 +414,8 @@
         this.loadData()
       },
       async downloadFile() {
-          this.file.download()
-          
-
-          this.hasDownloaded = true
+        this.file.download()
+        this.hasDownloaded = true
       },
       toggleTrust(event) {
         new MixItem(this.$root, this.itemId).init()
@@ -452,6 +472,6 @@
 
   .button {
     margin-right:10px;
-    
+
   }
 </style>

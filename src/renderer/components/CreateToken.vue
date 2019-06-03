@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      Create Token
+      {{ $t('createToken') }}
     </template>
 
     <template slot="body">
@@ -34,6 +34,7 @@
   import ethTx from 'ethereumjs-tx'
   import path from 'path'
   import fs from 'fs'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'create-token',
@@ -49,7 +50,7 @@
       }
     },
     created() {
-      delete window.fileNames
+      setTitle(this.$t('createToken'))
     },
     methods: {
       chooseFile(event) {
@@ -125,8 +126,6 @@
           this.$router.push({ name: 'item', params: { itemId: itemId }})
         })
       }
-    },
-    async created() {
     },
   }
 </script>
