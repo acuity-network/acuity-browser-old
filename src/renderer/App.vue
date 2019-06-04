@@ -81,92 +81,90 @@
       ipcRenderer.on('parity-stderr', (event, msg) => {
         console.error('Parity: ' + msg)
       })
-      ipcRenderer.on('parity-running', async (event) => {
-        await this.$mixClient.init(this.$root)
-        // Start the pinner.
-        this.pinner = new MixPinner(this.$root)
-        this.pinner.start()
-        // Load previous active account.
-        try {
-          let controller = await this.$db.get('/active-account')
-          window.activeAccount = await new MixAccount(this.$root, controller).init()
+      await this.$mixClient.init(this.$root)
+      // Start the pinner.
+      this.pinner = new MixPinner(this.$root)
+      this.pinner.start()
+      // Load previous active account.
+      try {
+        let controller = await this.$db.get('/active-account')
+        window.activeAccount = await new MixAccount(this.$root, controller).init()
+      }
+      catch(e) {}
+      window.downloads = []
+      await this.$settings.init(this.$db)
+      // Load previous selected language.
+      i18n.locale = this.$settings.get('locale')
+      this.$db.createValueStream({
+        'gt': '/account/controllerAddress/',
+        'lt': '/account/controllerAddress/z',
+      })
+      .on('data', async controller => {
+        let account = await new MixAccount(this, controller).init()
+        if (!account.contract) {
+          return
         }
-        catch(e) {}
-        window.downloads = []
-        await this.$settings.init(this.$db)
-        // Load previous selected language.
-        i18n.locale = this.$settings.get('locale')
-        this.$db.createValueStream({
-          'gt': '/account/controllerAddress/',
-          'lt': '/account/controllerAddress/z',
+        let startingBlock = await this.$mixClient.web3.eth.getBlockNumber()
+        account.contract.events.Receive({
+          fromBlock: 0,
+          toBlock: 'pending',
         })
-        .on('data', async controller => {
-          let account = await new MixAccount(this, controller).init()
-          if (!account.contract) {
-            return
+        .on('data', log => {
+          let payment = {
+            transaction: log.transactionHash,
+            sender: log.returnValues.from,
+            amount: log.returnValues.value.toString(),
           }
-          let startingBlock = await this.$mixClient.web3.eth.getBlockNumber()
-          account.contract.events.Receive({
-            fromBlock: 0,
-            toBlock: 'pending',
+          // Only show notifications for TX that occurred since logging in.
+          if (log.blockNumber >= startingBlock) {
+            let notification = this.$notifications.mixReceived(account.contractAddress, this.$mixClient.web3.utils.fromWei(payment.amount, 'Ether'))
+            new Notification(notification.title, notification)
+          }
+          this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+          .then(id => {
+            return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
           })
-          .on('data', log => {
-            let payment = {
-              transaction: log.transactionHash,
-              sender: log.returnValues.from,
-              amount: log.returnValues.value.toString(),
-            }
-            // Only show notifications for TX that occurred since logging in.
-            if (log.blockNumber >= startingBlock) {
-              let notification = this.$notifications.mixReceived(account.contractAddress, this.$mixClient.web3.utils.fromWei(payment.amount, 'Ether'))
-              new Notification(notification.title, notification)
-            }
-            this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-            .then(id => {
-              return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+          .catch(error => {
+            let id
+            return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
+            .then(count => {
+              id = parseInt(count)
             })
-            .catch(error => {
-              let id
-              return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
-              .then(count => {
-                id = parseInt(count)
-              })
-              .catch(err => {
-                id = 0
-              })
-              .then(() => {
-                return this.$db.batch()
-                .put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
-                .put('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex, id)
-                .put('/account/contract/' + account.contractAddress + '/receivedCount', id + 1)
-                .write()
-              })
+            .catch(err => {
+              id = 0
             })
             .then(() => {
-              this.$root.$emit('account-receive', account.contractAddress)
-              account.isUnlocked()
-              .then(unlocked => {
-                if (unlocked) {
-                  account.consolidateMix()
-                }
-              })
-            })
-          })
-          .on('changed', log => {
-            this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-            .then(id => {
               return this.$db.batch()
-              .del('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-              .del('/account/contract/' + account.contractAddress + '/received/' + id)
+              .put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
+              .put('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex, id)
+              .put('/account/contract/' + account.contractAddress + '/receivedCount', id + 1)
               .write()
             })
-            .then(() => {
-              this.$root.$emit('account-receive', account.contractAddress)
+          })
+          .then(() => {
+            this.$root.$emit('account-receive', account.contractAddress)
+            account.isUnlocked()
+            .then(unlocked => {
+              if (unlocked) {
+                account.consolidateMix()
+              }
             })
           })
         })
-        this.splash = false
+        .on('changed', log => {
+          this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+          .then(id => {
+            return this.$db.batch()
+            .del('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
+            .del('/account/contract/' + account.contractAddress + '/received/' + id)
+            .write()
+          })
+          .then(() => {
+            this.$root.$emit('account-receive', account.contractAddress)
+          })
+        })
       })
+      this.splash = false
     },
     destroyed() {
       this.pinner.stop()

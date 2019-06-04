@@ -113,8 +113,8 @@ async function createWindow () {
     shell.openExternal(url)
   });
 
-  // Make sure IPFS is launched before downloading Parity to prevent ETXTBSY.
-  await ipfs.launch(mainWindow)
+  // Launch IPFS.
+  ipfs.launch(mainWindow)
   // Launch Parity.
   parity.launch(mainWindow)
 }

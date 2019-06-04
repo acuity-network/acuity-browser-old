@@ -1,4 +1,3 @@
-import * as parity from '@parity/electron';
 import { app } from 'electron'
 import path from 'path'
 import Web3 from 'web3'
@@ -9,8 +8,19 @@ import { spawn } from 'child_process'
 let parityProcess
 
 async function launch(window) {
-
+	let isWindows = os.platform() === 'win32'
 	let parityPath
+
+	if (process.env.NODE_ENV !== 'development') {
+		parityPath = path.join(app.getAppPath(), '..')
+	}
+	else {
+		parityPath = path.join(app.getAppPath(), '..', '..', '..', '..', '..', 'src')
+	}
+
+	parityPath = path.join(parityPath, 'extraResources', isWindows ? 'parity.exe' : 'parity')
+	console.log('Parity path: ' + parityPath)
+
 	let ipcPath
 
 	if (os.platform() === 'win32') {
@@ -21,21 +31,6 @@ async function launch(window) {
 	}
 
 	console.log('Parity IPC path: ' + ipcPath)
-
-	try {
-		parityPath = await parity.getParityPath()
-	}
-	catch (e) {
-		try {
-			parityPath = await parity.fetchParity(window, { parityChannel: 'v2.4.6', onProgress: (progress) => {
-				window.webContents.send('parity-download-progress', progress)
-			}})
-		}
-		catch (e) {
-			console.error(e)
-			return
-		}
-	}
 
 	let args = [
 		'--no-download',

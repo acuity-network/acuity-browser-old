@@ -14,6 +14,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
+    "install": "node --experimental-modules download.mjs",
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
@@ -65,7 +66,6 @@
   },
   "dependencies": {
     "@mdi/font": "^2.8.94",
-    "@parity/electron": "^5.1.5",
     "axios": "^0.18.1",
     "babel-runtime": "^6.26.0",
     "base-58": "^0.0.1",
@@ -76,7 +76,6 @@
     "ethereumjs-tx": "^1.3.7",
     "ethereumjs-util": "^6.0.0",
     "events": "^3.0.0",
-    "go-ipfs-dep": "^0.4.21",
     "google-protobuf": "^3.5.0",
     "iltorb": "^2.4.0",
     "just-throttle": "^1.1.0",
@@ -112,6 +111,7 @@
     "cross-env": "^5.1.6",
     "css-loader": "^2.1.1",
     "del": "^4.1.0",
+    "download": "^7.1.0",
     "electron": "^5.0.2",
     "electron-builder": "^20.41.0",
     "electron-devtools-installer": "^2.2.0",

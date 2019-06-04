@@ -11,43 +11,29 @@
       <div class="columns">
         <div class="column">
           <h2 class="subtitle">{{ $t('mixBlockchain') }}</h2>
-          <div v-if="downloadingParity === true">
-            <b-field label="Parity downloading">
-              <progress-bar size="tiny" :val="parityDownloadProgress" max="1000" bar-transition="none" />
-            </b-field>
-          </div>
-          <div v-if="downloadingParity === false">
-            <b-field :label="$t('web3Version')">
-              {{ web3Version }}
-            </b-field>
-            <b-field :label="$t('protocolVersion')">
-              {{ protocolVersion }}
-            </b-field>
-            <b-field :label="$t('networkId')">
-              {{ networkId }}
-            </b-field>
-            <b-field :label="$t('blockNumber')">
-              {{ blockNumber }}
-            </b-field>
-            <b-field :label="$t('peerCount')">
-              {{ peerCount }}
-            </b-field>
-            <b-field :label="$t('catchingUp')">
-              <div v-if="isSyncing">
-                <progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
-              </div>
-              <div v-else>
-                no
-              </div>
-            </b-field>
-            <b-field :label="$t('clockSync')">
-              <span v-if="isClockSync">yes</span>
-              <span v-else>no</span>
-            </b-field>
-            <b-field :label="$t('timeDrift')">
-              {{ timeDrift }} ms
-            </b-field>
-          </div>
+          <b-field :label="$t('web3Version')">
+            {{ web3Version }}
+          </b-field>
+          <b-field :label="$t('protocolVersion')">
+            {{ protocolVersion }}
+          </b-field>
+          <b-field :label="$t('networkId')">
+            {{ networkId }}
+          </b-field>
+          <b-field :label="$t('blockNumber')">
+            {{ blockNumber }}
+          </b-field>
+          <b-field :label="$t('peerCount')">
+            {{ peerCount }}
+          </b-field>
+          <b-field :label="$t('catchingUp')">
+            <div v-if="isSyncing">
+              <progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
+            </div>
+            <div v-else>
+              no
+            </div>
+          </b-field>
         </div>
         <div class="column">
           <h2 class="subtitle">IPFS</h2>
@@ -82,7 +68,6 @@
 <script>
   import { remote } from 'electron'
   import Page from './Page.vue'
-  import { checkClockSync } from '@parity/electron'
   import throttle from 'just-throttle'
   import { ipcRenderer } from 'electron'
   import ProgressBar from 'vue-simple-progress'
@@ -98,16 +83,12 @@
     data() {
       return {
         acuityVersion: '',
-        downloadingParity: null,
-        parityDownloadProgress: '',
         web3Version: '',
         protocolVersion: '',
         networkId: '',
         blockNumber: '',
         peerCount: '',
         isSyncing: false,
-        isClockSync: '',
-        timeDrift: '',
         startingBlock: 0,
         highestBlock: 0,
         syncTotal: 0,
@@ -128,14 +109,10 @@
         else {
           this.acuityVersion = remote.app.getVersion()
         }
-        this.downloadingParity = false
         this.web3Version = this.$mixClient.web3.version
         let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
         this.protocolVersion = this.$mixClient.web3.utils.hexToNumber(protocolVersion)
         this.networkId = await this.$mixClient.web3.eth.net.getId()
-        let clockSync = await checkClockSync()
-        this.isClockSync = clockSync.isClockSync
-        this.timeDrift = Math.round(clockSync.timeDrift)
 
         let loadMixData = throttle(this.loadMixData, 500, true)
 
@@ -207,11 +184,6 @@
         this.start()
       }
       catch (e) {
-        this.downloadingParity = true
-        ipcRenderer.on('parity-download-progress', (event, progress) => {
-          this.parityDownloadProgress = progress * 1000
-        })
-
         this.$root.$on('mix-client-active', () => {
           this.start()
         })
