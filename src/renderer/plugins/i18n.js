@@ -26,6 +26,7 @@ let messages = {
     administration: 'Administration',
     accounts: 'Accounts',
     nodeStatus: 'Node Status',
+    mining: 'Mining',
     settings: 'Settings',
     debugItem: 'Debug Item',
     // Publish Item

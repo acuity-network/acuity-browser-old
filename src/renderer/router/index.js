@@ -121,6 +121,11 @@ export default new Router({
       component: require('@/components/NodeStatus').default
     },
     {
+      path: '/mining',
+      name: 'mining',
+      component: require('@/components/Mining').default
+    },
+    {
       path: '/settings',
       name: 'settings',
       component: require('@/components/Settings').default

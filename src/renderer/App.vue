@@ -36,6 +36,7 @@
         <ul class="menu-list">
           <li><router-link to="/manage-accounts">{{ $t('accounts') }}</router-link></li>
           <li><router-link to="/node-status">{{ $t('nodeStatus') }}</router-link></li>
+          <li><router-link to="/mining">{{ $t('mining') }}</router-link></li>
           <li><router-link to="/settings">{{ $t('settings') }}</router-link></li>
           <li><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
         </ul>
