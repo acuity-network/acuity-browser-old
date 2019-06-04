@@ -1,43 +1,48 @@
 <template>
   <div>
-    <div id="sidebar">
-      <active-account></active-account>
-      <navigation></navigation>
-      <p class="menu-label">
-       {{ $t('general') }}
-      </p>
-      <ul class="menu-list">
-        <li><router-link to="/home">{{ $t('home') }}</router-link>
-        <li><router-link to="/feeds">{{ $t('myFeeds') }}</router-link>
-        <li><router-link to="/subscriptions">{{ $t('subscriptions') }}</router-link>
-        <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
-        <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
-        <li><router-link to="/downloads">{{ $t('downloads') }}</router-link></li>
-        <li><router-link to="/publish-item">{{ $t('publishItem') }}</router-link></li>
-        <li><router-link to="/goto">{{ $t('gotoItem') }}</router-link></li>
-      </ul>
-      <p class="menu-label">
-        {{ $t('account') }}
-      </p>
-      <ul class="menu-list">
-        <li><router-link to="/transaction-history">{{ $t('transactionHistory') }}</router-link></li>
-        <li><router-link to="/profile">{{ $t('profile') }}</router-link></li>
-        <li><router-link to="/trusted-accounts">{{ $t('trustedAccounts') }}</router-link></li>
-        <li><router-link to="/wallet">{{ $t('wallet') }}</router-link></li>
-        <li><router-link to="/tokens">{{ $t('tokens') }}</router-link></li>
-      </ul>
-      <p class="menu-label">
-        {{ $t('administration') }}
-      </p>
-      <ul class="menu-list">
-        <li><router-link to="/manage-accounts">{{ $t('accounts') }}</router-link></li>
-        <li><router-link to="/node-status">{{ $t('nodeStatus') }}</router-link></li>
-        <li><router-link to="/settings">{{ $t('settings') }}</router-link></li>
-        <li><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
-      </ul>
-    </div>
-    <div id="router-view" tabindex="0">
-      <router-view></router-view>
+    <transition name="fade">
+      <splash v-if="splash"></splash>
+    </transition>
+    <div v-if="!splash">
+      <div id="sidebar">
+        <active-account></active-account>
+        <navigation></navigation>
+        <p class="menu-label">
+         {{ $t('general') }}
+        </p>
+        <ul class="menu-list">
+          <li><router-link to="/home">{{ $t('home') }}</router-link>
+          <li><router-link to="/feeds">{{ $t('myFeeds') }}</router-link>
+          <li><router-link to="/subscriptions">{{ $t('subscriptions') }}</router-link>
+          <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
+          <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
+          <li><router-link to="/downloads">{{ $t('downloads') }}</router-link></li>
+          <li><router-link to="/publish-item">{{ $t('publishItem') }}</router-link></li>
+          <li><router-link to="/goto">{{ $t('gotoItem') }}</router-link></li>
+        </ul>
+        <p class="menu-label">
+          {{ $t('account') }}
+        </p>
+        <ul class="menu-list">
+          <li><router-link to="/transaction-history">{{ $t('transactionHistory') }}</router-link></li>
+          <li><router-link to="/profile">{{ $t('profile') }}</router-link></li>
+          <li><router-link to="/trusted-accounts">{{ $t('trustedAccounts') }}</router-link></li>
+          <li><router-link to="/wallet">{{ $t('wallet') }}</router-link></li>
+          <li><router-link to="/tokens">{{ $t('tokens') }}</router-link></li>
+        </ul>
+        <p class="menu-label">
+          {{ $t('administration') }}
+        </p>
+        <ul class="menu-list">
+          <li><router-link to="/manage-accounts">{{ $t('accounts') }}</router-link></li>
+          <li><router-link to="/node-status">{{ $t('nodeStatus') }}</router-link></li>
+          <li><router-link to="/settings">{{ $t('settings') }}</router-link></li>
+          <li><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
+        </ul>
+      </div>
+      <div id="router-view" tabindex="0">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +50,7 @@
 <script>
   import MixAccount from '../lib/MixAccount.js'
   import MixPinner from '../lib/MixPinner.js'
+  import Splash from './components/Splash.vue'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
   import i18n from './plugins/i18n'
@@ -53,10 +59,15 @@
   export default {
     name: 'd-web',
     components: {
+      Splash,
       Navigation,
       ActiveAccount,
     },
-
+    data() {
+      return {
+        splash: true
+      }
+    },
     async created() {
       ipcRenderer.on('ipfs-stdout', (event, msg) => {
         console.log('IPFS: ' + msg)
@@ -154,6 +165,7 @@
             })
           })
         })
+        this.splash = false
       })
     },
     destroyed() {
@@ -343,6 +355,15 @@
 </style>
 
 <style scoped>
+
+  .fade-leave-active {
+    transition: opacity 0.5s ease-in;
+  }
+
+  .fade-leave-to {
+    opacity: 0;
+  }
+
   #sidebar {
     position: fixed;
     overflow-y: auto;
