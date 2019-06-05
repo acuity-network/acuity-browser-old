@@ -49,7 +49,14 @@
 
     	let ethminerProcess = spawn(ethminerPath, args)
 
-    	ethminerProcess.on('error', console.error)
+    	ethminerProcess.on('error', err => {
+        this.output += '<span style="color: red;">' + err + '</span>'
+      })
+      ethminerProcess.on('exit', (code, signal) => {
+        if (signal) {
+          this.output += '<span style="color: red;">Exit signal: ' + signal + '</span>'
+        }
+      })
     	ethminerProcess.stdout.on('data', data => {
         this.output += data.toString()
       })
