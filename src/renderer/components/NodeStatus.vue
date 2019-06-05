@@ -11,6 +11,9 @@
       <div class="columns">
         <div class="column">
           <h2 class="subtitle">{{ $t('mixBlockchain') }}</h2>
+          <b-field :label="$t('agent')">
+            {{ agent }}
+          </b-field>
           <b-field :label="$t('web3Version')">
             {{ web3Version }}
           </b-field>
@@ -83,6 +86,7 @@
     data() {
       return {
         acuityVersion: '',
+        agent: '',
         web3Version: '',
         protocolVersion: '',
         networkId: '',
@@ -109,6 +113,7 @@
         else {
           this.acuityVersion = remote.app.getVersion()
         }
+        this.agent = await this.$mixClient.web3.eth.getNodeInfo()
         this.web3Version = this.$mixClient.web3.version
         let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
         this.protocolVersion = this.$mixClient.web3.utils.hexToNumber(protocolVersion)
