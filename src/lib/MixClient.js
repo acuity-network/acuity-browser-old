@@ -3,6 +3,7 @@ import net from 'net'
 import os from 'os'
 import path from 'path'
 import { remote } from 'electron'
+import Api from '@parity/api';
 
 export default class MixClient {
 
@@ -29,6 +30,8 @@ export default class MixClient {
 
 		this.web3.eth.defaultBlock = 'pending'
 		this.web3.eth.transactionConfirmationBlocks = 1
+
+		this.parityApi = new Api(new Api.Provider.Http('http://localhost:8545'))
 
 		this.itemStoreRegistry = new this.web3.eth.Contract(require('./contracts/ItemStoreRegistry.abi.json'), '0x8928f846012b98aac5cd2f4ef4029097cd4110fc')
 		this.itemStoreIpfsSha256 = new this.web3.eth.Contract(require('./contracts/ItemStoreIpfsSha256.abi.json'), '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e')

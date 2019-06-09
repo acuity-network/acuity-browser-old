@@ -94,8 +94,10 @@ let messages = {
     // Settings
     language: 'Language',
     // Debug
-    readItem:'Read item'
-
+    readItem:'Read item',
+    mining: 'Mining',
+    start: 'Start',
+    stop: 'Stop',
   },
   'ru': {
     general: 'Общие',

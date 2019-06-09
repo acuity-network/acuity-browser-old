@@ -36,15 +36,20 @@ async function launch(window) {
 		'--no-download',
 		'--no-consensus',
 		'--chain=mix',
-		'--no-jsonrpc',
+		'--jsonrpc-apis=all',
+		'--jsonrpc-cors=all',
 		'--no-ws',
 		'--ipc-path=' + ipcPath,
 		'--no-secretstore',
 		'--force-sealing',
-		'--infinite-pending-block',
+		'--reseal-on-uncle',
+		'--stratum',
 		'--reseal-on-txs=all',
 		'--reseal-min-period=0',
 		'--reseal-max-period=600000',
+		'--relay-set=strict',
+		'--min-gas-price=1',
+		'--extra-data=Acuity',
 		'--can-restart',
 		'--pruning=fast',
 		'--pruning-history=64',
@@ -71,11 +76,9 @@ async function launch(window) {
 			window.webContents.send('parity-stderr', data.toString())
 		} catch (e) {}
 	})
-
-	window.webContents.send('parity-running')
 }
 
-async function kill() {
+function kill() {
 	parityProcess.kill()
 }
 
