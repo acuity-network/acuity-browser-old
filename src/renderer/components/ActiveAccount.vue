@@ -23,7 +23,7 @@
           let item = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
           this.title = revision.getTitle()
-          this.image = revision.getImage(64, 64)
+          this.image = revision.getImage(100, 100)
         }
         catch (error) {
           this.title = ''
@@ -52,8 +52,8 @@
 
   .avatar >>> img {
     object-fit: cover;
-    width: 64px;
-    height: 64px;
+    width: 100px;
+    height: 100px;
   }
 
 </style>
