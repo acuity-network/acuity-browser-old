@@ -82,6 +82,7 @@ async function launch(window) {
 		['config', '--json', 'Routing.Type', '"dhtclient"'],
 		['config', '--json', 'Swarm.DisableBandwidthMetrics', 'true'],
 		['config', '--json', 'Swarm.EnableAutoRelay', 'true'],
+		['config', '--json', 'Experimental.QUIC', 'false'],
 		['config', '--json', 'API.HTTPHeaders.Access-Control-Allow-Origin', '["*"]'],
 		['config', '--json', 'API.HTTPHeaders.Access-Control-Allow-Methods', '["GET", "PUT", "POST", "DELETE"]'],
 	]
