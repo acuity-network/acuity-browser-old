@@ -8,12 +8,15 @@
         <button class="button" @click="stop">{{ $t('stop') }}</button>
       </template>
       <template v-else>
-        <b-field label="API">
+        <b-field label="API" message="AMD devices use OpenCL. Nvidia devices use CUDA.">
           <b-select v-model="api">
             <option value="opencl">OpenCL</option>
             <option value="cuda">CUDA</option>
             <option value="cuda-opencl">Both</option>
           </b-select>
+        </b-field>
+        <b-field label="Pool" message="Leave blank for solo mining.">
+          <b-input v-model="pool" placeholder="scheme://user[.workername][:password]@hostname:port[/...]"></b-input>
         </b-field>
         <button class="button" @click="start">{{ $t('start') }}</button>
       </template>
@@ -49,9 +52,10 @@
     },
     data() {
       return {
-        output: '',
-        api: 'opencl',
         mining: false,
+        api: 'opencl',
+        pool: '',
+        output: '',
       }
     },
     created() {
@@ -104,7 +108,7 @@
           '--nocolor',
       		'--' + this.api,
           '--pool',
-          'stratum+tcp://127.0.0.1:8008',
+          (this.pool == '') ? 'stratum+tcp://127.0.0.1:8008' : this.pool,
       	]
 
         ethminerProcess = spawn(ethminerPath, args)
