@@ -83,7 +83,7 @@
           this.output += data.toString()
         })
       	process.stderr.on('data', data => {
-          this.output += '<span style="color: red;">' + data.toString() + '</span>'
+          this.output += data.toString()
         })
       }
     },
