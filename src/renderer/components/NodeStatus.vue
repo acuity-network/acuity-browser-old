@@ -126,6 +126,11 @@
           loadMixData()
         })
 
+        this.syncingEmitter = this.$mixClient.web3.eth.subscribe('syncing')
+        .on('data', block => {
+          loadMixData()
+        })
+
         loadMixData()
         this.ipfsInterval = setInterval(this.loadIpfsData, 10000)
         this.loadIpfsData()
@@ -196,6 +201,7 @@
     },
     destroyed() {
       this.newBlockHeadersEmitter.unsubscribe()
+      this.syncingEmitter.unsubscribe()
       clearInterval(this.ipfsInterval)
     },
   }
