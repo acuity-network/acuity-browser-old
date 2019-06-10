@@ -1,5 +1,3 @@
-# Commented sections below can be used to run tests on the CI server
-# https://simulatedgreg.gitbooks.io/electron-vue/content/en/testing.html#on-the-subject-of-ci-testing
 osx_image: xcode10.2
 sudo: required
 dist: xenial
@@ -37,7 +35,7 @@ install:
 script:
 #- xvfb-maybe node_modules/.bin/karma start test/unit/karma.conf.js
 #- yarn run pack && xvfb-maybe node_modules/.bin/mocha test/e2e
-- yarn run build
+- yarn dist
 branches:
   only:
   - master

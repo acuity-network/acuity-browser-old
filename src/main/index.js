@@ -9,6 +9,7 @@ import parity from '../lib/Parity.js'
 import ipfs from '../lib/Ipfs.js'
 import { shell } from 'electron'
 import windowStateKeeper from 'electron-window-state'
+import { format as formatUrl } from 'url'
 
 /**
  * Set `__static` path to static files in production
@@ -18,10 +19,10 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
+
 let mainWindow
-let winURL = process.env.NODE_ENV === 'development'
-  ? `http://127.0.0.1:9080`
-  : `file://${__dirname}/index.html`
 
 async function createWindow () {
   // Load the previous state with fallback to defaults
@@ -56,7 +57,16 @@ async function createWindow () {
   mainWindow = new BrowserWindow(windowOptions)
   mainWindowState.manage(mainWindow);
 
-  mainWindow.loadURL(winURL)
+  if (isDevelopment) {
+    mainWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
+  }
+  else {
+    mainWindow.loadURL(formatUrl({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file',
+      slashes: true
+    }))
+  }
 
   mainWindow.on('closed', () => {
     mainWindow = null
