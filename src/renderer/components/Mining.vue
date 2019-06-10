@@ -102,14 +102,20 @@
     methods: {
       async start(event) {
         this.output = ''
-        await this.$mixClient.parityApi.parity.setAuthor(window.activeAccount.controllerAddress)
 
         let args = [
           '--nocolor',
       		'--' + this.api,
           '--pool',
-          (this.pool == '') ? 'stratum+tcp://127.0.0.1:8008' : this.pool,
       	]
+
+        if (this.pool == '') {
+          args.push('stratum+tcp://127.0.0.1:8008')
+          await this.$mixClient.parityApi.parity.setAuthor(window.activeAccount.controllerAddress)
+        }
+        else {
+          args.push(this.pool)
+        }
 
         ethminerProcess = spawn(ethminerPath, args)
         this.mining = true
