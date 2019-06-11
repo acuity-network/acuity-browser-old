@@ -87,8 +87,7 @@
     "twemoji": "^12.0.0",
     "typeface-noto-serif": "^0.0.72",
     "unused-filename": "^2.1.0",
-    "vue": "^2.5.16",
-    "vue-electron": "^1.0.6",
+    "vue": "^2.6.10",
     "vue-i18n": "^8.10.0",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.1",
@@ -97,17 +96,13 @@
     "web3": "^1.0.0-beta.55"
   },
   "devDependencies": {
-    "css-loader": "^2.1.1",
     "download": "^7.1.0",
     "electron": "^5.0.3",
     "electron-builder": "^20.43.0",
     "electron-webpack": "^2.6.2",
+    "electron-webpack-vue": "^2.3.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.0.1",
-    "vue-html-loader": "^1.2.4",
-    "vue-loader": "^15.4.2",
-    "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.5.16",
     "webpack": "^4.33.0"
   }
 }

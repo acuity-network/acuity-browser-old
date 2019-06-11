@@ -22,9 +22,6 @@ import '@mdi/font/css/materialdesignicons.min.css'
 import 'notosans-fontface/css/notosans-fontface.css'
 import 'typeface-noto-serif/index.css'
 
-import VueElectron from 'vue-electron'
-Vue.use(VueElectron)
-
 import axios from 'axios'
 Vue.http = Vue.prototype.$http = axios
 
