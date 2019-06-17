@@ -13,7 +13,6 @@ export default class Image {
     // Use SIMD instructions if available.
     sharp.simd(true)
     let source = sharp(this.filepath)
-      .sequentialRead(true)
       .rotate()             // Rotate/flip the image if specified in EXIF.
 
     let metadata = await source.metadata()
