@@ -1,6 +1,8 @@
 <template>
 	<div class="wavefrontscontain">
 		<img src="../assets/acuity-logo.svg" alt="MIX Acuity Logo" class="acuitylogo">
+		<div class="status">{{ status }}</div>
+		<progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
     <div class="br-c6"></div>
     <div class="br-c5"></div>
     <div class="br-c4"></div>
@@ -29,8 +31,27 @@
 </template>
 
 <script>
+	import ProgressBar from 'vue-simple-progress'
+
   export default {
     name: 'splash',
+		components: {
+      ProgressBar,
+    },
+    data() {
+      return {
+        syncTotal: 1,
+        syncProgress: 0,
+				status: 'Please wait...',
+      }
+    },
+		async created() {
+      this.$root.$on('mix-client-syncing', isSyncing => {
+				this.status = 'Block ' + isSyncing.currentBlock
+				this.syncTotal = isSyncing.highestBlock - isSyncing.startingBlock
+				this.syncProgress = isSyncing.currentBlock - isSyncing.startingBlock
+      })
+    }
 	}
 </script>
 
@@ -56,6 +77,20 @@
 		display: block;
 		width: 200px;
 		margin: 60px auto;
+		z-index: 1;
+	}
+
+	.vue-simple-progress {
+		display: block;
+		width: 400px;
+		margin: 0 auto;
+		z-index: 1;
+	}
+
+	.status {
+		display: block;
+		width: 400px;
+		margin: 0 auto;
 		z-index: 1;
 	}
 

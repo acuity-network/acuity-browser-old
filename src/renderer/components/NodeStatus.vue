@@ -29,14 +29,6 @@
           <b-field :label="$t('peerCount')">
             {{ peerCount }}
           </b-field>
-          <b-field :label="$t('catchingUp')">
-            <div v-if="isSyncing">
-              <progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
-            </div>
-            <div v-else>
-              no
-            </div>
-          </b-field>
         </div>
         <div class="column">
           <h2 class="subtitle">IPFS</h2>
@@ -73,7 +65,6 @@
   import Page from './Page.vue'
   import throttle from 'just-throttle'
   import { ipcRenderer } from 'electron'
-  import ProgressBar from 'vue-simple-progress'
   import formatByteCount from '../../lib/formatByteCount.js'
   import setTitle from '../../lib/setTitle.js'
 
@@ -81,7 +72,6 @@
     name: 'node-status',
     components: {
       Page,
-      ProgressBar,
     },
     data() {
       return {
@@ -92,11 +82,6 @@
         networkId: '',
         blockNumber: '',
         peerCount: '',
-        isSyncing: false,
-        startingBlock: 0,
-        highestBlock: 0,
-        syncTotal: 0,
-        syncProgress: 0,
         ipfsAgent: '',
         ipfsProtocol: '',
         ipfsAddresses: [],
@@ -106,61 +91,9 @@
       }
     },
     methods: {
-      async start() {
-        if (process.env.NODE_ENV == 'development') {
-          this.acuityVersion = process.env.npm_package_version
-        }
-        else {
-          this.acuityVersion = remote.app.getVersion()
-        }
-        this.agent = await this.$mixClient.web3.eth.getNodeInfo()
-        this.web3Version = this.$mixClient.web3.version
-        let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
-        this.protocolVersion = this.$mixClient.web3.utils.hexToNumber(protocolVersion)
-        this.networkId = await this.$mixClient.web3.eth.net.getId()
-
-        let loadMixData = throttle(this.loadMixData, 500, true)
-
-        this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
-        .on('data', block => {
-          loadMixData()
-        })
-
-        this.syncingEmitter = this.$mixClient.web3.eth.subscribe('syncing')
-        .on('data', block => {
-          loadMixData()
-        })
-
-        loadMixData()
-        this.ipfsInterval = setInterval(this.loadIpfsData, 10000)
-        this.loadIpfsData()
-      },
       async loadMixData() {
         let blockNumber = await this.$mixClient.web3.eth.getBlockNumber()
         this.blockNumber = blockNumber.toLocaleString()
-        let isSyncing = await this.$mixClient.web3.eth.isSyncing()
-
-        if (isSyncing !== false) {
-          if (this.startingBlock == 0) {
-            this.startingBlock = isSyncing.currentBlock
-          }
-
-          if (isSyncing.highestBlock == 0) {
-            this.syncTotal = 1
-            this.syncProgress = 0
-          }
-          else {
-            let startingBlock = isSyncing.startingBlock ? isSyncing.startingBlock : this.startingBlock
-            this.syncTotal = isSyncing.highestBlock - startingBlock
-            this.syncProgress = isSyncing.currentBlock - startingBlock
-          }
-
-          this.isSyncing = true
-        }
-        else {
-          this.isSyncing = false
-        }
-
         this.peerCount = await this.$mixClient.web3.eth.net.getPeerCount()
       },
       async loadIpfsData() {
@@ -189,19 +122,31 @@
     },
     async created() {
       setTitle(this.$t('nodeStatus'))
-      try {
-        await this.$mixClient.web3.eth.getProtocolVersion()
-        this.start()
+      if (process.env.NODE_ENV == 'development') {
+        this.acuityVersion = process.env.npm_package_version
       }
-      catch (e) {
-        this.$root.$on('mix-client-active', () => {
-          this.start()
-        })
+      else {
+        this.acuityVersion = remote.app.getVersion()
       }
+      this.agent = (await this.$mixClient.web3.eth.getNodeInfo()).split('-stable-')[0]
+      this.web3Version = this.$mixClient.web3.version
+      let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
+      this.protocolVersion = this.$mixClient.web3.utils.hexToNumber(protocolVersion)
+      this.networkId = await this.$mixClient.web3.eth.net.getId()
+
+      let loadMixData = throttle(this.loadMixData, 500, true)
+
+      this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
+      .on('data', block => {
+        loadMixData()
+      })
+
+      loadMixData()
+      this.ipfsInterval = setInterval(this.loadIpfsData, 10000)
+      this.loadIpfsData()
     },
     destroyed() {
       this.newBlockHeadersEmitter.unsubscribe()
-      this.syncingEmitter.unsubscribe()
       clearInterval(this.ipfsInterval)
     },
   }
