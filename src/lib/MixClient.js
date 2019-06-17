@@ -18,15 +18,17 @@ export default class MixClient {
 		}
 
 		// Wait for IPC to come up.
-		let success = false
-		do {
-			try {
-				this.web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
-				await this.web3.eth.getProtocolVersion()
-				success = true
-			}
-			catch (e) {}
-		} while (!success)
+		await new Promise((resolve, reject) => {
+			let intervalId = setInterval(async () => {
+				try {
+					this.web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
+					await this.web3.eth.getProtocolVersion()
+					clearInterval(intervalId)
+					resolve()
+				}
+				catch (e) {}
+			}, 50);
+		})
 
 		this.web3.eth.defaultBlock = 'pending'
 		this.web3.eth.transactionConfirmationBlocks = 1
@@ -45,6 +47,17 @@ export default class MixClient {
 		this.tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
 		this.tokenRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenRegistry.abi.json'), this.tokenRegistryAddress)
 
-		vue.$emit('mix-client-active')
+		// Wait for Parity to start working.
+		return new Promise((resolve, reject) => {
+			let intervalId = setInterval(async () => {
+				try {
+					await this.itemStoreIpfsSha256.methods.getItem('0x310203dc4ca0c491a4be2fb0a82362addaa04645fd207be21f1e136d1003177d').call()
+					clearInterval(intervalId)
+					vue.$emit('mix-client-active')
+					resolve()
+				}
+				catch (e) {}
+			}, 50);
+		})
 	}
 }
