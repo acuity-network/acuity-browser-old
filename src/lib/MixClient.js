@@ -48,29 +48,26 @@ export default class MixClient {
 		this.tokenRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenRegistry.abi.json'), this.tokenRegistryAddress)
 
 		// Get synced.
-		await new Promise((resolve, reject) => {
-			let startingBlock, currentBlock
-			let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
-			.on('data', async () => {
-				let isSyncing = await this.web3.eth.isSyncing()
+		let startingBlock, currentBlock
+		let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
+		.on('data', async () => {
+			let isSyncing = await this.web3.eth.isSyncing()
 
-				if (isSyncing === false) {
-					newBlockHeadersEmitter.unsubscribe()
-					resolve()
-				}
-				else {
-					if (isSyncing.currentBlock != currentBlock) {
-						currentBlock = isSyncing.currentBlock
+			if (isSyncing === false) {
+				newBlockHeadersEmitter.unsubscribe()
+			}
+			else {
+				if (isSyncing.currentBlock != currentBlock) {
+					currentBlock = isSyncing.currentBlock
 
-						if (!startingBlock) {
-							startingBlock = currentBlock
-						}
-
-						isSyncing.startingBlock = startingBlock
-						vue.$emit('mix-client-syncing', isSyncing)
+					if (!startingBlock) {
+						startingBlock = currentBlock
 					}
+
+					isSyncing.startingBlock = startingBlock
+					vue.$emit('mix-client-syncing', isSyncing)
 				}
-			})
+			}
 		})
 
 		// Wait for Parity to start working.
