@@ -47,7 +47,7 @@
     },
 		async created() {
       this.$root.$on('mix-client-syncing', isSyncing => {
-				this.status = 'Block ' + isSyncing.currentBlock
+				this.status = 'Block ' + isSyncing.currentBlock.toLocaleString()
 				this.syncTotal = isSyncing.highestBlock - isSyncing.startingBlock
 				this.syncProgress = isSyncing.currentBlock - isSyncing.startingBlock
       })
