@@ -113,10 +113,10 @@ async function createWindow () {
     shell.openExternal(url)
   });
 
-  // Launch IPFS.
-  ipfs.launch(mainWindow)
   // Launch Parity.
   parity.launch(mainWindow)
+  // Launch IPFS.
+  ipfs.launch(mainWindow)
 }
 
 app.on('ready', createWindow)
