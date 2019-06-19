@@ -47,7 +47,10 @@
       ]
     },
     "mac": {
-      "target": "dmg"
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
     "win": {
       "target": [
@@ -57,7 +60,10 @@
     },
     "linux": {
       "icon": "1024x1024.png",
-      "target": "AppImage",
+      "target": [
+        "AppImage",
+        "snap"
+      ],
       "category": "Network"
     }
   },
