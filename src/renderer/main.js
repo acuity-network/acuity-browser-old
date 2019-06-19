@@ -41,8 +41,8 @@ Vue.prototype.$notifications = notifications
 import Settings from '../lib/Settings.js'
 Vue.prototype.$settings = new Settings()
 
-import ipfsClient from '../lib/IpfsClient.js'
-Vue.prototype.$ipfsClient = ipfsClient
+import IpfsClient from '../lib/IpfsClient.js'
+Vue.prototype.$ipfsClient = new IpfsClient()
 
 /* eslint-disable no-new */
 new Vue({

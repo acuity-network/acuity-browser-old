@@ -83,6 +83,7 @@
         console.error('Parity: ' + msg)
       })
       await this.$mixClient.init(this.$root)
+      await this.$ipfsClient.init()
       // Start the pinner.
       this.pinner = new MixPinner(this.$root)
       this.pinner.start()
