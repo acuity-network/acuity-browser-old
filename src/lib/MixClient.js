@@ -27,7 +27,7 @@ export default class MixClient {
 					resolve()
 				}
 				catch (e) {}
-			}, 50);
+			}, 50)
 		})
 
 		this.web3.eth.defaultBlock = 'pending'

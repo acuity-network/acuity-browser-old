@@ -9,8 +9,8 @@ export default class IpfsClient {
 			keepAlive: true,
 		});
 
-		// Wait for IPFS to start working.
-		return new Promise((resolve, reject) => {
+		// Wait for IPFS API to start working.
+		await new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {
 				try {
 					await this.get('id')
@@ -18,7 +18,26 @@ export default class IpfsClient {
 					resolve()
 				}
 				catch (e) {}
-			}, 50);
+			}, 50)
+		})
+
+		// Wait for IPFS Gateway to start working.
+		return new Promise((resolve, reject) => {
+			let options = {
+				port: 5102,
+				path: '/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',		// IPFS default file in repo
+				timeout: 0,
+			}
+
+			let intervalId = setInterval(async () => {
+				http.get(options)
+				.on('response', res => {
+					if (res.statusCode == 200) {
+						clearInterval(intervalId)
+						resolve()
+					}
+				})
+			}, 50)
 		})
 	}
 
