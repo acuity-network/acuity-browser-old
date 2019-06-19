@@ -36,7 +36,7 @@ export default class Image {
         let formData = new FormData()
         // See https://github.com/electron/electron/issues/11700
         formData.append('', new File([data.buffer.slice(0)], {type: 'application/octet-stream'}))
-        return this.vue.$http.post('http://127.0.0.1:5001/api/v0/add', formData)
+        return this.vue.$http.post('http://127.0.0.1:5101/api/v0/add', formData)
       })
     )
 
@@ -54,7 +54,7 @@ export default class Image {
           let formData = new FormData()
           // See https://github.com/electron/electron/issues/11700
           formData.append('', new File([data.buffer.slice(0)], {type: 'application/octet-stream'}))
-          return this.vue.$http.post('http://127.0.0.1:5001/api/v0/add', formData)
+          return this.vue.$http.post('http://127.0.0.1:5101/api/v0/add', formData)
         })
       )
       level++

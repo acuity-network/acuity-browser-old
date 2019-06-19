@@ -157,7 +157,7 @@
                   output.append('\nMipmap level: ' + j + '\n')
                   output.append('Mipmap filesize: ' + formatByteCount(mipmaps[j].getFilesize()) + '\n')
                   let el = document.createElement('img')
-                  let domString = '<img src="http://127.0.0.1:8080/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
+                  let domString = '<img src="http://127.0.0.1:5102/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
                   el.innerHTML = domString
                   output.appendChild(el.firstChild)
                 }

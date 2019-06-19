@@ -79,6 +79,8 @@ async function launch(window) {
 		['bootstrap', 'add', '/ip6/2400:8902::f03c:91ff:fed5:2ac0/tcp/4001/ipfs/QmPe3zVKqnwPyBDf51zg6XkKTLz2tx4iW3DtCtK6ojm6er'],
 		['bootstrap', 'add', '/ip4/172.105.16.240/tcp/4001/ipfs/Qmex27aG4LYeArEHBViQ52KN9coEwmwwsaRNKzTSbdBMSy'],
 		['bootstrap', 'add', '/ip6/2600:3c04::f03c:91ff:fec3:c620/tcp/4001/ipfs/Qmex27aG4LYeArEHBViQ52KN9coEwmwwsaRNKzTSbdBMSy'],
+		['config', '--json', 'Addresses.API', '"/ip4/127.0.0.1/tcp/5101"'],
+		['config', '--json', 'Addresses.Gateway', '"/ip4/127.0.0.1/tcp/5102"'],
 		['config', '--json', 'Addresses.Swarm', '["/ip4/0.0.0.0/tcp/0", "/ip6/::/tcp/0"]'],
 		['config', '--json', 'Routing.Type', '"dhtclient"'],
 		['config', '--json', 'Swarm.DisableBandwidthMetrics', 'true'],
