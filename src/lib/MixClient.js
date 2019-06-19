@@ -47,45 +47,40 @@ export default class MixClient {
 		this.tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
 		this.tokenRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenRegistry.abi.json'), this.tokenRegistryAddress)
 
-		// Get synced.
-		await new Promise((resolve, reject) => {
-			let startingBlock, currentBlock
-			let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
-			.on('data', async () => {
-				let isSyncing = await this.web3.eth.isSyncing()
+		// Emit sync info.
+		let startingBlock, currentBlock
+		let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
+		.on('data', async () => {
+			let isSyncing = await this.web3.eth.isSyncing()
 
-				if (isSyncing === false || isSyncing.currentBlock == isSyncing.highestBlock) {
-					if (newBlockHeadersEmitter) {
-						newBlockHeadersEmitter.unsubscribe()
-						newBlockHeadersEmitter = null
-						resolve()
+			if (isSyncing !== false) {
+				if (isSyncing.currentBlock != currentBlock) {
+					currentBlock = isSyncing.currentBlock
+
+					if (!startingBlock) {
+						startingBlock = currentBlock
 					}
-				}
-				else {
-					if (isSyncing.currentBlock != currentBlock) {
-						currentBlock = isSyncing.currentBlock
 
-						if (!startingBlock) {
-							startingBlock = currentBlock
-						}
-
-						isSyncing.startingBlock = startingBlock
-						vue.$emit('mix-client-syncing', isSyncing)
-					}
+					isSyncing.startingBlock = startingBlock
+					vue.$emit('mix-client-syncing', isSyncing)
 				}
-			})
+			}
 		})
 
 		// Wait for Parity to start working.
 		return new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {
-				try {
-					await this.itemStoreIpfsSha256.methods.getItem('0x310203dc4ca0c491a4be2fb0a82362addaa04645fd207be21f1e136d1003177d').call()
-					clearInterval(intervalId)
-					resolve()
+				let isSyncing = await this.web3.eth.isSyncing()
+
+				if (isSyncing === false) {
+					try {
+						await this.itemStoreIpfsSha256.methods.getItem('0x310203dc4ca0c491a4be2fb0a82362addaa04645fd207be21f1e136d1003177d').call()
+						clearInterval(intervalId)
+						resolve()
+					}
+					catch (e) {}
 				}
-				catch (e) {}
-			}, 50);
+			}, 100);
 		})
 	}
 }
