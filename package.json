@@ -97,7 +97,7 @@
   "devDependencies": {
     "download": "^7.1.0",
     "electron": "^5.0.3",
-    "electron-builder": "^20.43.0",
+    "electron-builder": "^20.44.2",
     "electron-webpack": "^2.6.2",
     "electron-webpack-vue": "^2.3.0",
     "node-sass": "^4.12.0",
