@@ -5,7 +5,10 @@ import router from './router'
 
 router.afterEach((to, from) => {
   // Ensure arrow keys work after clicking on route.
-  document.getElementById('router-view').focus()
+  let el = document.getElementById('router-view')
+  if (el) {
+    el.focus()
+  }
 })
 
 import { ipcRenderer } from 'electron'
