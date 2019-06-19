@@ -33,9 +33,7 @@ function connect() {
 		try {
 			await ipfsClient.get('swarm/connect?arg=' + bootnode)
 		}
-		catch (e) {
-			console.error('Failed to connect to boot node ' + bootnode)
-		}
+		catch (e) {}
 	})
 }
 
