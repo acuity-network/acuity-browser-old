@@ -36,6 +36,7 @@ async function launch(window) {
 		'--no-download',
 		'--no-consensus',
 		'--chain=mix',
+		'--port=0',
 		'--jsonrpc-apis=all',
 		'--jsonrpc-cors=all',
 		'--no-ws',
