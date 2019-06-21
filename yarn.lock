@@ -3140,7 +3140,7 @@ electron-webpack-vue@^2.3.0:
     vue-style-loader "^4.1.2"
     vue-template-compiler "^2.6.10"
 
-electron-webpack@^2.6.2:
+electron-webpack@2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/electron-webpack/-/electron-webpack-2.6.2.tgz#6727944eef2a6dc8e483e34e5da756903c501965"
   integrity sha512-/bl9FIRrk5/zCP0MyRB10sqHCIFWsuAF0QvhkS0kb+b7ezRCeY6ru8c0vO5kVt76XZY72JsVYEwPqrarAz36Zg==
