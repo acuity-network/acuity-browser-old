@@ -16,7 +16,7 @@
 
 <script>
   import Page from './Page.vue'
-  import bip39 from 'bip39'
+  let bip39 = require('bip39')  // this cant use import for some reason
   let ethUtil = require('ethereumjs-util')  // this cant use import for some reason
 
   export default {
@@ -38,9 +38,9 @@
         this.$router.push({ name: 'manage-account-activate', params: { controllerAddress: this.controllerAddress } })
       },
     },
-    async created() {
+    created() {
       this.recoveryPhrase = bip39.generateMnemonic()
-      let pk = bip39.mnemonicToSeedHex(this.recoveryPhrase).substr(0, 64)
+      let pk = bip39.mnemonicToSeedSync(this.recoveryPhrase).toString('hex').substr(0, 64)
       this.privateKey = '0x' + pk
       this.controllerAddress = '0x' + ethUtil.privateToAddress(new Buffer.from(pk, 'hex')).toString('hex')
     },
