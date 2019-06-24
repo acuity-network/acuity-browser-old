@@ -210,7 +210,7 @@
 
         if (this.isSendAll) {
           let balance = toBN(await window.activeAccount.getControllerBalance())
-          let gas = await window.activeAccount.getSendMixGas(this.to, balance)
+          let gas = await window.activeAccount.getSendMixGas(this.to, balance) + 200000
           this.amount = this.$mixClient.web3.utils.fromWei(balance.sub(toBN(gas).mul(toBN('1000000000'))))
         }
         else {

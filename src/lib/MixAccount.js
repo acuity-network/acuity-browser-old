@@ -113,7 +113,7 @@ export default class MixAccount {
         data: data,
         value: this.vue.$mixClient.web3.utils.toHex(value),
       }
-      rawTx.gas = await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+      rawTx.gas = 200000//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
       // Check if there is sufficient balance.
       let toBN = this.vue.$mixClient.web3.utils.toBN
       let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
@@ -141,19 +141,16 @@ export default class MixAccount {
   }
 
   consolidateMix() {
-    return new Promise((resolve, reject) => {
-      this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending')
-      .then(balance => {
-        if (balance > 0) {
-          this._send(this.contract.methods.withdraw(), 0, false)
-          .then(tx => {
-            resolve()
-          })
-        }
-        else {
-          resolve()
-        }
-      })
+    return new Promise(async (resolve, reject) => {
+      let balance = await this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending')
+      if (balance > 0) {
+        let tx = await this._send(this.contract.methods.withdraw(), 0, false)
+        await this._logTransaction(tx, '', 'Consolidate MIX')
+        resolve()
+      }
+      else {
+        resolve()
+      }
     })
   }
 
@@ -162,6 +159,8 @@ export default class MixAccount {
     if (await this.vue.$mixClient.web3.eth.getCode(to) == '0x') {
       return 21000
     }
+    return 200000
+/*
     let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
     let data = await this.contract.methods.sendMix(to).encodeABI()
     let rawTx = {
@@ -173,6 +172,7 @@ export default class MixAccount {
       value: this.vue.$mixClient.web3.utils.toHex(value),
     }
     return this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+*/
   }
 
   async sendMix(to, value) {
