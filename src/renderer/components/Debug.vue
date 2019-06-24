@@ -48,6 +48,7 @@
         let output = document.getElementById('output')
         output.innerHTML = ''
 
+        this.itemId = this.itemId.trim()
         try {
           let item = await new MixItem(this.$root, this.itemId).init()
         }
