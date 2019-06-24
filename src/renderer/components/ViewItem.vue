@@ -272,7 +272,7 @@
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 
-        if (!trustLevel) {
+        if (this.short && !trustLevel) {
           this.title = ''
           this.body = 'Author not trusted.'
           this.description = ''
