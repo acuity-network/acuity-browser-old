@@ -44,18 +44,30 @@
         </b-tab-item>
 
         <b-tab-item :label="$t('send')">
-          <b-field :label="$t('to')">
-            <b-input v-model="to" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
-          </b-field>
-          <b-field :label="$t('amount')">
-            <b-input v-model="amount" :disabled="sendAll"></b-input>
-          </b-field>
-          <b-field message="Send all account funds to the destination.">
-            <b-checkbox v-model="sendAll" @input="sendAllInput">
-              Send all
-            </b-checkbox>
-          </b-field>
-          <button type="submit" class="button is-primary" @click="confirm">{{ $t('send') }}</button>
+          <template v-if="!confirm">
+            <b-field :label="$t('to')">
+              <b-input v-model="to" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+            </b-field>
+            <b-field :label="$t('amount')">
+              <b-input v-model="amount" :disabled="sendAll"></b-input>
+            </b-field>
+            <b-field message="Send all account funds to the destination.">
+              <b-checkbox v-model="sendAll" @input="sendAllInput">
+                Send all
+              </b-checkbox>
+            </b-field>
+            <button type="submit" class="button is-primary" @click="confirm = true">{{ $t('send') }}</button>
+          </template>
+          <template v-else>
+            <b-field :label="$t('to')">
+              <code>{{ to }}</code>
+            </b-field>
+            <b-field :label="$t('amount')">
+              {{ amount }} MIX
+            </b-field>
+            <button type="button" class="button is-primary" @click="send">Confirm</button>
+            <button type="button" class="button" @click="confirm = false">Cancel</button>
+          </template>
         </b-tab-item>
       </b-tabs>
     </template>
@@ -65,14 +77,12 @@
 <script>
   import Page from './Page.vue'
   import QRCode from 'qrcode'
-  import WalletConfirmSend from './WalletConfirmSend.vue'
   import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'wallet',
     components: {
       Page,
-      WalletConfirmSend,
     },
     data() {
       return {
@@ -83,6 +93,7 @@
         to: '',
         amount: '',
         sendAll: false,
+        confirm: false,
         data: [],
       }
     },
@@ -168,16 +179,13 @@
           });
         })
       },
-      confirm(event) {
-        this.$modal.open({
-          parent: this,
-          component: WalletConfirmSend,
-          hasModalCard: true,
-          props: {
-            to: this.to.trim(),
-            amount: this.amount.trim(),
-          },
-        })
+      async send(event) {
+        await window.activeAccount.sendMix(this.to, this.$mixClient.web3.utils.toWei(this.amount))
+        this.loadData()
+        this.to = ''
+        this.amount = ''
+        this.sendAll = false
+        this.confirm = false
       },
       async sendAllInput(sendAll) {
         if (sendAll) {
