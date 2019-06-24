@@ -44,19 +44,19 @@
         </b-tab-item>
 
         <b-tab-item :label="$t('send')">
-          <template v-if="!confirm">
-            <b-field :label="$t('to')">
-              <b-input v-model="to" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+          <template v-if="!isConfirm">
+            <b-field :label="$t('to')" :type="{ 'is-danger': toError }" :message="toError">
+              <b-input v-model="to" @input="checkTo" placeholder="0x0000000000000000000000000000000000000000"></b-input>
             </b-field>
-            <b-field :label="$t('amount')">
-              <b-input v-model="amount" :disabled="sendAll"></b-input>
+            <b-field v-if="!isSendAll" :label="$t('amount')" :type="{ 'is-danger': amountError }" :message="amountError">
+              <b-input v-model="amount" @input="checkAmount"></b-input>
             </b-field>
             <b-field message="Send all account funds to the destination.">
-              <b-checkbox v-model="sendAll" @input="sendAllInput">
+              <b-checkbox v-model="isSendAll">
                 Send all
               </b-checkbox>
             </b-field>
-            <button type="submit" class="button is-primary" @click="confirm = true">{{ $t('send') }}</button>
+            <button type="submit" class="button is-primary" @click="send">{{ $t('send') }}</button>
           </template>
           <template v-else>
             <b-field :label="$t('to')">
@@ -65,8 +65,8 @@
             <b-field :label="$t('amount')">
               {{ amount }} MIX
             </b-field>
-            <button type="button" class="button is-primary" @click="send">Confirm</button>
-            <button type="button" class="button" @click="confirm = false">Cancel</button>
+            <button type="button" class="button is-primary" @click="confirm">Confirm</button>
+            <button type="button" class="button" @click="cancel">Cancel</button>
           </template>
         </b-tab-item>
       </b-tabs>
@@ -91,9 +91,11 @@
         balance: '',
         unconfirmedBalance: '',
         to: '',
+        toError: '',
         amount: '',
-        sendAll: false,
-        confirm: false,
+        amountError: '',
+        isSendAll: false,
+        isConfirm: false,
         data: [],
       }
     },
@@ -179,24 +181,69 @@
           });
         })
       },
+      checkTo(event) {
+        if (this.$mixClient.web3.utils.isAddress(this.to)) {
+          this.toError = ''
+        }
+      },
+      checkAmount(event) {
+        let toBN = this.$mixClient.web3.utils.toBN
+        try {
+          if (toBN(this.$mixClient.web3.utils.toWei(this.amount)).lte(toBN(0))) {
+            throw null
+          }
+        }
+        catch (e) {
+          return
+        }
+        this.amountError = ''
+      },
       async send(event) {
+        let toBN = this.$mixClient.web3.utils.toBN
+        this.to = this.to.trim()
+
+        let error = false
+        if (!this.$mixClient.web3.utils.isAddress(this.to)) {
+          this.toError = 'Invalid address.'
+          error = true
+        }
+
+        if (this.isSendAll) {
+          let balance = toBN(await window.activeAccount.getControllerBalance())
+          let gas = await window.activeAccount.getSendMixGas(this.to, balance)
+          this.amount = this.$mixClient.web3.utils.fromWei(balance.sub(toBN(gas).mul(toBN('1000000000'))))
+        }
+        else {
+          try {
+            if (toBN(this.$mixClient.web3.utils.toWei(this.amount)).lte(toBN(0))) {
+              throw null
+            }
+          }
+          catch (e) {
+            this.amountError = 'Invalid amount.'
+            error = true
+          }
+        }
+
+        if (error) {
+          return false
+        }
+
+        this.isConfirm = true
+      },
+      async cancel(event) {
+        if (this.isSendAll) {
+          this.amount = ''
+        }
+        this.isConfirm = false
+      },
+      async confirm(event) {
         await window.activeAccount.sendMix(this.to, this.$mixClient.web3.utils.toWei(this.amount))
         this.loadData()
         this.to = ''
         this.amount = ''
-        this.sendAll = false
-        this.confirm = false
-      },
-      async sendAllInput(sendAll) {
-        if (sendAll) {
-          let toBN = this.$mixClient.web3.utils.toBN
-          let balance = toBN(await window.activeAccount.getControllerBalance())
-          let gas = await window.activeAccount.getSendMixGas(this.to.trim(), balance)
-          this.amount = this.$mixClient.web3.utils.fromWei(balance.sub(toBN(gas).mul(toBN('1000000000'))))
-        }
-        else {
-          this.amount = ''
-        }
+        this.isSendAll = false
+        this.isConfirm = false
       },
       accountReceive(accountAddress) {
         if (accountAddress == window.activeAccount.contractAddress) {
