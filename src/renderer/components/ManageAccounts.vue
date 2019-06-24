@@ -53,13 +53,18 @@
         })
         .on('data', async address => {
           let account = await new MixAccount(this.$root, address).init()
-          let itemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
-          let item = await new MixItem(this, itemId).init()
-          let revision = await item.latestRevision().load()
+          let name = 'Unnamed'
+          try {
+            let itemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
+            let item = await new MixItem(this, itemId).init()
+            let revision = await item.latestRevision().load()
+            name = revision.getTitle()
+          }
+          catch (e) {}
 
           let row = {
             account: address,
-            name: revision.getTitle(),
+            name: name,
             balance: this.$mixClient.web3.utils.fromWei(await account.getUnconfirmedBalance()),
           }
           this.data.push(row)
