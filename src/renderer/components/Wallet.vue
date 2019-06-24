@@ -105,81 +105,60 @@
         this.balance = this.$mixClient.web3.utils.fromWei(balance)
         balance = await window.activeAccount.getUnconfirmedBalance()
         this.unconfirmedBalance = this.$mixClient.web3.utils.fromWei(balance)
-
         let data = []
 
-        this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/receivedCount')
-        .then(count => {
-          let payments = []
+        let count = await this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/receivedCount')
+        let payments = []
 
-          for (let i = 0; i < count; i++) {
-            payments.push(this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/received/' + i)
-              .then(json => {
-                let payment = JSON.parse(json)
-                return this.$mixClient.web3.eth.getTransaction(payment.transaction)
-                .then(tx => {
-                  return this.$mixClient.web3.eth.getBlock(tx.blockNumber)
-                  .then(block => {
-                    payment.timestamp = block.timestamp
-                  })
-                  .catch(error => {})
-                  .then(() => {
-                    return payment
-                  })
-                })
-              })
-              .catch(error => {
-                return
-              })
-            )
-          }
+        for (let i = 0; i < count; i++) {
+          payments.push(this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/received/' + i)
+            .then(async json => {
+              let payment = JSON.parse(json)
+              let tx = await this.$mixClient.web3.eth.getTransaction(payment.transaction)
+              let block = await this.$mixClient.web3.eth.getBlock(tx.blockNumber)
+              payment.timestamp = block.timestamp
+              return payment
+            })
+            .catch(error => {})
+          )
+        }
 
-          return Promise.all(payments)
-        })
-        .catch(error => {
-          return []
-        })
-        .then(results => {
-          for (let i = 0; i < results.length; i++) {
-            if (results[i]) {
-              try {
-                data.push({
-                  'timestamp': results[i].timestamp ? results[i].timestamp : 4000000000,
-                  'confirmed': results[i].timestamp != null,
-                  'when': results[i].timestamp ? new Date(results[i].timestamp * 1000) : null,
-                  'who': results[i].sender,
-                  'amount': this.$mixClient.web3.utils.fromWei(results[i].amount),
-                })
-              } catch (e) {}
-            }
-          }
-          return this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
-        })
-        .then(nonce => {
-          let transactions = []
-          for (let i = 0; i < nonce; i++) {
-            transactions.push(window.activeAccount.getTransactionInfo(i)
-              .catch(err => {
-                return false
+        let results = await Promise.all(payments)
+        for (let i = 0; i < results.length; i++) {
+          if (results[i]) {
+            try {
+              data.push({
+                'timestamp': results[i].timestamp ? results[i].timestamp : 4000000000,
+                'confirmed': results[i].timestamp != null,
+                'when': results[i].timestamp ? new Date(results[i].timestamp * 1000) : null,
+                'who': results[i].sender,
+                'amount': this.$mixClient.web3.utils.fromWei(results[i].amount),
               })
-            )
+            } catch (e) {}
           }
-          Promise.all(transactions)
-          .then(results => {
-            for (let i = 0; i < results.length; i++) {
-              if (results[i] && results[i].transaction && results[i].transaction.value != 0) {
-                data.push({
-                  'timestamp': results[i].block ? results[i].block.timestamp : 4000000000,
-                  'confirmed': results[i].block != null,
-                  'when': results[i].block ? new Date(results[i].block.timestamp * 1000) : null,
-                  'who': results[i].to,
-                  'amount': '-' + this.$mixClient.web3.utils.fromWei(results[i].transaction.value),
-                })
-              }
-            }
-            this.data = data
-          });
-        })
+        }
+        let nonce = await this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+        let transactions = []
+        for (let i = 0; i < nonce; i++) {
+          transactions.push(window.activeAccount.getTransactionInfo(i)
+            .catch(err => {
+              return false
+            })
+          )
+        }
+        results = await Promise.all(transactions)
+        for (let i = 0; i < results.length; i++) {
+          if (results[i] && results[i].transaction && results[i].transaction.value != 0) {
+            data.push({
+              'timestamp': results[i].block ? results[i].block.timestamp : 4000000000,
+              'confirmed': results[i].block != null,
+              'when': results[i].block ? new Date(results[i].block.timestamp * 1000) : null,
+              'who': results[i].to,
+              'amount': '-' + this.$mixClient.web3.utils.fromWei(results[i].transaction.value),
+            })
+          }
+        }
+        this.data = data
       },
       checkTo(event) {
         if (this.$mixClient.web3.utils.isAddress(this.to)) {
