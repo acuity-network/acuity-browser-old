@@ -270,7 +270,7 @@
   }
 
   tr.send td {
-    background-color: #8B0000;
+    background-color: #660000;
   }
 
   code {
