@@ -15,13 +15,13 @@
           {{ unconfirmedBalance }} MIX
         </b-field>
         <b-field label="Address">
-          {{ address }}
+          <code>{{ address }}</code>
         </b-field>
       </div>
 
       <b-tabs>
         <b-tab-item :label="$t('transactions')">
-          <b-table :data="data" default-sort="timestamp" default-sort-direction="desc">
+          <b-table :data="data" :row-class="(row, index) => (row.amount < 0) ? 'send' : 'receive'" default-sort="timestamp" default-sort-direction="desc">
             <template slot-scope="props">
               <b-table-column field="timestamp" :visible="false" sortable>
                 {{ props.row.timestamp }}
@@ -32,7 +32,7 @@
                 <span v-else>pending</span>
               </b-table-column>
 
-              <b-table-column :label="$t('receiver')">
+              <b-table-column label="Address">
                 <code>{{ props.row.who }}</code>
               </b-table-column>
 
@@ -285,4 +285,17 @@
     width: 256px;
     height: 256px;
   }
+
+  tr.receive td {
+    background-color: #013220;
+  }
+
+  tr.send td {
+    background-color: #8B0000;
+  }
+
+  code {
+    background-color: transparent;
+  }
+
 </style>
