@@ -181,8 +181,8 @@
       },
       async sendAllInput(sendAll) {
         if (sendAll) {
-          let balance = await window.activeAccount.getBalance()
           let toBN = this.$mixClient.web3.utils.toBN
+          let balance = toBN(await window.activeAccount.getControllerBalance())
           let gas = await window.activeAccount.getSendMixGas(this.to.trim(), balance)
           this.amount = this.$mixClient.web3.utils.fromWei(balance.sub(toBN(gas).mul(toBN('1000000000'))))
         }
