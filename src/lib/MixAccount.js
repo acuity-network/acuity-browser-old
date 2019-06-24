@@ -105,24 +105,23 @@ export default class MixAccount {
     return new Promise(async (resolve, reject) => {
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let data = await transaction.encodeABI()
-      let gas = 200000 //await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
-      // Check if there is sufficient balance.
-      let toBN = this.vue.$mixClient.web3.utils.toBN
-      let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
-      let requiredBalance = toBN(gas * 2).mul(toBN('1000000000'))
-      if (checkBalance && controllerBalance.lt(requiredBalance)) {
-        let notification = this.vue.$notifications.insufficientMix(this.title)
-        new Notification(notification.title, notification)
-        reject()
-      }
       let rawTx = {
         nonce: nonce,
         from: this.controllerAddress,
         to: this.contractAddress,
-        gas: this.vue.$mixClient.web3.utils.toHex(gas),
         gasPrice: '0x3b9aca00',
         data: data,
         value: this.vue.$mixClient.web3.utils.toHex(value),
+      }
+      rawTx.gas = await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+      // Check if there is sufficient balance.
+      let toBN = this.vue.$mixClient.web3.utils.toBN
+      let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
+      let requiredBalance = toBN(rawTx.gas).mul(toBN('1000000000'))
+      if (checkBalance && controllerBalance.lt(requiredBalance)) {
+        let notification = this.vue.$notifications.insufficientMix(this.title)
+        new Notification(notification.title, notification)
+        reject()
       }
       let tx = new ethTx(rawTx)
       let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
@@ -156,6 +155,24 @@ export default class MixAccount {
         }
       })
     })
+  }
+
+  async getSendMixGas(to, value) {
+    // Check if the destination is a contract.
+    if (await this.vue.$mixClient.web3.eth.getCode(to) == '0x') {
+      return 21000
+    }
+    let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
+    let data = await this.contract.methods.sendMix(to).encodeABI()
+    let rawTx = {
+      nonce: nonce,
+      from: this.controllerAddress,
+      to: this.contractAddress,
+      gasPrice: '0x3b9aca00',
+      data: data,
+      value: this.vue.$mixClient.web3.utils.toHex(value),
+    }
+    return this.vue.$mixClient.web3.eth.estimateGas(rawTx)
   }
 
   async sendMix(to, value) {

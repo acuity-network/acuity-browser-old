@@ -9,10 +9,13 @@
         <img class="qr is-pulled-right" :src="qrcode" />
 
         <b-field :label="$t('balance')">
-          {{ balance }}
+          {{ balance }} MIX
         </b-field>
         <b-field :label="$t('unconfirmedBalance')">
-          {{ unconfirmedBalance }}
+          {{ unconfirmedBalance }} MIX
+        </b-field>
+        <b-field label="Address">
+          {{ address }}
         </b-field>
       </div>
 
@@ -42,10 +45,15 @@
 
         <b-tab-item :label="$t('send')">
           <b-field :label="$t('to')">
-            <b-input v-model="to"></b-input>
+            <b-input v-model="to" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
           </b-field>
           <b-field :label="$t('amount')">
-            <b-input v-model="amount"></b-input>
+            <b-input v-model="amount" :disabled="sendAll"></b-input>
+          </b-field>
+          <b-field message="Send all account funds to the destination.">
+            <b-checkbox v-model="sendAll" @input="sendAllInput">
+              Send all
+            </b-checkbox>
           </b-field>
           <button type="submit" class="button is-primary" @click="confirm">{{ $t('send') }}</button>
         </b-tab-item>
@@ -74,20 +82,16 @@
         unconfirmedBalance: '',
         to: '',
         amount: '',
+        sendAll: false,
         data: [],
       }
     },
     methods: {
-      loadData() {
-        window.activeAccount.getBalance()
-        .then(balance => {
-          this.balance = this.$mixClient.web3.utils.fromWei(balance) + ' MIX'
-        })
-
-        window.activeAccount.getUnconfirmedBalance()
-        .then(balance => {
-          this.unconfirmedBalance = this.$mixClient.web3.utils.fromWei(balance) + ' MIX'
-        })
+      async loadData() {
+        let balance = await window.activeAccount.getBalance()
+        this.balance = this.$mixClient.web3.utils.fromWei(balance)
+        balance = await window.activeAccount.getUnconfirmedBalance()
+        this.unconfirmedBalance = this.$mixClient.web3.utils.fromWei(balance)
 
         let data = []
 
@@ -164,16 +168,27 @@
           });
         })
       },
-      confirm (event) {
+      confirm(event) {
         this.$modal.open({
           parent: this,
           component: WalletConfirmSend,
           hasModalCard: true,
           props: {
-            to: this.to,
-            amount: this.amount,
+            to: this.to.trim(),
+            amount: this.amount.trim(),
           },
         })
+      },
+      async sendAllInput(sendAll) {
+        if (sendAll) {
+          let balance = await window.activeAccount.getBalance()
+          let toBN = this.$mixClient.web3.utils.toBN
+          let gas = await window.activeAccount.getSendMixGas(this.to.trim(), balance)
+          this.amount = this.$mixClient.web3.utils.fromWei(balance.sub(toBN(gas).mul(toBN('1000000000'))))
+        }
+        else {
+          this.amount = ''
+        }
       },
       accountReceive(accountAddress) {
         if (accountAddress == window.activeAccount.contractAddress) {
@@ -186,6 +201,7 @@
       if (!window.activeAccount) {
         return
       }
+      this.address = window.activeAccount.contractAddress
       this.qrcode = await QRCode.toDataURL(window.activeAccount.contractAddress, {
         mode: 'alphanumeric',
         errorCorrectionLevel: 'H',
