@@ -83,6 +83,7 @@
     "google-protobuf": "^3.5.0",
     "iltorb": "^2.4.0",
     "just-throttle": "^1.1.0",
+    "keythereum": "^1.0.4",
     "level": "^5.0.1",
     "multihashes": "^0.4.13",
     "notosans-fontface": "^1.1.0",
