@@ -39,16 +39,7 @@ function connect() {
 
 async function launch(window) {
 	let isWindows = os.platform() === 'win32'
-	let commandPath
-
-	if (process.env.NODE_ENV !== 'development') {
-		commandPath = path.join(app.getAppPath(), '..')
-	}
-	else {
-		commandPath = path.join(app.getAppPath(), '..', '..', '..', '..', '..', 'src')
-	}
-
-	commandPath = path.join(commandPath, 'extraResources', 'go-ipfs', isWindows ? 'ipfs.exe' : 'ipfs')
+	let commandPath = path.join(__static, 'go-ipfs', isWindows ? 'ipfs.exe' : 'ipfs')
 	console.log('IPFS path: ' + commandPath)
 
 	let options = {

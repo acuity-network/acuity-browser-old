@@ -27,15 +27,7 @@ async function createWindow () {
     webPreferences: {
       nodeIntegration: true,
     },
-  }
-
-  if (process.platform === 'linux') {
-    if (process.env.NODE_ENV !== 'development') {
-      windowOptions.icon = path.join(app.getAppPath(), '..', 'extraResources', 'icon.png')
-    }
-    else {
-      windowOptions.icon = path.join(app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'icon.png')
-    }
+    icon: path.join(__static, 'icon.png'),
   }
 
   /**

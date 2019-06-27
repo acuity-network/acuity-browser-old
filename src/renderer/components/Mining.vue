@@ -33,15 +33,7 @@
   import { spawn } from 'child_process'
   import { remote } from 'electron'
 
-  let ethminerPath
-
-  if (process.env.NODE_ENV !== 'development') {
-  	ethminerPath = path.join(remote.app.getAppPath(), '..')
-  }
-  else {
-  	ethminerPath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src')
-  }
-
+  let ethminerPath = path.join(__static, (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
   ethminerPath = path.join(ethminerPath, 'extraResources', 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
   let ethminerProcess
 

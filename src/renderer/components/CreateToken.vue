@@ -94,14 +94,7 @@
 
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
 
-        let byteCodePath
-    	  if (process.env.NODE_ENV !== 'development') {
-          byteCodePath = path.join(remote.app.getAppPath(), '..', 'extraResources', 'CreatorToken.bin')
-        }
-        else {
-          byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'CreatorToken.bin')
-        }
-
+        let byteCodePath = path.join(__static, 'CreatorToken.bin')
         let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii')
         let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
         let params = [this.symbol, this.name, 18, this.payout, this.$tokenRegistryAddress, itemId]

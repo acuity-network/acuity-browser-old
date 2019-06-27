@@ -29,20 +29,19 @@ try {
 } catch (e) {}
 
 let archUrls = urls[os.platform()]
-let extraResourcesPath = path.join('src', 'extraResources')
 
 console.log('Downloading ' + archUrls['parity'])
-let parity = download(archUrls['parity'], extraResourcesPath)
+let parity = download(archUrls['parity'], 'static')
 .then(result => {
-	let parityPath = path.join(extraResourcesPath, (os.platform() == 'win32') ? 'parity.exe' : 'parity')
+	let parityPath = path.join('static', (os.platform() == 'win32') ? 'parity.exe' : 'parity')
 	fs.chmodSync(parityPath, '755');
 })
 
 console.log('Downloading ' + archUrls['ipfs'])
-let ipfs = download(archUrls['ipfs'], extraResourcesPath, {extract: true})
+let ipfs = download(archUrls['ipfs'], 'static', {extract: true})
 
 console.log('Downloading ' + archUrls['ethminer'])
-let ethminer = download(archUrls['ethminer'], path.join(extraResourcesPath, 'ethminer'), {extract: true})
+let ethminer = download(archUrls['ethminer'], path.join('static', 'ethminer'), {extract: true})
 
 Promise.all([parity, ipfs, ethminer])
 .then(() => {

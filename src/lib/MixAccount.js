@@ -44,14 +44,7 @@ export default class MixAccount {
 
   async deploy() {
     return new Promise(async (resolve, reject) => {
-      let byteCodePath
-      if (process.env.NODE_ENV !== 'development') {
-        byteCodePath = path.join(remote.app.getAppPath(), '..', 'extraResources', 'Account.bin')
-      }
-      else {
-        byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'Account.bin')
-      }
-
+      let byteCodePath = path.join(__static, 'Account.bin')
       let accountBytecode = fs.readFileSync(byteCodePath, 'ascii')
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let rawTx = {

@@ -9,16 +9,7 @@ let parityProcess
 
 async function launch(window) {
 	let isWindows = os.platform() === 'win32'
-	let parityPath
-
-	if (process.env.NODE_ENV !== 'development') {
-		parityPath = path.join(app.getAppPath(), '..')
-	}
-	else {
-		parityPath = path.join(app.getAppPath(), '..', '..', '..', '..', '..', 'src')
-	}
-
-	parityPath = path.join(parityPath, 'extraResources', isWindows ? 'parity.exe' : 'parity')
+	let parityPath = path.join(__static, isWindows ? 'parity.exe' : 'parity')
 	console.log('Parity path: ' + parityPath)
 
 	let ipcPath
