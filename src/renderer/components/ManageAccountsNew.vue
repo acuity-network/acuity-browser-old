@@ -14,10 +14,12 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
-  let bip39 = require('bip39')  // this cant use import for some reason
-  let ethUtil = require('ethereumjs-util')  // this cant use import for some reason
+  import * as bip32 from 'bip32';
+  import { BIP32Interface } from 'bip32';
+  import * as bip39  from 'bip39'
+  import * as ethUtil from 'ethereumjs-util'
 
   export default {
     name: 'manage-accounts-new',
@@ -38,11 +40,13 @@
         this.$router.push({ name: 'manage-account-activate', params: { controllerAddress: this.controllerAddress } })
       },
     },
-    created() {
+    async created() {
       this.recoveryPhrase = bip39.generateMnemonic()
-      let pk = bip39.mnemonicToSeedSync(this.recoveryPhrase).toString('hex').substr(0, 64)
-      this.privateKey = '0x' + pk
-      this.controllerAddress = '0x' + ethUtil.privateToAddress(new Buffer.from(pk, 'hex')).toString('hex')
+      let node: BIP32Interface = bip32.fromSeed(await bip39.mnemonicToSeed(this.recoveryPhrase))
+      let child: BIP32Interface = node.derivePath("m/44'/76'/0'/0/0");
+      let privateKey: string = Buffer.from(child.privateKey)
+      this.privateKey = '0x' + privateKey.toString('hex')
+      this.controllerAddress = '0x' + ethUtil.privateToAddress(privateKey).toString('hex')
     },
   }
 </script>
