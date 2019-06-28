@@ -16,8 +16,8 @@
 
 <script>
   import Page from './Page.vue'
-  import bip39 from 'bip39'
-  import ethUtil from 'ethereumjs-util'
+  import * as bip39  from 'bip39'
+  import keythereum from 'keythereum'
 
   export default {
     name: 'RecoverAccount',
@@ -38,7 +38,7 @@
 
             if(phrase && bip39.validateMnemonic(phrase)) {
                 let pk = bip39.mnemonicToSeedHex(phrase).substr(0, 64);
-                let address = '0x' + ethUtil.privateToAddress(new Buffer.from(pk, 'hex')).toString('hex');
+                let address = keythereum.privateKeyToAddress(pk)
                 let exist = await this.accountExist(address);
                 if(exist){
                     output.innerHTML = 'This account has already been added.'
