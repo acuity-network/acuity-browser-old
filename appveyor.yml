@@ -5,7 +5,8 @@ platform:
 
 cache:
   - node_modules
-  - '%USERPROFILE%\.electron'
+  - '%USERPROFILE%\.cache\electron'
+  - '%USERPROFILE%\.cache\electron-builder'
 
 init:
   - git config --global core.autocrlf input
