@@ -36,9 +36,7 @@
       "target": [
         "AppImage",
         "snap",
-        "tar.xz",
-        "tar.gz",
-        "tar.bz2"
+        "tar.xz"
       ],
       "category": "Network"
     }
