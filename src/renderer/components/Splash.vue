@@ -3,6 +3,13 @@
 		<img src="../assets/acuity-logo.svg" alt="MIX Acuity Logo" class="acuitylogo">
 		<div class="status">{{ status }}</div>
 		<progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
+		<div class="status"><br />
+			<span :class="web3Class">Web3 API</span><br />
+			<span :class="syncClass">Blockchain synchronized</span><br />
+			<span :class="stateClass">Blockchain state accessible</span><br />
+			<span :class="ipfsApiClass">IPFS API</span><br />
+			<span :class="ipfsGatewayClass">IPFS gateway</span>
+		</div>
     <div class="br-c6"></div>
     <div class="br-c5"></div>
     <div class="br-c4"></div>
@@ -43,6 +50,11 @@
         syncTotal: 1,
         syncProgress: 0,
 				status: 'Please wait...',
+				web3Class: '',
+				syncClass: '',
+				stateClass: '',
+				ipfsApiClass: '',
+				ipfsGatewayClass: '',
       }
     },
 		async created() {
@@ -51,6 +63,27 @@
 				this.syncTotal = isSyncing.highestBlock - isSyncing.startingBlock
 				this.syncProgress = isSyncing.currentBlock - isSyncing.startingBlock
       })
+
+			this.$root.$on('mix-client-web3', () => {
+				this.web3Class = 'completed'
+      })
+
+			this.$root.$on('mix-client-sync', () => {
+				this.syncClass = 'completed'
+      })
+
+			this.$root.$on('mix-client-state', () => {
+				this.stateClass = 'completed'
+      })
+
+			this.$root.$on('ipfs-api', () => {
+				this.ipfsApiClass = 'completed'
+      })
+
+			this.$root.$on('ipfs-gateway', () => {
+				this.ipfsGatewayClass = 'completed'
+      })
+
     }
 	}
 </script>
@@ -92,6 +125,10 @@
 		width: 400px;
 		margin: 0 auto;
 		z-index: 1;
+	}
+
+	.completed {
+		font-weight: bold;
 	}
 
 	.br-c6 {

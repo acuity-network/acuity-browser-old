@@ -82,8 +82,7 @@
       ipcRenderer.on('parity-stderr', (event, msg) => {
         console.error('Parity: ' + msg)
       })
-      await this.$mixClient.init(this.$root)
-      await this.$ipfsClient.init()
+      await Promise.all([this.$mixClient.init(this.$root), this.$ipfsClient.init(this.$root)])
       // Start the pinner.
       this.pinner = new MixPinner(this.$root)
       this.pinner.start()

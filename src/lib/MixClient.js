@@ -30,6 +30,8 @@ export default class MixClient {
 			}, 50)
 		})
 
+		vue.$emit('mix-client-web3')
+
 		this.web3.eth.defaultBlock = 'pending'
 		this.web3.eth.transactionConfirmationBlocks = 1
 
@@ -67,19 +69,29 @@ export default class MixClient {
 			}
 		})
 
-		// Wait for Parity to start working.
-		return new Promise((resolve, reject) => {
+		// Wait for Parity to sync.
+		await new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {
 				let isSyncing = await this.web3.eth.isSyncing()
 
 				if (isSyncing === false) {
-					try {
-						await this.itemStoreIpfsSha256.methods.getItem('0x310203dc4ca0c491a4be2fb0a82362addaa04645fd207be21f1e136d1003177d').call()
-						clearInterval(intervalId)
-						resolve()
-					}
-					catch (e) {}
+					vue.$emit('mix-client-sync')
+					clearInterval(intervalId)
+					resolve()
 				}
+			}, 100);
+		})
+
+		// Wait for Parity to start working.
+		return new Promise((resolve, reject) => {
+			let intervalId = setInterval(async () => {
+				try {
+					await this.itemStoreIpfsSha256.methods.getItem('0x310203dc4ca0c491a4be2fb0a82362addaa04645fd207be21f1e136d1003177d').call()
+					vue.$emit('mix-client-state')
+					clearInterval(intervalId)
+					resolve()
+				}
+				catch (e) {}
 			}, 100);
 		})
 	}

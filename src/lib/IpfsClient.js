@@ -3,7 +3,7 @@ import { randomHex } from 'web3-utils'
 
 export default class IpfsClient {
 
-	async init() {
+	async init(vue) {
 		this.agent = new http.Agent({
 			port: 5101,
 			keepAlive: true,
@@ -14,6 +14,7 @@ export default class IpfsClient {
 			let intervalId = setInterval(async () => {
 				try {
 					await this.get('id')
+					vue.$emit('ipfs-api')
 					clearInterval(intervalId)
 					resolve()
 				}
@@ -33,6 +34,7 @@ export default class IpfsClient {
 				http.get(options)
 				.on('response', res => {
 					if (res.statusCode == 200) {
+						vue.$emit('ipfs-gateway')
 						clearInterval(intervalId)
 						resolve()
 					}
