@@ -33,8 +33,7 @@
   import { spawn } from 'child_process'
   import { remote } from 'electron'
 
-  let ethminerPath = path.join(__static, (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
-  ethminerPath = path.join(ethminerPath, 'extraResources', 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
+  let ethminerPath = path.join(__static, 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
   let ethminerProcess
 
   export default {
