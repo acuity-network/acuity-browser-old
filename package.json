@@ -37,7 +37,6 @@
         "AppImage",
         "snap",
         "tar.xz",
-        "tar.lz",
         "tar.gz",
         "tar.bz2"
       ],
