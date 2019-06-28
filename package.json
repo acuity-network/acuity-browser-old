@@ -21,19 +21,25 @@
     "mac": {
       "target": [
         "dmg",
+        "pkg",
         "zip"
       ]
     },
     "win": {
       "target": [
         "nsis",
-        "portable"
+        "portable",
+        "7z"
       ]
     },
     "linux": {
       "target": [
         "AppImage",
-        "snap"
+        "snap",
+        "tar.xz",
+        "tar.lz",
+        "tar.gz",
+        "tar.bz2"
       ],
       "category": "Network"
     }
