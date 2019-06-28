@@ -44,7 +44,7 @@
       this.recoveryPhrase = bip39.generateMnemonic()
       let node: BIP32Interface = bip32.fromSeed(await bip39.mnemonicToSeed(this.recoveryPhrase))
       let child: BIP32Interface = node.derivePath("m/44'/76'/0'/0/0");
-      let privateKey: string = Buffer.from(child.privateKey)
+      let privateKey: Buffer = Buffer.from(child.privateKey)
       this.privateKey = '0x' + privateKey.toString('hex')
       this.controllerAddress = '0x' + ethUtil.privateToAddress(privateKey).toString('hex')
     },
