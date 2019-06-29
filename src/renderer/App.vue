@@ -144,12 +144,9 @@
           })
           .then(() => {
             this.$root.$emit('account-receive', account.contractAddress)
-            account.isUnlocked()
-            .then(unlocked => {
-              if (unlocked) {
-                account.consolidateMix()
-              }
-            })
+            if (account.isUnlocked()) {
+              account.consolidateMix()
+            }
           })
         })
         .on('changed', log => {

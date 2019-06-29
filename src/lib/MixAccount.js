@@ -3,6 +3,9 @@ import ethTx from 'ethereumjs-tx'
 import { remote } from 'electron'
 import path from 'path'
 import fs from 'fs'
+import keythereum from 'keythereum'
+
+let privateKeys = {}
 
 export default class MixAccount {
 
@@ -55,7 +58,7 @@ export default class MixAccount {
       }
       rawTx.gas = this.vue.$mixClient.web3.utils.toHex(await this.vue.$mixClient.web3.eth.estimateGas(rawTx))
       let tx = new ethTx(rawTx)
-      let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
+      let privateKey = privateKeys[this.controllerAddress]
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
@@ -84,14 +87,17 @@ export default class MixAccount {
     })
   }
 
-  unlock(password) {
+  async unlock(password) {
+    let keyObject = JSON.parse(await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/keyObject'))
+    privateKeys[this.controllerAddress] = '0x' + keythereum.recover(password, keyObject).toString('hex')
   }
 
   lock() {
+    delete privateKeys[this.controllerAddress]
   }
 
-  async isUnlocked() {
-    return true
+  isUnlocked() {
+    return this.controllerAddress in privateKeys
   }
 
   _send(transaction, value = 0, checkBalance = true) {
@@ -117,7 +123,7 @@ export default class MixAccount {
         reject()
       }
       let tx = new ethTx(rawTx)
-      let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
+      let privateKey = privateKeys[this.controllerAddress]
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
@@ -184,7 +190,7 @@ export default class MixAccount {
           value: this.vue.$mixClient.web3.utils.toHex(value),
         }
         let tx = new ethTx(rawTx)
-        let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
+        let privateKey = privateKeys[this.controllerAddress]
         tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
         let serializedTx = tx.serialize()
         this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
