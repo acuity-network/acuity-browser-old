@@ -42,6 +42,7 @@ export default class MixClient {
 		this.itemStoreShortId = new this.web3.eth.Contract(require('./contracts/ItemStoreShortId.abi.json'), '0xe8912dd1dc35bbd613dbc5f30fe8b20300ec9f79')
 		this.itemDagComments = new this.web3.eth.Contract(require('./contracts/ItemDagOneParent.abi.json'), '0x8e7f6a1696b0e702ac1701b9048c47783483330e')
 		this.itemDagFeedItems = new this.web3.eth.Contract(require('./contracts/ItemDag.abi.json'), '0xd6cc1712b46a599f87f023fad83bc06473bb2b8d')
+		this.accountRegistry = new this.web3.eth.Contract(require('./contracts/MixAccountRegistry.abi.json'), '0xb647a92167d48bbce13a551f79bfa28695ab1c5f')
 		this.accountProfile = new this.web3.eth.Contract(require('./contracts/AccountProfile.abi.json'), '0x7855a6b883c39c8e87d51002b064180ddbf16026')
 		this.accountFeeds = new this.web3.eth.Contract(require('./contracts/MixAccountItems.abi.json'), '0x988e19f9c1a004612b64ab100008897bbebc2470')
 		this.trustedAccounts = new this.web3.eth.Contract(require('./contracts/TrustedAccounts.abi.json'), '0x11dc5cf838ae3850458f92474dc28d1e47f8e045')

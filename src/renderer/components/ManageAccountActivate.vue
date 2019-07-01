@@ -29,6 +29,7 @@
   import Page from './Page.vue'
   import QRCode from 'qrcode'
   import MixAccount from '../../lib/MixAccount.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'manage-account-activate',
@@ -61,6 +62,7 @@
       }
     },
     async created() {
+      setTitle('Activate account')
       this.account = await new MixAccount(this, this.controllerAddress).init()
       if ('contractAddress' in this.account) {
         this.$router.push({ name: 'profile' })

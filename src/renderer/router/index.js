@@ -110,6 +110,11 @@ export default new Router({
       component: require('@/components/ManageAccountsNew').default
     },
     {
+      path: '/manage-accounts/recover',
+      name: 'manage-accounts-recover',
+      component: require('@/components/ManageAccountsRecover').default
+    },
+    {
       path: '/manage-accounts/controller/:controllerAddress',
       name: 'manage-account-activate',
       component: require('@/components/ManageAccountActivate').default,
@@ -139,11 +144,6 @@ export default new Router({
       path: '/debug',
       name: 'debug',
       component: require('@/components/Debug').default
-    },
-    {
-      path: '/recover-account',
-      name: 'recover-account',
-      component: require('@/components/RecoverAccount').default
     },
     {
       path: '/downloads',

@@ -1,4 +1,4 @@
-let accountAbi = require('./contracts/Account.abi.json')
+let accountAbi = require('./contracts/MixAccount.abi.json')
 import ethTx from 'ethereumjs-tx'
 import { remote } from 'electron'
 import path from 'path'
@@ -45,9 +45,29 @@ export default class MixAccount {
     return this.vue.$db.put('/account/controller/' + this.controllerAddress + '/transaction/' + transaction.nonce, JSON.stringify(info))
   }
 
+  async storeMapping() {
+    let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
+    let to = this.vue.$mixClient.accountRegistry.options.address
+    let data = this.vue.$mixClient.accountRegistry.methods.set(this.contractAddress).encodeABI()
+    let rawTx = {
+      nonce: nonce,
+      from: this.controllerAddress,
+      to: to,
+      gasPrice: '0x3b9aca00',
+      data: data,
+    }
+    rawTx.gas = 50000//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+    let tx = new ethTx(rawTx)
+    let privateKey = privateKeys[this.controllerAddress]
+    tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
+    let serializedTx = tx.serialize()
+    this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+    .on('error', console.error)
+  }
+
   async deploy() {
     return new Promise(async (resolve, reject) => {
-      let byteCodePath = path.join(__static, 'Account.bin')
+      let byteCodePath = path.join(__static, 'MixAccount.bin')
       let accountBytecode = fs.readFileSync(byteCodePath, 'ascii')
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let rawTx = {
@@ -65,6 +85,7 @@ export default class MixAccount {
       .on('error', reject)
       .on('receipt', async receipt => {
         this.contractAddress = receipt.contractAddress
+        this.storeMapping()
         await this.vue.$db.batch()
         .put('/account/controller/' + this.controllerAddress + '/contract', this.contractAddress)
         .put('/account/contract/' + this.contractAddress + '/controller', this.controllerAddress)

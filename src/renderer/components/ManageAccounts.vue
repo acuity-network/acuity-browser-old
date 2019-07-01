@@ -19,7 +19,7 @@
         </template>
         <template slot="footer">
           <router-link class="footer-link" :to="{ name: 'manage-accounts-new' }">{{ $t('createAccount') }}</router-link>
-          <router-link class="footer-link" :to="{ name: 'recover-account' }">{{ $t('recoverAccount') }}</router-link>
+          <router-link class="footer-link" :to="{ name: 'manage-accounts-recover' }">{{ $t('recoverAccount') }}</router-link>
         </template>
       </b-table>
     </template>
