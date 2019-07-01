@@ -352,8 +352,7 @@
       },
       async copyItemId(event) {
         clipboard.writeText(this.itemId)
-        let notification = this.$notifications.itemIdCopied(this.title)
-        new Notification(notification.title, notification)
+        this.$toast.open('itemId copied')
       },
       async toggleEdit(event) {
         this.editing = !this.editing

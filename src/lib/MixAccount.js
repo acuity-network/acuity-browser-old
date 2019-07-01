@@ -123,6 +123,11 @@ export default class MixAccount {
 
   _send(transaction, value = 0, checkBalance = true) {
     return new Promise(async (resolve, reject) => {
+      if (!this.isUnlocked()) {
+        this.vue.$toast.open({message: 'Account is locked', type: 'is-danger'})
+        reject()
+        return
+      }
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let data = await transaction.encodeABI()
       let rawTx = {
@@ -139,9 +144,9 @@ export default class MixAccount {
       let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
       let requiredBalance = toBN(rawTx.gas).mul(toBN('1000000000'))
       if (checkBalance && controllerBalance.lt(requiredBalance)) {
-        let notification = this.vue.$notifications.insufficientMix(this.title)
-        new Notification(notification.title, notification)
+        this.vue.$toast.open({message: 'Insufficient MIX', type: 'is-danger'})
         reject()
+        return
       }
       let tx = new ethTx(rawTx)
       let privateKey = privateKeys[this.controllerAddress]
