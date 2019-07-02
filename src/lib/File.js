@@ -25,7 +25,7 @@ export default class File extends EventEmitter {
     new Notification(notification.title, notification)
     this.vue.$root.$emit('start-download', this)
 
-    let fileUrl = "http://127.0.0.1:5001/api/v0/cat?arg=/ipfs/" + this.hash
+    let fileUrl = "http://127.0.0.1:5101/api/v0/cat?arg=/ipfs/" + this.hash
     let uncheckedFilePath = path.join(remote.app.getPath('downloads'), this.name)
 
     this.filePath = await unusedFilename(uncheckedFilePath)

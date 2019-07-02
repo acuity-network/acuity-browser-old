@@ -5,7 +5,10 @@ import router from './router'
 
 router.afterEach((to, from) => {
   // Ensure arrow keys work after clicking on route.
-  document.getElementById('router-view').focus()
+  let el = document.getElementById('router-view')
+  if (el) {
+    el.focus()
+  }
 })
 
 import { ipcRenderer } from 'electron'
@@ -21,9 +24,6 @@ import i18n from './plugins/i18n';
 import '@mdi/font/css/materialdesignicons.min.css'
 import 'notosans-fontface/css/notosans-fontface.css'
 import 'typeface-noto-serif/index.css'
-
-import VueElectron from 'vue-electron'
-Vue.use(VueElectron)
 
 import axios from 'axios'
 Vue.http = Vue.prototype.$http = axios
@@ -44,8 +44,8 @@ Vue.prototype.$notifications = notifications
 import Settings from '../lib/Settings.js'
 Vue.prototype.$settings = new Settings()
 
-import ipfsClient from '../lib/IpfsClient.js'
-Vue.prototype.$ipfsClient = ipfsClient
+import IpfsClient from '../lib/IpfsClient.js'
+Vue.prototype.$ipfsClient = new IpfsClient()
 
 /* eslint-disable no-new */
 new Vue({

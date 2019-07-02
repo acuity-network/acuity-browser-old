@@ -7,7 +7,7 @@
     <template slot="body">
       <div v-if="!activating">
         <div>Send 0.01 MIX to activate this account.</div>
-        <img :src="qrcode" />
+        <img class="qr" :src="qrcode" />
         <b-field label="Address">
           {{ controllerAddress }}
         </b-field>
@@ -29,6 +29,7 @@
   import Page from './Page.vue'
   import QRCode from 'qrcode'
   import MixAccount from '../../lib/MixAccount.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'manage-account-activate',
@@ -61,6 +62,7 @@
       }
     },
     async created() {
+      setTitle('Activate account')
       this.account = await new MixAccount(this, this.controllerAddress).init()
       if ('contractAddress' in this.account) {
         this.$router.push({ name: 'profile' })
@@ -69,6 +71,7 @@
         this.qrcode = await QRCode.toDataURL(this.controllerAddress, {
           mode: 'alphanumeric',
           errorCorrectionLevel: 'H',
+          scale: 1,
         })
         this.update()
         this.intervalId = window.setInterval(this.update, 500)
@@ -81,7 +84,11 @@
 </script>
 
 <style scoped>
-  img {
-    padding: 20px;
+  .qr {
+    image-rendering: pixelated;
+    width: 256px;
+    height: 256px;
+    cursor: none;
+    margin: 20px;
   }
 </style>

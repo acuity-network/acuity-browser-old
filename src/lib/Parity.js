@@ -1,4 +1,3 @@
-import * as parity from '@parity/electron';
 import { app } from 'electron'
 import path from 'path'
 import Web3 from 'web3'
@@ -9,8 +8,10 @@ import { spawn } from 'child_process'
 let parityProcess
 
 async function launch(window) {
+	let isWindows = os.platform() === 'win32'
+	let parityPath = path.join(__static, isWindows ? 'parity.exe' : 'parity')
+	console.log('Parity path: ' + parityPath)
 
-	let parityPath
 	let ipcPath
 
 	if (os.platform() === 'win32') {
@@ -22,34 +23,26 @@ async function launch(window) {
 
 	console.log('Parity IPC path: ' + ipcPath)
 
-	try {
-		parityPath = await parity.getParityPath()
-	}
-	catch (e) {
-		try {
-			parityPath = await parity.fetchParity(window, { parityChannel: 'v2.4.6', onProgress: (progress) => {
-				window.webContents.send('parity-download-progress', progress)
-			}})
-		}
-		catch (e) {
-			console.error(e)
-			return
-		}
-	}
-
 	let args = [
 		'--no-download',
 		'--no-consensus',
 		'--chain=mix',
-		'--no-jsonrpc',
+		'--port=0',
+		'--jsonrpc-port=8645',
+		'--jsonrpc-apis=net,parity_set',
+		'--jsonrpc-cors=all',
 		'--no-ws',
 		'--ipc-path=' + ipcPath,
 		'--no-secretstore',
 		'--force-sealing',
-		'--infinite-pending-block',
+		'--reseal-on-uncle',
+		'--stratum',
 		'--reseal-on-txs=all',
 		'--reseal-min-period=0',
 		'--reseal-max-period=600000',
+		'--relay-set=strict',
+		'--min-gas-price=1',
+		'--extra-data=Acuity',
 		'--can-restart',
 		'--pruning=fast',
 		'--pruning-history=64',
@@ -76,11 +69,9 @@ async function launch(window) {
 			window.webContents.send('parity-stderr', data.toString())
 		} catch (e) {}
 	})
-
-	window.webContents.send('parity-running')
 }
 
-async function kill() {
+function kill() {
 	parityProcess.kill()
 }
 

@@ -35,6 +35,7 @@
     },
     methods: {
       async goto(event) {
+        this.itemId = this.itemId.trim()
         try {
           let item = await new MixItem(this.$root, this.itemId).init()
         }

@@ -1,8 +1,11 @@
-let accountAbi = require('./contracts/Account.abi.json')
+let accountAbi = require('./contracts/MixAccount.abi.json')
 import ethTx from 'ethereumjs-tx'
 import { remote } from 'electron'
 import path from 'path'
 import fs from 'fs'
+import keythereum from 'keythereum'
+
+let privateKeys = {}
 
 export default class MixAccount {
 
@@ -42,16 +45,29 @@ export default class MixAccount {
     return this.vue.$db.put('/account/controller/' + this.controllerAddress + '/transaction/' + transaction.nonce, JSON.stringify(info))
   }
 
+  async storeMapping() {
+    let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
+    let to = this.vue.$mixClient.accountRegistry.options.address
+    let data = this.vue.$mixClient.accountRegistry.methods.set(this.contractAddress).encodeABI()
+    let rawTx = {
+      nonce: nonce,
+      from: this.controllerAddress,
+      to: to,
+      gasPrice: '0x3b9aca00',
+      data: data,
+    }
+    rawTx.gas = 50000//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+    let tx = new ethTx(rawTx)
+    let privateKey = privateKeys[this.controllerAddress]
+    tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
+    let serializedTx = tx.serialize()
+    this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+    .on('error', console.error)
+  }
+
   async deploy() {
     return new Promise(async (resolve, reject) => {
-      let byteCodePath
-      if (process.env.NODE_ENV !== 'development') {
-        byteCodePath = path.join(remote.app.getAppPath(), '..', 'extraResources', 'Account.bin')
-      }
-      else {
-        byteCodePath = path.join(remote.app.getAppPath(), '..', '..', '..', '..', '..', 'src', 'extraResources', 'Account.bin')
-      }
-
+      let byteCodePath = path.join(__static, 'MixAccount.bin')
       let accountBytecode = fs.readFileSync(byteCodePath, 'ascii')
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let rawTx = {
@@ -62,13 +78,14 @@ export default class MixAccount {
       }
       rawTx.gas = this.vue.$mixClient.web3.utils.toHex(await this.vue.$mixClient.web3.eth.estimateGas(rawTx))
       let tx = new ethTx(rawTx)
-      let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
+      let privateKey = privateKeys[this.controllerAddress]
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
       .on('error', reject)
       .on('receipt', async receipt => {
         this.contractAddress = receipt.contractAddress
+        this.storeMapping()
         await this.vue.$db.batch()
         .put('/account/controller/' + this.controllerAddress + '/contract', this.contractAddress)
         .put('/account/contract/' + this.contractAddress + '/controller', this.controllerAddress)
@@ -91,41 +108,48 @@ export default class MixAccount {
     })
   }
 
-  unlock(password) {
+  async unlock(password) {
+    let keyObject = JSON.parse(await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/keyObject'))
+    privateKeys[this.controllerAddress] = '0x' + keythereum.recover(password, keyObject).toString('hex')
   }
 
   lock() {
+    delete privateKeys[this.controllerAddress]
   }
 
-  async isUnlocked() {
-    return true
+  isUnlocked() {
+    return this.controllerAddress in privateKeys
   }
 
   _send(transaction, value = 0, checkBalance = true) {
     return new Promise(async (resolve, reject) => {
+      if (!this.isUnlocked()) {
+        this.vue.$toast.open({message: 'Account is locked', type: 'is-danger'})
+        reject()
+        return
+      }
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let data = await transaction.encodeABI()
-      let gas = 200000 //await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
-      // Check if there is sufficient balance.
-      let toBN = this.vue.$mixClient.web3.utils.toBN
-      let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
-      let requiredBalance = toBN(gas * 2).mul(toBN('1000000000'))
-      if (checkBalance && controllerBalance.lt(requiredBalance)) {
-        let notification = this.vue.$notifications.insufficientMix(this.title)
-        new Notification(notification.title, notification)
-        reject()
-      }
       let rawTx = {
         nonce: nonce,
         from: this.controllerAddress,
         to: this.contractAddress,
-        gas: this.vue.$mixClient.web3.utils.toHex(gas),
         gasPrice: '0x3b9aca00',
         data: data,
         value: this.vue.$mixClient.web3.utils.toHex(value),
       }
+      rawTx.gas = 200000//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+      // Check if there is sufficient balance.
+      let toBN = this.vue.$mixClient.web3.utils.toBN
+      let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
+      let requiredBalance = toBN(rawTx.gas).mul(toBN('1000000000'))
+      if (checkBalance && controllerBalance.lt(requiredBalance)) {
+        this.vue.$toast.open({message: 'Insufficient MIX', type: 'is-danger'})
+        reject()
+        return
+      }
       let tx = new ethTx(rawTx)
-      let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
+      let privateKey = privateKeys[this.controllerAddress]
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
@@ -142,20 +166,38 @@ export default class MixAccount {
   }
 
   consolidateMix() {
-    return new Promise((resolve, reject) => {
-      this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending')
-      .then(balance => {
-        if (balance > 0) {
-          this._send(this.contract.methods.withdraw(), 0, false)
-          .then(tx => {
-            resolve()
-          })
-        }
-        else {
-          resolve()
-        }
-      })
+    return new Promise(async (resolve, reject) => {
+      let balance = await this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending')
+      if (balance > 0) {
+        let tx = await this._send(this.contract.methods.withdraw(), 0, false)
+        await this._logTransaction(tx, '', 'Consolidate MIX')
+        resolve()
+      }
+      else {
+        resolve()
+      }
     })
+  }
+
+  async getSendMixGas(to, value) {
+    // Check if the destination is a contract.
+    if (await this.vue.$mixClient.web3.eth.getCode(to) == '0x') {
+      return 21000
+    }
+    return 200000
+/*
+    let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
+    let data = await this.contract.methods.sendMix(to).encodeABI()
+    let rawTx = {
+      nonce: nonce,
+      from: this.controllerAddress,
+      to: this.contractAddress,
+      gasPrice: '0x3b9aca00',
+      data: data,
+      value: this.vue.$mixClient.web3.utils.toHex(value),
+    }
+    return this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+*/
   }
 
   async sendMix(to, value) {
@@ -174,7 +216,7 @@ export default class MixAccount {
           value: this.vue.$mixClient.web3.utils.toHex(value),
         }
         let tx = new ethTx(rawTx)
-        let privateKey = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/privateKey')
+        let privateKey = privateKeys[this.controllerAddress]
         tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
         let serializedTx = tx.serialize()
         this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))

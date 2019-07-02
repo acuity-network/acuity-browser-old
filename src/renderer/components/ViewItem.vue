@@ -272,7 +272,7 @@
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 
-        if (!trustLevel) {
+        if (this.short && !trustLevel) {
           this.title = ''
           this.body = 'Author not trusted.'
           this.description = ''
@@ -352,8 +352,7 @@
       },
       async copyItemId(event) {
         clipboard.writeText(this.itemId)
-        let notification = this.$notifications.itemIdCopied(this.title)
-        new Notification(notification.title, notification)
+        this.$toast.open('itemId copied')
       },
       async toggleEdit(event) {
         this.editing = !this.editing

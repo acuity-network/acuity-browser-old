@@ -101,7 +101,7 @@
           let stats = fs.statSync(fileNames[0])
           this.fileTotalSize = stats.size
           output.innerHTML = 'Uploading file...'
-          let req = request.post('http://127.0.0.1:5001/api/v0/add', (err, res, body) => {
+          let req = request.post('http://127.0.0.1:5101/api/v0/add', (err, res, body) => {
             if (err) {
               console.log(err)
             } else {

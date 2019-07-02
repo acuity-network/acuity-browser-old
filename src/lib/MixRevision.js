@@ -46,7 +46,7 @@ export default class MixRevision {
 
     let widthOut = Math.round(width / scale)
     let heightOut = Math.round(height / scale)
-    return '<img src="http://127.0.0.1:8080/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash()) + '" width="' + widthOut + '" height="' + heightOut + '">'
+    return '<img src="http://127.0.0.1:5102/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash()) + '" width="' + widthOut + '" height="' + heightOut + '">'
   }
 
   getFile() {
