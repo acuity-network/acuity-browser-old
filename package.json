@@ -64,7 +64,7 @@
     "request": "^2.88.0",
     "sharp": "^0.22.1",
     "source-map-support": "^0.5.12",
-    "twemoji": "^12.0.0",
+    "twemoji": "12.0.4",
     "typeface-noto-serif": "^0.0.72",
     "unused-filename": "^2.1.0",
     "vue": "^2.6.10",
