@@ -1,9 +1,10 @@
 import multihashes from 'multihashes'
-import titleProto from './protobuf/title_pb.js'
-import jpegImageProto from './protobuf/jpeg-image_pb.js'
-import bodyTextProto from './protobuf/body_pb.js'
-import profileProto from './protobuf/account-profile_pb.js'
-import fileProto from './protobuf/file_pb.js'
+import TitleMixinProto from './protobuf/TitleMixin_pb.js'
+import ImageMixinProto from './protobuf/ImageMixin_pb.js'
+import BodyTextMixinProto from './protobuf/BodyTextMixin_pb.js'
+import MixinSchemaMixinProto from './protobuf/MixinSchemaMixin_pb.js'
+import ProfileMixinProto from './protobuf/ProfileMixin_pb.js'
+import FileMixinProto from './protobuf/FileMixin_pb.js'
 import MixContent from './MixContent.js'
 import File from './File.js'
 import Base58 from 'base-58'
@@ -27,11 +28,11 @@ export default class MixRevision {
   }
 
   getTitle() {
-    return titleProto.TitleMixin.deserializeBinary(this.content.getPayloads('0x24da6114')[0]).getTitle()
+    return TitleMixinProto.TitleMixin.deserializeBinary(this.content.getPayloads('0x24da6114')[0]).getTitle()
   }
 
   getImage(widthMin, heightMin) {
-    let imageMessage = new jpegImageProto.JpegMipmap.deserializeBinary(this.content.getPayloads('0x12745469')[0])
+    let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x12745469')[0])
     let width = imageMessage.getWidth()
     let height = imageMessage.getHeight()
     let mipmapList = imageMessage.getMipmapLevelList()
@@ -50,7 +51,7 @@ export default class MixRevision {
   }
 
   getFile() {
-    let fileMessage = fileProto.File.deserializeBinary(this.content.getPayloads('0x0b62637e')[0])
+    let fileMessage = FileMixinProto.FileMixin.deserializeBinary(this.content.getPayloads('0x0b62637e')[0])
     return {
       name: fileMessage.getFilename(),
       size: fileMessage.getFilesize(),
@@ -59,15 +60,15 @@ export default class MixRevision {
   }
 
   getBodyText() {
-    return bodyTextProto.BodyTextMixin.deserializeBinary(this.content.getPayloads('0x34a9a6ec')[0]).getBodyText()
+    return BodyTextProto.BodyTextMixin.deserializeBinary(this.content.getPayloads('0x34a9a6ec')[0]).getBodyText()
   }
 
-  getDescription() {
-    return bodyTextProto.BodyTextMixin.deserializeBinary(this.content.getPayloads('0x5a474550')[0]).getBodyText()
+  getMixinSchema() {
+    return MixinSchemaMixinProto.MixinSchemaMixin.deserializeBinary(this.content.getPayloads('0x5a474550')[0]).getMixinSchema()
   }
 
   getProfile() {
-    let profileMessage = profileProto.AccountProfile.deserializeBinary(this.content.getPayloads('0x4bf3ce07')[0])
+    let profileMessage = ProfileMixin.ProfileMixin.deserializeBinary(this.content.getPayloads('0x4bf3ce07')[0])
     return {
       type: profileMessage.getType(),
       location: profileMessage.getLocation(),

@@ -87,6 +87,10 @@
         case 7:
           this.type = 'Shill'
           break
+
+        case 7:
+          this.type = 'Test'
+          break
       }
     }
   }

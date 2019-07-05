@@ -19,6 +19,7 @@
           <option value="5">Parody</option>
           <option value="6">Bot</option>
           <option value="7">Shill</option>
+          <option value="8">Test</option>
         </b-select>
       </b-field>
 
@@ -41,11 +42,11 @@
 
 <script>
   import Page from './Page.vue'
-  import itemProto from '../../lib/protobuf/item_pb.js'
-  import profileProto from '../../lib/protobuf/account-profile_pb.js'
-  import titleProto from '../../lib/protobuf/title_pb.js'
-  import bodyTextProto from '../../lib/protobuf/body_pb.js'
-  import languageProto from '../../lib/protobuf/language_pb.js'
+  import ItemProto from '../../lib/protobuf/Item_pb.js'
+  import ProfileMixinProto from '../../lib/protobuf/ProfileMixin_pb.js'
+  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
+  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
+  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import multihash from 'multihashes'
   import MixItem from '../../lib/MixItem.js'
   import Image from '../../lib/Image.js'
@@ -94,23 +95,23 @@
         let content = new MixContent(this.$root)
 
         // Account profile
-        let profileMessage = new profileProto.AccountProfile()
+        let profileMessage = new ProfileMixinProto.ProfileMixin()
         profileMessage.setType(this.type)
         profileMessage.setLocation(this.location)
         content.addMixin(0x4bf3ce07, profileMessage.serializeBinary())
 
         // Language
-        let languageMessage = new languageProto.LanguageMixin()
+        let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
         content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
-        let titleMessage = new titleProto.TitleMixin()
+        let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.name)
         content.addMixin(0x24da6114, titleMessage.serializeBinary())
 
         // BodyText
-        let bodyTextMessage = new bodyTextProto.BodyTextMixin()
+        let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.bio)
         content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
 

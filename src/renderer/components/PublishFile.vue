@@ -35,11 +35,10 @@
 
 <script>
   import Page from './Page.vue'
-  import languageProto from '../../lib/protobuf/language_pb.js'
-  import titleProto from '../../lib/protobuf/title_pb.js'
-  import bodyTextProto from '../../lib/protobuf/body_pb.js'
-  import descriptionProto from '../../lib/protobuf/description_pb.js'
-  import fileProto from '../../lib/protobuf/file_pb.js'
+  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
+  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
+  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
+  import FileMixinProto from '../../lib/protobuf/FileMixin_pb.js'
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
   import fs from 'fs'
@@ -124,22 +123,22 @@
         let content = new MixContent(this.$root)
 
         // Language
-        let languageMessage = new languageProto.LanguageMixin()
+        let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
         content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
-        let titleMessage = new titleProto.TitleMixin()
+        let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
         content.addMixin(0x24da6114, titleMessage.serializeBinary())
 
-        // Description
-        let descriptionMessage = new descriptionProto.DescriptionMixin()
-        descriptionMessage.setDescription(this.description)
-        content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
+        // Body text
+        let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
+        bodyTextMessage.setBodyText(this.description)
+        content.addMixin(0x5a474550, bodyTextMessage.serializeBinary())
 
         // File
-        let fileMessage = new fileProto.File()
+        let fileMessage = new FileMixinProto.FileMixin()
         fileMessage.setFilename(this.fileName)
         fileMessage.setIpfsHash(Base58.decode(this.fileHash))
         fileMessage.setFilesize(this.fileSize)

@@ -9,9 +9,10 @@ enum AccountType {
   PARODY = 5;
   BOT = 6;
   SHILL = 7;
+  TEST = 8;
 }
 
-message AccountProfile {
+message ProfileMixin {
   AccountType type = 1;
   string location = 2;
 }

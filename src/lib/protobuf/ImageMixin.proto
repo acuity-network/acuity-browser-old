@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+message MipmapLevel {
+  uint64 filesize = 1;    // Size of the file addressed by ipfs_hash (bytes).
+  bytes ipfs_hash = 2;    // Base58 decoded IPFS multihash of the WebP file of this mipmap level.
+}
+
+message ImageMixin {
+  // Inherited from FileMixin
+  string filename = 1;    // Filename of the file.
+  uint64 filesize = 2;    // Size of the file addressed by ipfs_hash (bytes).
+  bytes ipfs_hash = 3;    // Base58 decoded IPFS multihash of the file.
+  // Image-specific
+  uint32 width = 4;                         // Width of the original image (pixels).
+  uint32 height = 5;                        // Height of the original image (pixels).
+  repeated MipmapLevel mipmap_level = 6;    // Array of mipmap levels.
+}

@@ -16,12 +16,12 @@
 
 <script>
   import Page from './Page.vue'
-  import itemProto from '../../lib/protobuf/item_pb.js'
-  import languageProto from '../../lib/protobuf/language_pb.js'
-  import titleProto from '../../lib/protobuf/title_pb.js'
-  import bodyTextProto from '../../lib/protobuf/body_pb.js'
-  import descriptionProto from '../../lib/protobuf/description_pb.js'
-  import jpegImageProto from '../../lib/protobuf/jpeg-image_pb.js'
+  import ItemProto from '../../lib/protobuf/Item_pb.js'
+  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
+  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
+  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
+  import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
+  import ImageMixin from '../../lib/protobuf/ImageMixin_pb.js'
   import brotli from 'iltorb'
   import Base58 from 'base-58'
   import multihashes from 'multihashes'
@@ -103,8 +103,8 @@
           let itemPayload = await brotli.decompress(Buffer.from(containerPayload))
           output.append('Uncompressed length: ' + formatByteCount(itemPayload.length) + '\n')
 
-          let itemMessage = itemProto.Item.deserializeBinary(itemPayload)
-          let mixins = itemMessage.getMixinList()
+          let itemMessage = ItemProto.Item.deserializeBinary(itemPayload)
+          let mixins = itemMessage.getMixinPayloadList()
 
           output.append('Mixin count: ' + mixins.length + '\n')
 
@@ -122,31 +122,31 @@
 
               case '0x4e4e06c4':
                 output.append('Mixin type: Language\n')
-                let languageMessage = languageProto.LanguageMixin.deserializeBinary(mixinPayload)
+                let languageMessage = LanguageMixinProto.LanguageMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
                 break
 
               case '0x24da6114':
                 output.append('Mixin type: Title\n')
-                let titleMessage = titleProto.TitleMixin.deserializeBinary(mixinPayload)
+                let titleMessage = TitleMixinProto.TitleMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
                 break
 
               case '0x34a9a6ec':
                 output.append('Mixin type: Body text\n')
-                let bodyTextMessage = bodyTextProto.BodyTextMixin.deserializeBinary(mixinPayload)
+                let bodyTextMessage = BodyTextMixinProto.BodyTextMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
                 break
 
               case '0x5a474550':
-                output.append('Mixin type: Description\n')
-                let descriptionMessage = descriptionProto.DescriptionMixin.deserializeBinary(mixinPayload)
-                output.appendChild(document.createTextNode('Description:\n'  + descriptionMessage.getDescription() + '\n'))
+                output.append('Mixin type: Mixin Schema\n')
+                let mixinSchemaMessage = MixinSchemaMixinProto.MixinSchemaMixin.deserializeBinary(mixinPayload)
+                output.appendChild(document.createTextNode('Mixin schema:\n'  + mixinSchemaMessage.getMixinSchema() + '\n'))
                 break
 
               case '0x12745469':
                 output.append('Mixin type: Image\n')
-                let imageMessage = jpegImageProto.JpegMipmap.deserializeBinary(mixinPayload)
+                let imageMessage = ImageMixinProto.ImageMixin.deserializeBinary(mixinPayload)
                 let width = imageMessage.getWidth()
                 output.append('Original width: ' + width + '\n')
                 let height = imageMessage.getHeight()
