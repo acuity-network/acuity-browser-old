@@ -87,8 +87,5 @@
     "sass-loader": "^7.0.1",
     "typescript": "^3.5.2",
     "webpack": "^4.33.0"
-  },
-  "resolutions": {
-    "builder-util-runtime": "8.2.5"
   }
 }
