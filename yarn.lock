@@ -1784,10 +1784,10 @@ bs58check@<3.0.0, bs58check@^2.1.1:
     create-hash "^1.1.0"
     safe-buffer "^5.1.2"
 
-buefy@0.7.8:
-  version "0.7.8"
-  resolved "https://registry.yarnpkg.com/buefy/-/buefy-0.7.8.tgz#9f7c73482c248fb9239540d0d415b093c52ffa95"
-  integrity sha512-ygOY/83spIkjRtqFd9I8ibPcvmVUotwljBqyHaQGhePXWkTFOnkIwDQZeMMAiB1FGWP5omFZ49e0yUXvbLK37A==
+buefy@^0.7.10:
+  version "0.7.10"
+  resolved "https://registry.yarnpkg.com/buefy/-/buefy-0.7.10.tgz#c9931114af9a40cb9a5314026309458241532049"
+  integrity sha512-jU9CTEQR1rozxagwEPB69qObBDwWl+4uCa6TjiPkqcqOb/uxq1uvyvCsVinADzjNjzOTFhUOuuSPQk8gsVEOzA==
   dependencies:
     bulma "0.7.5"
 
