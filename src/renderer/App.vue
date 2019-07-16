@@ -106,7 +106,7 @@
           return
         }
         let startingBlock = await this.$mixClient.web3.eth.getBlockNumber()
-        account.contract.events.Receive({
+        account.contract.events.ReceiveMix({
           fromBlock: 0,
           toBlock: 'pending',
         })

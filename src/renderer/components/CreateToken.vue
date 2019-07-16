@@ -95,7 +95,7 @@
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
 
         let byteCodePath = path.join(__static, 'CreatorToken.bin')
-        let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii')
+        let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
         let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
         let params = [this.symbol, this.name, 18, this.payout, this.$tokenRegistryAddress, itemId]
         let paramsBytecode = this.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
