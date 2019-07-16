@@ -60,7 +60,7 @@ export default class MixRevision {
   }
 
   getBodyText() {
-    return BodyTextProto.BodyTextMixin.deserializeBinary(this.content.getPayloads('0x34a9a6ec')[0]).getBodyText()
+    return BodyTextMixinProto.BodyTextMixin.deserializeBinary(this.content.getPayloads('0x34a9a6ec')[0]).getBodyText()
   }
 
   getMixinSchema() {
@@ -68,7 +68,7 @@ export default class MixRevision {
   }
 
   getProfile() {
-    let profileMessage = ProfileMixin.ProfileMixin.deserializeBinary(this.content.getPayloads('0x4bf3ce07')[0])
+    let profileMessage = ProfileMixinProto.ProfileMixin.deserializeBinary(this.content.getPayloads('0x4bf3ce07')[0])
     return {
       type: profileMessage.getType(),
       location: profileMessage.getLocation(),

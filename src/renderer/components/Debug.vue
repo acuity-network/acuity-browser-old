@@ -75,7 +75,7 @@
         }
 
         let contractId = await itemStore.methods.getContractId().call()
-        if (contractId != "0x1f1e136d1003177d") {
+        if (contractId != "0x2af60a6f66ae9ec0") {
           output.append('Unknown item store.\n')
           return
         }
@@ -87,9 +87,9 @@
         output.append('Retractable: ' + ((item.flags & 0x04) ? 'true' : 'false') + '\n')
         output.append('Transferable: ' + ((item.flags & 0x08) ? 'true' : 'false') + '\n')
         output.append('Owner: ' + item.owner + '\n')
-        output.append('Revision count: ' + item.revisionCount + '\n')
+        output.append('Revision count: ' + item.ipfsHashes.length + '\n')
 
-        for (let i = 0; i < item.revisionCount; i++) {
+        for (let i = 0; i < item.ipfsHashes.length; i++) {
           let timestamp = new Date(item.timestamps[i] * 1000)
           output.append('\nRevision ' + i + ' timestamp: ' + timestamp + '\n')
 

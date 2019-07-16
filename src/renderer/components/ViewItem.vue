@@ -376,13 +376,13 @@
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
         revision.content.removeMixins(0x24da6114)
-        revision.content.addMixin(0x24da6114, titleMessage.serializeBinary())
+        revision.content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
 
         // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
         revision.content.removeMixins(0x5a474550)
-        revision.content.addMixin(0x5a474550, bodyTextMessage.serializeBinary())
+        revision.content.addMixinPayload(0x5a474550, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await revision.content.save()
         this.editing = false
@@ -392,17 +392,17 @@
         let content = new MixContent(this.$root)
 
         // Comment
-        content.addMixin(0x874aba65)
+        content.addMixinPayload(0x874aba65)
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
 
         // BodyText
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.reply)
-        content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)

@@ -56,28 +56,28 @@
         let content = new MixContent(this.$root)
 
         // Mixin type
-        content.addMixin(0x51c32e3a)
+        content.addMixinPayload(0x51c32e3a)
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        content.addMixin(0x24da6114, titleMessage.serializeBinary())
+        content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
 
         // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
-        content.addMixin(0x5a474550, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x5a474550, bodyTextMessage.serializeBinary())
 
         // Schema
         if (this.schema.length > 0) {
           let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
           bodyTextMessage.setBodyText(this.schema)
-          content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
+          content.addMixinPayload(0x34a9a6ec, bodyTextMessage.serializeBinary())
         }
 
         let ipfsHash = await content.save()

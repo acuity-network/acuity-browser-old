@@ -64,27 +64,27 @@
         let content = new MixContent(this.$root)
 
         // Mixin type
-        content.addMixin(0xbcec8faa)
+        content.addMixinPayload(0xbcec8faa)
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        content.addMixin(0x24da6114, titleMessage.serializeBinary())
+        content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
 
         // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
-        content.addMixin(0x5a474550, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x5a474550, bodyTextMessage.serializeBinary())
 
         // Image
         if (this.filepath != '') {
           let image = new Image(this.$root, this.filepath)
-          content.addMixin(0x12745469, await image.createMixin())
+          content.addMixinPayload(0x12745469, await image.createMixin())
         }
 
         let ipfsHash = await content.save()
