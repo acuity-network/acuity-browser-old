@@ -87,7 +87,7 @@ export default class MixClient {
 		return new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {
 				try {
-					await this.itemStoreIpfsSha256.methods.getItem('0x310203dc4ca0c491a4be2fb0a82362addaa04645fd207be21f1e136d1003177d').call()
+					await this.itemStoreIpfsSha256.methods.getItem('0x63c8e076a9474c83a12b76e4f0a9f1370fd65b27d404e0ef2af60a6f66ae9ec0').call()
 					vue.$emit('mix-client-state')
 					clearInterval(intervalId)
 					resolve()
