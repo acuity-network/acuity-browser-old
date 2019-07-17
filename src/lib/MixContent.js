@@ -1,6 +1,6 @@
 import multihashes from 'multihashes'
 import brotli from 'iltorb'
-import itemProto from './protobuf/item_pb.js'
+import ItemProto from './protobuf/Item_pb.js'
 
 let contentCache = []
 
@@ -29,7 +29,7 @@ export default class MixContent {
 
     try {
       let itemPayload = await brotli.decompress(Buffer.from(response, "binary"))
-      let mixins = itemProto.Item.deserializeBinary(itemPayload).getMixinList()
+      let mixins = ItemProto.Item.deserializeBinary(itemPayload).getMixinPayloadList()
 
       for (let i = 0; i < mixins.length; i++) {
         this.mixins.push({
@@ -46,15 +46,15 @@ export default class MixContent {
   }
 
   async save() {
-    let itemMessage = new itemProto.Item()
+    let itemMessage = new ItemProto.Item()
 
     for (let i = 0; i < this.mixins.length; i++) {
-      let mixinMessage = new itemProto.Mixin()
+      let mixinMessage = new ItemProto.MixinPayload()
       mixinMessage.setMixinId(this.mixins[i].mixinId)
       if (this.mixins[i].payload) {
         mixinMessage.setPayload(this.mixins[i].payload)
       }
-      itemMessage.addMixin(mixinMessage)
+      itemMessage.addMixinPayload(mixinMessage)
     }
 
     let payload = await brotli.compress(Buffer.from(itemMessage.serializeBinary()))
@@ -95,7 +95,7 @@ export default class MixContent {
     return false
   }
 
-  addMixin(mixinId, payload) {
+  addMixinPayload(mixinId, payload) {
     this.mixins.push({
       mixinId: mixinId,
       payload: payload,

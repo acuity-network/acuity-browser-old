@@ -112,10 +112,10 @@
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
   import VueMarkdown from 'vue-markdown'
-  import titleProto from '../../lib/protobuf/title_pb.js'
-  import descriptionProto from '../../lib/protobuf/description_pb.js'
-  import bodyTextProto from '../../lib/protobuf/body_pb.js'
-  import languageProto from '../../lib/protobuf/language_pb.js'
+  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
+  import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
+  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
+  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import { clipboard } from 'electron'
   import formatByteCount from '../../lib/formatByteCount.js'
   import File from '../../lib/File.js'
@@ -290,7 +290,7 @@
           let timestamp = firstRevision.getTimestamp()
           this.published = 'Published ' + ((timestamp > 0) ? 'on ' + new Date(timestamp * 1000).toLocaleDateString() : 'just now')
           this.body = revision.getImage(512)
-          this.description = revision.getDescription()
+          this.description = revision.getBodyText()
         }
         catch (e) {}
 
@@ -373,16 +373,16 @@
         let revision = await item.latestRevision().load()
 
         // Title
-        let titleMessage = new titleProto.TitleMixin()
+        let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
         revision.content.removeMixins(0x24da6114)
-        revision.content.addMixin(0x24da6114, titleMessage.serializeBinary())
+        revision.content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
 
-        // Description
-        let descriptionMessage = new descriptionProto.DescriptionMixin()
-        descriptionMessage.setDescription(this.description)
+        // Body text
+        let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
+        bodyTextMessage.setBodyText(this.description)
         revision.content.removeMixins(0x5a474550)
-        revision.content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
+        revision.content.addMixinPayload(0x5a474550, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await revision.content.save()
         this.editing = false
@@ -392,17 +392,17 @@
         let content = new MixContent(this.$root)
 
         // Comment
-        content.addMixin(0x874aba65)
+        content.addMixinPayload(0x874aba65)
 
         // Language
-        let languageMessage = new languageProto.LanguageMixin()
+        let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
 
         // BodyText
-        let bodyTextMessage = new bodyTextProto.BodyTextMixin()
+        let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.reply)
-        content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)

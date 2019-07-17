@@ -1,5 +1,5 @@
 let itemStoreAbi = require('./contracts/ItemStoreInterface.abi.json')
-import itemProto from './protobuf/item_pb.js'
+import ItemProto from './protobuf/Item_pb.js'
 import MixRevision from './MixRevision.js'
 import MixAccount from './MixAccount.js'
 
@@ -22,7 +22,7 @@ export default class MixItem {
         }
 
         let contractId = await this.itemStore.methods.getContractId().call()
-        if (contractId != "0x1f1e136d1003177d") {
+        if (contractId != "0x2af60a6f66ae9ec0") {
           reject('Unknown item store.')
           return
         }
@@ -30,7 +30,9 @@ export default class MixItem {
         this.item = await this.vue.$mixClient.itemStoreIpfsSha256.methods.getItem(this.itemId).call()
         this.revisions = []
 
-        for (let i = 0; i < this.item.revisionCount; i++) {
+        console.log(this.item)
+
+        for (let i = 0; i < this.item.ipfsHashes.length; i++) {
           this.revisions.push(new MixRevision(this.vue, this, i))
         }
 
@@ -63,7 +65,7 @@ export default class MixItem {
   }
 
   latestRevision() {
-    return this.revisions[this.item.revisionCount - 1]
+    return this.revisions[this.item.ipfsHashes.length - 1]
   }
 
   get exists() {

@@ -35,11 +35,10 @@
 
 <script>
   import Page from './Page.vue'
-  import languageProto from '../../lib/protobuf/language_pb.js'
-  import titleProto from '../../lib/protobuf/title_pb.js'
-  import bodyTextProto from '../../lib/protobuf/body_pb.js'
-  import descriptionProto from '../../lib/protobuf/description_pb.js'
-  import jpegImageProto from '../../lib/protobuf/jpeg-image_pb.js'
+  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
+  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
+  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
+  import ImageMixinProto from '../../lib/protobuf/ImageMixin_pb.js'
   import Image from '../../lib/Image.js'
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
@@ -97,22 +96,22 @@
 
         // Image
         let image = new Image(this.$root, this.filepath)
-        content.addMixin(0x12745469, await image.createMixin())
+        content.addMixinPayload(0x12745469, await image.createMixin())
 
         // Language
-        let languageMessage = new languageProto.LanguageMixin()
+        let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
-        let titleMessage = new titleProto.TitleMixin()
+        let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        content.addMixin(0x24da6114, titleMessage.serializeBinary())
+        content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
 
-        // Description
-        let descriptionMessage = new descriptionProto.DescriptionMixin()
-        descriptionMessage.setDescription(this.description)
-        content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
+        // Body text
+        let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
+        bodyTextMessage.setBodyText(this.description)
+        content.addMixinPayload(0x5a474550, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
 

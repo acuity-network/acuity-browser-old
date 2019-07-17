@@ -62,7 +62,7 @@ proto.BodyTextMixin.prototype.toObject = function(opt_includeInstance) {
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.BodyTextMixin.toObject = function(includeInstance, msg) {
-  var f, obj = {
+  var obj = {
     bodyText: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 

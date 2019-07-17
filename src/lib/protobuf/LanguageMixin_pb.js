@@ -62,7 +62,7 @@ proto.LanguageMixin.prototype.toObject = function(opt_includeInstance) {
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.LanguageMixin.toObject = function(includeInstance, msg) {
-  var f, obj = {
+  var obj = {
     languageTag: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 

@@ -32,8 +32,8 @@
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
   import VueMarkdown from 'vue-markdown'
-  import bodyTextProto from '../../lib/protobuf/body_pb.js'
-  import languageProto from '../../lib/protobuf/language_pb.js'
+  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
+  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import Reactions from './Reactions.vue'
   import ProfileLink from './ProfileLink.vue'
   import twemoji from 'twemoji'
@@ -83,17 +83,17 @@
         let content = new MixContent(this.$root)
 
         // Comment
-        content.addMixin(0x874aba65)
+        content.addMixinPayload(0x874aba65)
 
         // Language
-        let languageMessage = new languageProto.LanguageMixin()
+        let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
 
         // BodyText
-        let bodyTextMessage = new bodyTextProto.BodyTextMixin()
+        let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.reply)
-        content.addMixin(0x34a9a6ec, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)

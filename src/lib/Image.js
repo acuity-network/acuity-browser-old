@@ -1,5 +1,5 @@
 import sharp from 'sharp'
-import jpegImageProto from './protobuf/jpeg-image_pb.js'
+import ImageMixinProto from './protobuf/ImageMixin_pb.js'
 import Base58 from 'base-58'
 
 export default class Image {
@@ -62,11 +62,11 @@ export default class Image {
     while (outWidth > 64 && outHeight > 64)
 
     mipmaps = await Promise.all(mipmaps)
-    let imageMessage = new jpegImageProto.JpegMipmap()
+    let imageMessage = new ImageMixinProto.ImageMixin()
     imageMessage.setWidth(width)
     imageMessage.setHeight(height)
     mipmaps.forEach(mipmap => {
-      let mipmapLevelMessage = new jpegImageProto.MipmapLevel()
+      let mipmapLevelMessage = new ImageMixinProto.MipmapLevel()
       mipmapLevelMessage.setFilesize(mipmap.data.Size)
       mipmapLevelMessage.setIpfsHash(Base58.decode(mipmap.data.Hash))
       imageMessage.addMipmapLevel(mipmapLevelMessage)

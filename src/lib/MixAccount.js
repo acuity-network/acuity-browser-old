@@ -68,7 +68,7 @@ export default class MixAccount {
   async deploy() {
     return new Promise(async (resolve, reject) => {
       let byteCodePath = path.join(__static, 'MixAccount.bin')
-      let accountBytecode = fs.readFileSync(byteCodePath, 'ascii')
+      let accountBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let rawTx = {
         nonce: this.vue.$mixClient.web3.utils.toHex(nonce),

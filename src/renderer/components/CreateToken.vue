@@ -26,9 +26,9 @@
 
 <script>
   import Page from './Page.vue'
-  import languageProto from '../../lib/protobuf/language_pb.js'
-  import titleProto from '../../lib/protobuf/title_pb.js'
-  import descriptionProto from '../../lib/protobuf/description_pb.js'
+  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
+  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
+  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
   import ethTx from 'ethereumjs-tx'
@@ -69,33 +69,33 @@
         let content = new MixContent(this.$root)
 
         // Token
-        content.addMixin(0x9fbbfaad)
+        content.addMixinPayload(0x9fbbfaad)
 
         // Image
         let image = new Image(this.$root, window.fileNames[0])
-        content.addMixin(0x12745469, await image.createMixin())
+        content.addMixinPayload(0x12745469, await image.createMixin())
 
         // Language
-        let languageMessage = new languageProto.LanguageMixin()
+        let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixin(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
 
         // Title
-        let titleMessage = new titleProto.TitleMixin()
+        let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        content.addMixin(0x24da6114, titleMessage.serializeBinary())
+        content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
 
         // Description
-        let descriptionMessage = new descriptionProto.DescriptionMixin()
-        descriptionMessage.setDescription(this.description)
-        content.addMixin(0x5a474550, descriptionMessage.serializeBinary())
+        let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
+        bodyTextMessage.setBodyText(this.description)
+        content.addMixinPayload(0x34a9a6ec, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
 
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
 
         let byteCodePath = path.join(__static, 'CreatorToken.bin')
-        let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii')
+        let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
         let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
         let params = [this.symbol, this.name, 18, this.payout, this.$tokenRegistryAddress, itemId]
         let paramsBytecode = this.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
