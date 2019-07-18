@@ -37,16 +37,16 @@ export default class MixClient {
 
 		this.parityApi = new Api(new Api.Provider.Http('http://localhost:8645'))
 
-		this.itemStoreRegistry = new this.web3.eth.Contract(require('./contracts/ItemStoreRegistry.abi.json'), '0x711dc8d9ce92baffb95e6fe56755ef68d80112d8')
-		this.itemStoreIpfsSha256 = new this.web3.eth.Contract(require('./contracts/ItemStoreIpfsSha256.abi.json'), '0x1d1f9c6086a9150abaf4fb98c3e65ca96eb275f6')
-		this.itemStoreShortId = new this.web3.eth.Contract(require('./contracts/ItemStoreShortId.abi.json'), '0xb01e3aa376fe78e52d561623c4c6dd46c37e2529')
-		this.itemDagComments = new this.web3.eth.Contract(require('./contracts/ItemDagOneParent.abi.json'), '0x674311e1f8d0382af87682281957404d372c4c86')
-		this.itemDagFeedItems = new this.web3.eth.Contract(require('./contracts/ItemDagOnlyOwner.abi.json'), '0xe76d07974cad5b22fa9cdf25d7f8d451f757935e')
-		this.accountRegistry = new this.web3.eth.Contract(require('./contracts/MixAccountRegistry.abi.json'), '0x82ef0fb799d79d3924301a309c5fd1c18fb2a804')
-		this.accountProfile = new this.web3.eth.Contract(require('./contracts/AccountProfile.abi.json'), '0x2158c2344e6acd142aea4d8fcfd44d3b459d5786')
-		this.accountFeeds = new this.web3.eth.Contract(require('./contracts/MixAccountItems.abi.json'), '0x04bdb9f1fd054c5c2d65f79f9d0fe9ddd9dfe01c')
-		this.trustedAccounts = new this.web3.eth.Contract(require('./contracts/TrustedAccounts.abi.json'), '0xe1209fafc2887ed6d619e8a39d067a80e2bdfef3')
-		this.reactions = new this.web3.eth.Contract(require('./contracts/MixReactions.abi.json'), '0x27eade6e5e8edc4a6d77581ac095ddaac7084ba6')
+		this.itemStoreRegistry = new this.web3.eth.Contract(require('./contracts/MixItemStoreRegistry.abi.json'), '0xb7aead157809d83234ae1a9ac42d8846ebceba6e')
+		this.itemStoreIpfsSha256 = new this.web3.eth.Contract(require('./contracts/MixItemStoreIpfsSha256.abi.json'), '0x26b10bb026700148962c4a948b08ae162d18c0af')
+		this.itemStoreShortId = new this.web3.eth.Contract(require('./contracts/MixItemStoreShortId.abi.json'), '0x14f4f09513c5b3de2a6200ccd513cfab0c890d54')
+		this.itemDagComments = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParent.abi.json'), '0x4aede30fd28df8aa06e1e03ba5a1b0e85a3cfef2')
+		this.itemDagFeedItems = new this.web3.eth.Contract(require('./contracts/MixItemDagOnlyOwner.abi.json'), '0xa9a5c68af9cee27812d9f1379d03e27f9ef449d7')
+		this.accountRegistry = new this.web3.eth.Contract(require('./contracts/MixAccountRegistry.abi.json'), '0xbcab5026b4d79396b222abc4d1ca36db10984c73')
+		this.accountProfile = new this.web3.eth.Contract(require('./contracts/MixAccountProfile.abi.json'), '0xa8d128ed120e4ad715e445ec4829052f1935a011')
+		this.accountFeeds = new this.web3.eth.Contract(require('./contracts/MixAccountItems.abi.json'), '0x240433a3e6d9ba4ea8853629238cd03e5a4f479c')
+		this.trustedAccounts = new this.web3.eth.Contract(require('./contracts/MixTrustedAccounts.abi.json'), '0x70e2e2d6b31cd25e00c034ac9cfc79575efa26a9')
+		this.reactions = new this.web3.eth.Contract(require('./contracts/MixReactions.abi.json'), '0x02a5c145512c5473da792098700859e86315b852')
 		this.tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
 		this.tokenRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenRegistry.abi.json'), this.tokenRegistryAddress)
 
@@ -87,7 +87,7 @@ export default class MixClient {
 		return new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {
 				try {
-					await this.itemStoreIpfsSha256.methods.getItem('0x63c8e076a9474c83a12b76e4f0a9f1370fd65b27d404e0ef2af60a6f66ae9ec0').call()
+					await this.itemStoreIpfsSha256.methods.getItem('0x7c8239285dc6053f835f70d5dc1f2979da95f6e4484d04dff1b5847865d2094d').call()
 					vue.$emit('mix-client-state')
 					clearInterval(intervalId)
 					resolve()
