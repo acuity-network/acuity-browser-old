@@ -3,7 +3,8 @@ import net from 'net'
 import os from 'os'
 import path from 'path'
 import { remote } from 'electron'
-import Api from '@parity/api';
+import Api from '@parity/api'
+import throttle from 'just-throttle'
 
 export default class MixClient {
 
@@ -53,6 +54,7 @@ export default class MixClient {
 
 		// Emit sync info.
 		let startingBlock, currentBlock
+		let emitSyncing = throttle(status => vue.$emit('mix-client-syncing', status), 250, true)
 		let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
 		.on('data', async () => {
 			let isSyncing = await this.web3.eth.isSyncing()
@@ -66,7 +68,7 @@ export default class MixClient {
 					}
 
 					isSyncing.startingBlock = startingBlock
-					vue.$emit('mix-client-syncing', isSyncing)
+					emitSyncing(isSyncing)
 				}
 			}
 		})
