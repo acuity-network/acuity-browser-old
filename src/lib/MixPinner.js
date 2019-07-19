@@ -20,7 +20,7 @@ export default class MixPinner {
     let content = new MixContent(this.vue)
     await content.load(ipfsHash)
     // Pin images.
-    let payloads = content.getPayloads('0x12745469')
+    let payloads = content.getPayloads('0x69a84d87')
     for (let payload of payloads) {
       let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(payload)
       let mipmapList = imageMessage.getMipmapLevelList()
@@ -32,7 +32,7 @@ export default class MixPinner {
       }
     }
     // Pin files.
-    let filePayloads = content.getPayloads('0x0b62637e')
+    let filePayloads = content.getPayloads('0x3c5bba9c')
     for (let payload of filePayloads) {
       let fileMessage = new FileMixinProto.FileMixin.deserializeBinary(payload)
       let encodedIpfsHash = Base58.encode(fileMessage.getIpfsHash())

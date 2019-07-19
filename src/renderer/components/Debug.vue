@@ -120,31 +120,31 @@
                 output.append('Mixin type: Mixin type\n')
                 break
 
-              case '0x4e4e06c4':
+              case '0x9bc7a0e6':
                 output.append('Mixin type: Language\n')
                 let languageMessage = LanguageMixinProto.LanguageMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Language tag: '  + languageMessage.getLanguageTag() + '\n'))
                 break
 
-              case '0x24da6114':
+              case '0x344f4812':
                 output.append('Mixin type: Title\n')
                 let titleMessage = TitleMixinProto.TitleMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Title: '  + titleMessage.getTitle() + '\n'))
                 break
 
-              case '0x34a9a6ec':
+              case '0x2d382044':
                 output.append('Mixin type: Body text\n')
                 let bodyTextMessage = BodyTextMixinProto.BodyTextMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Body text:\n'  + bodyTextMessage.getBodyText() + '\n'))
                 break
 
-              case '0x5a474550':
+              case '0xcdce4e5d':
                 output.append('Mixin type: Mixin Schema\n')
                 let mixinSchemaMessage = MixinSchemaMixinProto.MixinSchemaMixin.deserializeBinary(mixinPayload)
                 output.appendChild(document.createTextNode('Mixin schema:\n'  + mixinSchemaMessage.getMixinSchema() + '\n'))
                 break
 
-              case '0x12745469':
+              case '0x69a84d87':
                 output.append('Mixin type: Image\n')
                 let imageMessage = ImageMixinProto.ImageMixin.deserializeBinary(mixinPayload)
                 let width = imageMessage.getWidth()

@@ -98,27 +98,27 @@
         let profileMessage = new ProfileMixinProto.ProfileMixin()
         profileMessage.setType(this.type)
         profileMessage.setLocation(this.location)
-        content.addMixinPayload(0x4bf3ce07, profileMessage.serializeBinary())
+        content.addMixinPayload(0xbeef2144, profileMessage.serializeBinary())
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
 
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.name)
-        content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
+        content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
 
         // BodyText
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.bio)
-        content.addMixinPayload(0x34a9a6ec, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
 
         // Image
         if (this.filepath != '') {
           let image = new Image(this.$root, this.filepath)
-          content.addMixinPayload(0x12745469, await image.createMixin())
+          content.addMixinPayload(0x69a84d87, await image.createMixin())
         }
 
         let ipfsHash = await content.save()

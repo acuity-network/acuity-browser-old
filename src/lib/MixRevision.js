@@ -28,11 +28,11 @@ export default class MixRevision {
   }
 
   getTitle() {
-    return TitleMixinProto.TitleMixin.deserializeBinary(this.content.getPayloads('0x24da6114')[0]).getTitle()
+    return TitleMixinProto.TitleMixin.deserializeBinary(this.content.getPayloads('0x344f4812')[0]).getTitle()
   }
 
   getImage(widthMin, heightMin) {
-    let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x12745469')[0])
+    let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x69a84d87')[0])
     let width = imageMessage.getWidth()
     let height = imageMessage.getHeight()
     let mipmapList = imageMessage.getMipmapLevelList()
@@ -51,7 +51,7 @@ export default class MixRevision {
   }
 
   getFile() {
-    let fileMessage = FileMixinProto.FileMixin.deserializeBinary(this.content.getPayloads('0x0b62637e')[0])
+    let fileMessage = FileMixinProto.FileMixin.deserializeBinary(this.content.getPayloads('0x3c5bba9c')[0])
     return {
       name: fileMessage.getFilename(),
       size: fileMessage.getFilesize(),
@@ -60,15 +60,15 @@ export default class MixRevision {
   }
 
   getBodyText() {
-    return BodyTextMixinProto.BodyTextMixin.deserializeBinary(this.content.getPayloads('0x34a9a6ec')[0]).getBodyText()
+    return BodyTextMixinProto.BodyTextMixin.deserializeBinary(this.content.getPayloads('0x2d382044')[0]).getBodyText()
   }
 
   getMixinSchema() {
-    return MixinSchemaMixinProto.MixinSchemaMixin.deserializeBinary(this.content.getPayloads('0x5a474550')[0]).getMixinSchema()
+    return MixinSchemaMixinProto.MixinSchemaMixin.deserializeBinary(this.content.getPayloads('0xcdce4e5d')[0]).getMixinSchema()
   }
 
   getProfile() {
-    let profileMessage = ProfileMixinProto.ProfileMixin.deserializeBinary(this.content.getPayloads('0x4bf3ce07')[0])
+    let profileMessage = ProfileMixinProto.ProfileMixin.deserializeBinary(this.content.getPayloads('0xbeef2144')[0])
     return {
       type: profileMessage.getType(),
       location: profileMessage.getLocation(),
