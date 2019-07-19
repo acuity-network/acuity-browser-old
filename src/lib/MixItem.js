@@ -1,4 +1,4 @@
-let itemStoreAbi = require('./contracts/ItemStoreInterface.abi.json')
+let itemStoreAbi = require('./contracts/MixItemStoreInterface.abi.json')
 import ItemProto from './protobuf/Item_pb.js'
 import MixRevision from './MixRevision.js'
 import MixAccount from './MixAccount.js'
@@ -22,7 +22,7 @@ export default class MixItem {
         }
 
         let contractId = await this.itemStore.methods.getContractId().call()
-        if (contractId != "0x2af60a6f66ae9ec0") {
+        if (contractId != "0xf1b5847865d2094d") {
           reject('Unknown item store.')
           return
         }

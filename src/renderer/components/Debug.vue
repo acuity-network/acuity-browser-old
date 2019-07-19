@@ -65,7 +65,7 @@
         let itemStoreAddress = await this.$mixClient.itemStoreRegistry.methods.getItemStore(this.itemId).call()
         output.appendChild(document.createTextNode('itemStoreAddress: '  + itemStoreAddress + '\n'))
 
-        let itemStoreAbi = require('../../lib/contracts/ItemStoreInterface.abi.json')
+        let itemStoreAbi = require('../../lib/contracts/MixItemStoreInterface.abi.json')
         let itemStore = new this.$mixClient.web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
         let inUse = await itemStore.methods.getInUse(this.itemId).call()
@@ -75,7 +75,7 @@
         }
 
         let contractId = await itemStore.methods.getContractId().call()
-        if (contractId != "0x2af60a6f66ae9ec0") {
+        if (contractId != "0xf1b5847865d2094d") {
           output.append('Unknown item store.\n')
           return
         }
