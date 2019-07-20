@@ -125,29 +125,29 @@
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
 
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
+        content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
 
         // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
-        content.addMixinPayload(0x5a474550, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
 
         // File
         let fileMessage = new FileMixinProto.FileMixin()
         fileMessage.setFilename(this.fileName)
         fileMessage.setIpfsHash(Base58.decode(this.fileHash))
         fileMessage.setFilesize(this.fileSize)
-        content.addMixinPayload(0x0b62637e, fileMessage.serializeBinary())
+        content.addMixinPayload(0x3c5bba9c, fileMessage.serializeBinary())
 
         let ipfsHash = await content.save()
 
         if (this.feedId != '0') {
-          await window.activeAccount.sendData(this.$mixClient.itemDagFeedItems, 'addChild', [this.feedId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach feed item')
+          await window.activeAccount.sendData(this.$mixClient.itemDagFeedItems, 'addChild', [this.feedId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach feed item')
         }
 
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')

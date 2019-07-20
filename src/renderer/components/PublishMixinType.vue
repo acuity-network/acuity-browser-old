@@ -32,6 +32,7 @@
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
+  import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
   import setTitle from '../../lib/setTitle.js'
 
   export default {
@@ -53,37 +54,34 @@
     },
     methods: {
       async publish(event) {
-        let content = new MixContent(this.$root)
 
-        // Mixin type
-        content.addMixinPayload(0x51c32e3a)
+        let content = new MixContent(this.$root)
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
 
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
+        content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
 
         // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
-        content.addMixinPayload(0x5a474550, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
 
         // Schema
-        if (this.schema.length > 0) {
-          let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
-          bodyTextMessage.setBodyText(this.schema)
-          content.addMixinPayload(0x34a9a6ec, bodyTextMessage.serializeBinary())
-        }
+        let mixinSchemaMessage = new MixinSchemaMixinProto.MixinSchemaMixin()
+        mixinSchemaMessage.setMixinSchema(this.schema)
+        content.addMixinPayload(0xcdce4e5d, mixinSchemaMessage.serializeBinary())
 
         let ipfsHash = await content.save()
-        let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)
+        let flagsNonce = '0x10' + this.$mixClient.web3.utils.randomHex(31).substr(2)
         let itemId = await window.activeAccount.call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
         await window.activeAccount.sendData(this.$mixClient.itemStoreShortId, 'createShortId', [itemId], 0, 'Create short ID')
+//        await window.activeAccount.sendData(this.$mixClient.itemDagMixins, 'addChild', [this.parentId.trim(), '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach mixin to parent')
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create mixin type')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }

@@ -294,7 +294,7 @@
         }
         catch (e) {}
 
-        if (revision.content.existMixin('0x0b62637e')) {
+        if (revision.content.existMixin('0x3c5bba9c')) {
           this.hasFile = true
           let fileData = revision.getFile()
           this.file = new File(this.$root, fileData.name, fileData.size, fileData.hash)
@@ -303,7 +303,7 @@
           this.fileHash = fileData.hash
         }
 
-        if (revision.content.getPrimaryMixinId() == '0x4bf3ce07') {
+        if (revision.content.getPrimaryMixinId() == '0xbeef2144') {
           this.isProfile = true
         }
         else if (revision.content.getPrimaryMixinId() == '0xbcec8faa') {
@@ -375,14 +375,14 @@
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        revision.content.removeMixins(0x24da6114)
-        revision.content.addMixinPayload(0x24da6114, titleMessage.serializeBinary())
+        revision.content.removeMixins(0x344f4812)
+        revision.content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
 
         // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
-        revision.content.removeMixins(0x5a474550)
-        revision.content.addMixinPayload(0x5a474550, bodyTextMessage.serializeBinary())
+        revision.content.removeMixins(0x2d382044)
+        revision.content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await revision.content.save()
         this.editing = false
@@ -391,22 +391,19 @@
       async publishReply(event) {
         let content = new MixContent(this.$root)
 
-        // Comment
-        content.addMixinPayload(0x874aba65)
-
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag('en-US')
-        content.addMixinPayload(0x4e4e06c4, languageMessage.serializeBinary())
+        content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
 
         // BodyText
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.reply)
-        content.addMixinPayload(0x34a9a6ec, bodyTextMessage.serializeBinary())
+        content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)
-        await window.activeAccount.sendData(this.$mixClient.itemDagComments, 'addChild', [this.itemId, '0x1c12e8667bd48f87263e0745d7b28ea18f74ac0e', flagsNonce], 0, 'Attach comment')
+        await window.activeAccount.sendData(this.$mixClient.itemDagComments, 'addChild', [this.itemId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach comment')
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
         this.reply = ''
         this.startReply = false
