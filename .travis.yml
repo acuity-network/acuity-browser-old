@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "10.15"
+  - "10"
 compiler: clang
 matrix:
   include:
@@ -11,7 +11,6 @@ matrix:
 cache:
   yarn: true
   directories:
-  - node_modules
   - $HOME/.cache/electron
   - $HOME/.cache/electron-builder
 before_install:

@@ -84,7 +84,7 @@
         // Image
         if (this.filepath != '') {
           let image = new Image(this.$root, this.filepath)
-          content.addMixinPayload(0x69a84d87, await image.createMixin())
+          content.addMixinPayload(0x045eee8c, await image.createMixin())
         }
 
         let ipfsHash = await content.save()

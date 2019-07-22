@@ -144,7 +144,7 @@
                 output.appendChild(document.createTextNode('Mixin schema:\n'  + mixinSchemaMessage.getMixinSchema() + '\n'))
                 break
 
-              case '0x69a84d87':
+              case '0x045eee8c':
                 output.append('Mixin type: Image\n')
                 let imageMessage = ImageMixinProto.ImageMixin.deserializeBinary(mixinPayload)
                 let width = imageMessage.getWidth()
