@@ -73,7 +73,7 @@
 
         // Image
         let image = new Image(this.$root, window.fileNames[0])
-        content.addMixinPayload(0x69a84d87, await image.createMixin())
+        content.addMixinPayload(0x045eee8c, await image.createMixin())
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()

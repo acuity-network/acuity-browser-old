@@ -32,7 +32,7 @@ export default class MixRevision {
   }
 
   getImage(widthMin, heightMin) {
-    let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x69a84d87')[0])
+    let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x045eee8c')[0])
     let width = imageMessage.getWidth()
     let height = imageMessage.getHeight()
     let mipmapList = imageMessage.getMipmapLevelList()
