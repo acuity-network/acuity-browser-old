@@ -54,7 +54,7 @@ export default class MixClient {
 
 		// Emit sync info.
 		let startingBlock, currentBlock
-		let emitSyncing = throttle(status => vue.$emit('mix-client-syncing', status), 250, true)
+		let emitSyncing = throttle(status => vue.$emit('mix-client-syncing', status), 100, true)
 		let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
 		.on('data', async () => {
 			let isSyncing = await this.web3.eth.isSyncing()
