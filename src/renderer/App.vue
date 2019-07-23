@@ -14,7 +14,7 @@
           <li><router-link to="/home">{{ $t('home') }}</router-link>
           <li><router-link to="/feeds">{{ $t('myFeeds') }}</router-link>
           <li><router-link to="/subscriptions">{{ $t('subscriptions') }}</router-link>
-          <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
+          <li v-if="isDevelopment"><router-link to="/interactions">{{ $t('interactions') }}</router-link>
           <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
           <li><router-link to="/downloads">{{ $t('downloads') }}</router-link></li>
           <li><router-link to="/publish-item">{{ $t('publishItem') }}</router-link></li>
@@ -28,7 +28,7 @@
           <li><router-link to="/profile">{{ $t('profile') }}</router-link></li>
           <li><router-link to="/trusted-accounts">{{ $t('trustedAccounts') }}</router-link></li>
           <li><router-link to="/wallet">{{ $t('wallet') }}</router-link></li>
-          <li><router-link to="/tokens">{{ $t('tokens') }}</router-link></li>
+          <li v-if="isDevelopment"><router-link to="/tokens">{{ $t('tokens') }}</router-link></li>
         </ul>
         <p class="menu-label">
           {{ $t('administration') }}
@@ -38,7 +38,7 @@
           <li><router-link to="/node-status">{{ $t('nodeStatus') }}</router-link></li>
           <li><router-link to="/mining">{{ $t('mining') }}</router-link></li>
           <li><router-link to="/settings">{{ $t('settings') }}</router-link></li>
-          <li><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
+          <li v-if="isDevelopment"><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
         </ul>
       </div>
       <div id="router-view" tabindex="0">
@@ -66,10 +66,14 @@
     },
     data() {
       return {
-        splash: true
+        splash: true,
+        isDevelopment: this.$settings.get('development'),
       }
     },
     async created() {
+      this.$root.$on('development', isDevelopment => {
+				this.isDevelopment = isDevelopment
+      })
       ipcRenderer.on('ipfs-stdout', (event, msg) => {
         console.log('IPFS: ' + msg)
       })

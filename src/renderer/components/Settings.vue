@@ -43,6 +43,7 @@
       },
       development() {
         this.$settings.set('development', this.development);
+        this.$root.$emit('development', this.development)
       },
     },
     created() {
