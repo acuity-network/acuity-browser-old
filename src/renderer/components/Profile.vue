@@ -88,7 +88,7 @@
           this.type = 'Shill'
           break
 
-        case 7:
+        case 8:
           this.type = 'Test'
           break
       }
