@@ -21,7 +21,7 @@
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
-  import ImageMixin from '../../lib/protobuf/ImageMixin_pb.js'
+  import ImageMixinProto from '../../lib/protobuf/ImageMixin_pb.js'
   import brotli from 'iltorb'
   import Base58 from 'base-58'
   import multihashes from 'multihashes'
