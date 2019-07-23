@@ -67,7 +67,7 @@
     data() {
       return {
         splash: true,
-        isDevelopment: this.$settings.get('development'),
+        isDevelopment: false,
       }
     },
     async created() {
@@ -100,6 +100,7 @@
       await this.$settings.init(this.$db)
       // Load previous selected language.
       i18n.locale = this.$settings.get('locale')
+      this.isDevelopment = this.$settings.get('development')
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',
         'lt': '/account/controllerAddress/z',
