@@ -30,8 +30,6 @@ export default class MixItem {
         this.item = await this.vue.$mixClient.itemStoreIpfsSha256.methods.getItem(this.itemId).call()
         this.revisions = []
 
-        console.log(this.item)
-
         for (let i = 0; i < this.item.ipfsHashes.length; i++) {
           this.revisions.push(new MixRevision(this.vue, this, i))
         }
