@@ -5,11 +5,14 @@
     </template>
 
     <template slot="body">
-      <b-field label="Recovery phrase" :type="recoveryType" :message="recoveryMessage">
+      <b-field label="Recovery phrase" :type="recoveryPhraseType" :message="recoveryPhraseMessage">
         <b-input type="input" v-model="recoveryPhrase"></b-input>
       </b-field>
-      <b-field label="Password">
+      <b-field label="Password" :type="passwordType" :message="passwordMessage">
         <b-input type="password" v-model="password" password-reveal></b-input>
+      </b-field>
+      <b-field label="Repeat password" :type="passwordRepeatType" :message="passwordRepeatMessage">
+        <b-input type="password" v-model="passwordRepeat" password-reveal></b-input>
       </b-field>
       <button class="button" @click="recover">Recover</button>
     </template>
@@ -34,24 +37,62 @@
     data() {
       return {
         recoveryPhrase: '',
-        recoveryType: '',
-        recoveryMessage: '',
+        recoveryPhraseType: '',
+        recoveryPhraseMessage: '',
         password: '',
+        passwordType: '',
+        passwordMessage: '',
+        passwordRepeat: '',
+        passwordRepeatType: '',
+        passwordRepeatMessage: '',
         privateKey: '',
         controllerAddress: '',
       }
     },
     methods: {
       async recover(event) {
+        // Check a recovery phrase is entered.
+        if (this.recoveryPhrase.trim() == '') {
+          this.recoveryPhraseType = 'is-danger'
+          this.recoveryPhraseMessage = 'Recovery phrase is required.'
+          return
+        }
+        else {
+          this.recoveryPhraseType = ''
+          this.recoveryPhraseMessage = ''
+        }
+        // Password is required.
+        if (this.password == '') {
+          this.passwordType = 'is-danger'
+          this.passwordMessage = 'Password is required.'
+          return
+        }
+        else {
+          this.passwordType = ''
+          this.passwordMessage = ''
+        }
+        // Check passwords match.
+        if (this.password != this.passwordRepeat) {
+          this.passwordRepeatType = 'is-danger'
+          this.passwordRepeatMessage = 'Passwords do not match.'
+          return
+        }
+        else {
+          this.passwordRepeatType = ''
+          this.passwordRepeatMessage = ''
+        }
         // Calculate private key and controller address.
         let node: BIP32Interface = bip32.fromSeed(await bip39.mnemonicToSeed(this.recoveryPhrase))
         let privateKey: Buffer = Buffer.from(node.derivePath("m/44'/76'/0'/0/0").privateKey)
         let controllerAddress: String = keythereum.privateKeyToAddress(privateKey)
         // Lookup contract address on blockchain.
-        let contractAddress = await this.$mixClient.accountRegistry.methods.get(controllerAddress).call()
-        if (contractAddress == 0x0000000000000000000000000000000000000000) {
-          this.recoveryType = 'is-danger'
-          this.recoveryMessage = 'Account not found.'
+        let contractAddress
+        try {
+          contractAddress = await this.$mixClient.accountRegistry.methods.get(controllerAddress).call()
+        }
+        catch (e) {
+          this.recoveryPhraseType = 'is-danger'
+          this.recoveryPhraseMessage = 'Account not found.'
           return
         }
         // Encrypt private key.
