@@ -5,6 +5,10 @@
     </template>
 
     <template slot="body">
+      <b-message type="is-info">
+        <p>The recovery phrase is for account recovery. Write it down and store it securely. Do not store it on any electronic system.</p>
+        <p>The password is for unlocking the account on this device. It is not used for account recovery.</p>
+      </b-message>
       <b-field label="Recovery phrase">
         {{ recoveryPhrase }}
       </b-field>

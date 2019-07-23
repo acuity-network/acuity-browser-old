@@ -5,6 +5,10 @@
     </template>
 
     <template slot="body">
+      <b-message type="is-info">
+        <p>Enter the recovery phrase written down during account creation.</p>
+        <p>The password is for unlocking the account on this device. It is does not need to be the password used previously for this account.</p>
+      </b-message>
       <b-field label="Recovery phrase" :type="recoveryPhraseType" :message="recoveryPhraseMessage">
         <b-input type="input" v-model="recoveryPhrase"></b-input>
       </b-field>
