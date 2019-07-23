@@ -2,6 +2,7 @@
   <page>
     <template slot="title">
       <span v-if="isFeed">Feed: </span>
+      <span v-if="isProfile">Profile: </span>
       <item-link v-if="short" :itemId="itemId"></item-link>
       <span v-else>{{ title }}</span>
       <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
@@ -303,13 +304,13 @@
           this.fileHash = fileData.hash
         }
 
-        if (revision.content.getPrimaryMixinId() == '0xbeef2144') {
+        if (revision.content.existMixin('0xbeef2144')) {
           this.isProfile = true
         }
-        else if (revision.content.getPrimaryMixinId() == '0xbcec8faa') {
+        else if (revision.content.existMixin('0xbcec8faa')) {
           this.isFeed = true
         }
-        else if (revision.content.getPrimaryMixinId() == '0x9fbbfaad') {
+        else if (revision.content.existMixin('0x9fbbfaad')) {
           this.isToken = true
           this.tokenAddress = await this.$tokenRegistry.methods.getToken(this.itemId).call()
           let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
@@ -350,7 +351,7 @@
           .write()
         }
       },
-      async copyItemId(event) {
+      copyItemId(event) {
         clipboard.writeText(this.itemId)
         this.$toast.open('itemId copied')
       },
