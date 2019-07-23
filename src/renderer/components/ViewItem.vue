@@ -32,7 +32,7 @@
     <template slot="body">
       <div class="columns">
         <div class="column">
-          <div class="image" v-html="body"></div>
+          <div class="image" v-html="image"></div>
           <div v-if="hasFile" class="file">
             <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
             <span v-if="hasDownloaded" class="check" v-html="checkIcon" ></span>
@@ -210,7 +210,7 @@
         data.feed = ''
         data.feedRoute = ''
         data.published = ''
-        data.body = ''
+        data.image = ''
         data.description = ''
         data.hasFile = false
         data.file = null
@@ -275,8 +275,7 @@
 
         if (this.short && !trustLevel) {
           this.title = ''
-          this.body = 'Author not trusted.'
-          this.description = ''
+          this.description = 'Author not trusted.'
           return
         }
 
@@ -290,7 +289,7 @@
           }
           let timestamp = firstRevision.getTimestamp()
           this.published = 'Published ' + ((timestamp > 0) ? 'on ' + new Date(timestamp * 1000).toLocaleDateString() : 'just now')
-          this.body = revision.getImage(512)
+          this.image = revision.getImage(512)
           this.description = revision.getBodyText()
         }
         catch (e) {}
