@@ -8,8 +8,11 @@
       <b-field label="Recovery phrase">
         {{ recoveryPhrase }}
       </b-field>
-      <b-field label="Password">
+      <b-field label="Password" :type="passwordType" :message="passwordMessage">
         <b-input type="password" v-model="password" password-reveal></b-input>
+      </b-field>
+      <b-field label="Repeat password" :type="passwordRepeatType" :message="passwordRepeatMessage">
+        <b-input type="password" v-model="passwordRepeat" password-reveal></b-input>
       </b-field>
       <button class="button" @click="create">{{ $t('create') }}</button>
     </template>
@@ -35,10 +38,35 @@
       return {
         recoveryPhrase: '',
         password: '',
+        passwordType: '',
+        passwordMessage: '',
+        passwordRepeat: '',
+        passwordRepeatType: '',
+        passwordRepeatMessage: '',
       }
     },
     methods: {
       async create(event) {
+        // Password is required.
+        if (this.password == '') {
+          this.passwordType = 'is-danger'
+          this.passwordMessage = 'Password is required.'
+          return
+        }
+        else {
+          this.passwordType = ''
+          this.passwordMessage = ''
+        }
+        // Check passwords match.
+        if (this.password != this.passwordRepeat) {
+          this.passwordRepeatType = 'is-danger'
+          this.passwordRepeatMessage = 'Passwords do not match.'
+          return
+        }
+        else {
+          this.passwordRepeatType = ''
+          this.passwordRepeatMessage = ''
+        }
         // Calculate private key and controller address.
         let node: BIP32Interface = bip32.fromSeed(await bip39.mnemonicToSeed(this.recoveryPhrase))
         let privateKey: Buffer = Buffer.from(node.derivePath("m/44'/76'/0'/0/0").privateKey)
