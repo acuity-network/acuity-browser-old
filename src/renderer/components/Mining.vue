@@ -113,26 +113,18 @@
         this.attach()
       },
       stop(event) {
-        ethminerProcess.removeAllListeners('error')
-        ethminerProcess.removeAllListeners('exit')
-        ethminerProcess.stdout.removeAllListeners('data')
-        ethminerProcess.stderr.removeAllListeners('data')
         ethminerProcess.kill()
-        ethminerProcess = null
-        this.mining = false
       },
       attach() {
         ethminerProcess.on('error', err => {
           this.output += '<span style="color: red;">' + err + '</span>'
-          this.mining = false
-          ethminerProcess = null
+          this.detach()
         })
         ethminerProcess.on('exit', (code, signal) => {
           if (signal) {
             this.output += '<span style="color: red;">' + signal + '</span>'
           }
-          this.mining = false
-          ethminerProcess = null
+          this.detach()
         })
         ethminerProcess.stdout.on('data', data => {
           this.output += data.toString()
@@ -140,6 +132,18 @@
         ethminerProcess.stderr.on('data', data => {
           this.output += data.toString()
         })
+      },
+      detach() {
+        if (this.pool == '') {
+          // Removing pending 5 MIX.
+          this.$mixClient.parityApi.parity.setAuthor('0x0000000000000000000000000000000000000000')
+        }
+        ethminerProcess.removeAllListeners('error')
+        ethminerProcess.removeAllListeners('exit')
+        ethminerProcess.stdout.removeAllListeners('data')
+        ethminerProcess.stderr.removeAllListeners('data')
+        ethminerProcess = null
+        this.mining = false
       },
     },
   }
