@@ -8,7 +8,7 @@
       <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
       </span>
       <span
-        v-if="editable"
+        v-if="!short && editable"
         @click="toggleEdit"
         class="clickable mdi mdi-24px mdi-square-edit-outline">
       </span>
