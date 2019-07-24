@@ -206,6 +206,11 @@ export default class MixAccount {
     if (data == '0x') {
       // Send to a non-contract address.
       return new Promise(async (resolve, reject) => {
+        if (!this.isUnlocked()) {
+          this.vue.$toast.open({message: 'Account is locked', type: 'is-danger'})
+          reject()
+          return
+        }
         let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
         let rawTx = {
           nonce: nonce,
