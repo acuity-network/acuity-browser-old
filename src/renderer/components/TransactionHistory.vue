@@ -20,7 +20,7 @@
             <code>{{ props.row.receiver }}</code>
           </b-table-column>
 
-          <b-table-column :label="$t('fee')" numeric>
+          <b-table-column :label="$t('fee')">
             {{ props.row.fee }}
           </b-table-column>
 
@@ -63,7 +63,7 @@
             'when': info.receipt ? new Date(info.block.timestamp * 1000) : null,
             'description': info.description,
             'receiver': info.to,
-            'fee': info.receipt ? info.receipt.gasUsed * info.transaction.gasPrice : '?',
+            'fee': info.receipt ? this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(info.receipt.gasUsed * info.transaction.gasPrice)) : '?',
             'amount': this.$mixClient.web3.utils.fromWei(info.transaction.value),
           })
         }
