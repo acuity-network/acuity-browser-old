@@ -7,6 +7,7 @@
     <template slot="body">
       <b-message type="is-warning">
         <p>Everything published with MIX Acuity will be stored publically for eternity.</p>
+        <p>This software is immature. Do not store large quantities of MIX in the wallet.</p>
         <p>There is NO WARRANTY, to the extent permitted by law.</p>
       </b-message>
       <b-message type="is-info">
