@@ -111,6 +111,7 @@ export default class MixAccount {
   async unlock(password) {
     let keyObject = JSON.parse(await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/keyObject'))
     privateKeys[this.controllerAddress] = '0x' + keythereum.recover(password, keyObject).toString('hex')
+    this.consolidateMix()
   }
 
   lock() {
