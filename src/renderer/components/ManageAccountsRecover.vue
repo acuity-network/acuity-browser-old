@@ -5,6 +5,10 @@
     </template>
 
     <template slot="body">
+      <b-message type="is-warning">
+        <p>Everything published with MIX Acuity will be stored publically for eternity.</p>
+        <p>There is NO WARRANTY, to the extent permitted by law.</p>
+      </b-message>
       <b-message type="is-info">
         <p>Enter the recovery phrase written down during account creation.</p>
         <p>The password is for unlocking the account on this device. It is does not need to be the password used previously for this account.</p>
