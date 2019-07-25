@@ -65,7 +65,7 @@
           let row = {
             account: address,
             name: name,
-            balance: this.$mixClient.web3.utils.fromWei(await account.getUnconfirmedBalance()),
+            balance: this.$mixClient.web3.utils.fromWei(await account.getBalance()),
           }
           this.data.push(row)
           if (window.activeAccount && address == window.activeAccount.controllerAddress) {
