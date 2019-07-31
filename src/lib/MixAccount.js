@@ -168,6 +168,10 @@ export default class MixAccount {
 
   consolidateMix() {
     return new Promise(async (resolve, reject) => {
+      if (!this.contractAddress) {
+        resolve()
+        return
+      }
       let balance = await this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending')
       if (balance > 0) {
         let tx = await this._send(this.contract.methods.withdraw(), 0, false)
@@ -269,26 +273,26 @@ export default class MixAccount {
     return this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'pending')
   }
 
-  getBalance() {
+  async getBalance() {
     let toBN = this.vue.$mixClient.web3.utils.toBN
-    return Promise.all([
-      this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'latest'),
-      this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'latest'),
-    ])
-    .then(balances => {
-      return toBN(balances[0]).add(toBN(balances[1]))
-    })
+    let balance = toBN(await this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'latest'))
+
+    if (this.contractAddress) {
+      balance = balance.add(toBN(await this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'latest')))
+    }
+
+    return balance
   }
 
-  getUnconfirmedBalance() {
+  async getUnconfirmedBalance() {
     let toBN = this.vue.$mixClient.web3.utils.toBN
-    return Promise.all([
-      this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'pending'),
-      this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending'),
-    ])
-    .then(balances => {
-      return toBN(balances[0]).add(toBN(balances[1]))
-    })
+    let balance = toBN(await this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'pending'))
+
+    if (this.contractAddress) {
+      balance = balance.add(toBN(await this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending')))
+    }
+
+    return balance
   }
 
   async getTransactionInfo(nonce) {

@@ -27,18 +27,17 @@
     },
     methods: {
       async loadData() {
+        this.unlocked = window.activeAccount.isUnlocked()
         try {
           let itemId = await window.activeAccount.call(this.$mixClient.accountProfile, 'getProfile')
           let item = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
           this.title = revision.getTitle()
           this.image = revision.getImage(100, 100)
-          this.unlocked = window.activeAccount.isUnlocked()
         }
         catch (error) {
           this.title = ''
           this.image = ''
-          this.unlocked = false
         }
       },
       async unlock() {
