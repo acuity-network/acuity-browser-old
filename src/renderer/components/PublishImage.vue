@@ -58,14 +58,12 @@
         filepath: '',
       }
     },
-    created() {
+    async created() {
       setTitle(this.$t('publishImage'))
       delete window.fileNames
-      this.$db.createValueStream({
-        'gte': '/accountFeeds/' + window.activeAccount.contractAddress + '/',
-        'lt': '/accountFeeds/' + window.activeAccount.contractAddress + '/z',
-      })
-      .on('data', async itemId => {
+
+      let feeds = await window.activeAccount.call(this.$mixClient.accountFeeds, 'getAllItems')
+      for (let itemId of feeds) {
         try {
           let item = await new MixItem(this.$root, itemId).init()
           let revision = await item.latestRevision().load()
@@ -76,7 +74,7 @@
           })
         }
         catch (e) {}
-      })
+      }
     },
     methods: {
       chooseFile(event) {

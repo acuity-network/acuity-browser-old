@@ -90,7 +90,6 @@
         let ipfsHash = await content.save()
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create feed')
         await window.activeAccount.sendData(this.$mixClient.accountFeeds, 'addItem', [itemId], 0, 'Add feed to account')
-        await this.$db.put('/accountFeeds/' + window.activeAccount.contractAddress + '/' + itemId, itemId)
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },
