@@ -14,7 +14,8 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
+  import { clipboard } from 'electron'
   import Page from './Page.vue'
   import ItemProto from '../../lib/protobuf/Item_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
@@ -42,6 +43,10 @@
     },
     created() {
       setTitle(this.$t('debugItem'))
+      let clipboardText: string = clipboard.readText()
+      if (this.$mixClient.web3.utils.isHexStrict(clipboardText) && clipboardText.length == 66) {
+        this.itemId = clipboardText
+      }
     },
     methods: {
       async read(event) {

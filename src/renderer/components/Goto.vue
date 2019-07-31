@@ -14,7 +14,8 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
+  import { clipboard } from 'electron'
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
   import setTitle from '../../lib/setTitle.js'
@@ -32,12 +33,16 @@
     },
     created() {
       setTitle(this.$t('gotoItem'))
+      let clipboardText: string = clipboard.readText()
+      if (this.$mixClient.web3.utils.isHexStrict(clipboardText) && clipboardText.length == 66) {
+        this.itemId = clipboardText
+      }
     },
     methods: {
       async goto(event) {
         this.itemId = this.itemId.trim()
         try {
-          let item = await new MixItem(this.$root, this.itemId).init()
+          await new MixItem(this.$root, this.itemId).init()
         }
         catch (e) {
           this.message = 'Item not found.'
