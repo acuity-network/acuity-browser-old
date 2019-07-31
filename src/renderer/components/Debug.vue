@@ -55,7 +55,7 @@
 
         this.itemId = this.itemId.trim()
         try {
-          let item = await new MixItem(this.$root, this.itemId).init()
+          await new MixItem(this.$root, this.itemId).init()
         }
         catch (e) {
           this.message = 'Item not found.'
