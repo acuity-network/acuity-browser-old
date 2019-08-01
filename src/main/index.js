@@ -116,11 +116,7 @@ app.on('activate', () => {
   }
 })
 
-app.on('will-quit', () => {
-  parity.kill()
-  ipfs.kill()
-})
-
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
+  await Promise.all([parity.kill(), ipfs.kill()])
   app.quit()
 })

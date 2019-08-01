@@ -2,6 +2,7 @@ import { app } from 'electron'
 import path from 'path'
 import { spawn } from 'child_process'
 import os from 'os'
+import fs from 'fs'
 import ipfsClient from './IpfsClient.js'
 
 let ipfsProcess
@@ -38,6 +39,8 @@ function connect() {
 }
 
 async function launch(window) {
+	// Delete the API file that might have been left behind.
+	fs.unlinkSync(path.join(app.getPath('userData'), 'ipfs', 'api'))
 	let isWindows = os.platform() === 'win32'
 	let commandPath = path.join(__static, 'go-ipfs', isWindows ? 'ipfs.exe' : 'ipfs')
 	console.log('IPFS path: ' + commandPath)
@@ -119,8 +122,23 @@ async function launch(window) {
 }
 
 function kill() {
-	clearInterval(ipfsInterval)
-	ipfsProcess.kill()
+	return new Promise(async (resolve, reject) => {
+		let exited
+		clearInterval(ipfsInterval)
+		ipfsProcess.on('exit', (code) => {
+			exited = true
+			console.log('IPFS exited.')
+			resolve(code)
+		})
+		console.log('Exiting IPFS.')
+		ipfsProcess.kill()
+		setTimeout(() => {
+			if (!exited) {
+				console.log('Killing IPFS.')
+				ipfsProcess.kill('SIGKILL')
+			}
+		}, 10000)
+	})
 }
 
 export default { launch, kill }
