@@ -1,6 +1,6 @@
 {
-  "name": "acuity",
-  "productName": "Acuity",
+  "name": "mix-acuity",
+  "productName": "MIX Acuity",
   "version": "1.0.2",
   "author": "Jonathan Brown <jbrown@mix-blockchain.org>",
   "description": "Reference application for MIX Blockchain.",
