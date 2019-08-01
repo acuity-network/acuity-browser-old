@@ -40,7 +40,9 @@ function connect() {
 
 async function launch(window) {
 	// Delete the API file that might have been left behind.
-	fs.unlinkSync(path.join(app.getPath('userData'), 'ipfs', 'api'))
+	try {
+		fs.unlinkSync(path.join(app.getPath('userData'), 'ipfs', 'api'))
+	} catch (e) {}
 	let isWindows = os.platform() === 'win32'
 	let commandPath = path.join(__static, 'go-ipfs', isWindows ? 'ipfs.exe' : 'ipfs')
 	console.log('IPFS path: ' + commandPath)
