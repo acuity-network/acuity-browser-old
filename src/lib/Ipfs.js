@@ -125,6 +125,10 @@ async function launch(window) {
 
 function kill() {
 	return new Promise(async (resolve, reject) => {
+		if (!ipfsProcess) {
+			resolve()
+			return
+		}
 		let exited
 		clearInterval(ipfsInterval)
 		ipfsProcess.on('exit', (code) => {

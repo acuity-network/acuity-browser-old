@@ -73,6 +73,10 @@ async function launch(window) {
 
 function kill() {
 	return new Promise(async (resolve, reject) => {
+		if (!parityProcess) {
+			resolve()
+			return
+		}
 		let exited
 		parityProcess.on('exit', (code) => {
 			exited = true
