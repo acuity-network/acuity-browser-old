@@ -77,20 +77,16 @@ function kill() {
 			resolve()
 			return
 		}
-		let exited
-		parityProcess.on('exit', (code) => {
-			exited = true
+		let emitter = parityProcess.on('exit', (code) => {
 			console.log('Parity exited.')
 			resolve(code)
 		})
 		console.log('Exiting Parity.')
-		parityProcess.kill('SIGQUIT')		// Parity needs SIGQUIT for some reason.
-		setTimeout(() => {
-			if (!exited) {
-				console.log('Killing Parity.')
-				parityProcess.kill('SIGKILL')
-			}
+		let timeout = setTimeout(() => {
+			console.log('Killing Parity.')
+			parityProcess.kill('SIGKILL')
 		}, 10000)
+		parityProcess.kill('SIGQUIT')		// Parity needs SIGQUIT for some reason.
 	})
 }
 

@@ -117,6 +117,6 @@ app.on('activate', () => {
   }
 })
 
-app.on('before-quit', async () => {
+app.on('quit', async () => {
   await Promise.all([parity.kill(), ipfs.kill()])
 })

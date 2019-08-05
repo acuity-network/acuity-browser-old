@@ -129,21 +129,17 @@ function kill() {
 			resolve()
 			return
 		}
-		let exited
 		clearInterval(ipfsInterval)
-		ipfsProcess.on('exit', (code) => {
-			exited = true
+		let emitter = ipfsProcess.on('exit', (code) => {
 			console.log('IPFS exited.')
 			resolve(code)
 		})
 		console.log('Exiting IPFS.')
-		ipfsProcess.kill()
-		setTimeout(() => {
-			if (!exited) {
-				console.log('Killing IPFS.')
-				ipfsProcess.kill('SIGKILL')
-			}
+		let timeout = setTimeout(() => {
+			console.log('Killing IPFS.')
+			ipfsProcess.kill('SIGKILL')
 		}, 10000)
+		ipfsProcess.kill()
 	})
 }
 
