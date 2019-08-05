@@ -67,6 +67,11 @@ export default class MixAccount {
 
   async deploy() {
     return new Promise(async (resolve, reject) => {
+      if (!this.isUnlocked()) {
+        this.vue.$toast.open({message: 'Account is locked', type: 'is-danger'})
+        reject()
+        return
+      }
       let byteCodePath = path.join(__static, 'MixAccount.bin')
       let accountBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
