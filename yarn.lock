@@ -10512,7 +10512,7 @@ web3-utils@2.0.0-alpha:
     randombytes "^2.1.0"
     utf8 "2.1.1"
 
-web3@^2.0.0-alpha:
+web3@2.0.0-alpha:
   version "2.0.0-alpha"
   resolved "https://registry.yarnpkg.com/web3/-/web3-2.0.0-alpha.tgz#564f3dfc316a1bc9f45558f077746ef2b5a4d7f5"
   integrity sha512-2GEX6o7aM8eBL4Aiij5TN4ThjxXgUFf6ycxiouObnhiK1I15ztl4e28NjNq9pknZv8Ntx8QH0DvJlzxZTlTAng==
