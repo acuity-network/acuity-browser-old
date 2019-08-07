@@ -70,7 +70,6 @@
     },
     async created() {
       setTitle(this.$t('publishFile'))
-      delete window.fileNames
 
       let feeds = await window.activeAccount.call(this.$mixClient.accountFeeds, 'getAllItems')
       for (let itemId of feeds) {

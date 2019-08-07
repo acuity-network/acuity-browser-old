@@ -50,7 +50,6 @@
     },
     created() {
       setTitle(this.$t('publishMixin'))
-      delete window.fileNames
     },
     methods: {
       async publish(event) {

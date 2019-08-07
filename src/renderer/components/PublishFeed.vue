@@ -45,7 +45,6 @@
     },
     created() {
       setTitle(this.$t('publishFeed'))
-      delete window.fileNames
     },
     methods: {
       chooseFile(event) {
