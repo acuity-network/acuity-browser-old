@@ -59,7 +59,7 @@
           title: 'Choose image',
           filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
-          window.fileNames = fileNames
+          this.filepath = fileNames[0]
         })
       },
       async create(event) {
@@ -72,7 +72,7 @@
         content.addMixinPayload(0x9fbbfaad)
 
         // Image
-        let image = new Image(this.$root, window.fileNames[0])
+        let image = new Image(this.$root, this.filepath)
         content.addMixinPayload(0x045eee8c, await image.createMixin())
 
         // Language
@@ -85,7 +85,7 @@
         titleMessage.setTitle(this.title)
         content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
 
-        // Description
+        // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
         content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
@@ -93,31 +93,8 @@
         let ipfsHash = await content.save()
 
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
-
-        let byteCodePath = path.join(__static, 'CreatorToken.bin')
-        let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
-        let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
-        let params = [this.symbol, this.name, 18, this.payout, this.$tokenRegistryAddress, itemId]
-        let paramsBytecode = this.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
-        let nonce = await this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
-        let rawTx = {
-          nonce: this.$mixClient.web3.utils.toHex(nonce),
-          from: window.activeAccount.controllerAddress,
-          gas: this.$mixClient.web3.utils.toHex(2000000),
-          gasPrice: '0x3b9aca00',
-          data: '0x' + tokenBytecode + paramsBytecode,
-        }
-
-        let tx = new ethTx(rawTx)
-        let privateKey = await this.$db.get('/account/controller/' + window.activeAccount.controllerAddress + '/privateKey')
-        tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
-        let serializedTx = tx.serialize()
-
-        this.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-        .on('error', console.log)
-        .on('transactionHash', () => {
-          this.$router.push({ name: 'item', params: { itemId: itemId }})
-        })
+        await window.activeAccount.deployToken(this.symbol, this.name, this.payout, itemId)
+        this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },
   }

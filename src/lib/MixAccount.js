@@ -101,6 +101,38 @@ export default class MixAccount {
     })
   }
 
+  deployToken(symbol, name, payout, itemId) {
+    return new Promise(async (resolve, reject) => {
+      if (!this.isUnlocked()) {
+        this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
+        reject()
+        return
+      }
+      let byteCodePath = path.join(__static, 'CreatorToken.bin')
+      let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
+      let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
+      let params = [symbol, name, 18, payout, this.vue.$mixClient.tokenRegistryAddress, itemId]
+      let paramsBytecode = this.vue.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
+      let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+      let rawTx = {
+        nonce: this.vue.$mixClient.web3.utils.toHex(nonce),
+        from: window.activeAccount.controllerAddress,
+        gas: this.vue.$mixClient.web3.utils.toHex(2000000),
+        gasPrice: '0x3b9aca00',
+        data: '0x' + tokenBytecode + paramsBytecode,
+      }
+
+      let tx = new ethTx(rawTx)
+      let privateKey = privateKeys[window.activeAccount.controllerAddress]
+      tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
+      let serializedTx = tx.serialize()
+
+      this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+      .on('error', console.log)
+      .on('transactionHash', resolve)
+    })
+  }
+
   select() {
     window.activeAccount = this
     this.vue.$db.put('/active-account', this.controllerAddress)

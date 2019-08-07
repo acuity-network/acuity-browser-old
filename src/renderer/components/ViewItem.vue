@@ -3,6 +3,7 @@
     <template slot="title">
       <span v-if="isFeed">Feed: </span>
       <span v-if="isProfile">Profile: </span>
+      <span v-if="isToken">Token: </span>
       <item-link v-if="short" :itemId="itemId"></item-link>
       <span v-else>{{ title }}</span>
       <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
@@ -311,7 +312,7 @@
         }
         else if (revision.content.existMixin('0x9fbbfaad')) {
           this.isToken = true
-          this.tokenAddress = await this.$tokenRegistry.methods.getToken(this.itemId).call()
+          this.tokenAddress = await this.$mixClient.tokenRegistry.methods.getToken(this.itemId).call()
           let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
           this.tokenSymbol = await token.methods.symbol().call()
           this.tokenName = await token.methods.name().call()
