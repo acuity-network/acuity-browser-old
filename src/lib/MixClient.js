@@ -49,7 +49,7 @@ export default class MixClient {
 		this.accountFeeds = new this.web3.eth.Contract(require('./contracts/MixAccountItems.abi.json'), '0xc9ba9507d9f5be1d13ff2dca6f7e43dbfa859645')
 		this.trustedAccounts = new this.web3.eth.Contract(require('./contracts/MixTrustedAccounts.abi.json'), '0x70e2e2d6b31cd25e00c034ac9cfc79575efa26a9')
 		this.reactions = new this.web3.eth.Contract(require('./contracts/MixReactions.abi.json'), '0xd7051cd496a3a8373f9cf89476c04a7d51a5cc88')
-		this.tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
+		this.tokenRegistryAddress = '0x5402efb80b307250b978cb1039a95e0c292b50c2'
 		this.tokenRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenRegistry.abi.json'), this.tokenRegistryAddress)
 
 		// Emit sync info.
