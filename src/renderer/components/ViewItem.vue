@@ -17,6 +17,10 @@
         <button v-if="!isSubscribed" class="button is-primary" @click="subscribe">Subscribe</button>
         <button v-if="isSubscribed" class="button is-primary" @click="unsubscribe">Unsubscribe</button>
       </span>
+      <span v-if="isToken">
+        <button v-if="!isPortfolio" class="button is-primary" @click="portfolio">Add</button>
+        <button v-if="isPortfolio" class="button is-primary" @click="unportfolio">Remove</button>
+      </span>
     </template>
 
     <template slot="subtitle">
@@ -201,6 +205,7 @@
         data.editing = false
         data.editForm = ''
         data.isSubscribed = false
+        data.isPortfolio = false
         data.ownerAddress = null
         data.owner = ''
         data.ownerRoute = ''
@@ -237,11 +242,6 @@
         data.checkIcon = twemoji.parse(twemoji.convert.fromCodePoint('2714'), {folder: 'svg', ext: '.svg'})
       },
       async loadData() {
-        try {
-          await this.$db.get('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
-          this.isSubscribed = true
-        }
-        catch (e) {}
         let item = await new MixItem(this.$root, this.itemId).init()
         let account = await item.account()
         this.ownerAddress = account.contractAddress
@@ -309,9 +309,19 @@
         }
         else if (revision.content.existMixin('0xbcec8faa')) {
           this.isFeed = true
+          try {
+            await this.$db.get('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
+            this.isSubscribed = true
+          }
+          catch (e) {}
         }
         else if (revision.content.existMixin('0x9fbbfaad')) {
           this.isToken = true
+          try {
+            await this.$db.get('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId)
+            this.isPortfolio = true
+          }
+          catch (e) {}
           this.tokenAddress = await this.$mixClient.tokenRegistry.methods.getToken(this.itemId).call()
           let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
           this.tokenSymbol = await token.methods.symbol().call()
@@ -368,6 +378,14 @@
       async unsubscribe(event) {
         await this.$db.del('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
         this.isSubscribed = false
+      },
+      async portfolio(event) {
+        await this.$db.put('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId, this.itemId)
+        this.isPortfolio = true
+      },
+      async unportfolio(event) {
+        await this.$db.del('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId)
+        this.isPortfolio = false
       },
       async publish(event) {
         let item = await new MixItem(this.$root, this.itemId).init()

@@ -97,6 +97,11 @@ export default new Router({
     {
       path: '/tokens',
       name: 'tokens',
+      component: require('@/components/Tokens').default
+    },
+    {
+      path: '/tokens/create',
+      name: 'tokens-create',
       component: require('@/components/CreateToken').default
     },
     {
