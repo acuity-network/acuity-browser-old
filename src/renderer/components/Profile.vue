@@ -99,7 +99,7 @@
     methods: {
       async copyItemId(event) {
         clipboard.writeText(this.itemId)
-        this.$toast.open('itemId copied')
+        this.$buefy.toast.open('itemId copied')
       },
     },
   }

@@ -68,7 +68,7 @@ export default class MixAccount {
   async deploy() {
     return new Promise(async (resolve, reject) => {
       if (!this.isUnlocked()) {
-        this.vue.$toast.open({message: 'Account is locked', type: 'is-danger'})
+        this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
         reject()
         return
       }
@@ -130,7 +130,7 @@ export default class MixAccount {
   _send(transaction, value = 0, checkBalance = true) {
     return new Promise(async (resolve, reject) => {
       if (!this.isUnlocked()) {
-        this.vue.$toast.open({message: 'Account is locked', type: 'is-danger'})
+        this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
         reject()
         return
       }
@@ -150,7 +150,7 @@ export default class MixAccount {
       let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
       let requiredBalance = toBN(rawTx.gas).mul(toBN('1000000000'))
       if (checkBalance && controllerBalance.lt(requiredBalance)) {
-        this.vue.$toast.open({message: 'Insufficient MIX', type: 'is-danger'})
+        this.vue.$buefy.toast.open({message: 'Insufficient MIX', type: 'is-danger'})
         reject()
         return
       }
@@ -217,7 +217,7 @@ export default class MixAccount {
       // Send to a non-contract address.
       return new Promise(async (resolve, reject) => {
         if (!this.isUnlocked()) {
-          this.vue.$toast.open({message: 'Account is locked', type: 'is-danger'})
+          this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
           reject()
           return
         }
