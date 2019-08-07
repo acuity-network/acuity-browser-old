@@ -82,7 +82,7 @@
 
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
-        titleMessage.setTitle(this.title)
+        titleMessage.setTitle(this.name)
         content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
 
         // Body text
