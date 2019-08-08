@@ -98,6 +98,7 @@ let messages = {
     mining: 'Mining',
     start: 'Start',
     stop: 'Stop',
+    error: 'Error',
   },
   'ru': {
     general: 'Общие',

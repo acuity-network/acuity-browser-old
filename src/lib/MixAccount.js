@@ -342,6 +342,18 @@ export default class MixAccount {
 
     if (info.receipt)  {
       info.block = await this.vue.$mixClient.web3.eth.getBlock(info.receipt.blockNumber)
+
+      let events = await this.contract.getPastEvents('CallFailed', {
+        fromBlock: info.receipt.blockNumber,
+        toBlock: info.receipt.blockNumber,
+      })
+
+      for (let event of events) {
+        if (event.transactionHash == info.hash) {
+          let encoded = '0x' + event.returnValues.returnData.slice(10)
+          info.error = this.vue.$mixClient.web3.eth.abi.decodeParameter('string', encoded)
+        }
+      }
     }
 
     info.transaction = await transaction

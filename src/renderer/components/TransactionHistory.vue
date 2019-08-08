@@ -16,8 +16,8 @@
             {{ props.row.description }}
           </b-table-column>
 
-          <b-table-column :label="$t('receiver')">
-            <code>{{ props.row.receiver }}</code>
+          <b-table-column :label="$t('error')">
+            <code>{{ props.row.error }}</code>
           </b-table-column>
 
           <b-table-column :label="$t('fee')">
@@ -62,7 +62,7 @@
             'confirmed': info.receipt !== null,
             'when': info.receipt ? new Date(info.block.timestamp * 1000) : null,
             'description': info.description,
-            'receiver': info.to,
+            'error': info.error ? info.error : '',
             'fee': info.receipt ? this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(info.receipt.gasUsed * info.transaction.gasPrice)) : '?',
             'amount': this.$mixClient.web3.utils.fromWei(info.transaction.value),
           })
