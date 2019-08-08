@@ -64,29 +64,7 @@
       <reactions v-if="!isFeed" :itemId="itemId"></reactions>
 
       <div v-if="!short">
-        <div v-if="isToken">
-          <b-field label="Token address">
-            {{ tokenAddress }}
-          </b-field>
-          <b-field label="Token symbol">
-            {{ tokenSymbol }}
-          </b-field>
-          <b-field label="Token name">
-            {{ tokenName }}
-          </b-field>
-          <b-field label="Token start">
-            {{ tokenStart }}
-          </b-field>
-          <b-field label="Token owner">
-            {{ tokenOwner }}
-          </b-field>
-          <b-field label="Token payout">
-            {{ tokenPayout }}
-          </b-field>
-          <b-field label="Token supply">
-            {{ tokenSupply }}
-          </b-field>
-        </div>
+        <token-view v-if="isToken" :itemId="itemId"></token-view>
 
         <div v-if="isFeed">
           <view-item v-for="itemId in feedItemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
@@ -117,6 +95,7 @@
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
+  import TokenView from './mixins/TokenView.vue'
   import VueMarkdown from 'vue-markdown'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
@@ -147,6 +126,7 @@
       AccountInfo,
       ItemLink,
       ProfileLink,
+      TokenView,
       VueMarkdown,
       Reactions,
     },
@@ -226,13 +206,6 @@
         data.isProfile = ''
         data.isFeed = false
         data.isToken = false
-        data.tokenSymbol = ''
-        data.tokenName = ''
-        data.tokenStart = ''
-        data.tokenOwner = ''
-        data.tokenPayout = ''
-        data.tokenSupply = ''
-        data.tokenAddress = ''
         data.commentIds = []
         data.feedItemIds = []
         data.reply = ''
@@ -322,14 +295,6 @@
             this.isPortfolio = true
           }
           catch (e) {}
-          this.tokenAddress = await this.$mixClient.tokenRegistry.methods.getToken(this.itemId).call()
-          let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
-          this.tokenSymbol = await token.methods.symbol().call()
-          this.tokenName = await token.methods.name().call()
-          this.tokenStart = await token.methods.tokenStart().call()
-          this.tokenOwner = await token.methods.tokenOwner().call()
-          this.tokenPayout = await token.methods.tokenPayout().call()
-          this.tokenSupply = await token.methods.totalSupply().call()
         }
 
         if (!this.short) {
