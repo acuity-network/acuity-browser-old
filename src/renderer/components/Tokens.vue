@@ -14,6 +14,9 @@
             <span class="remove" @click="remove" :data-itemid="props.row.itemId">remove</span>
           </b-table-column>
         </template>
+        <template slot="footer">
+          <router-link class="footer-link" :to="{ name: 'tokens-create' }">{{ $t('createToken') }}</router-link>
+        </template>
       </b-table>
     </template>
   </page>

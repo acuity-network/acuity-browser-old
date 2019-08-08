@@ -93,7 +93,7 @@
         let ipfsHash = await content.save()
 
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
-        await window.activeAccount.deployToken(this.symbol, this.name, this.payout, itemId)
+        await window.activeAccount.deployToken(this.symbol, this.name, this.$mixClient.web3.utils.toWei(this.payout), itemId)
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

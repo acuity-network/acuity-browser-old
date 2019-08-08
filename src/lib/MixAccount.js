@@ -110,8 +110,8 @@ export default class MixAccount {
       }
       let byteCodePath = path.join(__static, 'CreatorToken.bin')
       let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
-      let types = ['string', 'string', 'uint', 'uint', 'address', 'bytes32']
-      let params = [symbol, name, 18, payout, this.vue.$mixClient.tokenRegistryAddress, itemId]
+      let types = ['string', 'string', 'uint', 'uint', 'address', 'address', 'bytes32']
+      let params = [symbol, name, 18, payout, this.contractAddress, this.vue.$mixClient.tokenRegistryAddress, itemId]
       let paramsBytecode = this.vue.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
       let rawTx = {
@@ -129,7 +129,11 @@ export default class MixAccount {
 
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
       .on('error', console.log)
-      .on('transactionHash', resolve)
+      .on('transactionHash', async hash => {
+        let transaction = await this.vue.$mixClient.web3.eth.getTransaction(hash)
+        this._logTransaction(transaction, '', 'Deploy token')
+        resolve(hash)
+      })
     })
   }
 
