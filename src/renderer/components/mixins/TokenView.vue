@@ -122,7 +122,7 @@
 			this.amountError = ''
 		},
     async created() {
-			this.loadData()
+			await this.loadData()
 			let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
 			token.events.Transfer({
 				filter: {

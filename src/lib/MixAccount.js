@@ -128,11 +128,11 @@ export default class MixAccount {
       let serializedTx = tx.serialize()
 
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-      .on('error', console.log)
-      .on('transactionHash', async hash => {
-        let transaction = await this.vue.$mixClient.web3.eth.getTransaction(hash)
+      .on('error', reject)
+      .on('receipt', async receipt => {
+        let transaction = await this.vue.$mixClient.web3.eth.getTransaction(receipt.transactionHash)
         this._logTransaction(transaction, '', 'Deploy token')
-        resolve(hash)
+        resolve(receipt.contractAddress)
       })
     })
   }
@@ -163,7 +163,7 @@ export default class MixAccount {
     return this.controllerAddress in privateKeys
   }
 
-  _send(transaction, value = 0, checkBalance = true) {
+  _send(transaction, value = 0, checkBalance = true, gas = 200000) {
     return new Promise(async (resolve, reject) => {
       if (!this.isUnlocked()) {
         this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
@@ -180,7 +180,7 @@ export default class MixAccount {
         data: data,
         value: this.vue.$mixClient.web3.utils.toHex(value),
       }
-      rawTx.gas = 200000//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+      rawTx.gas = gas//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
       // Check if there is sufficient balance.
       let toBN = this.vue.$mixClient.web3.utils.toBN
       let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
@@ -271,39 +271,27 @@ export default class MixAccount {
         tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
         let serializedTx = tx.serialize()
         this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-        .on('transactionHash', transactionHash => {
-          this.vue.$mixClient.web3.eth.getTransaction(transactionHash)
-          .then(transaction => {
-            this._logTransaction(transaction, to, 'Send MIX')
-            .then(() => {
-              resolve(transaction)
-            })
-          })
+        .on('transactionHash', async transactionHash => {
+          transaction = await this.vue.$mixClient.web3.eth.getTransaction(transactionHash)
+          this._logTransaction(transaction, to, 'Send MIX')
+          resolve(transaction)
         })
       })
     }
     else {
       // Send to a contract address.
-      return this._send(this.contract.methods.sendMix(to), value)
-      .then(transaction => {
-        return this._logTransaction(transaction, to, 'Send MIX')
-        .then(() => {
-          return transaction
-        })
-      })
+      let transaction = await this._send(this.contract.methods.sendMix(to), value)
+      this._logTransaction(transaction, to, 'Send MIX')
+      return transaction
     }
   }
 
-  sendData(contract, method, params, value, description) {
+  async sendData(contract, method, params, value, description, gas) {
     let to = contract.options.address
     let data = contract.methods[method].apply(this, params).encodeABI()
-    return this._send(this.contract.methods.sendData(to, data), value)
-    .then(transaction => {
-      return this._logTransaction(transaction, to, description)
-      .then(() => {
-        return transaction
-      })
-    })
+    let transaction = await this._send(this.contract.methods.sendData(to, data), value, true, gas)
+    this._logTransaction(transaction, to, description)
+    return transaction
   }
 
   getControllerBalance() {
@@ -354,8 +342,13 @@ export default class MixAccount {
 
       for (let event of events) {
         if (event.transactionHash == info.hash) {
-          let encoded = '0x' + event.returnValues.returnData.slice(10)
-          info.error = this.vue.$mixClient.web3.eth.abi.decodeParameter('string', encoded)
+          try {
+            let encoded = '0x' + event.returnValues.returnData.slice(10)
+            info.error = this.vue.$mixClient.web3.eth.abi.decodeParameter('string', encoded)
+          }
+          catch (e) {
+            info.error = 'Unknown.'
+          }
         }
       }
     }
