@@ -786,10 +786,10 @@
   resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.14.0.tgz#8edfc5f8e6eae20eeed3ca0d02974ed4ee5e4efc"
   integrity sha512-Fv+0gYJzE/czLoRKq+gnXWr4yBpPM3tO3C8pDLFwqVKlMICQUq5OsxwwFZYDaVr7+L6mgNDp16iOcJHEz3J5RQ==
 
-"@uniswap/sdk@^1.0.0-beta.3":
-  version "1.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@uniswap/sdk/-/sdk-1.0.0-beta.3.tgz#a8229136cb5b1bb4900b6540e0ab1fc6c17c0a82"
-  integrity sha512-JfA/xGwTQt3c3p8Aznc7LFHYZkzYCXuPsv2dwPSV8U4PiN103CQ2euK9xh4x8aN2F2MXb7MeoYXTfXU0fbtkCg==
+"@uniswap/sdk@^1.0.0-beta.4":
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@uniswap/sdk/-/sdk-1.0.0-beta.4.tgz#d14a0ddc15e8de9173f3d97075e7ebbaa2570f1a"
+  integrity sha512-a2GnlZrmg0Qxr4HFIBPCKygLFxu5f/hhIOKYVm12hG8vzsCVh72DEqZkpaOSFH3o6LDez4p2KnPvmwZkWVUnRg==
   dependencies:
     bignumber.js "^9.0.0"
     ethers "^4.0.28"
