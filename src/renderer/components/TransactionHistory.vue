@@ -5,7 +5,7 @@
     </template>
 
     <template slot="body">
-      <b-table :data="data">
+      <b-table :data="data" :row-class="(row, index) => (row.error == '') ? '' : 'error'">
         <template slot-scope="props">
           <b-table-column :label="$t('when')">
             <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true"></timeago>
@@ -17,7 +17,7 @@
           </b-table-column>
 
           <b-table-column :label="$t('error')">
-            <code>{{ props.row.error }}</code>
+            {{ props.row.error }}
           </b-table-column>
 
           <b-table-column :label="$t('fee')">
@@ -73,3 +73,11 @@
     },
   }
 </script>
+
+<style scoped>
+
+  tr.error td {
+    background-color: #660000;
+  }
+
+</style>
