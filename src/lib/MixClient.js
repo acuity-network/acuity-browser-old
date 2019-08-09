@@ -55,9 +55,7 @@ export default class MixClient {
 
 		// Emit sync info.
 		let startingBlock, currentBlock
-		let emitSyncing = throttle(status => vue.$emit('mix-client-syncing', status), 100, true)
-		let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
-		.on('data', async () => {
+		let newBlockHeaders = throttle(async () => {
 			let isSyncing = await this.web3.eth.isSyncing()
 
 			if (isSyncing !== false) {
@@ -69,10 +67,13 @@ export default class MixClient {
 					}
 
 					isSyncing.startingBlock = startingBlock
-					emitSyncing(isSyncing)
+					vue.$emit('mix-client-syncing', isSyncing)
 				}
 			}
-		})
+		}, 100, true)
+
+		let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
+		.on('data', newBlockHeaders)
 
 		// Wait for Parity to sync.
 		await new Promise((resolve, reject) => {
