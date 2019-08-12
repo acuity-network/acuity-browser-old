@@ -99,6 +99,10 @@ let messages = {
     start: 'Start',
     stop: 'Stop',
     error: 'Error',
+    addLiquidity: 'Add liquidity',
+    removeLiquidity: 'Remove liquidity',
+    minLiquidity: 'Minimum liquidity',
+    maxTokens: 'Maximum tokens',
   },
   'ru': {
     general: 'Общие',
