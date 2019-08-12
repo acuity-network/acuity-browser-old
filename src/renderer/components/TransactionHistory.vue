@@ -47,29 +47,43 @@
         data: [],
       }
     },
+    methods: {
+      async loadData() {
+        let nonce = await this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+        let transactions = []
+        let data = []
+        for (let i = nonce; i >= 0; i--) {
+          try {
+            let info = await window.activeAccount.getTransactionInfo(i)
+            data.push({
+              'confirmed': info.receipt !== null,
+              'when': info.receipt ? new Date(info.block.timestamp * 1000) : null,
+              'description': info.description,
+              'error': info.error ? info.error : '',
+              'fee': info.receipt ? this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(info.receipt.gasUsed * info.transaction.gasPrice)) : '?',
+              'amount': this.$mixClient.web3.utils.fromWei(info.transaction.value),
+            })
+          }
+          catch (e) {}
+        }
+        this.data = data
+      },
+    },
     async created() {
       setTitle(this.$t('transactionHistory'))
       if (!window.activeAccount) {
         return
       }
-      let nonce = await this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
-      let transactions = []
-      let data = []
-      for (let i = nonce; i >= 0; i--) {
-        try {
-          let info = await window.activeAccount.getTransactionInfo(i)
-          data.push({
-            'confirmed': info.receipt !== null,
-            'when': info.receipt ? new Date(info.block.timestamp * 1000) : null,
-            'description': info.description,
-            'error': info.error ? info.error : '',
-            'fee': info.receipt ? this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(info.receipt.gasUsed * info.transaction.gasPrice)) : '?',
-            'amount': this.$mixClient.web3.utils.fromWei(info.transaction.value),
-          })
-        }
-        catch (e) {}
-      }
-      this.data = data
+
+      this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
+      .on('data', block => {
+        this.loadData()
+      })
+
+      this.loadData()
+    },
+    destroyed() {
+      this.newBlockHeadersEmitter.unsubscribe()
     },
   }
 </script>
