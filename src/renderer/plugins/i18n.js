@@ -103,6 +103,9 @@ let messages = {
     removeLiquidity: 'Remove liquidity',
     minLiquidity: 'Minimum liquidity',
     maxTokens: 'Maximum tokens',
+    holders: 'Holders',
+    holder: 'Holder',
+    amount: 'Amount',
   },
   'ru': {
     general: 'Общие',

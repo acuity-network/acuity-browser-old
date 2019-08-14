@@ -146,16 +146,21 @@
           </div>
         </div>
       </b-tab-item>
+      <b-tab-item :label="$t('holders')">
+        <token-holders v-if="tokenAddress" :address="tokenAddress"></token-holders>
+      </b-tab-item>
 		</b-tabs>
   </div>
 </template>
 
 <script>
+  import TokenHolders from '../TokenHolders.vue'
 
   export default {
     name: 'token-view',
     props: ['itemId'],
     components: {
+      TokenHolders,
     },
     data() {
       return {
