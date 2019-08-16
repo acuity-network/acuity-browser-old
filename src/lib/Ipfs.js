@@ -3,9 +3,10 @@ import path from 'path'
 import { spawn } from 'child_process'
 import os from 'os'
 import fs from 'fs'
-import ipfsClient from './IpfsClient.js'
+import IpfsClient from './IpfsClient.js'
 
 let ipfsProcess
+let ipfsClient
 let ipfsInterval
 
 function connect() {
@@ -120,6 +121,8 @@ async function launch(window) {
 		} catch (e) {}
 	})
 
+	ipfsClient = new IpfsClient()
+	ipfsClient.init()
 	ipfsInterval = setInterval(connect, 30000)
 }
 

@@ -9,6 +9,8 @@ export default class IpfsClient {
 			keepAlive: true,
 		});
 
+		if (!vue) return;
+
 		// Wait for IPFS API to start working.
 		await new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {
