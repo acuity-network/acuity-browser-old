@@ -21,6 +21,13 @@
         </li>
       </ul>
     </b-field>
+    <b-field label="Visibilty override">
+      <b-select v-model="visibility">
+        <option value="none">None</option>
+        <option value="whitelist">Whitelist</option>
+        <option value="blacklist">Blacklist</option>
+      </b-select>
+    </b-field>
   </div>
 </template>
 
@@ -40,12 +47,23 @@
         feeds: [],
         trusted: [],
         trustedThatTrust: [],
+        visibility: 'none',
       }
     },
     async created() {
       this.feeds = await window.activeAccount.call(this.$mixClient.accountFeeds, 'getAllItemsByAccount', [this.address])
       this.trusted = await window.activeAccount.call(this.$mixClient.trustedAccounts, 'getAllTrustedByAccount', [this.address])
       this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(this.address)
+
+      try {
+        this.visibility = await this.$db.get('/accountVisibility/' + window.activeAccount.contractAddress + '/' + this.address)
+      }
+      catch (e) {}
     },
+    watch: {
+      visibility() {
+        this.$db.put('/accountVisibility/' + window.activeAccount.contractAddress + '/' + this.address, this.visibility)
+      },
+    }
   }
 </script>

@@ -76,6 +76,19 @@ export default class MixItem {
     if (window.activeAccount.contractAddress == this.item.owner) {
       return true
     }
+    let visibility
+    try {
+      visibility = await this.vue.$db.get('/accountVisibility/' + window.activeAccount.contractAddress + '/' + this.item.owner)
+    }
+    catch (e) {}
+
+    switch (visibility) {
+      case 'whitelist':
+        return true;
+
+      case 'blacklist':
+        return false;
+    }
     return await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedDeep', [this.item.owner])
   }
 
