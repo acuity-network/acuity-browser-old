@@ -201,6 +201,10 @@
   $primary: $blue;
   $primary-invert: findColorInvert($primary);
 
+  .control .select select option {
+      color: $grey-lighter;
+  }
+
   // Setup $colors to use as bulma classes (e.g. 'is-twitter')
   $colors: (
     "white": ($white, $black),
