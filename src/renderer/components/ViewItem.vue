@@ -34,6 +34,14 @@
       {{ published }}
     </template>
 
+    <template slot="messages">
+      <b-message type="is-warning" v-if="isToken">
+        <p>Token functionality is currently in development.</p>
+        <p>Tokens created at this point will not be available once this functionality is stable.</p>
+        <p>Do not hold any substantial value in MIX tokens yet.</p>
+      </b-message>
+    </template>
+
     <template slot="body">
       <div class="columns">
         <div class="column">

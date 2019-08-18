@@ -4,16 +4,19 @@
       New account
     </template>
 
-    <template slot="body">
+    <template slot="messages">
       <b-message type="is-warning">
         <p>Everything published with MIX Acuity will be stored publically for eternity.</p>
         <p>This software is immature. Do not store large quantities of MIX in the wallet.</p>
-        <p>There is NO WARRANTY, to the extent permitted by law.</p>
+        <p>There is NO WARRANTY.</p>
       </b-message>
       <b-message type="is-info">
         <p>The recovery phrase is the only way to recover your account. Write it down and store it securely. Do not store it on any electronic system.</p>
         <p>The password is for unlocking the account on this device. It is not used for account recovery.</p>
       </b-message>
+    </template>
+
+    <template slot="body">
       <b-field label="Recovery phrase">
         {{ recoveryPhrase }}
       </b-field>

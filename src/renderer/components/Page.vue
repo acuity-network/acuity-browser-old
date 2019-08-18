@@ -7,6 +7,10 @@
       </section>
 
       <section class="section">
+        <slot name="messages"></slot>
+      </section>
+
+      <section class="section">
         <slot name="body"></slot>
       </section>
     </main>
