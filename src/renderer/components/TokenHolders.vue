@@ -1,5 +1,5 @@
 <template>
-  <b-table :data="data" default-sort="amount" default-sort-direction="asc">
+  <b-table :data="data" default-sort="amount" default-sort-direction="desc">
     <template slot-scope="props">
       <b-table-column field="holder" :label="$t('holder')" sortable>
         <profile-link :address="props.row.holder" :key="props.row.holder"></profile-link>
