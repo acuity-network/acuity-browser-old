@@ -40,8 +40,8 @@
 							<span v-else>pending</span>
 						</b-table-column>
 
-						<b-table-column label="Address">
-							<code>{{ props.row.who }}</code>
+						<b-table-column label="Account">
+              <profile-link :address="props.row.who"></profile-link>
 						</b-table-column>
 
 						<b-table-column :label="$t('amount')" numeric>
