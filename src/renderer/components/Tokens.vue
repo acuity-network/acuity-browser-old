@@ -8,7 +8,10 @@
       <b-table :data="data">
         <template slot-scope="props">
           <b-table-column label="Token">
-            <router-link :to="props.row.route">{{ props.row.title }}</router-link>
+            <item-link :itemId="props.row.itemId"></item-link>
+          </b-table-column>
+          <b-table-column label="Balance" numeric>
+            {{ props.row.balance }}
           </b-table-column>
           <b-table-column label="">
             <span class="remove" @click="remove" :data-itemid="props.row.itemId">remove</span>
@@ -24,6 +27,7 @@
 
 <script>
   import Page from './Page.vue'
+  import ItemLink from './ItemLink.vue'
   import MixItem from '../../lib/MixItem.js'
   import setTitle from '../../lib/setTitle.js'
 
@@ -31,6 +35,7 @@
     name: 'tokens',
     components: {
       Page,
+      ItemLink,
     },
     data() {
       return {
@@ -50,13 +55,14 @@
         })
         .on('data', async itemId => {
           try {
-            let item = await new MixItem(this.$root, itemId).init()
-            let revision = await item.latestRevision().load()
+            let address = await this.$mixClient.tokenRegistry.methods.getToken(itemId).call()
+    				let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), address)
+            let toBN = this.$mixClient.web3.utils.toBN
+    				let balance = this.$mixClient.web3.utils.fromWei(toBN(await token.methods.balanceOf(window.activeAccount.contractAddress).call()))
 
             this.data.push({
-              title: revision.getTitle(),
-              route: '/item/' + itemId,
               itemId: itemId,
+              balance: balance,
             })
           }
           catch (e) {}
