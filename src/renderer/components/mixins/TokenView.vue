@@ -41,7 +41,7 @@
 						</b-table-column>
 
 						<b-table-column label="Account">
-              <profile-link :address="props.row.who"></profile-link>
+              <profile-link :address="props.row.who" :key="props.row.who"></profile-link>
 						</b-table-column>
 
 						<b-table-column :label="$t('amount')" numeric>
@@ -279,7 +279,9 @@
         try {
           this.mixPerToken = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.getEthToTokenOutputPrice(this.$mixClient.web3.utils.toWei('1')).call()))
         }
-        catch (e) {}
+        catch (e) {
+          this.mixPerToken = 'n/a'
+        }
 			},
 			checkTo(event) {
         if (this.$mixClient.web3.utils.isAddress(this.to)) {
