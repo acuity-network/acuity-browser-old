@@ -28,6 +28,18 @@
         <option value="blacklist">Blacklist</option>
       </b-select>
     </b-field>
+    <b-field label="Tokens">
+      <b-table :data="tokens">
+        <template slot-scope="props">
+          <b-table-column label="Token">
+            <item-link :itemId="props.row.itemId"></item-link>
+          </b-table-column>
+          <b-table-column label="Balance" numeric>
+            {{ props.row.balance }}
+          </b-table-column>
+        </template>
+      </b-table>
+    </b-field>
   </div>
 </template>
 
@@ -48,6 +60,7 @@
         trusted: [],
         trustedThatTrust: [],
         visibility: 'none',
+        tokens: [],
       }
     },
     async created() {
@@ -59,6 +72,26 @@
         this.visibility = await this.$db.get('/accountVisibility/' + window.activeAccount.contractAddress + '/' + this.address)
       }
       catch (e) {}
+
+      this.$db.createValueStream({
+        'gte': '/accountPortfolio/' + this.address + '/',
+        'lt': '/accountPortfolio/' + this.address + '/z',
+      })
+      .on('data', async itemId => {
+        try {
+          let address = await this.$mixClient.tokenRegistry.methods.getToken(itemId).call()
+          let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), address)
+          let toBN = this.$mixClient.web3.utils.toBN
+          let balance = this.$mixClient.web3.utils.fromWei(toBN(await token.methods.balanceOf(window.activeAccount.contractAddress).call()))
+
+          this.tokens.push({
+            itemId: itemId,
+            balance: balance,
+          })
+        }
+        catch (e) {}
+      })
+
     },
     watch: {
       visibility() {
