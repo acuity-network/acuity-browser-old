@@ -13,7 +13,7 @@
 			{{ start }}
 		</b-field>
 		<b-field label="Owner">
-			{{ owner }}
+      <profile-link :address="owner"></profile-link>
 		</b-field>
     <b-field label="Initial balance">
 			{{ initialBalance }}
@@ -158,12 +158,14 @@
 
 <script>
   import TokenHolders from '../TokenHolders.vue'
+  import ProfileLink from '../ProfileLink.vue'
 
   export default {
     name: 'token-view',
     props: ['itemId'],
     components: {
       TokenHolders,
+      ProfileLink,
     },
     data() {
       return {
@@ -261,7 +263,7 @@
 				this.token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
 				this.symbol = await this.token.methods.symbol().call()
 				this.name = await this.token.methods.name().call()
-				this.start = await this.token.methods.start().call()
+				this.start =  new Date(await this.token.methods.start().call() * 1000).toLocaleDateString()
 				this.owner = await this.token.methods.owner().call()
 				let toBN = this.$mixClient.web3.utils.toBN
         this.initialBalance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.initialBalance().call()))
