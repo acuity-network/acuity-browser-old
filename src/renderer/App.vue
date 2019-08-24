@@ -28,7 +28,7 @@
           <li><router-link to="/profile">{{ $t('profile') }}</router-link></li>
           <li><router-link to="/trusted-accounts">{{ $t('trustedAccounts') }}</router-link></li>
           <li><router-link to="/wallet">{{ $t('wallet') }}</router-link></li>
-          <li v-if="isDevelopment"><router-link to="/tokens">{{ $t('tokens') }}</router-link></li>
+          <li><router-link to="/tokens">{{ $t('tokens') }}</router-link></li>
         </ul>
         <p class="menu-label">
           {{ $t('administration') }}
