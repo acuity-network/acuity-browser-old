@@ -1,27 +1,30 @@
 <template>
   <div>
-		<b-field label="Token address">
-			{{ tokenAddress }}
+		<b-field label="Address">
+			{{ address }}
 		</b-field>
-		<b-field label="Token symbol">
-			{{ tokenSymbol }}
+		<b-field label="Symbol">
+			{{ symbol }}
 		</b-field>
-		<b-field label="Token name">
-			{{ tokenName }}
+		<b-field label="Name">
+			{{ name }}
 		</b-field>
-		<b-field label="Token start">
-			{{ tokenStart }}
+		<b-field label="Start">
+			{{ start }}
 		</b-field>
-		<b-field label="Token owner">
-			{{ tokenOwner }}
+		<b-field label="Owner">
+			{{ owner }}
 		</b-field>
-		<b-field label="Token payout">
-			{{ tokenPayout }}
+    <b-field label="Initial balance">
+			{{ initialBalance }}
 		</b-field>
-		<b-field label="Token supply">
-			{{ tokenSupply }}
+		<b-field label="Daily payout">
+			{{ dailyPayout }}
 		</b-field>
-		<b-field label="Balance">
+		<b-field label="Total supply">
+			{{ totalSupply }}
+		</b-field>
+		<b-field label="Your balance">
 			{{ balance }}
 		</b-field>
 		<b-tabs>
@@ -147,7 +150,7 @@
         </div>
       </b-tab-item>
       <b-tab-item :label="$t('holders')">
-        <token-holders v-if="tokenAddress" :address="tokenAddress"></token-holders>
+        <token-holders v-if="address" :address="address"></token-holders>
       </b-tab-item>
 		</b-tabs>
   </div>
@@ -164,13 +167,14 @@
     },
     data() {
       return {
-				tokenSymbol: '',
-        tokenName: '',
-        tokenStart: '',
-        tokenOwner: '',
-        tokenPayout: '',
-        tokenSupply: '',
-        tokenAddress: '',
+				symbol: '',
+        name: '',
+        start: '',
+        owner: '',
+        initialBalance: '',
+        dailyPayout: '',
+        totalSupply: '',
+        address: '',
 				balance: '',
 				to: '',
         toError: '',
@@ -214,7 +218,7 @@
 		},
     async created() {
 			await this.loadData()
-			let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
+			let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
 			token.events.Transfer({
 				filter: {
 					from: window.activeAccount.contractAddress,
@@ -253,23 +257,27 @@
     },
 		methods: {
 			async loadData() {
-				this.tokenAddress = await this.$mixClient.tokenRegistry.methods.getToken(this.itemId).call()
-				this.token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
-				this.tokenSymbol = await this.token.methods.symbol().call()
-				this.tokenName = await this.token.methods.name().call()
-				this.tokenStart = await this.token.methods.tokenStart().call()
-				this.tokenOwner = await this.token.methods.tokenOwner().call()
+				this.address = await this.$mixClient.tokenRegistry.methods.getToken(this.itemId).call()
+				this.token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
+				this.symbol = await this.token.methods.symbol().call()
+				this.name = await this.token.methods.name().call()
+				this.start = await this.token.methods.start().call()
+				this.owner = await this.token.methods.owner().call()
 				let toBN = this.$mixClient.web3.utils.toBN
-				this.tokenPayout = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.tokenPayout().call()))
-				this.tokenSupply = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.totalSupply().call()))
+        this.initialBalance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.initialBalance().call()))
+				this.dailyPayout = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.dailyPayout().call()))
+				this.totalSupply = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.totalSupply().call()))
 				this.balance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.balanceOf(window.activeAccount.contractAddress).call()))
 
-        this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(this.tokenAddress).call()
+        this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(this.address).call()
         this.exchange = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/UniswapExchange.abi.json'), this.exchangeAddress)
         this.liquidityMix = this.$mixClient.web3.utils.fromWei(toBN(await this.$mixClient.web3.eth.getBalance(this.exchangeAddress, 'pending')))
         this.liquidityToken = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.balanceOf(this.exchangeAddress).call()))
         this.liquidityMine = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.balanceOf(window.activeAccount.contractAddress).call()))
-        this.mixPerToken = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.getEthToTokenOutputPrice(this.$mixClient.web3.utils.toWei('1')).call()))
+        try {
+          this.mixPerToken = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.getEthToTokenOutputPrice(this.$mixClient.web3.utils.toWei('1')).call()))
+        }
+        catch (e) {}
 			},
 			checkTo(event) {
         if (this.$mixClient.web3.utils.isAddress(this.to)) {
@@ -328,7 +336,7 @@
 	      this.isConfirm = false
 	    },
 	    async confirm(event) {
-				let contract = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
+				let contract = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
 				await window.activeAccount.sendData(contract, 'transfer', [this.to, this.$mixClient.web3.utils.toWei(this.amount)], 0, 'Send token')
 	      this.loadData()
 	      this.to = ''

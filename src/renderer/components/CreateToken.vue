@@ -14,8 +14,11 @@
       <b-field :label="$t('description')">
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
+      <b-field :label="$t('initialBalance')">
+        <b-input v-model="initialBalance"></b-input>
+      </b-field>
       <b-field :label="$t('dailyPayout')">
-        <b-input v-model="payout"></b-input>
+        <b-input v-model="dailyPayout"></b-input>
       </b-field>
 
       <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
@@ -46,7 +49,8 @@
         symbol: '',
         name: '',
         description: '',
-        payout: '',
+        initialBalance: '',
+        dailyPayout: '',
       }
     },
     created() {
@@ -93,7 +97,7 @@
         let ipfsHash = await content.save()
 
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create token item')
-        let tokenContract = await window.activeAccount.deployToken(this.symbol, this.name, this.$mixClient.web3.utils.toWei(this.payout), itemId)
+        let tokenContract = await window.activeAccount.deployToken(this.symbol, this.name, itemId, this.$mixClient.web3.utils.toWei(this.initialBalance), this.$mixClient.web3.utils.toWei(this.dailyPayout))
         await window.activeAccount.sendData(this.$mixClient.uniswapFactory, 'createExchange', [tokenContract], 0, 'Deploy Uniswap exchange', 1000000)
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }

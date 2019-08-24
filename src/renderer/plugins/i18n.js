@@ -68,6 +68,7 @@ let messages = {
     symbol: 'Symbol',
     name: 'Name',
     dailyPayout: 'Daily Payout',
+    initialBalance: 'Initial Balance',
     chooseImage: 'Choose Image',
     create: 'Create',
     // Accounts
