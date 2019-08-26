@@ -290,8 +290,7 @@
         else if (revision.content.existMixin('0x9fbbfaad')) {
           this.isToken = true
           try {
-            await this.$db.get('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId)
-            this.isPortfolio = true
+            this.isPortfolio = await window.activeAccount.call(this.$mixClient.accountTokens, 'getItemExists', [this.itemId])
           }
           catch (e) {}
         }
@@ -344,11 +343,11 @@
         this.isSubscribed = false
       },
       async portfolio(event) {
-        await this.$db.put('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId, this.itemId)
+        await window.activeAccount.sendData(this.$mixClient.accountTokens, 'addItem', [this.itemId], 0, 'Add token to portfolio')
         this.isPortfolio = true
       },
       async unportfolio(event) {
-        await this.$db.del('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId)
+        await window.activeAccount.sendData(this.$mixClient.accountTokens, 'removeItem', [this.itemId], 0, 'Remove token from portfolio')
         this.isPortfolio = false
       },
       async publish(event) {

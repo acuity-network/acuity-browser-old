@@ -49,11 +49,8 @@
     methods: {
       async loadData() {
         this.data = []
-        this.$db.createValueStream({
-          'gte': '/accountPortfolio/' + window.activeAccount.contractAddress + '/',
-          'lt': '/accountPortfolio/' + window.activeAccount.contractAddress + '/z',
-        })
-        .on('data', async itemId => {
+        let tokens = await window.activeAccount.call(this.$mixClient.accountTokens, 'getAllItems')
+        for (let itemId of tokens) {
           try {
             let address = await this.$mixClient.tokenRegistry.methods.getToken(itemId).call()
     				let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), address)
@@ -66,10 +63,10 @@
             })
           }
           catch (e) {}
-        })
+        }
       },
       async remove(event) {
-        await this.$db.del('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + event.target.dataset.itemid)
+        await window.activeAccount.sendData(this.$mixClient.accountTokens, 'removeItem', [event.target.dataset.itemid], 0, 'Remove token from portfolio')
         this.loadData()
       }
     }

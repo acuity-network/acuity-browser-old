@@ -74,11 +74,8 @@
       }
       catch (e) {}
 
-      this.$db.createValueStream({
-        'gte': '/accountPortfolio/' + window.activeAccount.contractAddress + '/',
-        'lt': '/accountPortfolio/' + window.activeAccount.contractAddress + '/z',
-      })
-      .on('data', async itemId => {
+      let tokens = await window.activeAccount.call(this.$mixClient.accountTokens, 'getAllItems')
+      for (let itemId of tokens) {
         try {
           let address = await this.$mixClient.tokenRegistry.methods.getToken(itemId).call()
           let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), address)
@@ -93,8 +90,7 @@
           }
         }
         catch (e) {}
-      })
-
+      }
     },
     watch: {
       visibility() {
