@@ -12,7 +12,7 @@
   </b-table>
 </template>
 
-<script lang="ts">
+<script>
   import ProfileLink from './ProfileLink.vue'
 
   export default {
