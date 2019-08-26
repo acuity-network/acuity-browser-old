@@ -201,7 +201,7 @@
     async created() {
 			await this.loadData()
 			let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
-			token.events.Transfer({
+			this.transferFromEmitter = token.events.Transfer({
 				filter: {
 					from: window.activeAccount.contractAddress,
 				},
@@ -219,7 +219,7 @@
 				})
 			})
 
-			token.events.Transfer({
+			this.transferToEmitter = token.events.Transfer({
 				filter: {
 					to: window.activeAccount.contractAddress,
 				},
@@ -236,6 +236,10 @@
 					'amount': this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(log.returnValues.value)),
 				})
 			})
+    },
+    destroyed() {
+      this.transferFromEmitter.unsubscribe()
+      this.transferToEmitter.unsubscribe()
     },
 		methods: {
 			async loadData() {
