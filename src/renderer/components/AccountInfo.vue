@@ -74,7 +74,7 @@
       }
       catch (e) {}
 
-      let tokens = await window.activeAccount.call(this.$mixClient.accountTokens, 'getAllItems')
+      let tokens = await window.activeAccount.call(this.$mixClient.accountTokens, 'getAllItemsByAccount', [this.address])
       for (let itemId of tokens) {
         try {
           let address = await this.$mixClient.tokenRegistry.methods.getToken(itemId).call()

@@ -150,7 +150,7 @@
         </div>
       </b-tab-item>
       <b-tab-item :label="$t('holders')">
-        <token-holders v-if="address" :address="address"></token-holders>
+        <token-holders v-if="address" :address="address" :itemId="itemId"></token-holders>
       </b-tab-item>
 		</b-tabs>
   </div>

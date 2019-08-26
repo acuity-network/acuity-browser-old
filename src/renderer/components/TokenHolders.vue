@@ -25,6 +25,10 @@
         type: String,
         required: true,
       },
+      itemId: {
+        type: String,
+        required: true,
+      },
     },
     data() {
       return {
@@ -37,10 +41,12 @@
       let accountBalances = await this.token.methods.getAccountBalances().call()
       let data = []
       for (let i in accountBalances.accounts) {
-        data.push({
-          holder: accountBalances.accounts[i],
-          amount: this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(accountBalances.balances[i])),
-        })
+        if (await window.activeAccount.call(this.$mixClient.accountTokens, 'getItemExistsByAccount', [accountBalances.accounts[i], this.itemId])) {
+          data.push({
+            holder: accountBalances.accounts[i],
+            amount: this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(accountBalances.balances[i])),
+          })
+        }
       }
       this.data = data
     },
