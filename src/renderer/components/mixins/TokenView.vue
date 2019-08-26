@@ -99,9 +99,6 @@
         <div class="tile is-ancestor">
           <div class="tile">
             <section>
-              <b-field :label="$t('minLiquidity')">
-                <b-input v-model="addLiquidityMinLiquidity"></b-input>
-              </b-field>
               <b-field :label="$t('maxTokens')">
                 <b-input v-model="addLiquidityMaxTokens"></b-input>
               </b-field>
@@ -113,14 +110,8 @@
           </div>
           <div class="tile">
             <section>
-              <b-field label="Amount of UNI burned">
+              <b-field label="Liquidity">
                 <b-input v-model="removeLiquidityUni"></b-input>
-              </b-field>
-              <b-field label="Minimum MIX withdrawn">
-                <b-input v-model="removeLiquidityMinMix"></b-input>
-              </b-field>
-              <b-field label="Minimum tokens withdrawn">
-                <b-input v-model="removeLiquidityMinTokens"></b-input>
               </b-field>
               <button type="submit" class="button" @click="removeLiquidity">{{ $t('removeLiquidity') }}</button>
             </section>
@@ -130,9 +121,6 @@
               <b-field label="MIX">
                 <b-input v-model="mixToTokensMix"></b-input>
               </b-field>
-              <b-field label="Minimum tokens">
-                <b-input v-model="mixToTokensMinTokens"></b-input>
-              </b-field>
               <button type="submit" class="button" @click="mixToTokens">MIX to tokens</button>
             </section>
           </div>
@@ -140,9 +128,6 @@
             <section>
               <b-field label="Tokens">
                 <b-input v-model="tokensToMixTokens"></b-input>
-              </b-field>
-              <b-field label="Minimum MIX">
-                <b-input v-model="tokensToMixMinMix"></b-input>
               </b-field>
               <button type="submit" class="button" @click="tokensToMix">Tokens to MIX</button>
             </section>
@@ -189,16 +174,11 @@
         liquidityToken: '',
         liquidityMine: '',
         mixPerToken: '',
-        addLiquidityMinLiquidity: '',
         addLiquidityMaxTokens: '',
         addLiquidityMix: '',
         removeLiquidityUni: '',
-        removeLiquidityMinMix: '',
-        removeLiquidityMinTokens: '',
         mixToTokensMix: '',
-        mixToTokensMinTokens: '',
         tokensToMixTokens: '',
-        tokensToMixMinMix: '',
       }
     },
 		checkTo(event) {
@@ -350,29 +330,24 @@
 	    },
       async addLiquidity(event) {
         await window.activeAccount.sendData(this.token, 'authorize', [this.exchangeAddress], 0, 'Authorize exchange')
-        let minLiquidity = this.$mixClient.web3.utils.toWei(this.addLiquidityMinLiquidity)
         let maxTokens = this.$mixClient.web3.utils.toWei(this.addLiquidityMaxTokens)
         let mix = this.$mixClient.web3.utils.toWei(this.addLiquidityMix)
-        await window.activeAccount.sendData(this.exchange, 'addLiquidity', [minLiquidity, maxTokens, '4000000000'], mix, 'Add liquidity')
+        await window.activeAccount.sendData(this.exchange, 'addLiquidity', [1, maxTokens, '4000000000'], mix, 'Add liquidity')
         this.loadData()
       },
       async removeLiquidity(event) {
         let uni = this.$mixClient.web3.utils.toWei(this.removeLiquidityUni)
-        let minMix = this.$mixClient.web3.utils.toWei(this.removeLiquidityMinMix)
-        let minTokens = this.$mixClient.web3.utils.toWei(this.removeLiquidityMinTokens)
-        await window.activeAccount.sendData(this.exchange, 'removeLiquidity', [uni, minMix, minTokens, '4000000000'], 0, 'Remove liquidity')
+        await window.activeAccount.sendData(this.exchange, 'removeLiquidity', [uni, 1, 1, '4000000000'], 0, 'Remove liquidity')
         this.loadData()
       },
       async mixToTokens(event) {
-        let minTokens = this.$mixClient.web3.utils.toWei(this.mixToTokensMinTokens)
         let mix = this.$mixClient.web3.utils.toWei(this.mixToTokensMix)
-        await window.activeAccount.sendData(this.exchange, 'ethToTokenSwapInput', [minTokens, '4000000000'], mix, 'Swap MIX for tokens')
+        await window.activeAccount.sendData(this.exchange, 'ethToTokenSwapInput', [1, '4000000000'], mix, 'Swap MIX for tokens')
         this.loadData()
       },
       async tokensToMix(event) {
         let tokens = this.$mixClient.web3.utils.toWei(this.tokensToMixTokens)
-        let minMix = this.$mixClient.web3.utils.toWei(this.tokensToMixMinMix)
-        await window.activeAccount.sendData(this.exchange, 'tokenToEthSwapInput', [tokens, minMix, '4000000000'], 0, 'Swap tokens for MIX')
+        await window.activeAccount.sendData(this.exchange, 'tokenToEthSwapInput', [tokens, 1, '4000000000'], 0, 'Swap tokens for MIX')
         this.loadData()
       },
 		},
