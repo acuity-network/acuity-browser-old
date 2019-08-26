@@ -47,7 +47,7 @@ export default class MixClient {
 		this.accountRegistry = new this.web3.eth.Contract(require('./contracts/MixAccountRegistry.abi.json'), '0xbcab5026b4d79396b222abc4d1ca36db10984c73')
 		this.accountProfile = new this.web3.eth.Contract(require('./contracts/MixAccountProfile.abi.json'), '0x994abe0212b5dcc1fb0b0e7336e7980316c3fe19')
 		this.accountFeeds = new this.web3.eth.Contract(require('./contracts/MixAccountItems.abi.json'), '0xc9ba9507d9f5be1d13ff2dca6f7e43dbfa859645')
-		this.accountTokens = new this.web3.eth.Contract(require('./contracts/MixAccountItems2.abi.json'), '0x007ca6dbdfa92bb94b8ed148379f78588e0185a6')
+		this.accountTokens = new this.web3.eth.Contract(require('./contracts/MixAccountItems2.abi.json'), '0xa2f0d67eb4e6e33d568f25ce9cb8226e9032e9d1')
 		this.trustedAccounts = new this.web3.eth.Contract(require('./contracts/MixTrustedAccounts.abi.json'), '0x70e2e2d6b31cd25e00c034ac9cfc79575efa26a9')
 		this.reactions = new this.web3.eth.Contract(require('./contracts/MixReactions.abi.json'), '0xd7051cd496a3a8373f9cf89476c04a7d51a5cc88')
 		this.tokenRegistryAddress = '0x5402efb80b307250b978cb1039a95e0c292b50c2'
