@@ -12,7 +12,7 @@ export default new Router({
     },
     {
       path: '*',
-      redirect: '/node-status',
+      redirect: '/home',
     },
     {
       path: '/home',
