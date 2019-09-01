@@ -24,6 +24,8 @@
         </b-select>
       </b-field>
 
+      <topic-selector v-model="topic"></topic-selector>
+
       <b-field label="Image" :message="filepath">
         <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
       </b-field>
@@ -35,6 +37,7 @@
 
 <script>
   import Page from './Page.vue'
+  import TopicSelector from './TopicSelector.vue'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
@@ -48,6 +51,7 @@
     name: 'publish-image',
     components: {
       Page,
+      TopicSelector,
     },
     data() {
       return {
@@ -55,6 +59,7 @@
         description: '',
         feeds: [{itemId: '0', title: 'none'}],
         feedId: '0',
+        topic: '',
         filepath: '',
       }
     },
@@ -114,6 +119,17 @@
 
         if (this.feedId != '0') {
           await window.activeAccount.sendData(this.$mixClient.itemDagFeedItems, 'addChild', [this.feedId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach feed item')
+        }
+
+        if (this.topic != '') {
+          let topicHash = this.$mixClient.web3.utils.keccak256(this.topic)
+          try {
+            await window.activeAccount.call(this.$mixClient.itemTopics, 'getTopic', [topicHash])
+          }
+          catch (e) {
+            await window.activeAccount.sendData(this.$mixClient.itemTopics, 'createTopic', [this.topic], 0, 'Create topic.')
+          }
+          await window.activeAccount.sendData(this.$mixClient.itemTopics, 'addItem', [topicHash, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Add item to topic.')
         }
 
         await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')

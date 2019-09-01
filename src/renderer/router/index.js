@@ -11,6 +11,12 @@ export default new Router({
       props: true,
     },
     {
+      path: '/topic/:topicHash',
+      name: 'topic',
+      component: require('@/components/ViewTopic').default,
+      props: true,
+    },
+    {
       path: '*',
       redirect: '/home',
     },

@@ -31,6 +31,7 @@
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         @click="toggleTrust"></span><br />
       <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
+      <span v-if="inTopic">on <router-link :to="topicRoute">{{ topic }}</router-link><br /></span>
       {{ published }}
     </template>
     <template slot="body">
@@ -194,6 +195,9 @@
         data.inFeed = false
         data.feed = ''
         data.feedRoute = ''
+        data.inTopic = false
+        data.topic = ''
+        data.topicRoute = ''
         data.published = ''
         data.image = ''
         data.description = ''
@@ -241,6 +245,13 @@
           let feedRevision = await feedItem.latestRevision().load()
           this.feed = feedRevision.getTitle()
           this.inFeed = true
+        }
+
+        let topicHashes = await this.$mixClient.itemTopics.methods.getItemTopicHashes(this.itemId).call()
+        if (topicHashes.length > 0) {
+          this.topicRoute = '/topic/' + topicHashes[0]
+          this.topic = await this.$mixClient.itemTopics.methods.getTopic(topicHashes[0]).call()
+          this.inTopic = true
         }
 
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
