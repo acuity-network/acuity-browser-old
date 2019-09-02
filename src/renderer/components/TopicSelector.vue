@@ -1,9 +1,7 @@
 <template>
-	<div>
-		<b-field label="Topics">
-			<b-taginput v-bind:value="value" v-on:input="$emit('input', $event)" icon="label" placeholder="Add a tag"></b-taginput>
-		</b-field>
-	</div>
+	<b-field label="Topics">
+		<b-taginput v-bind:value="value" v-on:input="$emit('input', $event)" icon="label" placeholder="Add a topic"></b-taginput>
+	</b-field>
 </template>
 
 <script>
