@@ -2,6 +2,8 @@
   <page>
     <template slot="title">
       Topic: {{ topic }}
+      <button v-if="!isSubscribed" class="button is-primary" @click="subscribe">Subscribe</button>
+      <button v-if="isSubscribed" class="button is-primary" @click="unsubscribe">Unsubscribe</button>
     </template>
 
     <template slot="subtitle">
@@ -31,12 +33,30 @@
     data() {
       return {
         topic: '',
+        isSubscribed: false,
         itemIds: [],
       }
     },
     async created() {
       this.topic = await this.$mixClient.itemTopics.methods.getTopic(this.topicHash).call()
+
+      try {
+        await this.$db.get('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash)
+        this.isSubscribed = true
+      }
+      catch (e) {}
+
       this.itemIds = (await this.$mixClient.itemTopics.methods.getAllTopicItems(this.topicHash).call()).reverse()
     },
+    methods: {
+      async subscribe(event) {
+        await this.$db.put('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash, this.topicHash)
+        this.isSubscribed = true
+      },
+      async unsubscribe(event) {
+        await this.$db.del('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash)
+        this.isSubscribed = false
+      },
+    }
   }
 </script>

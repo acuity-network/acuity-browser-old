@@ -30,52 +30,97 @@
     async created() {
       setTitle(this.$t('home'))
       let feedIds = []
-      this.$db.createValueStream({
-        'gte': '/accountSubscribed/' + window.activeAccount.contractAddress + '/',
-        'lt': '/accountSubscribed/' + window.activeAccount.contractAddress + '/z',
+      let topicHashes = []
+
+      let feedsPromise = new Promise((resolve, reject) => {
+        this.$db.createValueStream({
+          'gte': '/accountSubscribed/' + window.activeAccount.contractAddress + '/',
+          'lt': '/accountSubscribed/' + window.activeAccount.contractAddress + '/z',
+        })
+        .on('data', feedId => {
+          feedIds.push(feedId)
+        })
+        .on('end', async () => {
+          resolve()
+        })
       })
-      .on('data', feedId => {
-        feedIds.push(feedId)
+
+      let topicsPromise = new Promise((resolve, reject) => {
+        this.$db.createValueStream({
+          'gte': '/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/',
+          'lt': '/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/z',
+        })
+        .on('data', topicHash => {
+          topicHashes.push(topicHash)
+        })
+        .on('end', async () => {
+          resolve()
+        })
       })
-      .on('end', async () => {
-        let feeds = {}
-        for (let feedId of feedIds) {
-          let count = await this.$mixClient.itemDagFeedItems.methods.getChildCount(feedId).call()
-          if (count > 0) {
-            let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(feedId, count - 1).call()
-            let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
-            feeds[feedId] = {
-              offset: count - 1,
-              itemId: itemId,
-              timestamp: (timestamp != 0) ? timestamp : 2000000000,
-            }
+
+      await Promise.all([feedsPromise, topicsPromise])
+
+      let subscriptions = []
+      for (let feedId of feedIds) {
+        let count = await this.$mixClient.itemDagFeedItems.methods.getChildCount(feedId).call()
+        if (count > 0) {
+          let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(feedId, count - 1).call()
+          let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+          subscriptions.push({
+            type: 'feed',
+            feedId: feedId,
+            offset: count - 1,
+            itemId: itemId,
+            timestamp: (timestamp != 0) ? timestamp : 2000000000,
+          })
+        }
+      }
+      for (let topicHash of topicHashes) {
+        let count = await this.$mixClient.itemTopics.methods.getTopicItemCount(topicHash).call()
+        if (count > 0) {
+          let itemIds = await this.$mixClient.itemTopics.methods.getTopicItems(topicHash, count - 1, 1).call()
+          let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemIds[0], 0).call()
+          subscriptions.push({
+            type: 'topic',
+            topicHash: topicHash,
+            offset: count - 1,
+            itemId: itemIds[0],
+            timestamp: (timestamp != 0) ? timestamp : 2000000000,
+          })
+        }
+      }
+
+      while (Object.keys(subscriptions).length > 0) {
+        // Find the most recent item.
+        let topI, topTimestamp = 0
+        for (let i in subscriptions) {
+          if (subscriptions[i].timestamp > topTimestamp) {
+            topI = i
+            topTimestamp = subscriptions[i].timestamp
           }
         }
-        while (Object.keys(feeds).length > 0) {
-          // Find the most recent item.
-          let topFeedId, topTimestamp = 0
-          for (let feedId in feeds) {
-            if (feeds[feedId].timestamp > topTimestamp) {
-              topFeedId = feedId
-              topTimestamp = feeds[feedId].timestamp
-            }
-          }
-          this.itemIds.push(feeds[topFeedId].itemId)
-          if (feeds[topFeedId].offset == 0) {
-            delete feeds[topFeedId]
-          }
-          else {
-            let offset = feeds[topFeedId].offset - 1
-            let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(topFeedId, offset).call()
-            let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
-            feeds[topFeedId] = {
-              offset: offset,
-              itemId: itemId,
-              timestamp: (timestamp != 0) ? timestamp : 2000000000,
-            }
-          }
+        this.itemIds.push(subscriptions[topI].itemId)
+        if (subscriptions[topI].offset == 0) {
+          delete subscriptions[topI]
         }
-      })
+        else {
+          let offset = subscriptions[topI].offset - 1
+          let itemId
+          switch (subscriptions[topI].type) {
+            case 'feed':
+              itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(subscriptions[topI].feedId, offset).call()
+              break;
+            case 'topic':
+              let itemIds = await this.$mixClient.itemTopics.methods.getTopicItems(subscriptions[topI].topicHash, offset, 1).call()
+              itemId = itemIds[0]
+              break;
+          }
+          let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+          subscriptions[topI].offset = offset
+          subscriptions[topI].itemId = itemId
+          subscriptions[topI].timestamp = (timestamp != 0) ? timestamp : 2000000000
+        }
+      }
     },
   }
 </script>
