@@ -99,7 +99,9 @@
             topTimestamp = subscriptions[i].timestamp
           }
         }
-        this.itemIds.push(subscriptions[topI].itemId)
+        if (!this.itemIds.includes(subscriptions[topI].itemId)) {
+          this.itemIds.push(subscriptions[topI].itemId)
+        }
         if (subscriptions[topI].offset == 0) {
           delete subscriptions[topI]
         }

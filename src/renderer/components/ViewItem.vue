@@ -31,7 +31,7 @@
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         @click="toggleTrust"></span><br />
       <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
-      <span v-if="inTopic">on <router-link :to="topicRoute">{{ topic }}</router-link><br /></span>
+      <span v-if="topics.length > 0" class="topics">on <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br />
       {{ published }}
     </template>
     <template slot="body">
@@ -195,9 +195,7 @@
         data.inFeed = false
         data.feed = ''
         data.feedRoute = ''
-        data.inTopic = false
-        data.topic = ''
-        data.topicRoute = ''
+        data.topics = []
         data.published = ''
         data.image = ''
         data.description = ''
@@ -248,10 +246,13 @@
         }
 
         let topicHashes = await this.$mixClient.itemTopics.methods.getItemTopicHashes(this.itemId).call()
-        if (topicHashes.length > 0) {
-          this.topicRoute = '/topic/' + topicHashes[0]
-          this.topic = await this.$mixClient.itemTopics.methods.getTopic(topicHashes[0]).call()
-          this.inTopic = true
+
+        for (let topicHash of topicHashes) {
+          this.topics.push({
+            hash: topicHash,
+            route: '/topic/' + topicHash,
+            topic: await this.$mixClient.itemTopics.methods.getTopic(topicHash).call(),
+          })
         }
 
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
@@ -461,6 +462,14 @@
 
   .button {
     margin-right:10px;
-
   }
+
+  .topics >>> .topic::after {
+    content: ", ";
+  }
+
+  .topics >>> .topic:last-child::after {
+    content: "";
+  }
+
 </style>

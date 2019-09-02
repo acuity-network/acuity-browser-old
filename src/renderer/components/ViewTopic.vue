@@ -38,17 +38,20 @@
       }
     },
     async created() {
-      this.topic = await this.$mixClient.itemTopics.methods.getTopic(this.topicHash).call()
-
-      try {
-        await this.$db.get('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash)
-        this.isSubscribed = true
-      }
-      catch (e) {}
-
-      this.itemIds = (await this.$mixClient.itemTopics.methods.getAllTopicItems(this.topicHash).call()).reverse()
+      this.loadData()
     },
     methods: {
+      async loadData() {
+        this.topic = await this.$mixClient.itemTopics.methods.getTopic(this.topicHash).call()
+
+        try {
+          await this.$db.get('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash)
+          this.isSubscribed = true
+        }
+        catch (e) {}
+
+        this.itemIds = (await this.$mixClient.itemTopics.methods.getAllTopicItems(this.topicHash).call()).reverse()
+      },
       async subscribe(event) {
         await this.$db.put('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash, this.topicHash)
         this.isSubscribed = true
@@ -57,6 +60,11 @@
         await this.$db.del('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash)
         this.isSubscribed = false
       },
-    }
+    },
+    watch: {
+      topicHash() {
+        this.loadData()
+      }
+    },
   }
 </script>
