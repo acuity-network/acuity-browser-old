@@ -1,14 +1,7 @@
 <template>
-  <page>
-    <template slot="title">
-      {{ $t('home') }}
-    </template>
-
-    <template slot="body">
-      <view-item v-for="itemId in itemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
-    </template>
-
-  </page>
+  <main>
+    <view-item v-for="itemId in itemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
+  </main>
 </template>
 
 <script>
