@@ -8,7 +8,9 @@
 
   export default {
     name: 'topic-selector',
-    props: ['value'],
+    props: {
+			value: Array,
+		},
 		data() {
       return {
         topics: [],
@@ -32,7 +34,7 @@
 		methods: {
 			getFilteredTopics(text) {
 				this.filteredTopics = this.topics.filter((topic) => {
-					return topic.toLowerCase().indexOf(text.toLowerCase()) >= 0
+					return (this.value.indexOf(topic) == -1) && (topic.toLowerCase().indexOf(text.toLowerCase()) >= 0)
 				})
 			}
 		}
