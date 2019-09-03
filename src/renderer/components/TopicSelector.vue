@@ -1,6 +1,6 @@
 <template>
 	<b-field label="Topics">
-		<b-taginput v-bind:value="value" v-on:input="$emit('input', $event)" icon="label" placeholder="Add a topic"></b-taginput>
+		<b-taginput v-bind:value="value" v-on:input="$emit('input', $event)" icon="label" placeholder="Add a topic" autocomplete @typing="getFilteredTopics" :data="filteredTopics" allow-new></b-taginput>
 	</b-field>
 </template>
 
@@ -8,12 +8,11 @@
 
   export default {
     name: 'topic-selector',
-    components: {
-    },
     props: ['value'],
 		data() {
       return {
         topics: [],
+				filteredTopics: [],
       }
     },
 		async created() {
@@ -30,6 +29,32 @@
         })
       })
 		},
-	}
+		methods: {
+			getFilteredTopics(text) {
+				this.filteredTopics = this.topics.filter((topic) => {
+					return topic.toLowerCase().indexOf(text.toLowerCase()) >= 0
+				})
+			}
+		}
+ }
 
 </script>
+
+<style scoped>
+
+	.taginput >>> .taginput-container .tag {
+		background-color: #3273dc;
+		color: #fff;
+	}
+
+	.taginput >>> .dropdown-item.is-hovered {
+		background-color: #3273dc;
+		color: #fff;
+	}
+
+	.taginput >>> .dropdown-item:hover {
+		background-color: #3273dc;
+		color: #fff;
+	}
+
+</style>
