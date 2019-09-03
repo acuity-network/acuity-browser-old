@@ -246,14 +246,15 @@
         }
 
         let topicHashes = await this.$mixClient.itemTopics.methods.getItemTopicHashes(this.itemId).call()
-
+        let topics = []
         for (let topicHash of topicHashes) {
-          this.topics.push({
+          topics.push({
             hash: topicHash,
             route: '/topic/' + topicHash,
             topic: await this.$mixClient.itemTopics.methods.getTopic(topicHash).call(),
           })
         }
+        this.topics = topics
 
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
