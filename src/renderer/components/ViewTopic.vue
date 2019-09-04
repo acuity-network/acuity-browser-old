@@ -17,6 +17,7 @@
 <script>
   import Page from './Page.vue'
   import ViewItem from './ViewItem.vue'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'view-topic',
@@ -43,6 +44,7 @@
     methods: {
       async loadData() {
         this.topic = await this.$mixClient.itemTopics.methods.getTopic(this.topicHash).call()
+        setTitle(this.topic)
 
         try {
           await this.$db.get('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash)
