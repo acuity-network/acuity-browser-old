@@ -107,6 +107,7 @@ let messages = {
     holders: 'Holders',
     holder: 'Holder',
     amount: 'Amount',
+    'feed': 'Feed',
   },
   'ru': {
     general: 'Общие',

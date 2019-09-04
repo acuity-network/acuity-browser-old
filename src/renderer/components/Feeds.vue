@@ -7,7 +7,7 @@
     <template slot="body">
       <b-table :data="data">
         <template slot-scope="props">
-          <b-table-column :label="$t('feeds')">
+          <b-table-column :label="$t('feed')">
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
         </template>
