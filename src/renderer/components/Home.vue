@@ -69,18 +69,21 @@
         }
       }
       for (let topicHash of topicHashes) {
-        let count = await this.$mixClient.itemTopics.methods.getTopicItemCount(topicHash).call()
-        if (count > 0) {
-          let itemIds = await this.$mixClient.itemTopics.methods.getTopicItems(topicHash, count - 1, 1).call()
-          let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemIds[0], 0).call()
-          subscriptions.push({
-            type: 'topic',
-            topicHash: topicHash,
-            offset: count - 1,
-            itemId: itemIds[0],
-            timestamp: (timestamp != 0) ? timestamp : 2000000000,
-          })
+        try {
+          let count = await this.$mixClient.itemTopics.methods.getTopicItemCount(topicHash).call()
+          if (count > 0) {
+            let itemId = await this.$mixClient.itemTopics.methods.getTopicItem(topicHash, count - 1).call()
+            let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+            subscriptions.push({
+              type: 'topic',
+              topicHash: topicHash,
+              offset: count - 1,
+              itemId: itemId,
+              timestamp: (timestamp != 0) ? timestamp : 2000000000,
+            })
+          }
         }
+        catch (e) {}
       }
 
       while (Object.keys(subscriptions).length > 0) {
@@ -106,8 +109,7 @@
               itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(subscriptions[topI].feedId, offset).call()
               break;
             case 'topic':
-              let itemIds = await this.$mixClient.itemTopics.methods.getTopicItems(subscriptions[topI].topicHash, offset, 1).call()
-              itemId = itemIds[0]
+              itemId = await this.$mixClient.itemTopics.methods.getTopicItem(subscriptions[topI].topicHash, offset).call()
               break;
           }
           let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
