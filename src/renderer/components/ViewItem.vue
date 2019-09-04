@@ -31,7 +31,7 @@
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         @click="toggleTrust"></span><br />
       <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
-      <span v-if="topics.length > 0" class="topics">on <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br />
+      <span v-if="topics.length > 0"><span class="topics">on <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br /></span>
       {{ published }}
     </template>
     <template slot="body">
