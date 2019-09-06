@@ -289,6 +289,15 @@ export default class MixAccount {
   async sendData(contract, method, params, value, description, gas) {
     let to = contract.options.address
     let data = contract.methods[method].apply(this, params).encodeABI()
+    // Test this transaction.
+    let success = await this.contract.methods.sendData(to, data).call({
+      from: this.controllerAddress,
+      value: this.vue.$mixClient.web3.utils.toHex(value),
+    })
+    if (!success) {
+      this.vue.$buefy.toast.open({message: 'Transaction error', type: 'is-danger'})
+      return
+    }
     let transaction = await this._send(this.contract.methods.sendData(to, data), value, true, gas)
     this._logTransaction(transaction, to, description)
     return transaction
