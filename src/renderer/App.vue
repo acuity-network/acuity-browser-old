@@ -235,6 +235,8 @@
     -webkit-font-smoothing: subpixel-antialiased;
   }
 
+  @import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i|Noto+Serif:400,400i,700,700i&display=swap&subset=cyrillic,cyrillic-ext,devanagari,greek,greek-ext,latin-ext,vietnamese');
+
   html body, html button, html input, html select {
     font-family: "Noto Sans";
   }
