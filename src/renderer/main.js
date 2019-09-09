@@ -16,7 +16,6 @@ Vue.use(VueI18n)
 import messages from './translations.js'
 
 let i18n = new VueI18n({
-  locale: 'en',
   messages,
 });
 

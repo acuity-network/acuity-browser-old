@@ -7,8 +7,8 @@
     <template slot="body">
       <b-field :label="$t('language')">
         <b-select v-model="locale">
-          <option value="en">English - en</option>
-          <option value="ru">Russian - ru</option>
+          <option value="en-US">English</option>
+          <option value="ru">русский</option>
         </b-select>
       </b-field>
       <b-field label="Advanced">

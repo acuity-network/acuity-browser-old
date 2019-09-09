@@ -1,5 +1,17 @@
 export default {
-  'en': {
+  // American English
+  'en-US': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
     // Nav Panel
     general: 'General',
     home: 'Home',
@@ -102,9 +114,49 @@ export default {
     holders: 'Holders',
     holder: 'Holder',
     amount: 'Amount',
-    'feed': 'Feed',
+    feed: 'Feed',
   },
+  // Chinese (Traditional)
+  'zh-CHT': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Chinese (Simplified)
+  'zh-CN': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Russian
   'ru': {
+    AccountInfo: {
+      Feeds: 'каналы',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
     general: 'Общие',
     home: 'Домой',
     myFeeds: 'Мои каналы',
@@ -182,5 +234,75 @@ export default {
     language: 'Язык',
     // Debug
     readItem:'Получить сведения'
-  }
+  },
+  // Indonesian
+  'id': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Japanese
+  'ja': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Vietnamese
+  'vi': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Javanese
+  'jv': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Thai
+  'th': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
 }

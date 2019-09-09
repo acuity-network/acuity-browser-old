@@ -1,44 +1,44 @@
 <template>
   <div>
-    <b-field label="Feeds">
+    <b-field :label="$t('AccountInfo.Feeds')">
       <ul>
         <li v-for="itemId in feeds" :key="itemId">
           <item-link :itemId="itemId"></item-link>
         </li>
       </ul>
     </b-field>
-    <b-field label="Trusted that trust">
+    <b-field :label="$t('AccountInfo.TrustedThatTrust')">
       <ul>
         <li v-for="address in trustedThatTrust" :key="address">
           <profile-link :address="address"></profile-link>
         </li>
       </ul>
     </b-field>
-    <b-field label="Trusts">
+    <b-field :label="$t('AccountInfo.Trusts')">
       <ul>
         <li v-for="address in trusted" :key="address">
           <profile-link :address="address"></profile-link>
         </li>
       </ul>
     </b-field>
-    <b-field label="Visibilty override">
+    <b-field :label="$t('AccountInfo.VisibilityOverride')">
       <b-select v-model="visibility">
         <option value="none">None</option>
-        <option value="whitelist">Whitelist</option>
-        <option value="blacklist">Blacklist</option>
+        <option value="whitelist">{{ $t('AccountInfo.Whitelist') }}</option>
+        <option value="blacklist">{{ $t('AccountInfo.Blacklist') }}</option>
       </b-select>
     </b-field>
     <b-table :data="tokens">
       <template slot-scope="props">
-        <b-table-column label="Token">
+        <b-table-column :label="$t('AccountInfo.Token')">
           <item-link :itemId="props.row.itemId"></item-link>
         </b-table-column>
-        <b-table-column label="Balance" numeric>
+        <b-table-column :label="$t('AccountInfo.Balance')" numeric>
           {{ props.row.balance }}
         </b-table-column>
       </template>
     </b-table>
-    <b-field label="Address">
+    <b-field :label="$t('AccountInfo.Address')">
       {{ address }}
     </b-field>
   </div>
