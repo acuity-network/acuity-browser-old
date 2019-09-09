@@ -54,7 +54,6 @@
   import Splash from './components/Splash.vue'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
-  import i18n from './plugins/i18n'
   import { ipcRenderer } from 'electron'
 
   export default {
@@ -99,7 +98,7 @@
       window.downloads = []
       await this.$settings.init(this.$db)
       // Load previous selected language.
-      i18n.locale = this.$settings.get('locale')
+      this.$root.$i18n.locale = this.$settings.get('locale')
       this.isDevelopment = this.$settings.get('development')
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',

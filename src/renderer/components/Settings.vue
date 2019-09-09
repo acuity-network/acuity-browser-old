@@ -22,7 +22,6 @@
 
 <script>
   import Page from './Page.vue'
-  import i18n from '../plugins/i18n'
   import setTitle from '../../lib/setTitle.js'
 
   export default {
@@ -38,7 +37,7 @@
     },
     watch: {
       locale() {
-        i18n.locale = this.locale;
+        this.$root.$i18n.locale = this.locale;
         this.$settings.set('locale', this.locale);
       },
       development() {

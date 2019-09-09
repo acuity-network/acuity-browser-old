@@ -1,9 +1,4 @@
-import Vue from 'vue';
-import VueI18n from 'vue-i18n';
-
-Vue.use(VueI18n);
-
-let messages = {
+export default {
   'en': {
     // Nav Panel
     general: 'General',
@@ -189,11 +184,3 @@ let messages = {
     readItem:'Получить сведения'
   }
 }
-
-let i18n = new VueI18n({
-    locale: 'en', // Set locale.
-    fallbackLocale: 'ru', // Set fallback locale.
-    messages, // Set locale messages.
-  });
-
-export default i18n;
