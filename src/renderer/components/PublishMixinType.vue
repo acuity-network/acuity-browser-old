@@ -78,10 +78,10 @@
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x10' + this.$mixClient.web3.utils.randomHex(31).substr(2)
-        let itemId = await window.activeAccount.call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
-        await window.activeAccount.sendData(this.$mixClient.itemStoreShortId, 'createShortId', [itemId], 0, 'Create short ID')
-//        await window.activeAccount.sendData(this.$mixClient.itemDagMixins, 'addChild', [this.parentId.trim(), '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach mixin to parent')
-        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create mixin type')
+        let itemId = await this.$activeAccount.get().call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [this.$activeAccount.get().contractAddress, flagsNonce])
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreShortId, 'createShortId', [itemId], 0, 'Create short ID')
+//        await this.$activeAccount.get().sendData(this.$mixClient.itemDagMixins, 'addChild', [this.parentId.trim(), '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach mixin to parent')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create mixin type')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

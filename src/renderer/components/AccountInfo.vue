@@ -65,16 +65,16 @@
       }
     },
     async created() {
-      this.feeds = await window.activeAccount.call(this.$mixClient.accountFeeds, 'getAllItemsByAccount', [this.address])
-      this.trusted = await window.activeAccount.call(this.$mixClient.trustedAccounts, 'getAllTrustedByAccount', [this.address])
-      this.trustedThatTrust = await window.activeAccount.getTrustedThatTrust(this.address)
+      this.feeds = await this.$activeAccount.get().call(this.$mixClient.accountFeeds, 'getAllItemsByAccount', [this.address])
+      this.trusted = await this.$activeAccount.get().call(this.$mixClient.trustedAccounts, 'getAllTrustedByAccount', [this.address])
+      this.trustedThatTrust = await this.$activeAccount.get().getTrustedThatTrust(this.address)
 
       try {
-        this.visibility = await this.$db.get('/accountVisibility/' + window.activeAccount.contractAddress + '/' + this.address)
+        this.visibility = await this.$db.get('/accountVisibility/' + this.$activeAccount.get().contractAddress + '/' + this.address)
       }
       catch (e) {}
 
-      let tokens = await window.activeAccount.call(this.$mixClient.accountTokens, 'getAllItemsByAccount', [this.address])
+      let tokens = await this.$activeAccount.get().call(this.$mixClient.accountTokens, 'getAllItemsByAccount', [this.address])
       for (let itemId of tokens) {
         try {
           let address = await this.$mixClient.tokenRegistry.methods.getToken(itemId).call()
@@ -94,7 +94,7 @@
     },
     watch: {
       visibility() {
-        this.$db.put('/accountVisibility/' + window.activeAccount.contractAddress + '/' + this.address, this.visibility)
+        this.$db.put('/accountVisibility/' + this.$activeAccount.get().contractAddress + '/' + this.address, this.visibility)
       },
     }
   }

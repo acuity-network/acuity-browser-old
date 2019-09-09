@@ -113,17 +113,17 @@ export default class MixAccount {
       let types = ['string', 'string', 'address', 'bytes32', 'address', 'uint', 'uint']
       let params = [symbol, name, this.vue.$mixClient.tokenRegistryAddress, itemId, this.contractAddress, initialBalance, dailyPayout]
       let paramsBytecode = this.vue.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
-      let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+      let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let rawTx = {
         nonce: this.vue.$mixClient.web3.utils.toHex(nonce),
-        from: window.activeAccount.controllerAddress,
+        from: this.controllerAddress,
         gas: this.vue.$mixClient.web3.utils.toHex(2000000),
         gasPrice: '0x3b9aca00',
         data: '0x' + tokenBytecode + paramsBytecode,
       }
 
       let tx = new ethTx(rawTx)
-      let privateKey = privateKeys[window.activeAccount.controllerAddress]
+      let privateKey = privateKeys[this.controllerAddress]
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
 
@@ -138,7 +138,7 @@ export default class MixAccount {
   }
 
   select() {
-    window.activeAccount = this
+    this.vue.$activeAccount.set(this)
     this.vue.$db.put('/active-account', this.controllerAddress)
     this.vue.$root.$emit('change-active-account', this)
   }

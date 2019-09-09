@@ -76,7 +76,7 @@
     async created() {
       setTitle(this.$t('publishFile'))
 
-      let feeds = await window.activeAccount.call(this.$mixClient.accountFeeds, 'getAllItems')
+      let feeds = await this.$activeAccount.get().call(this.$mixClient.accountFeeds, 'getAllItems')
       for (let itemId of feeds) {
         try {
           let item = await new MixItem(this.$root, itemId).init()
@@ -120,7 +120,7 @@
       },
       async publish(event) {
         let flagsNonce = '0x0f' + this.$mixClient.web3.utils.randomHex(31).substr(2)
-        let itemId = await window.activeAccount.call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+        let itemId = await this.$activeAccount.get().call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [this.$activeAccount.get().contractAddress, flagsNonce])
 
         let content = new MixContent(this.$root)
 
@@ -149,21 +149,21 @@
         let ipfsHash = await content.save()
 
         if (this.feedId != '0') {
-          await window.activeAccount.sendData(this.$mixClient.itemDagFeedItems, 'addChild', [this.feedId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach feed item')
+          await this.$activeAccount.get().sendData(this.$mixClient.itemDagFeedItems, 'addChild', [this.feedId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach feed item')
         }
 
         for (let topic of this.topics) {
           let topicHash = this.$mixClient.web3.utils.keccak256(topic)
           try {
-            await window.activeAccount.call(this.$mixClient.itemTopics, 'getTopic', [topicHash])
+            await this.$activeAccount.get().call(this.$mixClient.itemTopics, 'getTopic', [topicHash])
           }
           catch (e) {
-            await window.activeAccount.sendData(this.$mixClient.itemTopics, 'createTopic', [topic], 0, 'Create topic.')
+            await this.$activeAccount.get().sendData(this.$mixClient.itemTopics, 'createTopic', [topic], 0, 'Create topic.')
           }
-          await window.activeAccount.sendData(this.$mixClient.itemTopics, 'addItem', [topicHash, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Add item to topic.')
+          await this.$activeAccount.get().sendData(this.$mixClient.itemTopics, 'addItem', [topicHash, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Add item to topic.')
         }
 
-        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

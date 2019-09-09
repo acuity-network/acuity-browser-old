@@ -49,12 +49,12 @@
     },
     methods: {
       async loadData() {
-        let nonce = await this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+        let nonce = await this.$mixClient.web3.eth.getTransactionCount(this.$activeAccount.get().controllerAddress)
         let transactions = []
         let data = []
         for (let i = nonce; i >= 0; i--) {
           try {
-            let info = await window.activeAccount.getTransactionInfo(i)
+            let info = await this.$activeAccount.get().getTransactionInfo(i)
             data.push({
               'confirmed': info.receipt !== null,
               'when': info.receipt ? new Date(info.block.timestamp * 1000) : null,
@@ -71,7 +71,7 @@
     },
     async created() {
       setTitle(this.$t('transactionHistory'))
-      if (!window.activeAccount) {
+      if (!this.$activeAccount.get()) {
         return
       }
 

@@ -64,7 +64,7 @@
         let trusted = []
         let whitelist = []
         let blacklist = []
-        let trustedAccounts = await window.activeAccount.call(this.$mixClient.trustedAccounts, 'getAllTrusted')
+        let trustedAccounts = await this.$activeAccount.get().call(this.$mixClient.trustedAccounts, 'getAllTrusted')
         await trustedAccounts.forEach(async contractAddress => {
           let account = await new MixAccount(this.$root, contractAddress, true).init()
           let profileItemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
@@ -78,8 +78,8 @@
         })
 
         await this.$db.createReadStream({
-          'gte': '/accountVisibility/' + window.activeAccount.contractAddress + '/',
-          'lt': '/accountVisibility/' + window.activeAccount.contractAddress + '/z',
+          'gte': '/accountVisibility/' + this.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountVisibility/' + this.$activeAccount.get().contractAddress + '/z',
         })
         .on('data', async (data) => {
           let accountAddress = data.key.split('/')[3]
@@ -112,11 +112,11 @@
          this.blacklist = blacklist
       },
       async removeTrusted(event) {
-        await window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [event.target.dataset.address], 0, 'Untrust account')
+        await this.$activeAccount.get().sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [event.target.dataset.address], 0, 'Untrust account')
         this.loadData()
       },
       async removeVisibility(event) {
-        await this.$db.del('/accountVisibility/' + window.activeAccount.contractAddress + '/' + event.target.dataset.address)
+        await this.$db.del('/accountVisibility/' + this.$activeAccount.get().contractAddress + '/' + event.target.dataset.address)
         this.loadData()
       },
     },

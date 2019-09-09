@@ -49,13 +49,13 @@
     methods: {
       async loadData() {
         this.data = []
-        let tokens = await window.activeAccount.call(this.$mixClient.accountTokens, 'getAllItems')
+        let tokens = await this.$activeAccount.get().call(this.$mixClient.accountTokens, 'getAllItems')
         for (let itemId of tokens) {
           try {
             let address = await this.$mixClient.tokenRegistry.methods.getToken(itemId).call()
     				let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), address)
             let toBN = this.$mixClient.web3.utils.toBN
-    				let balance = this.$mixClient.web3.utils.fromWei(toBN(await token.methods.balanceOf(window.activeAccount.contractAddress).call()))
+    				let balance = this.$mixClient.web3.utils.fromWei(toBN(await token.methods.balanceOf(this.$activeAccount.get().contractAddress).call()))
 
             this.data.push({
               itemId: itemId,
@@ -66,7 +66,7 @@
         }
       },
       async remove(event) {
-        await window.activeAccount.sendData(this.$mixClient.accountTokens, 'removeItem', [event.target.dataset.itemid], 0, 'Remove token from portfolio')
+        await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'removeItem', [event.target.dataset.itemid], 0, 'Remove token from portfolio')
         this.loadData()
       }
     }

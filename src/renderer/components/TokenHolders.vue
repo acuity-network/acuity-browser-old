@@ -41,7 +41,7 @@
       let accountBalances = await this.token.methods.getAccountBalances().call()
       let data = []
       for (let i in accountBalances.accounts) {
-        if (await window.activeAccount.call(this.$mixClient.accountTokens, 'getItemExistsByAccount', [accountBalances.accounts[i], this.itemId])) {
+        if (await this.$activeAccount.get().call(this.$mixClient.accountTokens, 'getItemExistsByAccount', [accountBalances.accounts[i], this.itemId])) {
           data.push({
             holder: accountBalances.accounts[i],
             amount: this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(accountBalances.balances[i])),

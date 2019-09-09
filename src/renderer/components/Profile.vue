@@ -45,10 +45,10 @@
       }
     },
     async created() {
-      if (!window.activeAccount) {
+      if (!this.$activeAccount.get()) {
         return
       }
-      this.itemId = await window.activeAccount.getProfile()
+      this.itemId = await this.$activeAccount.get().getProfile()
       let item = await new MixItem(this, this.itemId).init()
       let revision = await item.latestRevision().load()
       this.title = revision.getTitle()

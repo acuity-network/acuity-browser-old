@@ -58,7 +58,7 @@
       },
       async publish(event) {
         let flagsNonce = '0x0f' + this.$mixClient.web3.utils.randomHex(31).substr(2)
-        let itemId = await window.activeAccount.call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+        let itemId = await this.$activeAccount.get().call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [this.$activeAccount.get().contractAddress, flagsNonce])
 
         let content = new MixContent(this.$root)
 
@@ -87,8 +87,8 @@
         }
 
         let ipfsHash = await content.save()
-        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create feed')
-        await window.activeAccount.sendData(this.$mixClient.accountFeeds, 'addItem', [itemId], 0, 'Add feed to account')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create feed')
+        await this.$activeAccount.get().sendData(this.$mixClient.accountFeeds, 'addItem', [itemId], 0, 'Add feed to account')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

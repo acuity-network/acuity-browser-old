@@ -68,7 +68,7 @@
       },
       async create(event) {
         let flagsNonce = '0x03' + this.$mixClient.web3.utils.randomHex(31).substr(2)
-        let itemId = await window.activeAccount.call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [window.activeAccount.contractAddress, flagsNonce])
+        let itemId = await this.$activeAccount.get().call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [this.$activeAccount.get().contractAddress, flagsNonce])
 
         let content = new MixContent(this.$root)
 
@@ -96,9 +96,9 @@
 
         let ipfsHash = await content.save()
 
-        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create token item')
-        let tokenContract = await window.activeAccount.deployToken(this.symbol, this.name, itemId, this.$mixClient.web3.utils.toWei(this.initialBalance), this.$mixClient.web3.utils.toWei(this.dailyPayout))
-        await window.activeAccount.sendData(this.$mixClient.uniswapFactory, 'createExchange', [tokenContract], 0, 'Deploy Uniswap exchange', 1000000)
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create token item')
+        let tokenContract = await this.$activeAccount.get().deployToken(this.symbol, this.name, itemId, this.$mixClient.web3.utils.toWei(this.initialBalance), this.$mixClient.web3.utils.toWei(this.dailyPayout))
+        await this.$activeAccount.get().sendData(this.$mixClient.uniswapFactory, 'createExchange', [tokenContract], 0, 'Deploy Uniswap exchange', 1000000)
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     },

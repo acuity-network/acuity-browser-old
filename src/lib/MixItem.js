@@ -73,12 +73,12 @@ export default class MixItem {
   }
 
   async isTrusted() {
-    if (window.activeAccount.contractAddress == this.item.owner) {
+    if (this.vue.$activeAccount.get().contractAddress == this.item.owner) {
       return true
     }
     let visibility
     try {
-      visibility = await this.vue.$db.get('/accountVisibility/' + window.activeAccount.contractAddress + '/' + this.item.owner)
+      visibility = await this.vue.$db.get('/accountVisibility/' + this.vue.$activeAccount.get().contractAddress + '/' + this.item.owner)
     }
     catch (e) {}
 
@@ -89,17 +89,17 @@ export default class MixItem {
       case 'blacklist':
         return false;
     }
-    return await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedDeep', [this.item.owner])
+    return await this.vue.$activeAccount.get().call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedDeep', [this.item.owner])
   }
 
   async getTrustLevel() {
-    if (window.activeAccount.contractAddress == this.item.owner) {
+    if (this.vue.$activeAccount.get().contractAddress == this.item.owner) {
       return 1
     }
-    if (await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrusted', [this.item.owner])) {
+    if (await this.vue.$activeAccount.get().call(this.vue.$mixClient.trustedAccounts, 'getIsTrusted', [this.item.owner])) {
       return 2
     }
-    if (await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedOnlyDeep', [this.item.owner])) {
+    if (await this.vue.$activeAccount.get().call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedOnlyDeep', [this.item.owner])) {
       return 3
     }
     return 0
@@ -116,7 +116,7 @@ export default class MixItem {
         return 1
 
       case 2:
-        if (await window.activeAccount.call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedOnlyDeep', [this.item.owner])) {
+        if (await this.vue.$activeAccount.get().call(this.vue.$mixClient.trustedAccounts, 'getIsTrustedOnlyDeep', [this.item.owner])) {
           return 3
         }
         return 0

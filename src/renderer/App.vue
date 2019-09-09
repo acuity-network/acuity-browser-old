@@ -93,7 +93,7 @@
       // Load previous active account.
       try {
         let controller = await this.$db.get('/active-account')
-        window.activeAccount = await new MixAccount(this.$root, controller).init()
+        this.$activeAccount.set(await new MixAccount(this.$root, controller).init())
       }
       catch(e) {}
       window.downloads = []

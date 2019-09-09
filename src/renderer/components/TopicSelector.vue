@@ -20,8 +20,8 @@
 		async created() {
 			await new Promise((resolve, reject) => {
         this.$db.createValueStream({
-          'gte': '/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/',
-          'lt': '/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/z',
+          'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
         .on('data', async topicHash => {
           this.topics.push(await this.$mixClient.itemTopics.methods.getTopic(topicHash).call())

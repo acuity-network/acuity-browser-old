@@ -101,17 +101,17 @@
     },
     methods: {
       async loadData() {
-        let balance = await window.activeAccount.getBalance()
+        let balance = await this.$activeAccount.get().getBalance()
         this.balance = this.$mixClient.web3.utils.fromWei(balance)
-        balance = await window.activeAccount.getUnconfirmedBalance()
+        balance = await this.$activeAccount.get().getUnconfirmedBalance()
         this.unconfirmedBalance = this.$mixClient.web3.utils.fromWei(balance)
         let data = []
 
-        let count = await this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/receivedCount')
+        let count = await this.$db.get('/account/contract/' + this.$activeAccount.get().contractAddress + '/receivedCount')
         let payments = []
 
         for (let i = 0; i < count; i++) {
-          payments.push(this.$db.get('/account/contract/' + window.activeAccount.contractAddress + '/received/' + i)
+          payments.push(this.$db.get('/account/contract/' + this.$activeAccount.get().contractAddress + '/received/' + i)
             .then(async json => {
               let payment = JSON.parse(json)
               let tx = await this.$mixClient.web3.eth.getTransaction(payment.transaction)
@@ -137,10 +137,10 @@
             } catch (e) {}
           }
         }
-        let nonce = await this.$mixClient.web3.eth.getTransactionCount(window.activeAccount.controllerAddress)
+        let nonce = await this.$mixClient.web3.eth.getTransactionCount(this.$activeAccount.get().controllerAddress)
         let transactions = []
         for (let i = 0; i < nonce; i++) {
-          transactions.push(window.activeAccount.getTransactionInfo(i)
+          transactions.push(this.$activeAccount.get().getTransactionInfo(i)
             .catch(err => {
               return false
             })
@@ -188,8 +188,8 @@
         }
 
         if (this.isSendAll) {
-          let balance = toBN(await window.activeAccount.getControllerBalance())
-          let gas = await window.activeAccount.getSendMixGas(this.to, balance) + 200000
+          let balance = toBN(await this.$activeAccount.get().getControllerBalance())
+          let gas = await this.$activeAccount.get().getSendMixGas(this.to, balance) + 200000
           this.amount = this.$mixClient.web3.utils.fromWei(balance.sub(toBN(gas).mul(toBN('1000000000'))))
         }
         else {
@@ -217,7 +217,7 @@
         this.isConfirm = false
       },
       async confirm(event) {
-        await window.activeAccount.sendMix(this.to, this.$mixClient.web3.utils.toWei(this.amount))
+        await this.$activeAccount.get().sendMix(this.to, this.$mixClient.web3.utils.toWei(this.amount))
         this.loadData()
         this.to = ''
         this.amount = ''
@@ -225,18 +225,18 @@
         this.isConfirm = false
       },
       accountReceive(accountAddress) {
-        if (accountAddress == window.activeAccount.contractAddress) {
+        if (accountAddress == this.$activeAccount.get().contractAddress) {
           this.loadData()
         }
       },
     },
     async created() {
       setTitle(this.$t('wallet'))
-      if (!window.activeAccount) {
+      if (!this.$activeAccount.get()) {
         return
       }
-      this.address = window.activeAccount.contractAddress
-      this.qrcode = await QRCode.toDataURL(window.activeAccount.contractAddress, {
+      this.address = this.$activeAccount.get().contractAddress
+      this.qrcode = await QRCode.toDataURL(this.$activeAccount.get().contractAddress, {
         mode: 'alphanumeric',
         errorCorrectionLevel: 'H',
         scale: 1,

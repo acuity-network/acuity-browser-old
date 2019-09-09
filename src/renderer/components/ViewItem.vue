@@ -295,7 +295,7 @@
         else if (revision.content.existMixin('0xbcec8faa')) {
           this.isFeed = true
           try {
-            await this.$db.get('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
+            await this.$db.get('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.itemId)
             this.isSubscribed = true
           }
           catch (e) {}
@@ -303,7 +303,7 @@
         else if (revision.content.existMixin('0x9fbbfaad')) {
           this.isToken = true
           try {
-            this.isPortfolio = await window.activeAccount.call(this.$mixClient.accountTokens, 'getItemExists', [this.itemId])
+            this.isPortfolio = await this.$activeAccount.get().call(this.$mixClient.accountTokens, 'getItemExists', [this.itemId])
           }
           catch (e) {}
         }
@@ -348,19 +348,19 @@
         }
       },
       async subscribe(event) {
-        await this.$db.put('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId, this.itemId)
+        await this.$db.put('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.itemId, this.itemId)
         this.isSubscribed = true
       },
       async unsubscribe(event) {
-        await this.$db.del('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
+        await this.$db.del('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.itemId)
         this.isSubscribed = false
       },
       async portfolio(event) {
-        await window.activeAccount.sendData(this.$mixClient.accountTokens, 'addItem', [this.itemId], 0, 'Add token to portfolio')
+        await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'addItem', [this.itemId], 0, 'Add token to portfolio')
         this.isPortfolio = true
       },
       async unportfolio(event) {
-        await window.activeAccount.sendData(this.$mixClient.accountTokens, 'removeItem', [this.itemId], 0, 'Remove token from portfolio')
+        await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'removeItem', [this.itemId], 0, 'Remove token from portfolio')
         this.isPortfolio = false
       },
       async publish(event) {
@@ -381,7 +381,7 @@
 
         let ipfsHash = await revision.content.save()
         this.editing = false
-        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
       },
       async publishReply(event) {
         let content = new MixContent(this.$root)
@@ -398,8 +398,8 @@
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)
-        await window.activeAccount.sendData(this.$mixClient.itemDagComments, 'addChild', [this.itemId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach comment')
-        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemDagComments, 'addChild', [this.itemId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach comment')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
         this.reply = ''
         this.startReply = false
         this.loadData()
@@ -414,13 +414,13 @@
           return item.account()
         })
         .then(account => {
-          window.activeAccount.call(this.$mixClient.trustedAccounts, 'getIsTrusted', [account.contractAddress])
+          this.$activeAccount.get().call(this.$mixClient.trustedAccounts, 'getIsTrusted', [account.contractAddress])
           .then(trusted => {
             if (trusted) {
-              return window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
+              return this.$activeAccount.get().sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
             }
             else {
-              return window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'trustAccount', [account.contractAddress], 0, 'Trust account')
+              return this.$activeAccount.get().sendData(this.$mixClient.trustedAccounts, 'trustAccount', [account.contractAddress], 0, 'Trust account')
             }
           })
           .then(() => {

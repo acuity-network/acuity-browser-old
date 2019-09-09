@@ -203,7 +203,7 @@
 			let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
 			this.transferFromEmitter = token.events.Transfer({
 				filter: {
-					from: window.activeAccount.contractAddress,
+					from: this.$activeAccount.get().contractAddress,
 				},
 				fromBlock: 0,
 				toBlock: 'pending',
@@ -221,7 +221,7 @@
 
 			this.transferToEmitter = token.events.Transfer({
 				filter: {
-					to: window.activeAccount.contractAddress,
+					to: this.$activeAccount.get().contractAddress,
 				},
 				fromBlock: 0,
 				toBlock: 'pending',
@@ -253,13 +253,13 @@
         this.initialBalance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.initialBalance().call()))
 				this.dailyPayout = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.dailyPayout().call()))
 				this.totalSupply = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.totalSupply().call()))
-				this.balance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.balanceOf(window.activeAccount.contractAddress).call()))
+				this.balance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.balanceOf(this.$activeAccount.get().contractAddress).call()))
 
         this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(this.address).call()
         this.exchange = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/UniswapExchange.abi.json'), this.exchangeAddress)
         this.liquidityMix = this.$mixClient.web3.utils.fromWei(toBN(await this.$mixClient.web3.eth.getBalance(this.exchangeAddress, 'pending')))
         this.liquidityToken = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.balanceOf(this.exchangeAddress).call()))
-        this.liquidityMine = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.balanceOf(window.activeAccount.contractAddress).call()))
+        this.liquidityMine = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.balanceOf(this.$activeAccount.get().contractAddress).call()))
         try {
           this.mixPerToken = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.getEthToTokenOutputPrice(this.$mixClient.web3.utils.toWei('1')).call()))
         }
@@ -295,8 +295,8 @@
         }
 
         if (this.isSendAll) {
-          let balance = toBN(await window.activeAccount.getControllerBalance())
-          let gas = await window.activeAccount.getSendMixGas(this.to, balance) + 200000
+          let balance = toBN(await this.$activeAccount.get().getControllerBalance())
+          let gas = await this.$activeAccount.get().getSendMixGas(this.to, balance) + 200000
           this.amount = this.$mixClient.web3.utils.fromWei(balance.sub(toBN(gas).mul(toBN('1000000000'))))
         }
         else {
@@ -325,7 +325,7 @@
 	    },
 	    async confirm(event) {
 				let contract = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
-				await window.activeAccount.sendData(contract, 'transfer', [this.to, this.$mixClient.web3.utils.toWei(this.amount)], 0, 'Send token')
+				await this.$activeAccount.get().sendData(contract, 'transfer', [this.to, this.$mixClient.web3.utils.toWei(this.amount)], 0, 'Send token')
 	      this.loadData()
 	      this.to = ''
 	      this.amount = ''
@@ -333,25 +333,25 @@
 	      this.isConfirm = false
 	    },
       async addLiquidity(event) {
-        await window.activeAccount.sendData(this.token, 'authorize', [this.exchangeAddress], 0, 'Authorize exchange')
+        await this.$activeAccount.get().sendData(this.token, 'authorize', [this.exchangeAddress], 0, 'Authorize exchange')
         let maxTokens = this.$mixClient.web3.utils.toWei(this.addLiquidityMaxTokens)
         let mix = this.$mixClient.web3.utils.toWei(this.addLiquidityMix)
-        await window.activeAccount.sendData(this.exchange, 'addLiquidity', [1, maxTokens, '4000000000'], mix, 'Add liquidity')
+        await this.$activeAccount.get().sendData(this.exchange, 'addLiquidity', [1, maxTokens, '4000000000'], mix, 'Add liquidity')
         this.loadData()
       },
       async removeLiquidity(event) {
         let uni = this.$mixClient.web3.utils.toWei(this.removeLiquidityUni)
-        await window.activeAccount.sendData(this.exchange, 'removeLiquidity', [uni, 1, 1, '4000000000'], 0, 'Remove liquidity')
+        await this.$activeAccount.get().sendData(this.exchange, 'removeLiquidity', [uni, 1, 1, '4000000000'], 0, 'Remove liquidity')
         this.loadData()
       },
       async mixToTokens(event) {
         let mix = this.$mixClient.web3.utils.toWei(this.mixToTokensMix)
-        await window.activeAccount.sendData(this.exchange, 'ethToTokenSwapInput', [1, '4000000000'], mix, 'Swap MIX for tokens')
+        await this.$activeAccount.get().sendData(this.exchange, 'ethToTokenSwapInput', [1, '4000000000'], mix, 'Swap MIX for tokens')
         this.loadData()
       },
       async tokensToMix(event) {
         let tokens = this.$mixClient.web3.utils.toWei(this.tokensToMixTokens)
-        await window.activeAccount.sendData(this.exchange, 'tokenToEthSwapInput', [tokens, 1, '4000000000'], 0, 'Swap tokens for MIX')
+        await this.$activeAccount.get().sendData(this.exchange, 'tokenToEthSwapInput', [tokens, 1, '4000000000'], 0, 'Swap tokens for MIX')
         this.loadData()
       },
 		},

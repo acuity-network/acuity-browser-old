@@ -73,7 +73,7 @@
             deploy: account.contractAddress ? '' : '/manage-accounts/controller/' + address
           }
           this.data.push(row)
-          if (window.activeAccount && address == window.activeAccount.controllerAddress) {
+          if (this.$activeAccount.get() && address == this.$activeAccount.get().controllerAddress) {
             this.selected = row
           }
         })

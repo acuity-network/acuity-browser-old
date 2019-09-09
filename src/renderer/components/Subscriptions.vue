@@ -53,8 +53,8 @@
       async loadData() {
         this.feeds = []
         this.$db.createValueStream({
-          'gte': '/accountSubscribed/' + window.activeAccount.contractAddress + '/',
-          'lt': '/accountSubscribed/' + window.activeAccount.contractAddress + '/z',
+          'gte': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
         .on('data', async itemId => {
           try {
@@ -71,8 +71,8 @@
         })
         this.topics = []
         this.$db.createValueStream({
-          'gte': '/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/',
-          'lt': '/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/z',
+          'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
         .on('data', async topicHash => {
           try {
@@ -86,11 +86,11 @@
         })
       },
       async removeFeed(event) {
-        await this.$db.del('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + event.target.dataset.itemid)
+        await this.$db.del('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + event.target.dataset.itemid)
         this.loadData()
       },
       async removeTopic(event) {
-        await this.$db.del('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + event.target.dataset.topichash)
+        await this.$db.del('/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/' + event.target.dataset.topichash)
         this.loadData()
       },
     }

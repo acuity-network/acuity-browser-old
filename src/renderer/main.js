@@ -47,6 +47,9 @@ Vue.prototype.$settings = new Settings()
 import IpfsClient from '../lib/IpfsClient.js'
 Vue.prototype.$ipfsClient = new IpfsClient()
 
+import activeAccount from '../lib/activeAccount.js'
+Vue.prototype.$activeAccount = activeAccount
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },

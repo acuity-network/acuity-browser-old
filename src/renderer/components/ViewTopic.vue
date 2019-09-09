@@ -47,7 +47,7 @@
         setTitle(this.topic)
 
         try {
-          await this.$db.get('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash)
+          await this.$db.get('/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.topicHash)
           this.isSubscribed = true
         }
         catch (e) {}
@@ -55,11 +55,11 @@
         this.itemIds = (await this.$mixClient.itemTopics.methods.getAllTopicItems(this.topicHash).call()).reverse()
       },
       async subscribe(event) {
-        await this.$db.put('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash, this.topicHash)
+        await this.$db.put('/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.topicHash, this.topicHash)
         this.isSubscribed = true
       },
       async unsubscribe(event) {
-        await this.$db.del('/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/' + this.topicHash)
+        await this.$db.del('/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.topicHash)
         this.isSubscribed = false
       },
     },

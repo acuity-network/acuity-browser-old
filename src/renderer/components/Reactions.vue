@@ -56,8 +56,8 @@
     },
     methods: {
       async loadData() {
-        let trustedReactions = await window.activeAccount.call(this.$mixClient.reactions, 'getTrustedReactions', [this.itemId])
-        let accountReactions = await window.activeAccount.call(this.$mixClient.reactions, 'getReactions', [this.itemId])
+        let trustedReactions = await this.$activeAccount.get().call(this.$mixClient.reactions, 'getTrustedReactions', [this.itemId])
+        let accountReactions = await this.$activeAccount.get().call(this.$mixClient.reactions, 'getReactions', [this.itemId])
         this.reactions = []
 
         let processedReactions = {}
@@ -89,12 +89,12 @@
           }
           let emoji = buf.toString('utf8', i, i + 4)
           if (emoji in processedReactions) {
-            processedReactions[emoji].addresses.push(window.activeAccount.contractAddress)
+            processedReactions[emoji].addresses.push(this.$activeAccount.get().contractAddress)
             processedReactions[emoji].count++
             processedReactions[emoji].current = true
           }
           else {
-            processedReactions[emoji] = {addresses: [window.activeAccount.contractAddress], count: 1, current: true}
+            processedReactions[emoji] = {addresses: [this.$activeAccount.get().contractAddress], count: 1, current: true}
           }
         }
 
@@ -119,16 +119,16 @@
         }
       },
       async addReaction(emoji) {
-        await window.activeAccount.sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(emoji, "utf8")], 0, 'Add reaction')
+        await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(emoji, "utf8")], 0, 'Add reaction')
         this.loadData()
       },
       async toggle(reaction) {
         if (reaction.current) {
-          await window.activeAccount.sendData(this.$mixClient.reactions, 'removeReaction', [this.itemId, Buffer.from(reaction.emoji, "utf8")], 0, 'Remove reaction')
+          await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'removeReaction', [this.itemId, Buffer.from(reaction.emoji, "utf8")], 0, 'Remove reaction')
           this.loadData()
         }
         else {
-          await window.activeAccount.sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(reaction.emoji, "utf8")], 0, 'Add reaction')
+          await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(reaction.emoji, "utf8")], 0, 'Add reaction')
           this.loadData()
         }
       },

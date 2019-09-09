@@ -27,8 +27,8 @@
 
       let feedsPromise = new Promise((resolve, reject) => {
         this.$db.createValueStream({
-          'gte': '/accountSubscribed/' + window.activeAccount.contractAddress + '/',
-          'lt': '/accountSubscribed/' + window.activeAccount.contractAddress + '/z',
+          'gte': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
         .on('data', feedId => {
           feedIds.push(feedId)
@@ -40,8 +40,8 @@
 
       let topicsPromise = new Promise((resolve, reject) => {
         this.$db.createValueStream({
-          'gte': '/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/',
-          'lt': '/accountTopicSubscribed/' + window.activeAccount.contractAddress + '/z',
+          'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
         .on('data', topicHash => {
           topicHashes.push(topicHash)

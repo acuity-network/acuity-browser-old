@@ -102,7 +102,7 @@
 
         if (this.pool == '') {
           args.push('stratum+tcp://127.0.0.1:8008')
-          await this.$mixClient.parityApi.parity.setAuthor(window.activeAccount.controllerAddress)
+          await this.$mixClient.parityApi.parity.setAuthor(this.$activeAccount.get().controllerAddress)
         }
         else {
           args.push(this.pool)

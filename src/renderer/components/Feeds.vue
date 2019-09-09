@@ -34,7 +34,7 @@
     async created() {
       setTitle(this.$t('myFeeds'))
 
-      let feeds = await window.activeAccount.call(this.$mixClient.accountFeeds, 'getAllItems')
+      let feeds = await this.$activeAccount.get().call(this.$mixClient.accountFeeds, 'getAllItems')
       for (let itemId of feeds) {
         try {
           let item = await new MixItem(this.$root, itemId).init()
