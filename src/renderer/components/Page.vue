@@ -28,7 +28,7 @@
   }
 
   h1.title {
-    font-family: "Noto Serif";
+    font-family: "Noto Serif", serif;
     font-weight: bold;
     margin-bottom: 0;
   }
