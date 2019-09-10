@@ -2,6 +2,7 @@
   <page>
     <template slot="title">
       {{ title }}
+      <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link"></span>
     </template>
 
     <template slot="body">
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+  import { clipboard } from 'electron'
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
   import setTitle from '../../lib/setTitle.js'
@@ -34,6 +36,7 @@
     },
     data() {
       return {
+        itemId: '',
         title: '',
         bio: '',
         image: '',
@@ -42,11 +45,11 @@
       }
     },
     async created() {
-      if (!window.activeAccount) {
+      if (!this.$activeAccount.get()) {
         return
       }
-      let itemId = await window.activeAccount.getProfile()
-      let item = await new MixItem(this, itemId).init()
+      this.itemId = await this.$activeAccount.get().getProfile()
+      let item = await new MixItem(this, this.itemId).init()
       let revision = await item.latestRevision().load()
       this.title = revision.getTitle()
       setTitle(this.title)
@@ -88,15 +91,26 @@
           this.type = 'Shill'
           break
 
-        case 7:
+        case 8:
           this.type = 'Test'
           break
       }
-    }
+    },
+    methods: {
+      async copyItemId(event) {
+        clipboard.writeText(this.itemId)
+        this.$buefy.toast.open('itemId copied')
+      },
+    },
   }
 </script>
 
 <style scoped>
+  .clickable {
+    cursor: pointer;
+    user-select: none;
+  }
+
   .avatar {
     width: 256px;
   }

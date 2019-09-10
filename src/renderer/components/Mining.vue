@@ -29,12 +29,18 @@
   import Page from './Page.vue'
   import setTitle from '../../lib/setTitle.js'
   import os from 'os'
+  import fs from 'fs'
   import path from 'path'
   import { spawn } from 'child_process'
-  import { remote } from 'electron'
+  import download from 'download'
 
   let ethminerPath = path.join(__static, 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
   let ethminerProcess
+  let urls = {
+    linux: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-linux-x86_64.tar.gz',
+    darwin: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-darwin-x86_64.tar.gz',
+    win32: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-cuda10.0-windows-amd64.zip',
+  }
 
   export default {
     name: 'mining',
@@ -49,7 +55,7 @@
         output: '',
       }
     },
-    created() {
+    async created() {
       setTitle(this.$t('mining'))
 
       if (ethminerProcess && !ethminerProcess.killed) {
@@ -64,6 +70,7 @@
           '--syslog',
       	]
 
+        await this.downloadEthMiner()
       	let process = spawn(ethminerPath, args)
 
       	process.on('error', err => {
@@ -91,6 +98,16 @@
       }
     },
     methods: {
+      async downloadEthMiner() {
+        try {
+          fs.statSync(ethminerPath)
+        }
+        catch (e) {
+          let url = urls[os.platform()]
+          this.output += 'Downloading ' + url
+          await download(url, path.join('static', 'ethminer'), {extract: true})
+        }
+      },
       async start(event) {
         this.output = ''
 
@@ -102,37 +119,30 @@
 
         if (this.pool == '') {
           args.push('stratum+tcp://127.0.0.1:8008')
-          await this.$mixClient.parityApi.parity.setAuthor(window.activeAccount.controllerAddress)
+          await this.$mixClient.parityApi.parity.setAuthor(this.$activeAccount.get().controllerAddress)
         }
         else {
           args.push(this.pool)
         }
 
-        ethminerProcess = spawn(ethminerPath, args)
         this.mining = true
+        await this.downloadEthMiner()
+        ethminerProcess = spawn(ethminerPath, args)
         this.attach()
       },
       stop(event) {
-        ethminerProcess.removeAllListeners('error')
-        ethminerProcess.removeAllListeners('exit')
-        ethminerProcess.stdout.removeAllListeners('data')
-        ethminerProcess.stderr.removeAllListeners('data')
         ethminerProcess.kill()
-        ethminerProcess = null
-        this.mining = false
       },
       attach() {
         ethminerProcess.on('error', err => {
           this.output += '<span style="color: red;">' + err + '</span>'
-          this.mining = false
-          ethminerProcess = null
+          this.detach()
         })
         ethminerProcess.on('exit', (code, signal) => {
           if (signal) {
             this.output += '<span style="color: red;">' + signal + '</span>'
           }
-          this.mining = false
-          ethminerProcess = null
+          this.detach()
         })
         ethminerProcess.stdout.on('data', data => {
           this.output += data.toString()
@@ -140,6 +150,18 @@
         ethminerProcess.stderr.on('data', data => {
           this.output += data.toString()
         })
+      },
+      detach() {
+        if (this.pool == '') {
+          // Removing pending 5 MIX.
+          this.$mixClient.parityApi.parity.setAuthor('0x0000000000000000000000000000000000000000')
+        }
+        ethminerProcess.removeAllListeners('error')
+        ethminerProcess.removeAllListeners('exit')
+        ethminerProcess.stdout.removeAllListeners('data')
+        ethminerProcess.stderr.removeAllListeners('data')
+        ethminerProcess = null
+        this.mining = false
       },
     },
   }

@@ -1,10 +1,17 @@
-import Vue from 'vue';
-import VueI18n from 'vue-i18n';
-
-Vue.use(VueI18n);
-
-let messages = {
-  'en': {
+export default {
+  // American English
+  'en-US': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
     // Nav Panel
     general: 'General',
     home: 'Home',
@@ -68,6 +75,7 @@ let messages = {
     symbol: 'Symbol',
     name: 'Name',
     dailyPayout: 'Daily Payout',
+    initialBalance: 'Initial Balance',
     chooseImage: 'Choose Image',
     create: 'Create',
     // Accounts
@@ -98,8 +106,57 @@ let messages = {
     mining: 'Mining',
     start: 'Start',
     stop: 'Stop',
+    error: 'Error',
+    addLiquidity: 'Add liquidity',
+    removeLiquidity: 'Remove liquidity',
+    minLiquidity: 'Minimum liquidity',
+    maxTokens: 'Maximum tokens',
+    holders: 'Holders',
+    holder: 'Holder',
+    amount: 'Amount',
+    feed: 'Feed',
   },
+  // Chinese (Traditional)
+  'zh-CHT': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Chinese (Simplified)
+  'zh-CN': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Russian
   'ru': {
+    AccountInfo: {
+      Feeds: 'каналы',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
     general: 'Общие',
     home: 'Домой',
     myFeeds: 'Мои каналы',
@@ -177,13 +234,75 @@ let messages = {
     language: 'Язык',
     // Debug
     readItem:'Получить сведения'
-  }
+  },
+  // Indonesian
+  'id': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Japanese
+  'ja': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Vietnamese
+  'vi': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Javanese
+  'jv': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
+  // Thai
+  'th': {
+    AccountInfo: {
+      Feeds: 'Feeds',
+      TrustedThatTrust: 'Trusted that trust',
+      Trusts: 'Trusts',
+      VisibilityOverride: 'Visibility override',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+      Token: 'Token',
+      Balance: 'Balance',
+      Address: 'Address',
+    },
+  },
 }
-
-let i18n = new VueI18n({
-    locale: 'en', // Set locale.
-    fallbackLocale: 'ru', // Set fallback locale.
-    messages, // Set locale messages.
-  });
-
-export default i18n;

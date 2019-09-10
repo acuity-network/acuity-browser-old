@@ -44,19 +44,20 @@ export default class MixClient {
 		this.itemDagMixins = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParent.abi.json'), '0x341518c5b28d3564b39ab7560e47b4486ddb762a')
 		this.itemDagComments = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParent.abi.json'), '0x2a37382ea172d0a28905052ee79f802cd7fd74b4')
 		this.itemDagFeedItems = new this.web3.eth.Contract(require('./contracts/MixItemDagOnlyOwner.abi.json'), '0x622d9bd5adf631c6e190f8d2beebcd5533ffa5e6')
+		this.itemTopics = new this.web3.eth.Contract(require('./contracts/MixItemTopics.abi.json'), '0xcc64d1519d4e2be2b025204f5b3470d5f14a1a99')
 		this.accountRegistry = new this.web3.eth.Contract(require('./contracts/MixAccountRegistry.abi.json'), '0xbcab5026b4d79396b222abc4d1ca36db10984c73')
 		this.accountProfile = new this.web3.eth.Contract(require('./contracts/MixAccountProfile.abi.json'), '0x994abe0212b5dcc1fb0b0e7336e7980316c3fe19')
 		this.accountFeeds = new this.web3.eth.Contract(require('./contracts/MixAccountItems.abi.json'), '0xc9ba9507d9f5be1d13ff2dca6f7e43dbfa859645')
+		this.accountTokens = new this.web3.eth.Contract(require('./contracts/MixAccountItems2.abi.json'), '0xa2f0d67eb4e6e33d568f25ce9cb8226e9032e9d1')
 		this.trustedAccounts = new this.web3.eth.Contract(require('./contracts/MixTrustedAccounts.abi.json'), '0x70e2e2d6b31cd25e00c034ac9cfc79575efa26a9')
 		this.reactions = new this.web3.eth.Contract(require('./contracts/MixReactions.abi.json'), '0xd7051cd496a3a8373f9cf89476c04a7d51a5cc88')
-		this.tokenRegistryAddress = '0x71387fc1fc8238cb80d3ca3d67d07bb672a3a8d8'
+		this.tokenRegistryAddress = '0x5402efb80b307250b978cb1039a95e0c292b50c2'
 		this.tokenRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenRegistry.abi.json'), this.tokenRegistryAddress)
+		this.uniswapFactory = new this.web3.eth.Contract(require('./contracts/UniswapFactory.abi.json'), '0x1381a70fc605b7d7e54b7e1159afba1429a4bbb1')
 
 		// Emit sync info.
 		let startingBlock, currentBlock
-		let emitSyncing = throttle(status => vue.$emit('mix-client-syncing', status), 100, true)
-		let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
-		.on('data', async () => {
+		let newBlockHeaders = throttle(async () => {
 			let isSyncing = await this.web3.eth.isSyncing()
 
 			if (isSyncing !== false) {
@@ -68,10 +69,13 @@ export default class MixClient {
 					}
 
 					isSyncing.startingBlock = startingBlock
-					emitSyncing(isSyncing)
+					vue.$emit('mix-client-syncing', isSyncing)
 				}
 			}
-		})
+		}, 100, true)
+
+		let newBlockHeadersEmitter = this.web3.eth.subscribe('newBlockHeaders')
+		.on('data', newBlockHeaders)
 
 		// Wait for Parity to sync.
 		await new Promise((resolve, reject) => {

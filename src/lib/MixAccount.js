@@ -67,6 +67,11 @@ export default class MixAccount {
 
   async deploy() {
     return new Promise(async (resolve, reject) => {
+      if (!this.isUnlocked()) {
+        this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
+        reject()
+        return
+      }
       let byteCodePath = path.join(__static, 'MixAccount.bin')
       let accountBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
@@ -96,8 +101,44 @@ export default class MixAccount {
     })
   }
 
+  deployToken(symbol, name, itemId, initialBalance, dailyPayout) {
+    return new Promise(async (resolve, reject) => {
+      if (!this.isUnlocked()) {
+        this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
+        reject()
+        return
+      }
+      let byteCodePath = path.join(__static, 'CreatorToken.bin')
+      let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
+      let types = ['string', 'string', 'address', 'bytes32', 'address', 'uint', 'uint']
+      let params = [symbol, name, this.vue.$mixClient.tokenRegistryAddress, itemId, this.contractAddress, initialBalance, dailyPayout]
+      let paramsBytecode = this.vue.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
+      let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
+      let rawTx = {
+        nonce: this.vue.$mixClient.web3.utils.toHex(nonce),
+        from: this.controllerAddress,
+        gas: this.vue.$mixClient.web3.utils.toHex(2000000),
+        gasPrice: '0x3b9aca00',
+        data: '0x' + tokenBytecode + paramsBytecode,
+      }
+
+      let tx = new ethTx(rawTx)
+      let privateKey = privateKeys[this.controllerAddress]
+      tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
+      let serializedTx = tx.serialize()
+
+      this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+      .on('error', reject)
+      .on('receipt', async receipt => {
+        let transaction = await this.vue.$mixClient.web3.eth.getTransaction(receipt.transactionHash)
+        this._logTransaction(transaction, '', 'Deploy token')
+        resolve(receipt.contractAddress)
+      })
+    })
+  }
+
   select() {
-    window.activeAccount = this
+    this.vue.$activeAccount.set(this)
     this.vue.$db.put('/active-account', this.controllerAddress)
     this.vue.$root.$emit('change-active-account', this)
   }
@@ -111,6 +152,7 @@ export default class MixAccount {
   async unlock(password) {
     let keyObject = JSON.parse(await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/keyObject'))
     privateKeys[this.controllerAddress] = '0x' + keythereum.recover(password, keyObject).toString('hex')
+    this.consolidateMix()
   }
 
   lock() {
@@ -121,10 +163,10 @@ export default class MixAccount {
     return this.controllerAddress in privateKeys
   }
 
-  _send(transaction, value = 0, checkBalance = true) {
+  _send(transaction, value = 0, checkBalance = true, gas = 200000) {
     return new Promise(async (resolve, reject) => {
       if (!this.isUnlocked()) {
-        this.vue.$toast.open({message: 'Account is locked', type: 'is-danger'})
+        this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
         reject()
         return
       }
@@ -138,13 +180,13 @@ export default class MixAccount {
         data: data,
         value: this.vue.$mixClient.web3.utils.toHex(value),
       }
-      rawTx.gas = 200000//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+      rawTx.gas = gas//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
       // Check if there is sufficient balance.
       let toBN = this.vue.$mixClient.web3.utils.toBN
       let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())
       let requiredBalance = toBN(rawTx.gas).mul(toBN('1000000000'))
       if (checkBalance && controllerBalance.lt(requiredBalance)) {
-        this.vue.$toast.open({message: 'Insufficient MIX', type: 'is-danger'})
+        this.vue.$buefy.toast.open({message: 'Insufficient MIX', type: 'is-danger'})
         reject()
         return
       }
@@ -167,6 +209,10 @@ export default class MixAccount {
 
   consolidateMix() {
     return new Promise(async (resolve, reject) => {
+      if (!this.contractAddress) {
+        resolve()
+        return
+      }
       let balance = await this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending')
       if (balance > 0) {
         let tx = await this._send(this.contract.methods.withdraw(), 0, false)
@@ -206,6 +252,11 @@ export default class MixAccount {
     if (data == '0x') {
       // Send to a non-contract address.
       return new Promise(async (resolve, reject) => {
+        if (!this.isUnlocked()) {
+          this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
+          reject()
+          return
+        }
         let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
         let rawTx = {
           nonce: nonce,
@@ -220,39 +271,36 @@ export default class MixAccount {
         tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
         let serializedTx = tx.serialize()
         this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-        .on('transactionHash', transactionHash => {
-          this.vue.$mixClient.web3.eth.getTransaction(transactionHash)
-          .then(transaction => {
-            this._logTransaction(transaction, to, 'Send MIX')
-            .then(() => {
-              resolve(transaction)
-            })
-          })
+        .on('transactionHash', async transactionHash => {
+          transaction = await this.vue.$mixClient.web3.eth.getTransaction(transactionHash)
+          this._logTransaction(transaction, to, 'Send MIX')
+          resolve(transaction)
         })
       })
     }
     else {
       // Send to a contract address.
-      return this._send(this.contract.methods.sendMix(to), value)
-      .then(transaction => {
-        return this._logTransaction(transaction, to, 'Send MIX')
-        .then(() => {
-          return transaction
-        })
-      })
+      let transaction = await this._send(this.contract.methods.sendMix(to), value)
+      this._logTransaction(transaction, to, 'Send MIX')
+      return transaction
     }
   }
 
-  sendData(contract, method, params, value, description) {
+  async sendData(contract, method, params, value, description, gas) {
     let to = contract.options.address
     let data = contract.methods[method].apply(this, params).encodeABI()
-    return this._send(this.contract.methods.sendData(to, data), value)
-    .then(transaction => {
-      return this._logTransaction(transaction, to, description)
-      .then(() => {
-        return transaction
-      })
+    // Test this transaction.
+    let success = await this.contract.methods.sendData(to, data).call({
+      from: this.controllerAddress,
+      value: this.vue.$mixClient.web3.utils.toHex(value),
     })
+    if (!success) {
+      this.vue.$buefy.toast.open({message: 'Transaction error', type: 'is-danger'})
+      return
+    }
+    let transaction = await this._send(this.contract.methods.sendData(to, data), value, true, gas)
+    this._logTransaction(transaction, to, description)
+    return transaction
   }
 
   getControllerBalance() {
@@ -263,26 +311,26 @@ export default class MixAccount {
     return this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'pending')
   }
 
-  getBalance() {
+  async getBalance() {
     let toBN = this.vue.$mixClient.web3.utils.toBN
-    return Promise.all([
-      this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'latest'),
-      this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'latest'),
-    ])
-    .then(balances => {
-      return toBN(balances[0]).add(toBN(balances[1]))
-    })
+    let balance = toBN(await this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'latest'))
+
+    if (this.contractAddress) {
+      balance = balance.add(toBN(await this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'latest')))
+    }
+
+    return balance
   }
 
-  getUnconfirmedBalance() {
+  async getUnconfirmedBalance() {
     let toBN = this.vue.$mixClient.web3.utils.toBN
-    return Promise.all([
-      this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'pending'),
-      this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending'),
-    ])
-    .then(balances => {
-      return toBN(balances[0]).add(toBN(balances[1]))
-    })
+    let balance = toBN(await this.vue.$mixClient.web3.eth.getBalance(this.controllerAddress, 'pending'))
+
+    if (this.contractAddress) {
+      balance = balance.add(toBN(await this.vue.$mixClient.web3.eth.getBalance(this.contractAddress, 'pending')))
+    }
+
+    return balance
   }
 
   async getTransactionInfo(nonce) {
@@ -295,6 +343,23 @@ export default class MixAccount {
 
     if (info.receipt)  {
       info.block = await this.vue.$mixClient.web3.eth.getBlock(info.receipt.blockNumber)
+
+      let events = await this.contract.getPastEvents('CallFailed', {
+        fromBlock: info.receipt.blockNumber,
+        toBlock: info.receipt.blockNumber,
+      })
+
+      for (let event of events) {
+        if (event.transactionHash == info.hash) {
+          try {
+            let encoded = '0x' + event.returnValues.returnData.slice(10)
+            info.error = this.vue.$mixClient.web3.eth.abi.decodeParameter('string', encoded)
+          }
+          catch (e) {
+            info.error = 'Unknown.'
+          }
+        }
+      }
     }
 
     info.transaction = await transaction

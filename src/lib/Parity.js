@@ -72,7 +72,22 @@ async function launch(window) {
 }
 
 function kill() {
-	parityProcess.kill()
+	return new Promise(async (resolve, reject) => {
+		if (!parityProcess) {
+			resolve()
+			return
+		}
+		let emitter = parityProcess.on('exit', (code) => {
+			console.log('Parity exited.')
+			resolve(code)
+		})
+		console.log('Exiting Parity.')
+		let timeout = setTimeout(() => {
+			console.log('Killing Parity.')
+			parityProcess.kill('SIGKILL')
+		}, 10000)
+		parityProcess.kill('SIGQUIT')		// Parity needs SIGQUIT for some reason.
+	})
 }
 
 export default { launch, kill }

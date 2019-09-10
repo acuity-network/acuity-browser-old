@@ -72,10 +72,6 @@ export default class MixContent {
     return this.mixins
   }
 
-  getPrimaryMixinId() {
-    return this.mixins[0].mixinId
-  }
-
   getPayloads(mixinId) {
     let payloads = []
     for (let i = 0; i < this.mixins.length; i++) {

@@ -58,7 +58,6 @@ export default class File extends EventEmitter {
 
   async stopdeleteFile() {
     try {
-      this.req.abort()
       await shell.moveItemToTrash(this.filePath)
       this.status = 'Deleted'
       this.vue.$root.$emit('stop-download', this)

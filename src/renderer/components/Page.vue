@@ -1,16 +1,18 @@
 <template>
-  <div id="wrapper">
-    <main>
-      <section class="section is-primary">
-        <h1 class="title is-spaced"><slot name="title"></slot></h1>
-        <h2 class="subtitle"><slot name="subtitle"></slot></h2>
-      </section>
+  <main>
+    <section class="section is-primary">
+      <h1 class="title is-spaced"><slot name="title"></slot></h1>
+      <h2 class="subtitle"><slot name="subtitle"></slot></h2>
+    </section>
 
-      <section class="section">
-        <slot name="body"></slot>
-      </section>
-    </main>
-  </div>
+    <section class="section">
+      <slot name="messages"></slot>
+    </section>
+
+    <section class="section">
+      <slot name="body"></slot>
+    </section>
+  </main>
 </template>
 
 <script>
@@ -26,7 +28,7 @@
   }
 
   h1.title {
-    font-family: "Noto Serif";
+    font-family: "Noto Serif", serif;
     font-weight: bold;
     margin-bottom: 0;
   }

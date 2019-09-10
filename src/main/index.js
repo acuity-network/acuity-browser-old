@@ -28,6 +28,7 @@ async function createWindow () {
       nodeIntegration: true,
     },
     icon: path.join(__static, 'icon.png'),
+    title: 'MIX Acuity',
   }
 
   /**
@@ -116,11 +117,6 @@ app.on('activate', () => {
   }
 })
 
-app.on('will-quit', () => {
-  parity.kill()
-  ipfs.kill()
-})
-
-app.on('window-all-closed', () => {
-  app.quit()
+app.on('quit', async () => {
+  await Promise.all([parity.kill(), ipfs.kill()])
 })

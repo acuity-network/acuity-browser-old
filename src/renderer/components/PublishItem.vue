@@ -6,10 +6,10 @@
 
     <template slot="body">
       <ul>
-        <li><router-link to="/publish-item/mixin-type">{{ $t('publishMixin') }}</router-link></li>
         <li><router-link to="/publish-item/image">{{ $t('publishImage') }}</router-link></li>
         <li><router-link to="/publish-item/feed">{{ $t('publishFeed') }}</router-link></li>
         <li><router-link to="/publish-item/file">{{ $t('publishFile') }}</router-link></li>
+        <li v-if="isDevelopment"><router-link to="/publish-item/mixin-type">{{ $t('publishMixin') }}</router-link></li>
       </ul>
     </template>
   </page>
@@ -23,6 +23,11 @@
     name: 'create-item',
     components: {
       Page,
+    },
+    data() {
+      return {
+        isDevelopment: this.$settings.get('development'),
+      }
     },
     created() {
       setTitle(this.$t('publishItem'))

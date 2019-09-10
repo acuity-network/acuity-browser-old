@@ -7,8 +7,8 @@
     <template slot="body">
       <b-field :label="$t('language')">
         <b-select v-model="locale">
-          <option value="en">English - en</option>
-          <option value="ru">Russian - ru</option>
+          <option value="en-US">English</option>
+          <option value="ru">русский</option>
         </b-select>
       </b-field>
       <b-field label="Advanced">
@@ -22,7 +22,6 @@
 
 <script>
   import Page from './Page.vue'
-  import i18n from '../plugins/i18n'
   import setTitle from '../../lib/setTitle.js'
 
   export default {
@@ -38,11 +37,12 @@
     },
     watch: {
       locale() {
-        i18n.locale = this.locale;
+        this.$root.$i18n.locale = this.locale;
         this.$settings.set('locale', this.locale);
       },
       development() {
         this.$settings.set('development', this.development);
+        this.$root.$emit('development', this.development)
       },
     },
     created() {

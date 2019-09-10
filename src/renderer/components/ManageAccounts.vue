@@ -16,6 +16,10 @@
             {{ props.row.balance }}
           </b-table-column>
 
+          <b-table-column field="operations">
+            <router-link v-if="props.row.deploy" :to="props.row.deploy">deploy</router-link>
+          </b-table-column>
+
         </template>
         <template slot="footer">
           <router-link class="footer-link" :to="{ name: 'manage-accounts-new' }">{{ $t('createAccount') }}</router-link>
@@ -65,10 +69,11 @@
           let row = {
             account: address,
             name: name,
-            balance: this.$mixClient.web3.utils.fromWei(await account.getUnconfirmedBalance()),
+            balance: this.$mixClient.web3.utils.fromWei(await account.getBalance()),
+            deploy: account.contractAddress ? '' : '/manage-accounts/controller/' + address
           }
           this.data.push(row)
-          if (window.activeAccount && address == window.activeAccount.controllerAddress) {
+          if (this.$activeAccount.get() && address == this.$activeAccount.get().controllerAddress) {
             this.selected = row
           }
         })

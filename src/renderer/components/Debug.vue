@@ -14,14 +14,15 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
+  import { clipboard } from 'electron'
   import Page from './Page.vue'
   import ItemProto from '../../lib/protobuf/Item_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
-  import ImageMixin from '../../lib/protobuf/ImageMixin_pb.js'
+  import ImageMixinProto from '../../lib/protobuf/ImageMixin_pb.js'
   import brotli from 'iltorb'
   import Base58 from 'base-58'
   import multihashes from 'multihashes'
@@ -42,6 +43,10 @@
     },
     created() {
       setTitle(this.$t('debugItem'))
+      let clipboardText: string = clipboard.readText()
+      if (this.$mixClient.web3.utils.isHexStrict(clipboardText) && clipboardText.length == 66) {
+        this.itemId = clipboardText
+      }
     },
     methods: {
       async read(event) {
@@ -50,7 +55,7 @@
 
         this.itemId = this.itemId.trim()
         try {
-          let item = await new MixItem(this.$root, this.itemId).init()
+          await new MixItem(this.$root, this.itemId).init()
         }
         catch (e) {
           this.message = 'Item not found.'

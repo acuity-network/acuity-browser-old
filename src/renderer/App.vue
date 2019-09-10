@@ -14,7 +14,7 @@
           <li><router-link to="/home">{{ $t('home') }}</router-link>
           <li><router-link to="/feeds">{{ $t('myFeeds') }}</router-link>
           <li><router-link to="/subscriptions">{{ $t('subscriptions') }}</router-link>
-          <li><router-link to="/interactions">{{ $t('interactions') }}</router-link>
+          <li v-if="isDevelopment"><router-link to="/interactions">{{ $t('interactions') }}</router-link>
           <li><router-link to="/browsing-history">{{ $t('browsingHistory') }}</router-link></li>
           <li><router-link to="/downloads">{{ $t('downloads') }}</router-link></li>
           <li><router-link to="/publish-item">{{ $t('publishItem') }}</router-link></li>
@@ -38,7 +38,7 @@
           <li><router-link to="/node-status">{{ $t('nodeStatus') }}</router-link></li>
           <li><router-link to="/mining">{{ $t('mining') }}</router-link></li>
           <li><router-link to="/settings">{{ $t('settings') }}</router-link></li>
-          <li><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
+          <li v-if="isDevelopment"><router-link to="/debug">{{ $t('debugItem') }}</router-link></li>
         </ul>
       </div>
       <div id="router-view" tabindex="0">
@@ -54,7 +54,6 @@
   import Splash from './components/Splash.vue'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
-  import i18n from './plugins/i18n'
   import { ipcRenderer } from 'electron'
 
   export default {
@@ -66,10 +65,14 @@
     },
     data() {
       return {
-        splash: true
+        splash: true,
+        isDevelopment: false,
       }
     },
     async created() {
+      this.$root.$on('development', isDevelopment => {
+				this.isDevelopment = isDevelopment
+      })
       ipcRenderer.on('ipfs-stdout', (event, msg) => {
         console.log('IPFS: ' + msg)
       })
@@ -89,13 +92,14 @@
       // Load previous active account.
       try {
         let controller = await this.$db.get('/active-account')
-        window.activeAccount = await new MixAccount(this.$root, controller).init()
+        this.$activeAccount.set(await new MixAccount(this.$root, controller).init())
       }
       catch(e) {}
       window.downloads = []
       await this.$settings.init(this.$db)
       // Load previous selected language.
-      i18n.locale = this.$settings.get('locale')
+      this.$root.$i18n.locale = this.$settings.get('locale')
+      this.isDevelopment = this.$settings.get('development')
       this.$db.createValueStream({
         'gt': '/account/controllerAddress/',
         'lt': '/account/controllerAddress/z',
@@ -196,6 +200,10 @@
   $primary: $blue;
   $primary-invert: findColorInvert($primary);
 
+  .control .select select option {
+      color: $grey-lighter;
+  }
+
   // Setup $colors to use as bulma classes (e.g. 'is-twitter')
   $colors: (
     "white": ($white, $black),
@@ -227,13 +235,18 @@
     -webkit-font-smoothing: subpixel-antialiased;
   }
 
+  @import url('https://fonts.googleapis.com/css?family=Noto+Sans+HK:400,700|Noto+Sans+JP:400,700|Noto+Sans+KR:400,700|Noto+Sans+TC:400,700|Noto+Sans:400,700|Noto+Serif+JP:400,700|Noto+Serif+KR:400,700|Noto+Serif+SC:400,700|Noto+Serif+TC:400,700|Noto+Serif:400,700|Source+Code+Pro&display=swap&subset=chinese-hongkong,chinese-simplified,chinese-traditional,cyrillic,cyrillic-ext,devanagari,greek,greek-ext,japanese,korean,latin-ext,vietnamese');
+
   html body, html button, html input, html select {
-    font-family: "Noto Sans";
+    font-family: "Noto Sans", sans-serif;
   }
 
   html textarea.textarea {
-    font-family: "Noto Mono";
-    font-size: 0.8rem;
+    font-family: "Noto Sans", sans-serif;
+  }
+
+  html code {
+    font-family: 'Source Code Pro', monospace;
   }
 
   html button {

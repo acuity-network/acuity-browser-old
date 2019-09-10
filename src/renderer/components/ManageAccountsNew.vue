@@ -4,12 +4,27 @@
       New account
     </template>
 
+    <template slot="messages">
+      <b-message type="is-warning">
+        <p>Everything published with MIX Acuity will be stored publically for eternity.</p>
+        <p>This software is immature. Do not store large quantities of MIX in the wallet.</p>
+        <p>There is NO WARRANTY.</p>
+      </b-message>
+      <b-message type="is-info">
+        <p>The recovery phrase is the only way to recover your account. Write it down and store it securely. Do not store it on any electronic system.</p>
+        <p>The password is for unlocking the account on this device. It is not used for account recovery.</p>
+      </b-message>
+    </template>
+
     <template slot="body">
       <b-field label="Recovery phrase">
         {{ recoveryPhrase }}
       </b-field>
-      <b-field label="Password">
+      <b-field label="Password" :type="passwordType" :message="passwordMessage">
         <b-input type="password" v-model="password" password-reveal></b-input>
+      </b-field>
+      <b-field label="Repeat password" :type="passwordRepeatType" :message="passwordRepeatMessage">
+        <b-input type="password" v-model="passwordRepeat" password-reveal></b-input>
       </b-field>
       <button class="button" @click="create">{{ $t('create') }}</button>
     </template>
@@ -35,10 +50,35 @@
       return {
         recoveryPhrase: '',
         password: '',
+        passwordType: '',
+        passwordMessage: '',
+        passwordRepeat: '',
+        passwordRepeatType: '',
+        passwordRepeatMessage: '',
       }
     },
     methods: {
       async create(event) {
+        // Password is required.
+        if (this.password == '') {
+          this.passwordType = 'is-danger'
+          this.passwordMessage = 'Password is required.'
+          return
+        }
+        else {
+          this.passwordType = ''
+          this.passwordMessage = ''
+        }
+        // Check passwords match.
+        if (this.password != this.passwordRepeat) {
+          this.passwordRepeatType = 'is-danger'
+          this.passwordRepeatMessage = 'Passwords do not match.'
+          return
+        }
+        else {
+          this.passwordRepeatType = ''
+          this.passwordRepeatMessage = ''
+        }
         // Calculate private key and controller address.
         let node: BIP32Interface = bip32.fromSeed(await bip39.mnemonicToSeed(this.recoveryPhrase))
         let privateKey: Buffer = Buffer.from(node.derivePath("m/44'/76'/0'/0/0").privateKey)

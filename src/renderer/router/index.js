@@ -11,8 +11,14 @@ export default new Router({
       props: true,
     },
     {
+      path: '/topic/:topicHash',
+      name: 'topic',
+      component: require('@/components/ViewTopic').default,
+      props: true,
+    },
+    {
       path: '*',
-      redirect: '/node-status',
+      redirect: '/home',
     },
     {
       path: '/home',
@@ -97,6 +103,11 @@ export default new Router({
     {
       path: '/tokens',
       name: 'tokens',
+      component: require('@/components/Tokens').default
+    },
+    {
+      path: '/tokens/create',
+      name: 'tokens-create',
       component: require('@/components/CreateToken').default
     },
     {

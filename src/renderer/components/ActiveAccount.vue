@@ -27,23 +27,22 @@
     },
     methods: {
       async loadData() {
+        this.unlocked = this.$activeAccount.get().isUnlocked()
         try {
-          let itemId = await window.activeAccount.call(this.$mixClient.accountProfile, 'getProfile')
+          let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
           let item = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
           this.title = revision.getTitle()
           this.image = revision.getImage(100, 100)
-          this.unlocked = window.activeAccount.isUnlocked()
         }
         catch (error) {
           this.title = ''
           this.image = ''
-          this.unlocked = false
         }
       },
       async unlock() {
         try {
-          await window.activeAccount.unlock(this.password)
+          await this.$activeAccount.get().unlock(this.password)
         }
         catch (e) {
           this.passwordFieldType = 'is-danger'
@@ -54,7 +53,7 @@
         this.loadData()
       },
       lock() {
-        window.activeAccount.lock()
+        this.$activeAccount.get().lock()
         this.loadData()
       },
       changeActiveAccount() {

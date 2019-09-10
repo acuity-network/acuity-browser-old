@@ -5,13 +5,35 @@
     </template>
 
     <template slot="body">
-      <b-table :data="data">
+      <b-table :data="trusted" default-sort="account" default-sort-direction="asc">
         <template slot-scope="props">
-          <b-table-column :label="$t('account')">
+          <b-table-column :label="$t('account')" field="account" sortable>
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
           <b-table-column label="">
-            <span class="remove" @click="remove" :data-address="props.row.account">remove</span>
+            <span class="remove" @click="removeTrusted" :data-address="props.row.account">remove</span>
+          </b-table-column>
+        </template>
+      </b-table>
+      <h2 class="subtitle">Whitelist</h2>
+      <b-table :data="whitelist" default-sort="account" default-sort-direction="asc">
+        <template slot-scope="props">
+          <b-table-column :label="$t('account')" field="account" sortable>
+            <router-link :to="props.row.route">{{ props.row.title }}</router-link>
+          </b-table-column>
+          <b-table-column label="">
+            <span class="remove" @click="removeVisibility" :data-address="props.row.account">remove</span>
+          </b-table-column>
+        </template>
+      </b-table>
+      <h2 class="subtitle">Blacklist</h2>
+      <b-table :data="blacklist" default-sort="account" default-sort-direction="asc">
+        <template slot-scope="props">
+          <b-table-column :label="$t('account')" field="account" sortable>
+            <router-link :to="props.row.route">{{ props.row.title }}</router-link>
+          </b-table-column>
+          <b-table-column label="">
+            <span class="remove" @click="removeVisibility" :data-address="props.row.account">remove</span>
           </b-table-column>
         </template>
       </b-table>
@@ -32,27 +54,69 @@
     },
     data() {
       return {
-        data: [],
+        trusted: [],
+        whitelist: [],
+        blacklist: [],
       }
     },
     methods: {
       async loadData() {
-        this.data = []
-        let trusted = await window.activeAccount.call(this.$mixClient.trustedAccounts, 'getAllTrusted')
-        trusted.forEach(async contractAddress => {
+        let trusted = []
+        let whitelist = []
+        let blacklist = []
+        let trustedAccounts = await this.$activeAccount.get().call(this.$mixClient.trustedAccounts, 'getAllTrusted')
+        await trustedAccounts.forEach(async contractAddress => {
           let account = await new MixAccount(this.$root, contractAddress, true).init()
           let profileItemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
           let profileItem = await new MixItem(this.$root, profileItemId).init()
           let profileRevision = await profileItem.latestRevision().load()
-          this.data.push({
+          trusted.push({
             account: account.contractAddress,
             title: profileRevision.getTitle(),
             route: '/item/' + profileItemId,
           })
         })
+
+        await this.$db.createReadStream({
+          'gte': '/accountVisibility/' + this.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountVisibility/' + this.$activeAccount.get().contractAddress + '/z',
+        })
+        .on('data', async (data) => {
+          let accountAddress = data.key.split('/')[3]
+          let account = await new MixAccount(this.$root, accountAddress, true).init()
+          let profileItemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
+          let profileItem = await new MixItem(this.$root, profileItemId).init()
+          let profileRevision = await profileItem.latestRevision().load()
+
+          switch (data.value) {
+            case 'whitelist':
+              whitelist.push({
+                account: accountAddress,
+                title: profileRevision.getTitle(),
+                route: '/item/' + profileItemId,
+              })
+              break;
+
+            case 'blacklist':
+              blacklist.push({
+                account: accountAddress,
+                title: profileRevision.getTitle(),
+                route: '/item/' + profileItemId,
+              })
+              break;
+          }
+         })
+
+         this.trusted = trusted
+         this.whitelist = whitelist
+         this.blacklist = blacklist
       },
-      async remove(event) {
-        await window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [event.target.dataset.address], 0, 'Untrust account')
+      async removeTrusted(event) {
+        await this.$activeAccount.get().sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [event.target.dataset.address], 0, 'Untrust account')
+        this.loadData()
+      },
+      async removeVisibility(event) {
+        await this.$db.del('/accountVisibility/' + this.$activeAccount.get().contractAddress + '/' + event.target.dataset.address)
         this.loadData()
       },
     },
@@ -67,5 +131,9 @@
   .remove {
     cursor: pointer;
     user-select: none;
+  }
+
+  h2 {
+    margin-top: 1.5rem;
   }
 </style>

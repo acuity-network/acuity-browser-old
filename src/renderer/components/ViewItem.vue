@@ -2,18 +2,24 @@
   <page>
     <template slot="title">
       <span v-if="isFeed">Feed: </span>
+      <span v-if="isProfile">Profile: </span>
+      <span v-if="isToken">Token: </span>
       <item-link v-if="short" :itemId="itemId"></item-link>
       <span v-else>{{ title }}</span>
       <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
       </span>
       <span
-        v-if="editable"
+        v-if="!short && editable"
         @click="toggleEdit"
         class="clickable mdi mdi-24px mdi-square-edit-outline">
       </span>
       <span v-if="isFeed">
         <button v-if="!isSubscribed" class="button is-primary" @click="subscribe">Subscribe</button>
         <button v-if="isSubscribed" class="button is-primary" @click="unsubscribe">Unsubscribe</button>
+      </span>
+      <span v-if="isToken">
+        <button v-if="!isPortfolio" class="button is-primary" @click="portfolio">Add</button>
+        <button v-if="isPortfolio" class="button is-primary" @click="unportfolio">Remove</button>
       </span>
     </template>
 
@@ -25,13 +31,13 @@
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         @click="toggleTrust"></span><br />
       <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
+      <span v-if="topics.length > 0"><span class="topics">on <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br /></span>
       {{ published }}
     </template>
-
     <template slot="body">
       <div class="columns">
         <div class="column">
-          <div class="image" v-html="body"></div>
+          <div class="image" v-html="image"></div>
           <div v-if="hasFile" class="file">
             <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
             <span v-if="hasDownloaded" class="check" v-html="checkIcon" ></span>
@@ -58,29 +64,7 @@
       <reactions v-if="!isFeed" :itemId="itemId"></reactions>
 
       <div v-if="!short">
-        <div v-if="isToken">
-          <b-field label="Token address">
-            {{ tokenAddress }}
-          </b-field>
-          <b-field label="Token symbol">
-            {{ tokenSymbol }}
-          </b-field>
-          <b-field label="Token name">
-            {{ tokenName }}
-          </b-field>
-          <b-field label="Token start">
-            {{ tokenStart }}
-          </b-field>
-          <b-field label="Token owner">
-            {{ tokenOwner }}
-          </b-field>
-          <b-field label="Token payout">
-            {{ tokenPayout }}
-          </b-field>
-          <b-field label="Token supply">
-            {{ tokenSupply }}
-          </b-field>
-        </div>
+        <token-view v-if="isToken" :itemId="itemId"></token-view>
 
         <div v-if="isFeed">
           <view-item v-for="itemId in feedItemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
@@ -111,6 +95,7 @@
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
+  import TokenView from './mixins/TokenView.vue'
   import VueMarkdown from 'vue-markdown'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
@@ -141,6 +126,7 @@
       AccountInfo,
       ItemLink,
       ProfileLink,
+      TokenView,
       VueMarkdown,
       Reactions,
     },
@@ -199,6 +185,7 @@
         data.editing = false
         data.editForm = ''
         data.isSubscribed = false
+        data.isPortfolio = false
         data.ownerAddress = null
         data.owner = ''
         data.ownerRoute = ''
@@ -208,8 +195,9 @@
         data.inFeed = false
         data.feed = ''
         data.feedRoute = ''
+        data.topics = []
         data.published = ''
-        data.body = ''
+        data.image = ''
         data.description = ''
         data.hasFile = false
         data.file = null
@@ -219,13 +207,6 @@
         data.isProfile = ''
         data.isFeed = false
         data.isToken = false
-        data.tokenSymbol = ''
-        data.tokenName = ''
-        data.tokenStart = ''
-        data.tokenOwner = ''
-        data.tokenPayout = ''
-        data.tokenSupply = ''
-        data.tokenAddress = ''
         data.commentIds = []
         data.feedItemIds = []
         data.reply = ''
@@ -235,11 +216,6 @@
         data.checkIcon = twemoji.parse(twemoji.convert.fromCodePoint('2714'), {folder: 'svg', ext: '.svg'})
       },
       async loadData() {
-        try {
-          await this.$db.get('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
-          this.isSubscribed = true
-        }
-        catch (e) {}
         let item = await new MixItem(this.$root, this.itemId).init()
         let account = await item.account()
         this.ownerAddress = account.contractAddress
@@ -269,13 +245,23 @@
           this.inFeed = true
         }
 
+        let topicHashes = await this.$mixClient.itemTopics.methods.getItemTopicHashes(this.itemId).call()
+        let topics = []
+        for (let topicHash of topicHashes) {
+          topics.push({
+            hash: topicHash,
+            route: '/topic/' + topicHash,
+            topic: await this.$mixClient.itemTopics.methods.getTopic(topicHash).call(),
+          })
+        }
+        this.topics = topics
+
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 
         if (this.short && !trustLevel) {
           this.title = ''
-          this.body = 'Author not trusted.'
-          this.description = ''
+          this.description = 'Author not trusted.'
           return
         }
 
@@ -289,7 +275,7 @@
           }
           let timestamp = firstRevision.getTimestamp()
           this.published = 'Published ' + ((timestamp > 0) ? 'on ' + new Date(timestamp * 1000).toLocaleDateString() : 'just now')
-          this.body = revision.getImage(512)
+          this.image = revision.getImage(512)
           this.description = revision.getBodyText()
         }
         catch (e) {}
@@ -303,22 +289,23 @@
           this.fileHash = fileData.hash
         }
 
-        if (revision.content.getPrimaryMixinId() == '0xbeef2144') {
+        if (revision.content.existMixin('0xbeef2144')) {
           this.isProfile = true
         }
-        else if (revision.content.getPrimaryMixinId() == '0xbcec8faa') {
+        else if (revision.content.existMixin('0xbcec8faa')) {
           this.isFeed = true
+          try {
+            await this.$db.get('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.itemId)
+            this.isSubscribed = true
+          }
+          catch (e) {}
         }
-        else if (revision.content.getPrimaryMixinId() == '0x9fbbfaad') {
+        else if (revision.content.existMixin('0x9fbbfaad')) {
           this.isToken = true
-          this.tokenAddress = await this.$tokenRegistry.methods.getToken(this.itemId).call()
-          let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.tokenAddress)
-          this.tokenSymbol = await token.methods.symbol().call()
-          this.tokenName = await token.methods.name().call()
-          this.tokenStart = await token.methods.tokenStart().call()
-          this.tokenOwner = await token.methods.tokenOwner().call()
-          this.tokenPayout = await token.methods.tokenPayout().call()
-          this.tokenSupply = await token.methods.totalSupply().call()
+          try {
+            this.isPortfolio = await this.$activeAccount.get().call(this.$mixClient.accountTokens, 'getItemExists', [this.itemId])
+          }
+          catch (e) {}
         }
 
         if (!this.short) {
@@ -350,9 +337,9 @@
           .write()
         }
       },
-      async copyItemId(event) {
+      copyItemId(event) {
         clipboard.writeText(this.itemId)
-        this.$toast.open('itemId copied')
+        this.$buefy.toast.open('itemId copied')
       },
       async toggleEdit(event) {
         this.editing = !this.editing
@@ -361,12 +348,20 @@
         }
       },
       async subscribe(event) {
-        await this.$db.put('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId, this.itemId)
+        await this.$db.put('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.itemId, this.itemId)
         this.isSubscribed = true
       },
       async unsubscribe(event) {
-        await this.$db.del('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
+        await this.$db.del('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.itemId)
         this.isSubscribed = false
+      },
+      async portfolio(event) {
+        await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'addItem', [this.itemId], 0, 'Add token to portfolio')
+        this.isPortfolio = true
+      },
+      async unportfolio(event) {
+        await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'removeItem', [this.itemId], 0, 'Remove token from portfolio')
+        this.isPortfolio = false
       },
       async publish(event) {
         let item = await new MixItem(this.$root, this.itemId).init()
@@ -386,7 +381,7 @@
 
         let ipfsHash = await revision.content.save()
         this.editing = false
-        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
       },
       async publishReply(event) {
         let content = new MixContent(this.$root)
@@ -403,8 +398,8 @@
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)
-        await window.activeAccount.sendData(this.$mixClient.itemDagComments, 'addChild', [this.itemId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach comment')
-        await window.activeAccount.sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemDagComments, 'addChild', [this.itemId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach comment')
+        await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Post comment')
         this.reply = ''
         this.startReply = false
         this.loadData()
@@ -419,13 +414,13 @@
           return item.account()
         })
         .then(account => {
-          window.activeAccount.call(this.$mixClient.trustedAccounts, 'getIsTrusted', [account.contractAddress])
+          this.$activeAccount.get().call(this.$mixClient.trustedAccounts, 'getIsTrusted', [account.contractAddress])
           .then(trusted => {
             if (trusted) {
-              return window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
+              return this.$activeAccount.get().sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
             }
             else {
-              return window.activeAccount.sendData(this.$mixClient.trustedAccounts, 'trustAccount', [account.contractAddress], 0, 'Trust account')
+              return this.$activeAccount.get().sendData(this.$mixClient.trustedAccounts, 'trustAccount', [account.contractAddress], 0, 'Trust account')
             }
           })
           .then(() => {
@@ -468,6 +463,14 @@
 
   .button {
     margin-right:10px;
-
   }
+
+  .topics >>> .topic::after {
+    content: ", ";
+  }
+
+  .topics >>> .topic:last-child::after {
+    content: "";
+  }
+
 </style>

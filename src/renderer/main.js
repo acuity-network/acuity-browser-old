@@ -1,5 +1,4 @@
 import Vue from 'vue'
-
 import App from './App'
 import router from './router'
 
@@ -11,7 +10,14 @@ router.afterEach((to, from) => {
   }
 })
 
-import { ipcRenderer } from 'electron'
+import VueI18n from 'vue-i18n'
+Vue.use(VueI18n)
+
+import messages from './translations.js'
+
+let i18n = new VueI18n({
+  messages,
+});
 
 import Buefy from 'buefy'
 Vue.use(Buefy)
@@ -19,11 +25,7 @@ Vue.use(Buefy)
 import VueTimeago from 'vue-timeago'
 Vue.use(VueTimeago, { locale: 'en' })
 
-import i18n from './plugins/i18n';
-
 import '@mdi/font/css/materialdesignicons.min.css'
-import 'notosans-fontface/css/notosans-fontface.css'
-import 'typeface-noto-serif/index.css'
 
 import axios from 'axios'
 Vue.http = Vue.prototype.$http = axios
@@ -47,7 +49,9 @@ Vue.prototype.$settings = new Settings()
 import IpfsClient from '../lib/IpfsClient.js'
 Vue.prototype.$ipfsClient = new IpfsClient()
 
-/* eslint-disable no-new */
+import activeAccount from '../lib/activeAccount.js'
+Vue.prototype.$activeAccount = activeAccount
+
 new Vue({
   components: { App },
   router,
