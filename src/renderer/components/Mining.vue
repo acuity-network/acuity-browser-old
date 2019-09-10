@@ -29,12 +29,18 @@
   import Page from './Page.vue'
   import setTitle from '../../lib/setTitle.js'
   import os from 'os'
+  import fs from 'fs'
   import path from 'path'
   import { spawn } from 'child_process'
-  import { remote } from 'electron'
+  import download from 'download'
 
   let ethminerPath = path.join(__static, 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
   let ethminerProcess
+  let urls = {
+    linux: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-linux-x86_64.tar.gz',
+    darwin: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-darwin-x86_64.tar.gz',
+    win32: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-cuda10.0-windows-amd64.zip',
+  }
 
   export default {
     name: 'mining',
@@ -49,7 +55,7 @@
         output: '',
       }
     },
-    created() {
+    async created() {
       setTitle(this.$t('mining'))
 
       if (ethminerProcess && !ethminerProcess.killed) {
@@ -64,6 +70,7 @@
           '--syslog',
       	]
 
+        await this.downloadEthMiner()
       	let process = spawn(ethminerPath, args)
 
       	process.on('error', err => {
@@ -91,6 +98,16 @@
       }
     },
     methods: {
+      async downloadEthMiner() {
+        try {
+          fs.statSync(ethminerPath)
+        }
+        catch (e) {
+          let url = urls[os.platform()]
+          this.output += 'Downloading ' + url
+          await download(url, path.join('static', 'ethminer'), {extract: true})
+        }
+      },
       async start(event) {
         this.output = ''
 
@@ -108,8 +125,9 @@
           args.push(this.pool)
         }
 
-        ethminerProcess = spawn(ethminerPath, args)
         this.mining = true
+        await this.downloadEthMiner()
+        ethminerProcess = spawn(ethminerPath, args)
         this.attach()
       },
       stop(event) {

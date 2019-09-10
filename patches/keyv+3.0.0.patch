@@ -1,0 +1,12 @@
+diff --git a/node_modules/keyv/src/index.js b/node_modules/keyv/src/index.js
+index ab714b2..9ef0488 100644
+--- a/node_modules/keyv/src/index.js
++++ b/node_modules/keyv/src/index.js
+@@ -15,7 +15,6 @@ const loadStore = opts => {
+ 	};
+ 	if (opts.adapter || opts.uri) {
+ 		const adapter = opts.adapter || /^[^:]*/.exec(opts.uri)[0];
+-		return new (require(adapters[adapter]))(opts);
+ 	}
+ 	return new Map();
+ };

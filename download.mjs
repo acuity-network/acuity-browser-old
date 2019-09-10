@@ -8,22 +8,19 @@ let urls = {
 	linux: {
 		parity: 'https://releases.parity.io/ethereum/v2.5.7/x86_64-unknown-linux-gnu/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz',
-		ethminer: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-linux-x86_64.tar.gz',
 	},
 	darwin: {
 		parity: 'https://releases.parity.io/ethereum/v2.5.7/x86_64-apple-darwin/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_darwin-amd64.tar.gz',
-		ethminer: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-darwin-x86_64.tar.gz',
 	},
 	win32: {
 		parity: 'https://releases.parity.io/ethereum/v2.5.7/x86_64-pc-windows-msvc/parity.exe',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_windows-amd64.zip',
-		ethminer: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-cuda10.0-windows-amd64.zip',
 	},
 }
 
 try {
-	if (parseInt(fs.readFileSync('download_rev')) >= 6) {
+	if (parseInt(fs.readFileSync('download_rev')) >= 7) {
 		process.exit(0)
 	}
 } catch (e) {}
@@ -40,12 +37,9 @@ let parity = download(archUrls['parity'], 'static')
 console.log('Downloading ' + archUrls['ipfs'])
 let ipfs = download(archUrls['ipfs'], 'static', {extract: true})
 
-console.log('Downloading ' + archUrls['ethminer'])
-let ethminer = download(archUrls['ethminer'], path.join('static', 'ethminer'), {extract: true})
-
-Promise.all([parity, ipfs, ethminer])
+Promise.all([parity, ipfs])
 .then(() => {
-	fs.writeFileSync('download_rev', '6')
+	fs.writeFileSync('download_rev', '7')
 	process.exit(0)
 })
 .catch(e => {
