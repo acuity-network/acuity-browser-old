@@ -75,6 +75,9 @@ let messages = {
     activate: 'Activate',
     createAccount: 'Create account',
     recoverAccount: 'Recover account',
+    //faucet
+    faucet: 'Faucet',
+    requestMix: 'Request Mix',
     // Node Status
     acuityVersion: 'Acuity Version',
     mixBlockchain: 'MIX Blockchain',
