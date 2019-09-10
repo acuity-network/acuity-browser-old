@@ -242,8 +242,7 @@
   }
 
   html textarea.textarea {
-    font-family: "Noto Mono";
-    font-size: 0.8rem;
+    font-family: "Noto Sans";
   }
 
   html button {
