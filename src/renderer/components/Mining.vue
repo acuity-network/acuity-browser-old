@@ -4,9 +4,7 @@
       {{ $t('mining') }}
     </template>
     <template slot="body">
-      <template v-if="mining">
-        <button class="button" @click="stop">{{ $t('stop') }}</button>
-      </template>
+      <button v-if="mining" class="button" @click="stop">{{ $t('stop') }}</button>
       <template v-else>
         <b-field label="API" message="AMD devices use OpenCL. Nvidia devices use CUDA.">
           <b-select v-model="api">
@@ -20,6 +18,7 @@
         </b-field>
         <button class="button" @click="start">{{ $t('start') }}</button>
       </template>
+      <progress-bar v-if="downloading" size="tiny" :val="transferred" :max="total" bar-transition="none" />
       <code v-html="output" style="display: block; white-space: pre;"></code>
     </template>
   </page>
@@ -33,6 +32,7 @@
   import path from 'path'
   import { spawn } from 'child_process'
   import download from 'download'
+  import ProgressBar from 'vue-simple-progress'
 
   let ethminerPath = path.join(__static, 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
   let ethminerProcess
@@ -46,17 +46,35 @@
     name: 'mining',
     components: {
       Page,
+      ProgressBar,
     },
     data() {
       return {
         mining: false,
         api: 'opencl',
         pool: '',
+        downloading: false,
+        transferred: 0,
+        total: 0,
         output: '',
       }
     },
     async created() {
       setTitle(this.$t('mining'))
+
+      try {
+        fs.statSync(ethminerPath)
+      }
+      catch (e) {
+        let url = urls[os.platform()]
+        await download(url, path.join('static', 'ethminer'), {extract: true})
+          .on('downloadProgress', progress => {
+            this.downloading = true
+            this.transferred = progress.transferred
+            this.total = progress.total
+          })
+        this.downloading = false
+      }
 
       if (ethminerProcess && !ethminerProcess.killed) {
         this.mining = true
@@ -70,7 +88,6 @@
           '--syslog',
       	]
 
-        await this.downloadEthMiner()
       	let process = spawn(ethminerPath, args)
 
       	process.on('error', err => {
@@ -98,16 +115,6 @@
       }
     },
     methods: {
-      async downloadEthMiner() {
-        try {
-          fs.statSync(ethminerPath)
-        }
-        catch (e) {
-          let url = urls[os.platform()]
-          this.output += 'Downloading ' + url
-          await download(url, path.join('static', 'ethminer'), {extract: true})
-        }
-      },
       async start(event) {
         this.output = ''
 
@@ -126,7 +133,6 @@
         }
 
         this.mining = true
-        await this.downloadEthMiner()
         ethminerProcess = spawn(ethminerPath, args)
         this.attach()
       },
