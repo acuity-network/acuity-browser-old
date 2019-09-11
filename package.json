@@ -1,7 +1,7 @@
 {
   "name": "mix-acuity",
   "productName": "MIX Acuity",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "author": "Jonathan Brown <jbrown@mix-blockchain.org>",
   "description": "Reference application for MIX Blockchain.",
   "license": "Apache-2.0",
