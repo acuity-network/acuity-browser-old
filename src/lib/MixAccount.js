@@ -1,4 +1,6 @@
+let erc165Abi = require('./contracts/ERC165.abi.json')
 let accountAbi = require('./contracts/MixAccount.abi.json')
+let accountAbi2 = require('./contracts/MixAccount2.abi.json')
 import ethTx from 'ethereumjs-tx'
 import { remote } from 'electron'
 import path from 'path'
@@ -31,7 +33,16 @@ export default class MixAccount {
       } catch (e) {}
     }
     if (this.contractAddress) {
-      this.contract = new this.vue.$mixClient.web3.eth.Contract(accountAbi, this.contractAddress)
+      // Check which account interface we are using.
+      let erc165 = new this.vue.$mixClient.web3.eth.Contract(erc165Abi, this.contractAddress)
+      if (await erc165.methods.supportsInterface('0x527f66d8').call()) {
+        this.abiVersion = 1
+        this.contract = new this.vue.$mixClient.web3.eth.Contract(accountAbi2, this.contractAddress)
+      }
+      else {
+        this.abiVersion = 0
+        this.contract = new this.vue.$mixClient.web3.eth.Contract(accountAbi, this.contractAddress)
+      }
     }
     return this
   }
@@ -95,7 +106,8 @@ export default class MixAccount {
         .put('/account/controller/' + this.controllerAddress + '/contract', this.contractAddress)
         .put('/account/contract/' + this.contractAddress + '/controller', this.controllerAddress)
         .write()
-        this.contract = new this.vue.$mixClient.web3.eth.Contract(accountAbi, this.contractAddress)
+        this.abiVersion = 1
+        this.contract = new this.vue.$mixClient.web3.eth.Contract(accountAbi2, this.contractAddress)
         resolve()
       })
     })
@@ -272,7 +284,7 @@ export default class MixAccount {
         let serializedTx = tx.serialize()
         this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
         .on('transactionHash', async transactionHash => {
-          transaction = await this.vue.$mixClient.web3.eth.getTransaction(transactionHash)
+          let transaction = await this.vue.$mixClient.web3.eth.getTransaction(transactionHash)
           this._logTransaction(transaction, to, 'Send MIX')
           resolve(transaction)
         })
@@ -280,9 +292,12 @@ export default class MixAccount {
     }
     else {
       // Send to a contract address.
-      let transaction = await this._send(this.contract.methods.sendMix(to), value)
-      this._logTransaction(transaction, to, 'Send MIX')
-      return transaction
+      let inner = (this.abiVersion == 0) ?
+        this.contract.methods.sendMix(to) :
+        this.contract.methods.sendCallNoReturn(to, '0x');
+      let outer = await this._send(inner, value)
+      this._logTransaction(outer, to, 'Send MIX')
+      return outer
     }
   }
 
@@ -290,17 +305,31 @@ export default class MixAccount {
     let to = contract.options.address
     let data = contract.methods[method].apply(this, params).encodeABI()
     // Test this transaction.
-    let success = await this.contract.methods.sendData(to, data).call({
-      from: this.controllerAddress,
-      value: this.vue.$mixClient.web3.utils.toHex(value),
-    })
+    let success;
+    switch (this.abiVersion) {
+      case 0:
+        success = await this.contract.methods.sendData(to, data).call({
+          from: this.controllerAddress,
+          value: this.vue.$mixClient.web3.utils.toHex(value),
+        })
+        break;
+
+      case 1:
+        let result = await this.contract.methods.sendCall(to, data).call({
+          from: this.controllerAddress,
+          value: this.vue.$mixClient.web3.utils.toHex(value),
+        })
+        success = result.success
+        break;
+    }
     if (!success) {
       this.vue.$buefy.toast.open({message: 'Transaction error', type: 'is-danger'})
       return
     }
-    let transaction = await this._send(this.contract.methods.sendData(to, data), value, true, gas)
-    this._logTransaction(transaction, to, description)
-    return transaction
+    let inner = (this.abiVersion == 0) ? this.contract.methods.sendData(to, data) : this.contract.methods.sendCallNoReturn(to, data)
+    let outer = await this._send(inner, value, true, gas)
+    this._logTransaction(outer, to, description)
+    return outer
   }
 
   getControllerBalance() {
@@ -339,6 +368,7 @@ export default class MixAccount {
 
     let receipt = this.vue.$mixClient.web3.eth.getTransactionReceipt(info.hash)
     let transaction = this.vue.$mixClient.web3.eth.getTransaction(info.hash)
+      .catch(e => {})
     info.receipt = await receipt
 
     if (info.receipt)  {

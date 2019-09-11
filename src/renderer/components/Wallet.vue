@@ -107,7 +107,11 @@
         this.unconfirmedBalance = this.$mixClient.web3.utils.fromWei(balance)
         let data = []
 
-        let count = await this.$db.get('/account/contract/' + this.$activeAccount.get().contractAddress + '/receivedCount')
+        let count = 0
+        try {
+          count = await this.$db.get('/account/contract/' + this.$activeAccount.get().contractAddress + '/receivedCount')
+        }
+        catch (e) {}
         let payments = []
 
         for (let i = 0; i < count; i++) {
