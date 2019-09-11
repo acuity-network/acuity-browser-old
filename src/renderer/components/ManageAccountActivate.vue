@@ -11,6 +11,15 @@
         <b-field label="Address">
           {{ controllerAddress }}
         </b-field>
+        <b-field label="Faucet">
+          <div v-if="!requesting">
+            <vue-recaptcha class="captcha" sitekey="6Ld3npIUAAAAAN3xMe83rYHUy0wkgGXajOU6f9OM" @verify="onVerify" :loadRecaptchaScript="true"></vue-recaptcha>
+            <button v-if="captchaComplete" class="button is-primary" @click="request">{{ $t('requestMix') }}</button>
+          </div>
+          <div v-if="requesting">
+            {{ requestStatus}}
+          </div>
+        </b-field>
         <b-field label="Balance">
           {{ balance }} MIX
         </b-field>
@@ -30,12 +39,14 @@
   import QRCode from 'qrcode'
   import MixAccount from '../../lib/MixAccount.js'
   import setTitle from '../../lib/setTitle.js'
+  import VueRecaptcha from 'vue-recaptcha'
 
   export default {
     name: 'manage-account-activate',
     props: ['controllerAddress'],
     components: {
       Page,
+      VueRecaptcha,
     },
     data() {
       return {
@@ -43,6 +54,10 @@
         qrcode: '',
         balance: '',
         balancePending: '',
+        requestStatus: '',
+        key: '',
+        requesting: false,
+        captchaComplete: false,
       }
     },
     methods: {
@@ -59,7 +74,28 @@
           this.balance = balance
           this.balancePending = this.$mixClient.web3.utils.fromWei(await this.account.getUnconfirmedControllerBalance())
         }
-      }
+      },  
+      async request() {
+        this.requesting = true
+        this.requestStatus = 'Requesting...'
+        let _toAddr = this.controllerAddress;
+        this.$http.post("https://faucet.doubleplus.io/getMix", {
+          toAddr: _toAddr,
+          captcha: this.key  
+        }).then(res => {
+          if(res.status == 200) {
+            this.requestStatus = 'Request Successful! TxHash: ' + res.data.txHash
+          } else {
+            this.requestStatus = 'Request Failed! ' + res.data.error
+          }
+        }).catch(err =>{
+          this.requestStatus = 'Request Failed!'
+        })
+      },
+      onVerify(response) {
+        this.captchaComplete = true
+        this.key = response  
+      },
     },
     async created() {
       setTitle('Activate account')
@@ -90,5 +126,8 @@
     height: 256px;
     cursor: none;
     margin: 20px;
+  }
+  .captcha {
+    margin-bottom: 15px;
   }
 </style>

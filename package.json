@@ -68,6 +68,7 @@
     "vue": "^2.6.10",
     "vue-i18n": "^8.10.0",
     "vue-markdown": "^2.2.4",
+    "vue-recaptcha": "^1.2.0",
     "vue-router": "^3.0.1",
     "vue-simple-progress": "^1.1.0",
     "vue-timeago": "^5.0.0",
