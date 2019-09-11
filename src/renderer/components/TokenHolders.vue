@@ -44,7 +44,7 @@
         if (await this.$activeAccount.get().call(this.$mixClient.accountTokens, 'getItemExistsByAccount', [accountBalances.accounts[i], this.itemId])) {
           data.push({
             holder: accountBalances.accounts[i],
-            amount: this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(accountBalances.balances[i])),
+            amount: parseInt(this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(accountBalances.balances[i]))),
           })
         }
       }
