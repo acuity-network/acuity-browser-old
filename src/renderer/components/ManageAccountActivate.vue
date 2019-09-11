@@ -6,7 +6,9 @@
 
     <template slot="body">
       <div v-if="!activating">
-        <div>Send 0.01 MIX to activate this account.</div>
+        <b-message type="is-info">
+          <p>You need 0.01 MIX to get started. Either send MIX or use the faucet.</p>
+        </b-message>
         <img class="qr" :src="qrcode" />
         <b-field label="Address">
           {{ controllerAddress }}
@@ -74,14 +76,14 @@
           this.balance = balance
           this.balancePending = this.$mixClient.web3.utils.fromWei(await this.account.getUnconfirmedControllerBalance())
         }
-      },  
+      },
       async request() {
         this.requesting = true
         this.requestStatus = 'Requesting...'
         let _toAddr = this.controllerAddress;
         this.$http.post("https://faucet.doubleplus.io/getMix", {
           toAddr: _toAddr,
-          captcha: this.key  
+          captcha: this.key,
         }).then(res => {
           if(res.status == 200) {
             this.requestStatus = 'Request Successful! TxHash: ' + res.data.txHash
@@ -94,7 +96,7 @@
       },
       onVerify(response) {
         this.captchaComplete = true
-        this.key = response  
+        this.key = response
       },
     },
     async created() {
