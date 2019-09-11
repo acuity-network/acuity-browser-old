@@ -368,7 +368,6 @@ export default class MixAccount {
 
     let receipt = this.vue.$mixClient.web3.eth.getTransactionReceipt(info.hash)
     let transaction = this.vue.$mixClient.web3.eth.getTransaction(info.hash)
-      .catch(e => {})
     info.receipt = await receipt
 
     if (info.receipt)  {

@@ -142,15 +142,14 @@
           }
         }
         let nonce = await this.$mixClient.web3.eth.getTransactionCount(this.$activeAccount.get().controllerAddress)
-        let transactions = []
+        results = []
         for (let i = 0; i < nonce; i++) {
-          transactions.push(this.$activeAccount.get().getTransactionInfo(i)
+          results.push(await this.$activeAccount.get().getTransactionInfo(i)
             .catch(err => {
               return false
             })
           )
         }
-        results = await Promise.all(transactions)
         for (let i = 0; i < results.length; i++) {
           if (results[i] && results[i].transaction && results[i].transaction.value != 0) {
             data.push({
