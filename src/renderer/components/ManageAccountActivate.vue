@@ -7,13 +7,13 @@
     <template slot="body">
       <div v-if="!activating">
         <b-message type="is-info">
-          <p>You need 0.01 MIX to get started. Either send MIX or use the faucet.</p>
+          <p>You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.</p>
         </b-message>
         <img class="qr" :src="qrcode" />
         <b-field label="Address">
           {{ controllerAddress }}
         </b-field>
-        <b-field label="Faucet">
+        <b-field label="DoublePlus faucet">
           <div v-if="!requesting">
             <vue-recaptcha class="captcha" sitekey="6Ld3npIUAAAAAN3xMe83rYHUy0wkgGXajOU6f9OM" @verify="onVerify" :loadRecaptchaScript="true"></vue-recaptcha>
             <button v-if="captchaComplete" class="button is-primary" @click="request">{{ $t('requestMix') }}</button>
