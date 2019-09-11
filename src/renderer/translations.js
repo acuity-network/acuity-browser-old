@@ -83,6 +83,9 @@ export default {
     activate: 'Activate',
     createAccount: 'Create account',
     recoverAccount: 'Recover account',
+    //Faucet
+    faucet: 'Faucet',
+    requestMix: 'Request MIX',
     // Node Status
     acuityVersion: 'Acuity Version',
     mixBlockchain: 'MIX Blockchain',
