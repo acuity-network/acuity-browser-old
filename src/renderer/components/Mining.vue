@@ -33,8 +33,9 @@
   import { spawn } from 'child_process'
   import download from 'download'
   import ProgressBar from 'vue-simple-progress'
+  import { remote } from 'electron'
 
-  let ethminerPath = path.join(__static, 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
+  let ethminerPath = path.join(remote.app.getPath('userData'), 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
   let ethminerProcess
   let urls = {
     linux: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-linux-x86_64.tar.gz',
@@ -67,7 +68,7 @@
       }
       catch (e) {
         let url = urls[os.platform()]
-        await download(url, path.join('static', 'ethminer'), {extract: true})
+        await download(url, path.join(remote.app.getPath('userData'), 'ethminer'), {extract: true})
           .on('downloadProgress', progress => {
             this.downloading = true
             this.transferred = progress.transferred
