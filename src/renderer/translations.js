@@ -12,13 +12,18 @@ export default {
       Balance: 'Balance',
       Address: 'Address',
     },
+    BrowsingHistory: {
+      BrowsingHistory: 'Browsing History',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
+    },
     // Nav Panel
     general: 'General',
     home: 'Home',
     myFeeds: 'My Feeds',
     subscriptions: 'Subscriptions',
     interactions: 'Interactions',
-    browsingHistory: 'Browsing History',
     downloads: 'Downloads',
     publishItem: 'Publish Item',
     gotoItem: 'Goto Item',
@@ -132,6 +137,12 @@ export default {
       Balance: 'Balance',
       Address: 'Address',
     },
+    BrowsingHistory: {
+      BrowsingHistory: 'Browsing History',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -145,6 +156,12 @@ export default {
       Token: 'Token',
       Balance: 'Balance',
       Address: 'Address',
+    },
+    BrowsingHistory: {
+      BrowsingHistory: 'Browsing History',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
     },
   },
   // Russian
@@ -160,12 +177,17 @@ export default {
       Balance: 'Balance',
       Address: 'Address',
     },
+    BrowsingHistory: {
+      BrowsingHistory: 'История браузера',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
+    },
     general: 'Общие',
     home: 'Домой',
     myFeeds: 'Мои каналы',
     subscriptions: 'Подписки',
     interactions: 'Взаимосвязи',
-    browsingHistory: 'История браузера',
     publishItem: 'Опубликовать',
     gotoItem: 'Перейти к',
     goto: 'Перейти к',
@@ -251,6 +273,12 @@ export default {
       Balance: 'Balance',
       Address: 'Address',
     },
+    BrowsingHistory: {
+      BrowsingHistory: 'Browsing History',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
+    },
   },
   // Japanese
   'ja': {
@@ -264,6 +292,12 @@ export default {
       Token: 'Token',
       Balance: 'Balance',
       Address: 'Address',
+    },
+    BrowsingHistory: {
+      BrowsingHistory: 'Browsing History',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
     },
   },
   // Vietnamese
@@ -279,6 +313,12 @@ export default {
       Balance: 'Balance',
       Address: 'Address',
     },
+    BrowsingHistory: {
+      BrowsingHistory: 'Browsing History',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
+    },
   },
   // Javanese
   'jv': {
@@ -293,6 +333,12 @@ export default {
       Balance: 'Balance',
       Address: 'Address',
     },
+    BrowsingHistory: {
+      BrowsingHistory: 'Browsing History',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
+    },
   },
   // Thai
   'th': {
@@ -306,6 +352,12 @@ export default {
       Token: 'Token',
       Balance: 'Balance',
       Address: 'Address',
+    },
+    BrowsingHistory: {
+      BrowsingHistory: 'Browsing History',
+      LastAccess: 'Last Access',
+      Item: 'Item',
+      Author: 'Author',
     },
   },
 }

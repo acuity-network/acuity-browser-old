@@ -1,21 +1,21 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('browsingHistory') }}
+      {{ $t('BrowsingHistory.BrowsingHistory') }}
     </template>
 
     <template slot="body">
       <b-table :data="data">
         <template slot-scope="props">
-          <b-table-column field="when" label="Last access">
+          <b-table-column field="when" :label="$t('BrowsingHistory.LastAccess')">
             <timeago :datetime="props.row.when" :autoUpdate="true"></timeago>
           </b-table-column>
 
-          <b-table-column field="item" label="Item">
+          <b-table-column field="item" :label="$t('BrowsingHistory.Item')">
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
 
-          <b-table-column field="author" label="Author">
+          <b-table-column field="author" :label="$t('BrowsingHistory.Author')">
             <router-link :to="props.row.ownerRoute">{{ props.row.owner }}</router-link>
           </b-table-column>
         </template>
@@ -39,7 +39,7 @@
       }
     },
     async created() {
-      setTitle(this.$t('browsingHistory'))
+      setTitle(this.$t('BrowsingHistory.BrowsingHistory'))
       let data = []
       let count = await this.$db.get('/historyCount')
       for (let i = count - 1; i >= 0; i--) {
