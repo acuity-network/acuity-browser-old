@@ -47,7 +47,7 @@ async function launch(window) {
 		'--pruning=fast',
 		'--pruning-history=64',
 		'--pruning-memory=0',
-		'--logging=error',
+		'--logging=warn',
 	]
 
 	parityProcess = spawn(parityPath, args)
