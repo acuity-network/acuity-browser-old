@@ -1,28 +1,28 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('createToken') }}
+      {{ $t('CreateToken.CreateToken') }}
     </template>
 
     <template slot="body">
-      <b-field :label="$t('symbol')">
+      <b-field :label="$t('CreateToken.Symbol')">
         <b-input v-model="symbol"></b-input>
       </b-field>
-      <b-field :label="$t('name')">
+      <b-field :label="$t('CreateToken.Name')">
         <b-input v-model="name"></b-input>
       </b-field>
-      <b-field :label="$t('description')">
+      <b-field :label="$t('CreateToken.Description')">
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
-      <b-field :label="$t('initialBalance')">
+      <b-field :label="$t('CreateToken.InitialBalance')">
         <b-input v-model="initialBalance"></b-input>
       </b-field>
-      <b-field :label="$t('dailyPayout')">
+      <b-field :label="$t('CreateToken.DailyPayout')">
         <b-input v-model="dailyPayout"></b-input>
       </b-field>
 
-      <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
-      <button class="button is-primary" @click="create">{{ $t('create') }}</button>
+      <button class="button" @click="chooseFile">{{ $t('CreateToken.ChooseImage') }}</button>
+      <button class="button is-primary" @click="create">{{ $t('CreateToken.Create') }}</button>
     </template>
   </page>
 </template>
@@ -54,13 +54,13 @@
       }
     },
     created() {
-      setTitle(this.$t('createToken'))
+      setTitle(this.$t('CreateToken.CreateToken'))
     },
     methods: {
       chooseFile(event) {
         let {dialog} = require('electron').remote
         dialog.showOpenDialog({
-          title: 'Choose image',
+          title: this.$t('CreateToken.ChooseImage'),
           filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
           this.filepath = fileNames[0]

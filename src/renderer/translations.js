@@ -41,6 +41,16 @@ export default {
       Item: 'Item',
       Author: 'Author',
     },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Symbol',
+      Name: 'Name',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Daily Payout',
+      ChooseImage: 'Choose Image',
+      Create: 'Create',
+    },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -76,13 +86,6 @@ export default {
     transactions: 'Transactions',
     send: 'Send',
     to: 'To',
-    // Tokens
-    symbol: 'Symbol',
-    name: 'Name',
-    dailyPayout: 'Daily Payout',
-    initialBalance: 'Initial Balance',
-    chooseImage: 'Choose Image',
-    create: 'Create',
     // Accounts
     lock: 'Lock',
     activate: 'Activate',
@@ -166,6 +169,16 @@ export default {
       Item: 'Item',
       Author: 'Author',
     },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Symbol',
+      Name: 'Name',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Daily Payout',
+      ChooseImage: 'Choose Image',
+      Create: 'Create',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -208,6 +221,16 @@ export default {
       LastAccess: 'Last Access',
       Item: 'Item',
       Author: 'Author',
+    },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Symbol',
+      Name: 'Name',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Daily Payout',
+      ChooseImage: 'Choose Image',
+      Create: 'Create',
     },
   },
   // Russian
@@ -252,6 +275,16 @@ export default {
       Item: 'Item',
       Author: 'Author',
     },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Символ',
+      Name: 'Название',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Ежедневная выплата',
+      ChooseImage: 'Выбрать изображение',
+      Create: 'Создать',
+    },
     // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
     publishImage: 'Опубликовать картинку',
@@ -279,12 +312,6 @@ export default {
     transactions: 'Транзакции',
     send: 'Отправить',
     to: 'Куда',
-    // Tokens
-    symbol: 'Символ',
-    name: 'Название',
-    dailyPayout: 'Ежедневная выплата',
-    chooseImage: 'Выбрать изображение',
-    create: 'Создать',
     // Accounts
     lock: 'заблокировать',
     activate: 'активировать',
@@ -352,6 +379,16 @@ export default {
       Item: 'Item',
       Author: 'Author',
     },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Symbol',
+      Name: 'Name',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Daily Payout',
+      ChooseImage: 'Choose Image',
+      Create: 'Create',
+    },
   },
   // Japanese
   'ja': {
@@ -394,6 +431,16 @@ export default {
       LastAccess: 'Last Access',
       Item: 'Item',
       Author: 'Author',
+    },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Symbol',
+      Name: 'Name',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Daily Payout',
+      ChooseImage: 'Choose Image',
+      Create: 'Create',
     },
   },
   // Vietnamese
@@ -438,6 +485,16 @@ export default {
       Item: 'Item',
       Author: 'Author',
     },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Symbol',
+      Name: 'Name',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Daily Payout',
+      ChooseImage: 'Choose Image',
+      Create: 'Create',
+    },
   },
   // Javanese
   'jv': {
@@ -481,6 +538,16 @@ export default {
       Item: 'Item',
       Author: 'Author',
     },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Symbol',
+      Name: 'Name',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Daily Payout',
+      ChooseImage: 'Choose Image',
+      Create: 'Create',
+    },
   },
   // Thai
   'th': {
@@ -523,6 +590,16 @@ export default {
       LastAccess: 'Last Access',
       Item: 'Item',
       Author: 'Author',
+    },
+    CreateToken: {
+      CreateToken: 'Create Token',
+      Symbol: 'Symbol',
+      Name: 'Name',
+      Description: 'Description',
+      InitialBalance: 'Initial Balance',
+      DailyPayout: 'Daily Payout',
+      ChooseImage: 'Choose Image',
+      Create: 'Create',
     },
   },
 }
