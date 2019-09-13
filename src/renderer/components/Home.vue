@@ -21,7 +21,7 @@
       }
     },
     async created() {
-      setTitle(this.$t('home'))
+      setTitle(this.$t('Home.Home'))
       let feedIds = []
       let topicHashes = []
 

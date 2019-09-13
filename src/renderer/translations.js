@@ -102,6 +102,9 @@ export default {
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
     },
+    Home: {
+      Home: 'Home',
+    },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -271,6 +274,9 @@ export default {
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
     },
+    Home: {
+      Home: 'Home',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -375,6 +381,9 @@ export default {
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
     },
+    Home: {
+      Home: 'Home',
+    },
   },
   // Russian
   'ru': {
@@ -478,6 +487,9 @@ export default {
       GotoItem: 'Goto Item',
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
+    },
+    Home: {
+      Home: 'Домой',
     },
     // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
@@ -630,6 +642,9 @@ export default {
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
     },
+    Home: {
+      Home: 'Home',
+    },
   },
   // Japanese
   'ja': {
@@ -733,6 +748,9 @@ export default {
       GotoItem: 'Goto Item',
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
+    },
+    Home: {
+      Home: 'Home',
     },
   },
   // Vietnamese
@@ -838,6 +856,9 @@ export default {
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
     },
+    Home: {
+      Home: 'Home',
+    },
   },
   // Javanese
   'jv': {
@@ -942,6 +963,9 @@ export default {
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
     },
+    Home: {
+      Home: 'Home',
+    },
   },
   // Thai
   'th': {
@@ -1045,6 +1069,9 @@ export default {
       GotoItem: 'Goto Item',
       Goto: 'Goto',
       ItemNotFound: 'Item not found.',
+    },
+    Home: {
+      Home: 'Home',
     },
   },
 }
