@@ -1,33 +1,32 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('downloads') }}
+      {{ $t('Downloads.Downloads') }}
     </template>
 
     <template slot="body">
        <b-table ref="dlTable" :key="refreshKey" :data="data">
         <template slot-scope="props">
-          <b-table-column field="name" label="Name">
+          <b-table-column field="name" :label="$t('Downloads.Name')">
             {{props.row.name}}
           </b-table-column>
 
-          <b-table-column field="size" label="Size">
+          <b-table-column field="size" :label="$t('Downloads.Size')">
             {{props.row.size}}
           </b-table-column>
 
-          <b-table-column field="status" label="Status">
+          <b-table-column field="status" :label="$t('Downloads.Status')">
             {{props.row.status}}
           </b-table-column>
 
-          <b-table-column field="progress" label="Progress">
+          <b-table-column field="progress" :label="$t('Downloads.Progress')">
             {{props.row.progress}}%
           </b-table-column>
 
           <b-table-column>
-            <span v-if="props.row.status == 'Complete'" class="clickable" @click="openFile" :data-index="props.row.index">Open</span> &nbsp;
-            <span v-if="props.row.status != 'Deleted'" class="clickable" @click="deleteFile" :data-index="props.row.index">Delete</span>
+            <span v-if="props.row.status == $t('Downloads.Complete')" class="clickable" @click="openFile" :data-index="props.row.index">{{ $t('Downloads.Open') }}</span>&nbsp;
+            <span v-if="props.row.status != $t('Downloads.Deleted')" class="clickable" @click="deleteFile" :data-index="props.row.index">{{ $t('Downloads.Delete') }}</span>
           </b-table-column>
-
         </template>
       </b-table>
     </template>
@@ -69,16 +68,16 @@
           window.downloads[i].on('done', ()=>{
             this.data[i].status = window.downloads[i].getStatus()
             this.data[i].progress = 100
-            window.downloads[i].removeAllListeners();
+            window.downloads[i].removeAllListeners()
             this.refreshKey++
           })
         }
       },
       async deleteFile(event) {
-        let i = event.target.dataset.index;
+        let i = event.target.dataset.index
         await window.downloads[i].stopdeleteFile()
         this.data[i].status = window.downloads[i].getStatus()
-        window.downloads[i].removeAllListeners();
+        window.downloads[i].removeAllListeners()
         this.refreshKey++
       },
       openFile(event) {
@@ -86,17 +85,17 @@
       }
     },
     created() {
-      setTitle(this.$t('downloads'))
+      setTitle(this.$t('Downloads.Downloads'))
       this.loadDownloads()
     },
     destroyed() {
-        for (let download of window.downloads) {
-            try{
-                download.removeAllListeners()
-            } catch (e) {
-                console.log(e)
-            }
+      for (let download of window.downloads) {
+        try {
+          download.removeAllListeners()
+        } catch (e) {
+          console.log(e)
         }
+      }
     }
   }
 </script>

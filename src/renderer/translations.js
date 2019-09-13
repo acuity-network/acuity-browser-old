@@ -82,6 +82,17 @@ export default {
       MipmapLevel: 'Mipmap level',
       MipmapFilesize: 'Mipmap filesize',
     },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
+    },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -97,12 +108,6 @@ export default {
     updateProfile: 'Update profile',
     setProfileItem: 'Set profile item',
     createProfileItem: 'Create profile item',
-    // Downloads
-    downloads: 'Downloads',
-    fileName: 'File Name',
-    fileSize: 'Size',
-    progress: 'Progress',
-    open_delete: 'Open/Delete',
     // Profile
     editProfile: 'Edit profile',
     accountType: 'Account type',
@@ -238,6 +243,17 @@ export default {
       MipmapLevel: 'Mipmap level',
       MipmapFilesize: 'Mipmap filesize',
     },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -322,6 +338,17 @@ export default {
       MipmapLevel: 'Mipmap level',
       MipmapFilesize: 'Mipmap filesize',
     },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
+    },
   },
   // Russian
   'ru': {
@@ -404,6 +431,17 @@ export default {
         MipmapLevels: 'Mipmap levels',
         MipmapLevel: 'Mipmap level',
         MipmapFilesize: 'Mipmap filesize',
+      },
+      Downloads: {
+        Downloads: 'Downloads',
+        Name: 'Name',
+        Size: 'Size',
+        Status: 'Status',
+        Progress: 'Progress',
+        Complete: 'Complete',
+        Open: 'Open',
+        Deleted: 'Deleted',
+        Delete: 'Delete',
       },
     },
     // Publish Item
@@ -537,6 +575,17 @@ export default {
       MipmapLevel: 'Mipmap level',
       MipmapFilesize: 'Mipmap filesize',
     },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
+    },
   },
   // Japanese
   'ja': {
@@ -620,6 +669,17 @@ export default {
       MipmapLevels: 'Mipmap levels',
       MipmapLevel: 'Mipmap level',
       MipmapFilesize: 'Mipmap filesize',
+    },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
     },
   },
   // Vietnamese
@@ -705,6 +765,17 @@ export default {
       MipmapLevel: 'Mipmap level',
       MipmapFilesize: 'Mipmap filesize',
     },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
+    },
   },
   // Javanese
   'jv': {
@@ -789,6 +860,17 @@ export default {
       MipmapLevel: 'Mipmap level',
       MipmapFilesize: 'Mipmap filesize',
     },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
+    },
   },
   // Thai
   'th': {
@@ -872,6 +954,17 @@ export default {
       MipmapLevels: 'Mipmap levels',
       MipmapLevel: 'Mipmap level',
       MipmapFilesize: 'Mipmap filesize',
+    },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
     },
   },
 }
