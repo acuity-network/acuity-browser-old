@@ -27,7 +27,6 @@
   import Base58 from 'base-58'
   import multihashes from 'multihashes'
   import formatByteCount from '../../lib/formatByteCount.js'
-  import MixItem from '../../lib/MixItem.js'
   import setTitle from '../../lib/setTitle.js'
 
   // https://github.com/jasonmoo/t.js/blob/master/t.js
