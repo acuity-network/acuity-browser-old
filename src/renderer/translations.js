@@ -97,6 +97,11 @@ export default {
       MyFeeds: 'My Feeds',
       Feed: 'Feed',
     },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
+    },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -261,6 +266,11 @@ export default {
       MyFeeds: 'My Feeds',
       Feed: 'Feed',
     },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -360,6 +370,11 @@ export default {
       MyFeeds: 'My Feeds',
       Feed: 'Feed',
     },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
+    },
   },
   // Russian
   'ru': {
@@ -458,6 +473,11 @@ export default {
     Feeds: {
       MyFeeds: 'Мои каналы',
       Feed: 'Feed',
+    },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
     },
     // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
@@ -605,6 +625,11 @@ export default {
       MyFeeds: 'My Feeds',
       Feed: 'Feed',
     },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
+    },
   },
   // Japanese
   'ja': {
@@ -703,6 +728,11 @@ export default {
     Feeds: {
       MyFeeds: 'My Feeds',
       Feed: 'Feed',
+    },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
     },
   },
   // Vietnamese
@@ -803,6 +833,11 @@ export default {
       MyFeeds: 'My Feeds',
       Feed: 'Feed',
     },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
+    },
   },
   // Javanese
   'jv': {
@@ -902,6 +937,11 @@ export default {
       MyFeeds: 'My Feeds',
       Feed: 'Feed',
     },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
+    },
   },
   // Thai
   'th': {
@@ -1000,6 +1040,11 @@ export default {
     Feeds: {
       MyFeeds: 'My Feeds',
       Feed: 'Feed',
+    },
+    Goto: {
+      GotoItem: 'Goto Item',
+      Goto: 'Goto',
+      ItemNotFound: 'Item not found.',
     },
   },
 }

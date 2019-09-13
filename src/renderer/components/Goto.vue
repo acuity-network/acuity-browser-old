@@ -1,15 +1,15 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('gotoItem') }}
+      {{ $t('Goto.GotoItem') }}
     </template>
 
     <template slot="body">
-      <b-field :label="$t('itemId')" :message="message">
-        <b-input v-model="itemId" @keydown.native.enter="goto" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+      <b-field label="itemId" :message="message">
+        <b-input v-model.trim="itemId" @keydown.native.enter="goto" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
 
-      <button class="button is-primary" @click="goto">{{ $t('goto') }}</button>
+      <button class="button is-primary" @click="goto">{{ $t('Goto.Goto') }}</button>
     </template>
   </page>
 </template>
@@ -32,7 +32,7 @@
       }
     },
     created() {
-      setTitle(this.$t('gotoItem'))
+      setTitle(this.$t('Goto.GotoItem'))
       let clipboardText: string = clipboard.readText()
       if (this.$mixClient.web3.utils.isHexStrict(clipboardText) && clipboardText.length == 66) {
         this.itemId = clipboardText
@@ -40,12 +40,11 @@
     },
     methods: {
       async goto(event) {
-        this.itemId = this.itemId.trim()
         try {
           await new MixItem(this.$root, this.itemId).init()
         }
         catch (e) {
-          this.message = 'Item not found.'
+          this.message = this.$t('Goto.ItemNotFound')
           return
         }
 
