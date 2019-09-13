@@ -1,13 +1,13 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('myFeeds') }}
+      {{ $t('Feeds.MyFeeds') }}
     </template>
 
     <template slot="body">
       <b-table :data="data">
         <template slot-scope="props">
-          <b-table-column :label="$t('feed')">
+          <b-table-column :label="$t('Feeds.Feed')">
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
         </template>
@@ -32,7 +32,7 @@
       }
     },
     async created() {
-      setTitle(this.$t('myFeeds'))
+      setTitle(this.$t('Feeds.MyFeeds'))
 
       let feeds = await this.$activeAccount.get().call(this.$mixClient.accountFeeds, 'getAllItems')
       for (let itemId of feeds) {

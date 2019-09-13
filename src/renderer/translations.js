@@ -93,6 +93,10 @@ export default {
       Deleted: 'Deleted',
       Delete: 'Delete',
     },
+    Feeds: {
+      MyFeeds: 'My Feeds',
+      Feed: 'Feed',
+    },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -158,7 +162,6 @@ export default {
     holders: 'Holders',
     holder: 'Holder',
     amount: 'Amount',
-    feed: 'Feed',
   },
   // Chinese (Traditional)
   'zh-CHT': {
@@ -253,6 +256,10 @@ export default {
       Open: 'Open',
       Deleted: 'Deleted',
       Delete: 'Delete',
+    },
+    Feeds: {
+      MyFeeds: 'My Feeds',
+      Feed: 'Feed',
     },
   },
   // Chinese (Simplified)
@@ -349,6 +356,10 @@ export default {
       Deleted: 'Deleted',
       Delete: 'Delete',
     },
+    Feeds: {
+      MyFeeds: 'My Feeds',
+      Feed: 'Feed',
+    },
   },
   // Russian
   'ru': {
@@ -401,48 +412,52 @@ export default {
       DailyPayout: 'Ежедневная выплата',
       ChooseImage: 'Выбрать изображение',
       Create: 'Создать',
-      Debug: {
-        DebugItem: 'Debug Item',
-        ReadItem: 'Получить сведения',
-        itemStoreNotFound: 'itemStore not found.',
-        ItemNotFound: 'Item not found.',
-        UnsupportedItemStore: 'Unsupported itemStore.',
-        Updatable: 'Updatable',
-        EnforceRevisions: 'Enforce revisions',
-        Retractable: 'Retractable',
-        Transferable: 'Transferable',
-        Owner: 'Owner',
-        RevisionCount: 'Revision count',
-        Revision: 'Revision',
-        Timestamp: 'Timestamp',
-        IpfsHash:  'IPFS hash',
-        CompressedLength: 'Compressed length',
-        UncompressedLength: 'Uncompressed length',
-        MixinCount: 'Mixin count',
-        MixinType: 'Mixin type',
-        LanguageTag: 'Language tag',
-        Title: 'Title',
-        BodyText: 'Body text',
-        MixinSchema: 'Mixin schema',
-        Image: 'Image',
-        TopicFeed: 'Topic feed',
-        OriginalWidth: 'Original width',
-        OriginalHeight: 'Original height',
-        MipmapLevels: 'Mipmap levels',
-        MipmapLevel: 'Mipmap level',
-        MipmapFilesize: 'Mipmap filesize',
-      },
-      Downloads: {
-        Downloads: 'Downloads',
-        Name: 'Name',
-        Size: 'Size',
-        Status: 'Status',
-        Progress: 'Progress',
-        Complete: 'Complete',
-        Open: 'Open',
-        Deleted: 'Deleted',
-        Delete: 'Delete',
-      },
+    },
+    Debug: {
+      DebugItem: 'Debug Item',
+      ReadItem: 'Получить сведения',
+      itemStoreNotFound: 'itemStore not found.',
+      ItemNotFound: 'Item not found.',
+      UnsupportedItemStore: 'Unsupported itemStore.',
+      Updatable: 'Updatable',
+      EnforceRevisions: 'Enforce revisions',
+      Retractable: 'Retractable',
+      Transferable: 'Transferable',
+      Owner: 'Owner',
+      RevisionCount: 'Revision count',
+      Revision: 'Revision',
+      Timestamp: 'Timestamp',
+      IpfsHash:  'IPFS hash',
+      CompressedLength: 'Compressed length',
+      UncompressedLength: 'Uncompressed length',
+      MixinCount: 'Mixin count',
+      MixinType: 'Mixin type',
+      LanguageTag: 'Language tag',
+      Title: 'Title',
+      BodyText: 'Body text',
+      MixinSchema: 'Mixin schema',
+      Image: 'Image',
+      TopicFeed: 'Topic feed',
+      OriginalWidth: 'Original width',
+      OriginalHeight: 'Original height',
+      MipmapLevels: 'Mipmap levels',
+      MipmapLevel: 'Mipmap level',
+      MipmapFilesize: 'Mipmap filesize',
+    },
+    Downloads: {
+      Downloads: 'Downloads',
+      Name: 'Name',
+      Size: 'Size',
+      Status: 'Status',
+      Progress: 'Progress',
+      Complete: 'Complete',
+      Open: 'Open',
+      Deleted: 'Deleted',
+      Delete: 'Delete',
+    },
+    Feeds: {
+      MyFeeds: 'Мои каналы',
+      Feed: 'Feed',
     },
     // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
@@ -586,6 +601,10 @@ export default {
       Deleted: 'Deleted',
       Delete: 'Delete',
     },
+    Feeds: {
+      MyFeeds: 'My Feeds',
+      Feed: 'Feed',
+    },
   },
   // Japanese
   'ja': {
@@ -680,6 +699,10 @@ export default {
       Open: 'Open',
       Deleted: 'Deleted',
       Delete: 'Delete',
+    },
+    Feeds: {
+      MyFeeds: 'My Feeds',
+      Feed: 'Feed',
     },
   },
   // Vietnamese
@@ -776,6 +799,10 @@ export default {
       Deleted: 'Deleted',
       Delete: 'Delete',
     },
+    Feeds: {
+      MyFeeds: 'My Feeds',
+      Feed: 'Feed',
+    },
   },
   // Javanese
   'jv': {
@@ -871,6 +898,10 @@ export default {
       Deleted: 'Deleted',
       Delete: 'Delete',
     },
+    Feeds: {
+      MyFeeds: 'My Feeds',
+      Feed: 'Feed',
+    },
   },
   // Thai
   'th': {
@@ -965,6 +996,10 @@ export default {
       Open: 'Open',
       Deleted: 'Deleted',
       Delete: 'Delete',
+    },
+    Feeds: {
+      MyFeeds: 'My Feeds',
+      Feed: 'Feed',
     },
   },
 }
