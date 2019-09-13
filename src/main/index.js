@@ -109,14 +109,28 @@ async function createWindow () {
   ipfs.launch(mainWindow)
 }
 
-app.on('ready', createWindow)
+let gotTheLock = app.requestSingleInstanceLock()
 
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+  })
 
-app.on('quit', async () => {
-  await Promise.all([parity.kill(), ipfs.kill()])
-})
+  app.on('ready', createWindow)
+
+  app.on('activate', () => {
+    if (mainWindow === null) {
+      createWindow()
+    }
+  })
+
+  app.on('quit', async () => {
+    await Promise.all([parity.kill(), ipfs.kill()])
+  })
+}
