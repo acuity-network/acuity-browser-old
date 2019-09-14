@@ -1,19 +1,19 @@
 <template>
   <page>
     <template slot="title">
-      Activate account
+      {{ $t('ManageAccountActivate.ActivateAccount') }}
     </template>
 
     <template slot="body">
       <div v-if="!activating">
         <b-message type="is-info">
-          <p>You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.</p>
+          <p>{{ $t('ManageAccountActivate.Info') }}</p>
         </b-message>
         <img class="qr" :src="qrcode" />
-        <b-field label="Address">
+        <b-field :label="$t('ManageAccountActivate.Address')">
           {{ controllerAddress }}
         </b-field>
-        <b-field label="DoublePlus faucet">
+        <b-field :label="$t('ManageAccountActivate.DoublePlusFaucet')">
           <div v-if="!requesting">
             <vue-recaptcha class="captcha" sitekey="6Ld3npIUAAAAAN3xMe83rYHUy0wkgGXajOU6f9OM" @verify="onVerify" :loadRecaptchaScript="true"></vue-recaptcha>
             <button v-if="captchaComplete" class="button is-primary" @click="request">{{ $t('requestMix') }}</button>
@@ -22,15 +22,15 @@
             {{ requestStatus}}
           </div>
         </b-field>
-        <b-field label="Balance">
+        <b-field :label="$t('ManageAccountActivate.Balance')">
           {{ balance }} MIX
         </b-field>
-        <b-field label="Pending balance">
+        <b-field :label="$t('ManageAccountActivate.PendingBalance')">
           {{ balancePending }} MIX
         </b-field>
       </div>
       <div v-else>
-        Activating...
+        {{ $t('ManageAccountActivate.Activating') }}
       </div>
     </template>
   </page>
@@ -79,19 +79,19 @@
       },
       async request() {
         this.requesting = true
-        this.requestStatus = 'Requesting...'
+        this.requestStatus = this.$t('ManageAccountActivate.Requesting')
         let _toAddr = this.controllerAddress;
         this.$http.post("https://faucet.doubleplus.io/getMix", {
           toAddr: _toAddr,
           captcha: this.key,
         }).then(res => {
           if(res.status == 200) {
-            this.requestStatus = 'Request Successful! TxHash: ' + res.data.txHash
+            this.requestStatus = this.$t('ManageAccountActivate.RequestSuccessful') + ' TxHash: ' + res.data.txHash
           } else {
-            this.requestStatus = 'Request Failed! ' + res.data.error
+            this.requestStatus = this.$t('ManageAccountActivate.RequestFailed') + ' ' + res.data.error
           }
         }).catch(err =>{
-          this.requestStatus = 'Request Failed!'
+          this.requestStatus = this.$t('ManageAccountActivate.RequestFailed')
         })
       },
       onVerify(response) {
@@ -100,7 +100,7 @@
       },
     },
     async created() {
-      setTitle('Activate account')
+      setTitle(this.$t('ManageAccountActivate.ActivateAccount'))
       this.account = await new MixAccount(this, this.controllerAddress).init()
       if ('contractAddress' in this.account) {
         this.$router.push({ name: 'profile' })

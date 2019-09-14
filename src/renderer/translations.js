@@ -106,7 +106,19 @@ export default {
       Home: 'Home',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
@@ -281,7 +293,19 @@ export default {
       Home: 'Home',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
   },
   // Chinese (Simplified)
@@ -391,7 +415,19 @@ export default {
       Home: 'Home',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
   },
   // Russian
@@ -501,7 +537,19 @@ export default {
       Home: 'Домой',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
     // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
@@ -658,7 +706,19 @@ export default {
       Home: 'Home',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
   },
   // Japanese
@@ -768,7 +828,19 @@ export default {
       Home: 'Home',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
   },
   // Vietnamese
@@ -878,7 +950,19 @@ export default {
       Home: 'Home',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
   },
   // Javanese
@@ -988,7 +1072,19 @@ export default {
       Home: 'Home',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
   },
   // Thai
@@ -1098,7 +1194,19 @@ export default {
       Home: 'Home',
     },
     Interactions: {
-      Interactions: 'Interactions'
+      Interactions: 'Interactions',
+    },
+    ManageAccountActivate: {
+      ActivateAccount: 'Activate Account',
+      Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+      Address: 'Address',
+      DoublePlusFaucet: 'DoublePlus Faucet',
+      Balance: 'Balance',
+      PendingBalance: 'Pending Balance',
+      Activating: 'Activating...',
+      Requesting: 'Requesting...',
+      RequestSuccessful: 'Request successful!',
+      RequestFailed: 'Request failed!',
     },
   },
 }
