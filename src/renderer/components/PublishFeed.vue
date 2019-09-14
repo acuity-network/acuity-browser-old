@@ -72,7 +72,7 @@
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
-        languageMessage.setLanguageTag('en-US')
+        languageMessage.setLanguageTag(this.$settings.get('locale'))
         content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
 
         // Title
