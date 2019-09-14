@@ -1,29 +1,29 @@
 <template>
   <page>
     <template slot="title">
-      Recover account
+      {{ $t('ManageAccountsRecover.RecoverAccount') }}
     </template>
 
     <template slot="body">
       <b-message type="is-warning">
-        <p>Everything published with MIX Acuity will be stored publically for eternity.</p>
-        <p>This software is immature. Do not store large quantities of MIX in the wallet.</p>
-        <p>There is NO WARRANTY, to the extent permitted by law.</p>
+        <p>{{ $t('ManageAccountsRecover.Warning1') }}</p>
+        <p>{{ $t('ManageAccountsRecover.Warning2') }}</p>
+        <p>{{ $t('ManageAccountsRecover.Warning3') }}</p>
       </b-message>
       <b-message type="is-info">
-        <p>Enter the recovery phrase written down during account creation.</p>
-        <p>The password is for unlocking the account on this device. It is does not need to be the password used previously for this account.</p>
+        <p>{{ $t('ManageAccountsRecover.Info1') }}</p>
+        <p>{{ $t('ManageAccountsRecover.Info2') }}</p>
       </b-message>
-      <b-field label="Recovery phrase" :type="recoveryPhraseType" :message="recoveryPhraseMessage">
-        <b-input type="input" v-model="recoveryPhrase"></b-input>
+      <b-field :label="$t('ManageAccountsRecover.RecoveryPhrase')" :type="recoveryPhraseType" :message="recoveryPhraseMessage">
+        <b-input type="input" v-model.trim="recoveryPhrase"></b-input>
       </b-field>
-      <b-field label="Password" :type="passwordType" :message="passwordMessage">
+      <b-field :label="$t('ManageAccountsRecover.Password')" :type="passwordType" :message="passwordMessage">
         <b-input type="password" v-model="password" password-reveal></b-input>
       </b-field>
-      <b-field label="Repeat password" :type="passwordRepeatType" :message="passwordRepeatMessage">
+      <b-field :label="$t('ManageAccountsRecover.RepeatPassword')" :type="passwordRepeatType" :message="passwordRepeatMessage">
         <b-input type="password" v-model="passwordRepeat" password-reveal></b-input>
       </b-field>
-      <button class="button" @click="recover">Recover</button>
+      <button class="button" @click="recover">{{ $t('ManageAccountsRecover.Recover') }}</button>
     </template>
   </page>
 </template>
@@ -61,9 +61,9 @@
     methods: {
       async recover(event) {
         // Check a recovery phrase is entered.
-        if (this.recoveryPhrase.trim() == '') {
+        if (this.recoveryPhrase == '') {
           this.recoveryPhraseType = 'is-danger'
-          this.recoveryPhraseMessage = 'Recovery phrase is required.'
+          this.recoveryPhraseMessage = this.$t('ManageAccountsRecover.RecoveryPhraseIsRequired')
           return
         }
         else {
@@ -73,7 +73,7 @@
         // Password is required.
         if (this.password == '') {
           this.passwordType = 'is-danger'
-          this.passwordMessage = 'Password is required.'
+          this.passwordMessage = this.$t('ManageAccountsRecover.PasswordIsRequired')
           return
         }
         else {
@@ -83,7 +83,7 @@
         // Check passwords match.
         if (this.password != this.passwordRepeat) {
           this.passwordRepeatType = 'is-danger'
-          this.passwordRepeatMessage = 'Passwords do not match.'
+          this.passwordRepeatMessage = this.$t('ManageAccountsRecover.PasswordsDoNotMatch')
           return
         }
         else {
@@ -101,7 +101,7 @@
         }
         catch (e) {
           this.recoveryPhraseType = 'is-danger'
-          this.recoveryPhraseMessage = 'Account not found.'
+          this.recoveryPhraseMessage = this.$t('ManageAccountsRecover.AccountNotFound')
           return
         }
         // Encrypt private key.
@@ -123,7 +123,7 @@
       },
     },
     async created() {
-      setTitle('Recover account')
+      setTitle(this.$t('ManageAccountsRecover.RecoverAccount'))
     },
   }
 </script>

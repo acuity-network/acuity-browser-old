@@ -99,7 +99,7 @@
       },
     },
     async created() {
-      setTitle(this.$t('ManageAccounts.CreateAccount'))
+      setTitle(this.$t('ManageAccountsNew.CreateAccount'))
       this.recoveryPhrase = bip39.generateMnemonic()
     },
   }
