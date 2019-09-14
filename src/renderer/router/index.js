@@ -147,11 +147,6 @@ export default new Router({
       component: require('@/components/Settings').default
     },
     {
-      path: '/search',
-      name: 'search',
-      component: require('@/components/Search').default
-    },
-    {
       path: '/debug',
       name: 'debug',
       component: require('@/components/Debug').default
