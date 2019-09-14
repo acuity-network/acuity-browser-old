@@ -14,24 +14,24 @@
         class="clickable mdi mdi-24px mdi-square-edit-outline">
       </span>
       <span v-if="isFeed">
-        <button v-if="!isSubscribed" class="button is-primary" @click="subscribe">Subscribe</button>
-        <button v-if="isSubscribed" class="button is-primary" @click="unsubscribe">Unsubscribe</button>
+        <button v-if="!isSubscribed" class="button is-primary" @click="subscribe">{{ $t('ViewItem.Subscribe') }}</button>
+        <button v-if="isSubscribed" class="button is-primary" @click="unsubscribe">{{ $t('ViewItem.Unsubscribe') }}</button>
       </span>
       <span v-if="isToken">
-        <button v-if="!isPortfolio" class="button is-primary" @click="portfolio">Add</button>
-        <button v-if="isPortfolio" class="button is-primary" @click="unportfolio">Remove</button>
+        <button v-if="!isPortfolio" class="button is-primary" @click="portfolio">{{ $t('ViewItem.Add') }}</button>
+        <button v-if="isPortfolio" class="button is-primary" @click="unportfolio">{{ $t('ViewItem.Remove') }}</button>
       </span>
     </template>
 
     <template slot="subtitle">
-      by <profile-link :address="ownerAddress"></profile-link>&ensp;
+      {{ $t('ViewItem.by') }} <profile-link :address="ownerAddress"></profile-link>&ensp;
       <span
         @mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
         @mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
         @click="toggleTrust"></span><br />
-      <span v-if="inFeed">in <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
-      <span v-if="topics.length > 0"><span class="topics">on <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br /></span>
+      <span v-if="inFeed">{{ $t('ViewItem.in') }} <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
+      <span v-if="topics.length > 0"><span class="topics">{{ $t('ViewItem.on') }} <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br /></span>
       {{ published }}
     </template>
     <template slot="body">
@@ -42,22 +42,22 @@
             <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
             <span v-if="hasDownloaded" class="check" v-html="checkIcon" ></span>
               {{ fileName }} <br/>
-              Size: {{ fileSize }}
+              {{ $t('ViewItem.Size') }}: {{ fileSize }}
             </span>
           </div>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
           <account-info v-if="isProfile" :address="ownerAddress"></account-info>
         </div>
         <div v-if="editing" class="column">
-          <b-field label="Title">
+          <b-field :label="$t('ViewItem.Title')">
             <b-input v-model="title"></b-input>
           </b-field>
 
-          <b-field label="Description">
+          <b-field :label="$t('ViewItem.Description')">
             <b-input v-model="description" type="textarea" rows="20"></b-input>
           </b-field>
 
-          <button class="button is-primary" @click="publish">Publish</button>
+          <button class="button is-primary" @click="publish">{{ $t('ViewItem.Publish') }}</button>
         </div>
       </div>
 
@@ -74,11 +74,11 @@
 
           <div v-if="startReply">
             <b-input v-model="reply" type="textarea" class="comment-box"></b-input>
-            <button class="button is-primary" @click="publishReply">Reply</button>
-            <button class="button" @click="startReply = false">Close</button>
+            <button class="button is-primary" @click="publishReply">{{ $t('ViewItem.Reply') }}</button>
+            <button class="button" @click="startReply = false">{{ $t('ViewItem.Close') }}</button>
           </div>
           <div v-else>
-            <button class="button is-primary" @click="startReply = true">Reply</button>
+            <button class="button is-primary" @click="startReply = true">{{ $t('ViewItem.Reply') }}</button>
           </div>
         </div>
       </div>
@@ -261,7 +261,7 @@
 
         if (this.short && !trustLevel) {
           this.title = ''
-          this.description = 'Author not trusted.'
+          this.description = this.$t('ViewItem.AuthorNotTrusted')
           return
         }
 
@@ -274,7 +274,7 @@
             setTitle(this.title)
           }
           let timestamp = firstRevision.getTimestamp()
-          this.published = 'Published ' + ((timestamp > 0) ? 'on ' + new Date(timestamp * 1000).toLocaleDateString() : 'just now')
+          this.published = this.$t('ViewItem.Published') + ' ' + ((timestamp > 0) ? this.$t('ViewItem.on') + ' ' + new Date(timestamp * 1000).toLocaleDateString() : this.$t('ViewItem.JustNow'))
           this.image = revision.getImage(512)
           this.description = revision.getBodyText()
         }
@@ -339,7 +339,7 @@
       },
       copyItemId(event) {
         clipboard.writeText(this.itemId)
-        this.$buefy.toast.open('itemId copied')
+        this.$buefy.toast.open(this.$t('ViewItem.ItemIdCopied'))
       },
       async toggleEdit(event) {
         this.editing = !this.editing
