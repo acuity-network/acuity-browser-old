@@ -1,5 +1,5 @@
 export default {
-  // American English
+  // English (United States)
   'en-US': {
     App: {
       General: 'General',
