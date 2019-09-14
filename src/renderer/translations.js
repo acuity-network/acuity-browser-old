@@ -266,6 +266,12 @@ export default {
       ParentItemId: 'Parent itemId',
       Publish: 'Publish',
     },
+    Settings: {
+      Settings: 'Settings',
+      Language: 'Language',
+      Advanced: 'Advanced',
+      DevelopmentMode: 'Development mode',
+    },
     // Transaction History
     when: 'When',
     description: 'Description',
@@ -284,8 +290,6 @@ export default {
     //Faucet
     faucet: 'Faucet',
     requestMix: 'Request MIX',
-    // Settings
-    language: 'Language',
     // Other
     error: 'Error',
     addLiquidity: 'Add liquidity',
@@ -563,6 +567,12 @@ export default {
       ParentItemId: 'Parent itemId',
       Publish: 'Publish',
     },
+    Settings: {
+      Settings: 'Settings',
+      Language: 'Language',
+      Advanced: 'Advanced',
+      DevelopmentMode: 'Development mode',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -830,6 +840,12 @@ export default {
       Description: 'Description',
       ParentItemId: 'Parent itemId',
       Publish: 'Publish',
+    },
+    Settings: {
+      Settings: 'Settings',
+      Language: 'Language',
+      Advanced: 'Advanced',
+      DevelopmentMode: 'Development mode',
     },
   },
   // Russian
@@ -1099,6 +1115,12 @@ export default {
       ParentItemId: 'Parent itemId',
       Publish: 'Publish',
     },
+    Settings: {
+      Settings: 'Настройки',
+      Language: 'Язык',
+      Advanced: 'Advanced',
+      DevelopmentMode: 'Development mode',
+    },
     // Transaction History
     when: 'Когда',
     description: 'Описание',
@@ -1114,8 +1136,6 @@ export default {
     transactions: 'Транзакции',
     send: 'Отправить',
     to: 'Куда',
-    // Settings
-    language: 'Язык',
   },
   // Indonesian
   'id': {
@@ -1652,6 +1672,12 @@ export default {
       ParentItemId: 'Parent itemId',
       Publish: 'Publish',
     },
+    Settings: {
+      Settings: 'Settings',
+      Language: 'Language',
+      Advanced: 'Advanced',
+      DevelopmentMode: 'Development mode',
+    },
   },
   // Vietnamese
   'vi': {
@@ -1920,6 +1946,12 @@ export default {
       ParentItemId: 'Parent itemId',
       Publish: 'Publish',
     },
+    Settings: {
+      Settings: 'Settings',
+      Language: 'Language',
+      Advanced: 'Advanced',
+      DevelopmentMode: 'Development mode',
+    },
   },
   // Thai
   'th': {
@@ -2187,6 +2219,12 @@ export default {
       Description: 'Description',
       ParentItemId: 'Parent itemId',
       Publish: 'Publish',
+    },
+    Settings: {
+      Settings: 'Settings',
+      Language: 'Language',
+      Advanced: 'Advanced',
+      DevelopmentMode: 'Development mode',
     },
   },
 }
