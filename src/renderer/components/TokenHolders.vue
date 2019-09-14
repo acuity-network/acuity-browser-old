@@ -1,11 +1,11 @@
 <template>
   <b-table :data="data" default-sort="amount" default-sort-direction="desc">
     <template slot-scope="props">
-      <b-table-column field="holder" :label="$t('holder')" sortable>
+      <b-table-column field="holder" :label="$t('TokenHolders.Holder')" sortable>
         <profile-link :address="props.row.holder" :key="props.row.holder"></profile-link>
       </b-table-column>
 
-      <b-table-column field="amount" :label="$t('amount')" numeric sortable>
+      <b-table-column field="amount" :label="$t('TokenHolders.Amount')" numeric sortable>
         {{ props.row.amount }}
       </b-table-column>
     </template>

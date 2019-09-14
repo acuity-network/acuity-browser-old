@@ -285,6 +285,10 @@ export default {
       Remove: 'remove',
       Topic: 'Topic',
     },
+    TokenHolders: {
+      Holder: 'Holder',
+      Amount: 'Amount',
+    },
     // Transaction History
     when: 'When',
     description: 'Description',
@@ -599,6 +603,10 @@ export default {
       Remove: 'remove',
       Topic: 'Topic',
     },
+    TokenHolders: {
+      Holder: 'Holder',
+      Amount: 'Amount',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -886,6 +894,10 @@ export default {
       Remove: 'remove',
       Topic: 'Topic',
     },
+    TokenHolders: {
+      Holder: 'Holder',
+      Amount: 'Amount',
+    },
   },
   // Russian
   'ru': {
@@ -1172,6 +1184,10 @@ export default {
       Feed: 'Feed',
       Remove: 'remove',
       Topic: 'Topic',
+    },
+    TokenHolders: {
+      Holder: 'Holder',
+      Amount: 'Amount',
     },
     // Transaction History
     when: 'Когда',
@@ -1743,6 +1759,10 @@ export default {
       Remove: 'remove',
       Topic: 'Topic',
     },
+    TokenHolders: {
+      Holder: 'Holder',
+      Amount: 'Amount',
+    },
   },
   // Vietnamese
   'vi': {
@@ -2030,6 +2050,10 @@ export default {
       Remove: 'remove',
       Topic: 'Topic',
     },
+    TokenHolders: {
+      Holder: 'Holder',
+      Amount: 'Amount',
+    },
   },
   // Thai
   'th': {
@@ -2316,6 +2340,10 @@ export default {
       Feed: 'Feed',
       Remove: 'remove',
       Topic: 'Topic',
+    },
+    TokenHolders: {
+      Holder: 'Holder',
+      Amount: 'Amount',
     },
   },
 }
