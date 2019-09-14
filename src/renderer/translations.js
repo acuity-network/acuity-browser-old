@@ -300,12 +300,15 @@ export default {
       Topics: 'Topics',
       AddATopic: 'Add a topic',
     },
-    // Transaction History
-    when: 'When',
-    description: 'Description',
-    receiver: 'Receiver',
-    fee: 'Fee',
-    amount: 'Amount',
+    TransactionHistory: {
+      TransactionHistory: 'Transaction history',
+      When: 'When',
+      Pending: 'pending',
+      Description: 'Description',
+      Error: 'Error',
+      Fee: 'Fee',
+      Amount: 'Amount',
+    },
     updateProfile: 'Update profile',
     setProfileItem: 'Set profile item',
     createProfileItem: 'Create profile item',
@@ -627,6 +630,15 @@ export default {
       Topics: 'Topics',
       AddATopic: 'Add a topic',
     },
+    TransactionHistory: {
+      TransactionHistory: 'Transaction history',
+      When: 'When',
+      Pending: 'pending',
+      Description: 'Description',
+      Error: 'Error',
+      Fee: 'Fee',
+      Amount: 'Amount',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -928,6 +940,15 @@ export default {
     TopicSelector: {
       Topics: 'Topics',
       AddATopic: 'Add a topic',
+    },
+    TransactionHistory: {
+      TransactionHistory: 'Transaction history',
+      When: 'When',
+      Pending: 'pending',
+      Description: 'Description',
+      Error: 'Error',
+      Fee: 'Fee',
+      Amount: 'Amount',
     },
   },
   // Russian
@@ -1231,15 +1252,15 @@ export default {
       Topics: 'Topics',
       AddATopic: 'Add a topic',
     },
-    // Transaction History
-    when: 'Когда',
-    description: 'Описание',
-    receiver: 'Получатель',
-    fee: 'Комиссия',
-    amount: 'Сумма',
-    updateProfile: 'Обновить профиль',
-    setProfileItem: 'Настройки  элемента профиля',
-    createProfileItem: 'Создать элемент профиля',
+    TransactionHistory: {
+      TransactionHistory: 'История транзакций',
+      When: 'Когда',
+      Pending: 'pending',
+      Description: 'Описание',
+      Error: 'Error',
+      Fee: 'Комиссия',
+      Amount: 'Сумма',
+    },
     // Wallet
     balance: 'Баланс',
     unconfirmedBalance: 'Неподтвержденный баланс',
@@ -1816,6 +1837,15 @@ export default {
       Topics: 'Topics',
       AddATopic: 'Add a topic',
     },
+    TransactionHistory: {
+      TransactionHistory: 'Transaction history',
+      When: 'When',
+      Pending: 'pending',
+      Description: 'Description',
+      Error: 'Error',
+      Fee: 'Fee',
+      Amount: 'Amount',
+    },
   },
   // Vietnamese
   'vi': {
@@ -2118,6 +2148,15 @@ export default {
       Topics: 'Topics',
       AddATopic: 'Add a topic',
     },
+    TransactionHistory: {
+      TransactionHistory: 'Transaction history',
+      When: 'When',
+      Pending: 'pending',
+      Description: 'Description',
+      Error: 'Error',
+      Fee: 'Fee',
+      Amount: 'Amount',
+    },
   },
   // Thai
   'th': {
@@ -2419,6 +2458,15 @@ export default {
     TopicSelector: {
       Topics: 'Topics',
       AddATopic: 'Add a topic',
+    },
+    TransactionHistory: {
+      TransactionHistory: 'Transaction history',
+      When: 'When',
+      Pending: 'pending',
+      Description: 'Description',
+      Error: 'Error',
+      Fee: 'Fee',
+      Amount: 'Amount',
     },
   },
 }

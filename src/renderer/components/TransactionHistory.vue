@@ -1,30 +1,30 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('transactionHistory') }}
+      {{ $t('TransactionHistory.TransactionHistory') }}
     </template>
 
     <template slot="body">
       <b-table :data="data" :row-class="(row, index) => (row.error == '') ? '' : 'error'">
         <template slot-scope="props">
-          <b-table-column :label="$t('when')">
+          <b-table-column :label="$t('TransactionHistory.When')">
             <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true"></timeago>
-            <span v-else>pending</span>
+            <span v-else>{{ $t('TransactionHistory.Pending') }}</span>
           </b-table-column>
 
-          <b-table-column :label="$t('description')">
+          <b-table-column :label="$t('TransactionHistory.Description')">
             {{ props.row.description }}
           </b-table-column>
 
-          <b-table-column :label="$t('error')">
+          <b-table-column :label="$t('TransactionHistory.Error')">
             {{ props.row.error }}
           </b-table-column>
 
-          <b-table-column :label="$t('fee')">
+          <b-table-column :label="$t('TransactionHistory.Fee')">
             {{ props.row.fee }}
           </b-table-column>
 
-          <b-table-column :label="$t('amount')" numeric>
+          <b-table-column :label="$t('TransactionHistory.Amount')" numeric>
             {{ props.row.amount }}
           </b-table-column>
         </template>
@@ -70,7 +70,7 @@
       },
     },
     async created() {
-      setTitle(this.$t('transactionHistory'))
+      setTitle(this.$t('TransactionHistory.TransactionHistory'))
       if (!this.$activeAccount.get()) {
         return
       }
