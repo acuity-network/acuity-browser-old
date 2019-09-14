@@ -309,9 +309,13 @@ export default {
       Fee: 'Fee',
       Amount: 'Amount',
     },
-    updateProfile: 'Update profile',
-    setProfileItem: 'Set profile item',
-    createProfileItem: 'Create profile item',
+    TrustedAccounts: {
+      TrustedAccounts: 'Trusted accounts',
+      Account: 'Account',
+      Remove: 'remove',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+    },
     // Wallet
     balance: 'Balance',
     unconfirmedBalance: 'Unconfirmed Balance',
@@ -639,6 +643,13 @@ export default {
       Fee: 'Fee',
       Amount: 'Amount',
     },
+    TrustedAccounts: {
+      TrustedAccounts: 'Trusted accounts',
+      Account: 'Account',
+      Remove: 'remove',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -950,6 +961,13 @@ export default {
       Fee: 'Fee',
       Amount: 'Amount',
     },
+    TrustedAccounts: {
+      TrustedAccounts: 'Trusted accounts',
+      Account: 'Account',
+      Remove: 'remove',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+    },
   },
   // Russian
   'ru': {
@@ -1260,6 +1278,13 @@ export default {
       Error: 'Error',
       Fee: 'Комиссия',
       Amount: 'Сумма',
+    },
+    TrustedAccounts: {
+      TrustedAccounts: 'Доверенные аккаунты',
+      Account: 'Account',
+      Remove: 'remove',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
     },
     // Wallet
     balance: 'Баланс',
@@ -1846,6 +1871,13 @@ export default {
       Fee: 'Fee',
       Amount: 'Amount',
     },
+    TrustedAccounts: {
+      TrustedAccounts: 'Trusted accounts',
+      Account: 'Account',
+      Remove: 'remove',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+    },
   },
   // Vietnamese
   'vi': {
@@ -2157,6 +2189,13 @@ export default {
       Fee: 'Fee',
       Amount: 'Amount',
     },
+    TrustedAccounts: {
+      TrustedAccounts: 'Trusted accounts',
+      Account: 'Account',
+      Remove: 'remove',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
+    },
   },
   // Thai
   'th': {
@@ -2467,6 +2506,13 @@ export default {
       Error: 'Error',
       Fee: 'Fee',
       Amount: 'Amount',
+    },
+    TrustedAccounts: {
+      TrustedAccounts: 'Trusted accounts',
+      Account: 'Account',
+      Remove: 'remove',
+      Whitelist: 'Whitelist',
+      Blacklist: 'Blacklist',
     },
   },
 }
