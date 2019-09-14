@@ -279,6 +279,12 @@ export default {
       PleaseWait: 'Please wait...',
       Block: 'Block',
     },
+    Subscriptions: {
+      Subscriptions: 'Subscriptions',
+      Feed: 'Feed',
+      Remove: 'remove',
+      Topic: 'Topic',
+    },
     // Transaction History
     when: 'When',
     description: 'Description',
@@ -587,6 +593,12 @@ export default {
       PleaseWait: 'Please wait...',
       Block: 'Block',
     },
+    Subscriptions: {
+      Subscriptions: 'Subscriptions',
+      Feed: 'Feed',
+      Remove: 'remove',
+      Topic: 'Topic',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -868,6 +880,12 @@ export default {
       PleaseWait: 'Please wait...',
       Block: 'Block',
     },
+    Subscriptions: {
+      Subscriptions: 'Subscriptions',
+      Feed: 'Feed',
+      Remove: 'remove',
+      Topic: 'Topic',
+    },
   },
   // Russian
   'ru': {
@@ -1148,6 +1166,12 @@ export default {
       IpfsGateway: 'IPFS gateway',
       PleaseWait: 'Please wait...',
       Block: 'Block',
+    },
+    Subscriptions: {
+      Subscriptions: 'Подписки',
+      Feed: 'Feed',
+      Remove: 'remove',
+      Topic: 'Topic',
     },
     // Transaction History
     when: 'Когда',
@@ -1713,6 +1737,12 @@ export default {
       PleaseWait: 'Please wait...',
       Block: 'Block',
     },
+    Subscriptions: {
+      Subscriptions: 'Subscriptions',
+      Feed: 'Feed',
+      Remove: 'remove',
+      Topic: 'Topic',
+    },
   },
   // Vietnamese
   'vi': {
@@ -1994,6 +2024,12 @@ export default {
       PleaseWait: 'Please wait...',
       Block: 'Block',
     },
+    Subscriptions: {
+      Subscriptions: 'Subscriptions',
+      Feed: 'Feed',
+      Remove: 'remove',
+      Topic: 'Topic',
+    },
   },
   // Thai
   'th': {
@@ -2274,6 +2310,12 @@ export default {
       IpfsGateway: 'IPFS gateway',
       PleaseWait: 'Please wait...',
       Block: 'Block',
+    },
+    Subscriptions: {
+      Subscriptions: 'Subscriptions',
+      Feed: 'Feed',
+      Remove: 'remove',
+      Topic: 'Topic',
     },
   },
 }

@@ -1,27 +1,27 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('subscriptions') }}
+      {{ $t('Subscriptions.Subscriptions') }}
     </template>
 
     <template slot="body">
       <b-table :data="feeds">
         <template slot-scope="props">
-          <b-table-column label="Feed">
+          <b-table-column :label="$t('Subscriptions.Feed')">
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
           <b-table-column label="">
-            <span class="remove" @click="removeFeed" :data-itemid="props.row.itemId">remove</span>
+            <span class="remove" @click="removeFeed" :data-itemid="props.row.itemId">{{ $t('Subscriptions.Remove') }}</span>
           </b-table-column>
         </template>
       </b-table>
       <b-table :data="topics">
         <template slot-scope="props">
-          <b-table-column label="Topic">
+          <b-table-column :label="$t('Subscriptions.Topic')">
             <router-link :to="props.row.route">{{ props.row.title }}</router-link>
           </b-table-column>
           <b-table-column label="">
-            <span class="remove" @click="removeTopic" :data-topichash="props.row.topicHash">remove</span>
+            <span class="remove" @click="removeTopic" :data-topichash="props.row.topicHash">{{ $t('Subscriptions.Remove') }}</span>
           </b-table-column>
         </template>
       </b-table>
@@ -46,7 +46,7 @@
       }
     },
     created() {
-      setTitle(this.$t('subscriptions'))
+      setTitle(this.$t('Subscriptions.Subscriptions'))
       this.loadData()
     },
     methods: {
