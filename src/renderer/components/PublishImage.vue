@@ -1,20 +1,20 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('publishImage') }}
+      {{ $t('PublishImage.PublishImage') }}
     </template>
 
     <template slot="body">
-      <b-field label="Title">
+      <b-field :label="$t('PublishImage.Title')">
         <b-input v-model="title"></b-input>
       </b-field>
 
-      <b-field label="Description">
+      <b-field :label="$t('PublishImage.Description')">
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-      <b-field label="Feed">
-        <b-select v-model="feedId" placeholder="Select a feed">
+      <b-field :label="$t('PublishImage.Feed')">
+        <b-select v-model="feedId" :placeholder="$t('PublishImage.SelectAFeed')">
           <option
             v-for="feed in feeds"
             :value="feed.itemId"
@@ -26,11 +26,11 @@
 
       <topic-selector v-model="topics"></topic-selector>
 
-      <b-field label="Image" :message="filepath">
-        <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
+      <b-field :label="$t('PublishImage.Image')" :message="filepath">
+        <button class="button" @click="chooseFile">{{ $t('PublishImage.ChooseImage') }}</button>
       </b-field>
 
-      <button class="button is-primary" @click="publish">{{ $t('publish') }}</button>
+      <button class="button is-primary" @click="publish">{{ $t('PublishImage.Publish') }}</button>
     </template>
   </page>
 </template>
@@ -64,7 +64,7 @@
       }
     },
     async created() {
-      setTitle(this.$t('publishImage'))
+      setTitle(this.$t('PublishImage.PublishImage'))
 
       let feeds = await this.$activeAccount.get().call(this.$mixClient.accountFeeds, 'getAllItems')
       for (let itemId of feeds) {
@@ -84,8 +84,8 @@
       chooseFile(event) {
         let {dialog} = require('electron').remote
         dialog.showOpenDialog({
-          title: 'Choose image',
-          filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
+          title: this.$t('PublishImage.ChooseImage'),
+          filters: [{name: this.$t('PublishImage.Images'), extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
           this.filepath = fileNames[0]
         })
