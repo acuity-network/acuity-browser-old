@@ -1,25 +1,25 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('publishFeed') }}
+      {{ $t('PublishFeed.PublishFeed') }}
     </template>
 
     <template slot="body">
-      <b-field label="Title">
+      <b-field :label="$t('PublishFeed.Title')">
         <b-input v-model="title"></b-input>
       </b-field>
 
-      <b-field label="Description">
+      <b-field :label="$t('PublishFeed.Description')">
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-      <b-field label="Image" :message="filepath">
-        <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
+      <b-field :label="$t('PublishFeed.Image')" :message="filepath">
+        <button class="button" @click="chooseFile">{{ $t('PublishFeed.ChooseImage') }}</button>
       </b-field>
 
       <topic-selector v-model="topics"></topic-selector>
 
-      <button class="button is-primary" @click="publish">{{ $t('publish') }}</button>
+      <button class="button is-primary" @click="publish">{{ $t('PublishFeed.Publish') }}</button>
     </template>
   </page>
 </template>
@@ -49,14 +49,14 @@
       }
     },
     created() {
-      setTitle(this.$t('publishFeed'))
+      setTitle(this.$t('PublishFeed.PublishFeed'))
     },
     methods: {
       chooseFile(event) {
         let {dialog} = require('electron').remote
         dialog.showOpenDialog({
-          title: 'Choose image',
-          filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
+          title: this.$t('PublishFeed.ChooseImage'),
+          filters: [{name: this.$t('PublishFeed.Images'), extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
           this.filepath = fileNames[0]
         })
