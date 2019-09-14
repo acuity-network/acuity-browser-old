@@ -289,6 +289,13 @@ export default {
       Holder: 'Holder',
       Amount: 'Amount',
     },
+    Tokens: {
+      Tokens: 'Tokens',
+      Token: 'Token',
+      Balance: 'Balance',
+      Remove: 'remove',
+      CreateToken: 'Create token',
+    },
     // Transaction History
     when: 'When',
     description: 'Description',
@@ -314,8 +321,6 @@ export default {
     minLiquidity: 'Minimum liquidity',
     maxTokens: 'Maximum tokens',
     holders: 'Holders',
-    holder: 'Holder',
-    amount: 'Amount',
   },
   // Chinese (Traditional)
   'zh-CHT': {
@@ -606,6 +611,13 @@ export default {
     TokenHolders: {
       Holder: 'Holder',
       Amount: 'Amount',
+    },
+    Tokens: {
+      Tokens: 'Tokens',
+      Token: 'Token',
+      Balance: 'Balance',
+      Remove: 'remove',
+      CreateToken: 'Create token',
     },
   },
   // Chinese (Simplified)
@@ -898,6 +910,13 @@ export default {
       Holder: 'Holder',
       Amount: 'Amount',
     },
+    Tokens: {
+      Tokens: 'Tokens',
+      Token: 'Token',
+      Balance: 'Balance',
+      Remove: 'remove',
+      CreateToken: 'Create token',
+    },
   },
   // Russian
   'ru': {
@@ -1187,7 +1206,14 @@ export default {
     },
     TokenHolders: {
       Holder: 'Holder',
-      Amount: 'Amount',
+      Amount: 'Сумма',
+    },
+    Tokens: {
+      Tokens: 'Токены',
+      Token: 'Token',
+      Balance: 'Balance',
+      Remove: 'remove',
+      CreateToken: 'Create token',
     },
     // Transaction History
     when: 'Когда',
@@ -1763,6 +1789,13 @@ export default {
       Holder: 'Holder',
       Amount: 'Amount',
     },
+    Tokens: {
+      Tokens: 'Tokens',
+      Token: 'Token',
+      Balance: 'Balance',
+      Remove: 'remove',
+      CreateToken: 'Create token',
+    },
   },
   // Vietnamese
   'vi': {
@@ -2054,6 +2087,13 @@ export default {
       Holder: 'Holder',
       Amount: 'Amount',
     },
+    Tokens: {
+      Tokens: 'Tokens',
+      Token: 'Token',
+      Balance: 'Balance',
+      Remove: 'remove',
+      CreateToken: 'Create token',
+    },
   },
   // Thai
   'th': {
@@ -2344,6 +2384,13 @@ export default {
     TokenHolders: {
       Holder: 'Holder',
       Amount: 'Amount',
+    },
+    Tokens: {
+      Tokens: 'Tokens',
+      Token: 'Token',
+      Balance: 'Balance',
+      Remove: 'remove',
+      CreateToken: 'Create token',
     },
   },
 }

@@ -1,24 +1,24 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('tokens') }}
+      {{ $t('Tokens.Tokens') }}
     </template>
 
     <template slot="body">
       <b-table :data="data">
         <template slot-scope="props">
-          <b-table-column label="Token">
+          <b-table-column :label="$t('Tokens.Token')">
             <item-link :itemId="props.row.itemId"></item-link>
           </b-table-column>
-          <b-table-column label="Balance" numeric>
+          <b-table-column :label="$t('Tokens.Balance')" numeric>
             {{ props.row.balance }}
           </b-table-column>
           <b-table-column label="">
-            <span class="remove" @click="remove" :data-itemid="props.row.itemId">remove</span>
+            <span class="remove" @click="remove" :data-itemid="props.row.itemId">{{ $t('Tokens.Remove') }}</span>
           </b-table-column>
         </template>
         <template slot="footer">
-          <router-link class="footer-link" :to="{ name: 'tokens-create' }">{{ $t('createToken') }}</router-link>
+          <router-link class="footer-link" :to="{ name: 'tokens-create' }">{{ $t('Tokens.CreateToken') }}</router-link>
         </template>
       </b-table>
     </template>
@@ -43,7 +43,7 @@
       }
     },
     created() {
-      setTitle(this.$t('tokens'))
+      setTitle(this.$t('Tokens.Tokens'))
       this.loadData()
     },
     methods: {
