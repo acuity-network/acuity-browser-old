@@ -1,57 +1,57 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('nodeStatus') }}
+      {{ $t('NodeStatus.NodeStatus') }}
     </template>
 
     <template slot="body">
-      <b-field :label="$t('acuityVersion')">
+      <b-field :label="$t('NodeStatus.AcuityVersion')">
         {{ acuityVersion }}
       </b-field>
       <div class="columns">
         <div class="column">
-          <h2 class="subtitle">{{ $t('mixBlockchain') }}</h2>
-          <b-field :label="$t('agent')">
+          <h2 class="subtitle">{{ $t('NodeStatus.MixBlockchain') }}</h2>
+          <b-field :label="$t('NodeStatus.Agent')">
             {{ agent }}
           </b-field>
-          <b-field :label="$t('web3Version')">
+          <b-field :label="$t('NodeStatus.Web3Version')">
             {{ web3Version }}
           </b-field>
-          <b-field :label="$t('protocolVersion')">
+          <b-field :label="$t('NodeStatus.ProtocolVersion')">
             {{ protocolVersion }}
           </b-field>
-          <b-field :label="$t('networkId')">
+          <b-field :label="$t('NodeStatus.NetworkId')">
             {{ networkId }}
           </b-field>
-          <b-field :label="$t('blockNumber')">
+          <b-field :label="$t('NodeStatus.BlockNumber')">
             {{ blockNumber }}
           </b-field>
-          <b-field :label="$t('peerCount')">
+          <b-field :label="$t('NodeStatus.PeerCount')">
             {{ peerCount }}
           </b-field>
         </div>
         <div class="column">
           <h2 class="subtitle">IPFS</h2>
-          <b-field :label="$t('agent')">
+          <b-field :label="$t('NodeStatus.Agent')">
             {{ ipfsAgent }}
           </b-field>
-          <b-field :label="$t('protocol')">
+          <b-field :label="$t('NodeStatus.Protocol')">
             {{ ipfsProtocol }}
           </b-field>
-          <b-field :label="$t('addresses')">
+          <b-field :label="$t('NodeStatus.Addresses')">
             <ul>
               <li v-for="address in ipfsAddresses">
                 {{ address }}
               </li>
             </ul>
           </b-field>
-          <b-field :label="$t('peerCount')">
+          <b-field :label="$t('NodeStatus.PeerCount')">
             {{ ipfsPeerCount }}
           </b-field>
-          <b-field :label="$t('repoSize')">
+          <b-field :label="$t('NodeStatus.RepoSize')">
             {{ ipfsRepoSize }}
           </b-field>
-          <b-field :label="$t('repoObjectCount')">
+          <b-field :label="$t('NodeStatus.RepoObjectCount')">
             {{ ipfsRepoObjectCount }}
           </b-field>
         </div>
