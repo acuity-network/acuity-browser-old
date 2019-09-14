@@ -1,27 +1,27 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('publishMixin') }}
+      {{ $t('PublishMixinType.PublishMixinType') }}
     </template>
 
     <template slot="body">
-      <b-field label="Title">
+      <b-field :label="$t('PublishMixinType.Title')">
         <b-input v-model="title"></b-input>
       </b-field>
 
-      <b-field label="Schema">
+      <b-field :label="$t('PublishMixinType.Schema')">
         <b-input v-model="schema" type="textarea"></b-input>
       </b-field>
 
-      <b-field label="Description">
+      <b-field :label="$t('PublishMixinType.Description')">
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-      <b-field label="Parent itemId">
+      <b-field :label="$t('PublishMixinType.ParentItemId')">
         <b-input v-model="parentId" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
       </b-field>
 
-      <button class="button is-primary" @click="publish">{{ $t('publish') }}</button>
+      <button class="button is-primary" @click="publish">{{ $t('PublishMixinType.Publish') }}</button>
     </template>
   </page>
 </template>
@@ -49,7 +49,7 @@
       }
     },
     created() {
-      setTitle(this.$t('publishMixin'))
+      setTitle(this.$t('PublishMixinType.PublishMixinType'))
     },
     methods: {
       async publish(event) {
