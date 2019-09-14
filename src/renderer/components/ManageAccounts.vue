@@ -1,29 +1,29 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('accounts') }}
+      {{ $t('ManageAccounts.Accounts') }}
     </template>
 
     <template slot="body">
       <b-table :data="data" :selected.sync="selected" @click="select" default-sort="account">
         <template slot-scope="props">
 
-          <b-table-column field="account" :label="$t('account')" sortable>
+          <b-table-column field="account" :label="$t('ManageAccounts.Account')" sortable>
             <span class="clickable">{{ props.row.name }}</span>
           </b-table-column>
 
-          <b-table-column field="balance" :label="$t('balance')">
+          <b-table-column field="balance" :label="$t('ManageAccounts.Balance')">
             {{ props.row.balance }}
           </b-table-column>
 
           <b-table-column field="operations">
-            <router-link v-if="props.row.deploy" :to="props.row.deploy">deploy</router-link>
+            <router-link v-if="props.row.deploy" :to="props.row.deploy">{{ $t('ManageAccounts.deploy') }}</router-link>
           </b-table-column>
 
         </template>
         <template slot="footer">
-          <router-link class="footer-link" :to="{ name: 'manage-accounts-new' }">{{ $t('createAccount') }}</router-link>
-          <router-link class="footer-link" :to="{ name: 'manage-accounts-recover' }">{{ $t('recoverAccount') }}</router-link>
+          <router-link class="footer-link" :to="{ name: 'manage-accounts-new' }">{{ $t('ManageAccounts.CreateAccount') }}</router-link>
+          <router-link class="footer-link" :to="{ name: 'manage-accounts-recover' }">{{ $t('ManageAccounts.RecoverAccount') }}</router-link>
         </template>
       </b-table>
     </template>
@@ -84,7 +84,7 @@
       },
     },
     created() {
-      setTitle(this.$t('accounts'))
+      setTitle(this.$t('ManageAccounts.Accounts'))
       this.loadAccounts()
     },
   }

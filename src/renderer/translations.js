@@ -120,6 +120,14 @@ export default {
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
     },
+    ManageAccounts: {
+      Accounts: 'Accounts',
+      Account: 'Account',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Create account',
+      RecoverAccount: 'Recover account',
+    },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -147,11 +155,6 @@ export default {
     transactions: 'Transactions',
     send: 'Send',
     to: 'To',
-    // Accounts
-    lock: 'Lock',
-    activate: 'Activate',
-    createAccount: 'Create account',
-    recoverAccount: 'Recover account',
     //Faucet
     faucet: 'Faucet',
     requestMix: 'Request MIX',
@@ -307,6 +310,14 @@ export default {
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
     },
+    ManageAccounts: {
+      Accounts: 'Accounts',
+      Account: 'Account',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Create account',
+      RecoverAccount: 'Recover account',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -428,6 +439,14 @@ export default {
       Requesting: 'Requesting...',
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
+    },
+    ManageAccounts: {
+      Accounts: 'Accounts',
+      Account: 'Account',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Create account',
+      RecoverAccount: 'Recover account',
     },
   },
   // Russian
@@ -551,6 +570,14 @@ export default {
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
     },
+    ManageAccounts: {
+      Accounts: 'Аккаунт',
+      Account: 'Аккаунт',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Создать аккаунт',
+      RecoverAccount: 'Восстановить аккаунт',
+    },
     // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
     publishImage: 'Опубликовать картинку',
@@ -576,11 +603,6 @@ export default {
     transactions: 'Транзакции',
     send: 'Отправить',
     to: 'Куда',
-    // Accounts
-    lock: 'заблокировать',
-    activate: 'активировать',
-    createAccount: 'Создать аккаунт',
-    recoverAccount: 'Восстановить аккаунт',
     // Node Status
     mixBlockchain: 'MIX Blockchain',
     web3Version: 'Web3 версия',
@@ -720,6 +742,14 @@ export default {
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
     },
+    ManageAccounts: {
+      Accounts: 'Accounts',
+      Account: 'Account',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Create account',
+      RecoverAccount: 'Recover account',
+    },
   },
   // Japanese
   'ja': {
@@ -841,6 +871,14 @@ export default {
       Requesting: 'Requesting...',
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
+    },
+    ManageAccounts: {
+      Accounts: 'Accounts',
+      Account: 'Account',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Create account',
+      RecoverAccount: 'Recover account',
     },
   },
   // Vietnamese
@@ -964,6 +1002,14 @@ export default {
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
     },
+    ManageAccounts: {
+      Accounts: 'Accounts',
+      Account: 'Account',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Create account',
+      RecoverAccount: 'Recover account',
+    },
   },
   // Javanese
   'jv': {
@@ -1086,6 +1132,14 @@ export default {
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
     },
+    ManageAccounts: {
+      Accounts: 'Accounts',
+      Account: 'Account',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Create account',
+      RecoverAccount: 'Recover account',
+    },
   },
   // Thai
   'th': {
@@ -1207,6 +1261,14 @@ export default {
       Requesting: 'Requesting...',
       RequestSuccessful: 'Request successful!',
       RequestFailed: 'Request failed!',
+    },
+    ManageAccounts: {
+      Accounts: 'Accounts',
+      Account: 'Account',
+      Balance: 'Balance',
+      deploy: 'deploy',
+      CreateAccount: 'Create account',
+      RecoverAccount: 'Recover account',
     },
   },
 }
