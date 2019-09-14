@@ -17,6 +17,8 @@
         <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
       </b-field>
 
+      <topic-selector v-model="topics"></topic-selector>
+
       <button class="button is-primary" @click="publish">{{ $t('publish') }}</button>
     </template>
   </page>
@@ -24,6 +26,7 @@
 
 <script>
   import Page from './Page.vue'
+  import TopicSelector from './TopicSelector.vue'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
@@ -32,14 +35,16 @@
   import setTitle from '../../lib/setTitle.js'
 
   export default {
-    name: 'publish-image',
+    name: 'publish-feed',
     components: {
       Page,
+      TopicSelector,
     },
     data() {
       return {
         title: '',
         description: '',
+        topics: [],
         filepath: '',
       }
     },
@@ -87,6 +92,18 @@
         }
 
         let ipfsHash = await content.save()
+
+        for (let topic of this.topics) {
+          let topicHash = this.$mixClient.web3.utils.keccak256(topic)
+          try {
+            await this.$activeAccount.get().call(this.$mixClient.itemTopics, 'getTopic', [topicHash])
+          }
+          catch (e) {
+            await this.$activeAccount.get().sendData(this.$mixClient.itemTopics, 'createTopic', [topic], 0, 'Create topic.')
+          }
+          await this.$activeAccount.get().sendData(this.$mixClient.itemTopics, 'addItem', [topicHash, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Add item to topic.')
+        }
+
         await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create feed')
         await this.$activeAccount.get().sendData(this.$mixClient.accountFeeds, 'addItem', [itemId], 0, 'Add feed to account')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
