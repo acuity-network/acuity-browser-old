@@ -7,16 +7,16 @@
 
     <template slot="body">
       <ul>
-        <li><router-link to="/profile/edit">{{ $t('editProfile') }}</router-link></li>
+        <li><router-link to="/profile/edit">{{ $t('Profile.EditProfile') }}</router-link></li>
       </ul>
       <div class="avatar" v-html="image"></div>
-      <b-field :label="$t('accountType')">
+      <b-field :label="$t('Profile.AccountType')">
         {{ type }}
       </b-field>
-      <b-field :label="$t('bio')">
+      <b-field :label="$t('Profile.Bio')">
         {{ bio }}
       </b-field>
-      <b-field :label="$t('location')">
+      <b-field :label="$t('Profile.Location')">
         {{ location }}
       </b-field>
     </template>
@@ -60,46 +60,46 @@
 
       switch (profile.type) {
         case 0:
-          this.type = 'Anon'
+          this.type = this.$t('Profile.Anon')
           break
 
         case 1:
-          this.type = 'Person'
+          this.type = this.$t('Profile.Person')
           break
 
         case 2:
-          this.type = 'Project'
+          this.type = this.$t('Profile.Project')
           break
 
         case 3:
-          this.type = 'Organization'
+          this.type = this.$t('Profile.Organization')
           break
 
         case 4:
-          this.type = 'Proxy'
+          this.type = this.$t('Profile.Proxy')
           break
 
         case 5:
-          this.type = 'Parody'
+          this.type = this.$t('Profile.Parody')
           break
 
         case 6:
-          this.type = 'Bot'
+          this.type = this.$t('Profile.Bot')
           break
 
         case 7:
-          this.type = 'Shill'
+          this.type = this.$t('Profile.Shill')
           break
 
         case 8:
-          this.type = 'Test'
+          this.type = this.$t('Profile.Test')
           break
       }
     },
     methods: {
       async copyItemId(event) {
         clipboard.writeText(this.itemId)
-        this.$buefy.toast.open('itemId copied')
+        this.$buefy.toast.open(this.$t('Profile.ItemIdCopied'))
       },
     },
   }
