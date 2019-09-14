@@ -1,22 +1,22 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('mining') }}
+      {{ $t('Mining.Mining') }}
     </template>
     <template slot="body">
-      <button v-if="mining" class="button" @click="stop">{{ $t('stop') }}</button>
+      <button v-if="mining" class="button" @click="stop">{{ $t('Mining.Stop') }}</button>
       <template v-else>
-        <b-field label="API" message="AMD devices use OpenCL. Nvidia devices use CUDA.">
+        <b-field label="API" :message="$t('Mining.ApiMessage')">
           <b-select v-model="api">
             <option value="opencl">OpenCL</option>
             <option value="cuda">CUDA</option>
-            <option value="cuda-opencl">Both</option>
+            <option value="cuda-opencl">{{ $t('Mining.Both') }}</option>
           </b-select>
         </b-field>
-        <b-field label="Pool" message="Leave blank for solo mining.">
+        <b-field :label="$t('Mining.Pool')" :message="$t('Mining.PoolMessage')">
           <b-input v-model="pool" placeholder="scheme://user[.workername][:password]@hostname:port[/...]"></b-input>
         </b-field>
-        <button class="button" @click="start">{{ $t('start') }}</button>
+        <button class="button" @click="start">{{ $t('Mining.Start') }}</button>
       </template>
       <progress-bar v-if="downloading" size="tiny" :val="transferred" :max="total" bar-transition="none" />
       <code v-html="output" style="display: block; white-space: pre;"></code>

@@ -158,6 +158,15 @@ export default {
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
     },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
+    },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -378,6 +387,15 @@ export default {
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
     },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -538,6 +556,15 @@ export default {
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
     },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
+    },
   },
   // Russian
   'ru': {
@@ -697,6 +724,15 @@ export default {
       PasswordIsRequired: 'Password is required.',
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
+    },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
     },
     // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
@@ -900,6 +936,15 @@ export default {
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
     },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
+    },
   },
   // Japanese
   'ja': {
@@ -1059,6 +1104,15 @@ export default {
       PasswordIsRequired: 'Password is required.',
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
+    },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
     },
   },
   // Vietnamese
@@ -1220,6 +1274,15 @@ export default {
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
     },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
+    },
   },
   // Javanese
   'jv': {
@@ -1380,6 +1443,15 @@ export default {
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
     },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
+    },
   },
   // Thai
   'th': {
@@ -1539,6 +1611,15 @@ export default {
       PasswordIsRequired: 'Password is required.',
       PasswordsDoNotMatch: 'Passwords do not match.',
       AccountNotFound: 'Account not found.',
+    },
+    Mining: {
+      Mining: 'Mining',
+      Stop: 'Stop',
+      ApiMessage: 'AMD devices use OpenCL. Nvidia devices use CUDA.',
+      Both: 'Both',
+      Pool: 'Pool',
+      PoolMessage: 'Leave blank for solo mining.',
+      Start: 'Start',
     },
   },
 }
