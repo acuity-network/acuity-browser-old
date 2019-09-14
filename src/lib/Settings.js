@@ -22,7 +22,7 @@ export default class Settings {
 		}
 
 		let defaults = {
-			locale: 'en',
+			locale: 'en-US',
 			development: false,
 		}
 
