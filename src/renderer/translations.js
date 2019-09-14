@@ -272,6 +272,13 @@ export default {
       Advanced: 'Advanced',
       DevelopmentMode: 'Development mode',
     },
+    Splash: {
+      BlockchainSync: 'Blockchain synchronized',
+      BlockchainState: 'Blockchain state accessible',
+      IpfsGateway: 'IPFS gateway',
+      PleaseWait: 'Please wait...',
+      Block: 'Block',
+    },
     // Transaction History
     when: 'When',
     description: 'Description',
@@ -573,6 +580,13 @@ export default {
       Advanced: 'Advanced',
       DevelopmentMode: 'Development mode',
     },
+    Splash: {
+      BlockchainSync: 'Blockchain synchronized',
+      BlockchainState: 'Blockchain state accessible',
+      IpfsGateway: 'IPFS gateway',
+      PleaseWait: 'Please wait...',
+      Block: 'Block',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -847,6 +861,13 @@ export default {
       Advanced: 'Advanced',
       DevelopmentMode: 'Development mode',
     },
+    Splash: {
+      BlockchainSync: 'Blockchain synchronized',
+      BlockchainState: 'Blockchain state accessible',
+      IpfsGateway: 'IPFS gateway',
+      PleaseWait: 'Please wait...',
+      Block: 'Block',
+    },
   },
   // Russian
   'ru': {
@@ -1120,6 +1141,13 @@ export default {
       Language: 'Язык',
       Advanced: 'Advanced',
       DevelopmentMode: 'Development mode',
+    },
+    Splash: {
+      BlockchainSync: 'Blockchain synchronized',
+      BlockchainState: 'Blockchain state accessible',
+      IpfsGateway: 'IPFS gateway',
+      PleaseWait: 'Please wait...',
+      Block: 'Block',
     },
     // Transaction History
     when: 'Когда',
@@ -1678,6 +1706,13 @@ export default {
       Advanced: 'Advanced',
       DevelopmentMode: 'Development mode',
     },
+    Splash: {
+      BlockchainSync: 'Blockchain synchronized',
+      BlockchainState: 'Blockchain state accessible',
+      IpfsGateway: 'IPFS gateway',
+      PleaseWait: 'Please wait...',
+      Block: 'Block',
+    },
   },
   // Vietnamese
   'vi': {
@@ -1952,6 +1987,13 @@ export default {
       Advanced: 'Advanced',
       DevelopmentMode: 'Development mode',
     },
+    Splash: {
+      BlockchainSync: 'Blockchain synchronized',
+      BlockchainState: 'Blockchain state accessible',
+      IpfsGateway: 'IPFS gateway',
+      PleaseWait: 'Please wait...',
+      Block: 'Block',
+    },
   },
   // Thai
   'th': {
@@ -2225,6 +2267,13 @@ export default {
       Language: 'Language',
       Advanced: 'Advanced',
       DevelopmentMode: 'Development mode',
+    },
+    Splash: {
+      BlockchainSync: 'Blockchain synchronized',
+      BlockchainState: 'Blockchain state accessible',
+      IpfsGateway: 'IPFS gateway',
+      PleaseWait: 'Please wait...',
+      Block: 'Block',
     },
   },
 }

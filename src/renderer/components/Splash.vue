@@ -1,14 +1,14 @@
 <template>
 	<div class="wavefrontscontain">
-		<img src="../assets/acuity-logo.svg" alt="MIX Acuity Logo" class="acuitylogo">
+		<img src="../assets/acuity-logo.svg" class="acuitylogo">
 		<div class="status">{{ status }}</div>
 		<progress-bar size="tiny" :val="syncProgress" :max="syncTotal" bar-transition="none" />
 		<div class="status"><br />
 			<span :class="web3Class">Web3 API</span><br />
-			<span :class="syncClass">Blockchain synchronized</span><br />
-			<span :class="stateClass">Blockchain state accessible</span><br />
+			<span :class="syncClass">{{ $t('Splash.BlockchainSync') }}</span><br />
+			<span :class="stateClass">{{ $t('Splash.BlockchainState') }}</span><br />
 			<span :class="ipfsApiClass">IPFS API</span><br />
-			<span :class="ipfsGatewayClass">IPFS gateway</span>
+			<span :class="ipfsGatewayClass">{{ $t('Splash.IpfsGateway') }}</span>
 		</div>
     <div class="br-c6"></div>
     <div class="br-c5"></div>
@@ -49,7 +49,7 @@
       return {
         syncTotal: 1,
         syncProgress: 0,
-				status: 'Please wait...',
+				status: this.$t('Splash.PleaseWait'),
 				web3Class: '',
 				syncClass: '',
 				stateClass: '',
@@ -59,7 +59,7 @@
     },
 		async created() {
       this.$root.$on('mix-client-syncing', isSyncing => {
-				this.status = 'Block ' + isSyncing.currentBlock.toLocaleString()
+				this.status = this.$t('Splash.Block') + ' ' + isSyncing.currentBlock.toLocaleString()
 				this.syncTotal = isSyncing.highestBlock - isSyncing.startingBlock
 				this.syncProgress = isSyncing.currentBlock - isSyncing.startingBlock
       })
