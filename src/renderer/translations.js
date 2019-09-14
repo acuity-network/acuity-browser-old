@@ -105,6 +105,9 @@ export default {
     Home: {
       Home: 'Home',
     },
+    Interactions: {
+      Interactions: 'Interactions'
+    },
     // Publish Item
     publishMixin: 'Publish Mixin Type',
     publishImage: 'Publish Image',
@@ -277,6 +280,9 @@ export default {
     Home: {
       Home: 'Home',
     },
+    Interactions: {
+      Interactions: 'Interactions'
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -384,6 +390,9 @@ export default {
     Home: {
       Home: 'Home',
     },
+    Interactions: {
+      Interactions: 'Interactions'
+    },
   },
   // Russian
   'ru': {
@@ -490,6 +499,9 @@ export default {
     },
     Home: {
       Home: 'Домой',
+    },
+    Interactions: {
+      Interactions: 'Interactions'
     },
     // Publish Item
     publishMixin: 'Опубликовать смешанный тип',
@@ -645,6 +657,9 @@ export default {
     Home: {
       Home: 'Home',
     },
+    Interactions: {
+      Interactions: 'Interactions'
+    },
   },
   // Japanese
   'ja': {
@@ -751,6 +766,9 @@ export default {
     },
     Home: {
       Home: 'Home',
+    },
+    Interactions: {
+      Interactions: 'Interactions'
     },
   },
   // Vietnamese
@@ -859,6 +877,9 @@ export default {
     Home: {
       Home: 'Home',
     },
+    Interactions: {
+      Interactions: 'Interactions'
+    },
   },
   // Javanese
   'jv': {
@@ -966,6 +987,9 @@ export default {
     Home: {
       Home: 'Home',
     },
+    Interactions: {
+      Interactions: 'Interactions'
+    },
   },
   // Thai
   'th': {
@@ -1072,6 +1096,9 @@ export default {
     },
     Home: {
       Home: 'Home',
+    },
+    Interactions: {
+      Interactions: 'Interactions'
     },
   },
 }

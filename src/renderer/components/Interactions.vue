@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('interactions') }}
+      {{ $t('Interactions.Interactions') }}
     </template>
   </page>
 </template>
@@ -16,7 +16,7 @@
       Page,
     },
     created() {
-      setTitle(this.$t('interactions'))
+      setTitle(this.$t('Interactions.Interactions'))
     }
   }
 </script>
