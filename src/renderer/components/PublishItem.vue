@@ -1,15 +1,15 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('publishItem') }}
+      {{ $t('PublishItem.PublishItem') }}
     </template>
 
     <template slot="body">
       <ul>
-        <li><router-link to="/publish-item/image">{{ $t('publishImage') }}</router-link></li>
-        <li><router-link to="/publish-item/feed">{{ $t('publishFeed') }}</router-link></li>
-        <li><router-link to="/publish-item/file">{{ $t('publishFile') }}</router-link></li>
-        <li v-if="isDevelopment"><router-link to="/publish-item/mixin-type">{{ $t('publishMixin') }}</router-link></li>
+        <li><router-link to="/publish-item/image">{{ $t('PublishItem.PublishImage') }}</router-link></li>
+        <li><router-link to="/publish-item/feed">{{ $t('PublishItem.PublishFeed') }}</router-link></li>
+        <li><router-link to="/publish-item/file">{{ $t('PublishItem.PublishFile') }}</router-link></li>
+        <li v-if="isDevelopment"><router-link to="/publish-item/mixin-type">{{ $t('PublishItem.PublishMixinType') }}</router-link></li>
       </ul>
     </template>
   </page>
@@ -30,7 +30,7 @@
       }
     },
     created() {
-      setTitle(this.$t('publishItem'))
+      setTitle(this.$t('PublishItem.PublishItem'))
     },
   }
 </script>

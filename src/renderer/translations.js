@@ -251,6 +251,13 @@ export default {
       Publish: 'Publish',
       Images: 'Images',
     },
+    PublishItem: {
+      PublishItem: 'Publish item',
+      PublishImage: 'Publish image',
+      PublishFeed: 'Publish feed',
+      PublishFile: 'Publish file',
+      PublishMixinType: 'Publish mixin type',
+    },
     // Transaction History
     when: 'When',
     description: 'Description',
@@ -533,6 +540,13 @@ export default {
       Publish: 'Publish',
       Images: 'Images',
     },
+    PublishItem: {
+      PublishItem: 'Publish item',
+      PublishImage: 'Publish image',
+      PublishFeed: 'Publish feed',
+      PublishFile: 'Publish file',
+      PublishMixinType: 'Publish mixin type',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -786,6 +800,13 @@ export default {
       Publish: 'Publish',
       Images: 'Images',
     },
+    PublishItem: {
+      PublishItem: 'Publish item',
+      PublishImage: 'Publish image',
+      PublishFeed: 'Publish feed',
+      PublishFile: 'Publish file',
+      PublishMixinType: 'Publish mixin type',
+    },
   },
   // Russian
   'ru': {
@@ -1015,7 +1036,7 @@ export default {
       Images: 'Images',
     },
     PublishFile: {
-      PublishFile: 'Publish file',
+      PublishFile: 'Опубликовать file',
       Title: 'Title',
       Description: 'Description',
       Feed: 'Feed',
@@ -1039,8 +1060,13 @@ export default {
       Publish: 'Publish',
       Images: 'Images',
     },
-    // Publish Item
-    publishMixin: 'Опубликовать смешанный тип',
+    PublishItem: {
+      PublishItem: 'Опубликовать item',
+      PublishImage: 'Опубликовать картинку',
+      PublishFeed: 'Опубликовать новость',
+      PublishFile: 'Опубликовать file',
+      PublishMixinType: 'Опубликовать смешанный тип',
+    },
     // Transaction History
     when: 'Когда',
     description: 'Описание',
@@ -1311,6 +1337,13 @@ export default {
       Publish: 'Publish',
       Images: 'Images',
     },
+    PublishItem: {
+      PublishItem: 'Publish item',
+      PublishImage: 'Publish image',
+      PublishFeed: 'Publish feed',
+      PublishFile: 'Publish file',
+      PublishMixinType: 'Publish mixin type',
+    },
   },
   // Japanese
   'ja': {
@@ -1563,6 +1596,13 @@ export default {
       ChooseImage: 'Choose image',
       Publish: 'Publish',
       Images: 'Images',
+    },
+    PublishItem: {
+      PublishItem: 'Publish item',
+      PublishImage: 'Publish image',
+      PublishFeed: 'Publish feed',
+      PublishFile: 'Publish file',
+      PublishMixinType: 'Publish mixin type',
     },
   },
   // Vietnamese
@@ -1817,6 +1857,13 @@ export default {
       Publish: 'Publish',
       Images: 'Images',
     },
+    PublishItem: {
+      PublishItem: 'Publish item',
+      PublishImage: 'Publish image',
+      PublishFeed: 'Publish feed',
+      PublishFile: 'Publish file',
+      PublishMixinType: 'Publish mixin type',
+    },
   },
   // Thai
   'th': {
@@ -2069,6 +2116,13 @@ export default {
       ChooseImage: 'Choose image',
       Publish: 'Publish',
       Images: 'Images',
+    },
+    PublishItem: {
+      PublishItem: 'Publish item',
+      PublishImage: 'Publish image',
+      PublishFeed: 'Publish feed',
+      PublishFile: 'Publish file',
+      PublishMixinType: 'Publish mixin type',
     },
   },
 }
