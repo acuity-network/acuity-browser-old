@@ -1,41 +1,41 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('editProfile') }}
+      {{ $t('ProfileEdit.EditProfile') }}
     </template>
 
     <template slot="body">
-      <b-field :label="$t('name')">
+      <b-field :label="$t('ProfileEdit.Name')">
         <b-input v-model="name"></b-input>
       </b-field>
 
-      <b-field :label="$t('accountType')">
+      <b-field :label="$t('ProfileEdit.AccountType')">
         <b-select v-model="type">
-          <option value="0">Anon</option>
-          <option value="1">Person</option>
-          <option value="2">Project</option>
-          <option value="3">Organization</option>
-          <option value="4">Proxy</option>
-          <option value="5">Parody</option>
-          <option value="6">Bot</option>
-          <option value="7">Shill</option>
-          <option value="8">Test</option>
+          <option value="0">{{ $t('ProfileEdit.Anon') }}</option>
+          <option value="1">{{ $t('ProfileEdit.Person') }}</option>
+          <option value="2">{{ $t('ProfileEdit.Project') }}</option>
+          <option value="3">{{ $t('ProfileEdit.Organization') }}</option>
+          <option value="4">{{ $t('ProfileEdit.Proxy') }}</option>
+          <option value="5">{{ $t('ProfileEdit.Parody') }}</option>
+          <option value="6">{{ $t('ProfileEdit.Bot') }}</option>
+          <option value="7">{{ $t('ProfileEdit.Shill') }}</option>
+          <option value="8">{{ $t('ProfileEdit.Test') }}</option>
         </b-select>
       </b-field>
 
-      <b-field :label="$t('location')">
+      <b-field :label="$t('ProfileEdit.Location')">
         <b-input v-model="location"></b-input>
       </b-field>
 
-      <b-field :label="$t('bio')">
+      <b-field :label="$t('ProfileEdit.Bio')">
         <b-input v-model="bio" type="textarea"></b-input>
       </b-field>
 
       <b-field label="Image" :message="filepath">
-        <button class="button" @click="chooseFile">{{ $t('chooseImage') }}</button>
+        <button class="button" @click="chooseFile">{{ $t('ProfileEdit.ChooseImage') }}</button>
       </b-field>
 
-      <button class="button is-primary" @click="publish">{{ $t('publish') }}</button>
+      <button class="button is-primary" @click="publish">{{ $t('ProfileEdit.Publish') }}</button>
     </template>
   </page>
 </template>
@@ -51,6 +51,7 @@
   import MixItem from '../../lib/MixItem.js'
   import Image from '../../lib/Image.js'
   import MixContent from '../../lib/MixContent.js'
+  import setTitle from '../../lib/setTitle.js'
 
   export default {
     name: 'profile',
@@ -74,6 +75,7 @@
       let item = await new MixItem(this, itemId).init()
       let revision = await item.latestRevision().load()
       this.name = revision.getTitle()
+      setTitle(this.name)
       this.bio = revision.getBodyText()
       this.image = revision.getImage(256)
       let profile = revision.getProfile()
@@ -84,8 +86,8 @@
       chooseFile(event) {
         let {dialog} = require('electron').remote
         dialog.showOpenDialog({
-          title: 'Choose image',
-          filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
+          title: this.$t('ProfileEdit.ChooseImage'),
+          filters: [{name: this.$t('ProfileEdit.Images'), extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
         }, (fileNames) => {
           this.filepath = fileNames[0]
         })
