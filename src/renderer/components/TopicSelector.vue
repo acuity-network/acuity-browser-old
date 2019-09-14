@@ -1,6 +1,6 @@
 <template>
-	<b-field label="Topics">
-		<b-taginput v-bind:value="value" v-on:input="$emit('input', $event)" icon="label" placeholder="Add a topic" autocomplete @typing="getFilteredTopics" :data="filteredTopics" allow-new></b-taginput>
+	<b-field :label="$t('TopicSelector.Topics')">
+		<b-taginput v-bind:value="value" v-on:input="$emit('input', $event)" icon="label" :placeholder="$t('TopicSelector.AddATopic')" autocomplete @typing="getFilteredTopics" :data="filteredTopics" allow-new></b-taginput>
 	</b-field>
 </template>
 

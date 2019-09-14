@@ -296,6 +296,10 @@ export default {
       Remove: 'remove',
       CreateToken: 'Create token',
     },
+    TopicSelector: {
+      Topics: 'Topics',
+      AddATopic: 'Add a topic',
+    },
     // Transaction History
     when: 'When',
     description: 'Description',
@@ -619,6 +623,10 @@ export default {
       Remove: 'remove',
       CreateToken: 'Create token',
     },
+    TopicSelector: {
+      Topics: 'Topics',
+      AddATopic: 'Add a topic',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -917,6 +925,10 @@ export default {
       Remove: 'remove',
       CreateToken: 'Create token',
     },
+    TopicSelector: {
+      Topics: 'Topics',
+      AddATopic: 'Add a topic',
+    },
   },
   // Russian
   'ru': {
@@ -1214,6 +1226,10 @@ export default {
       Balance: 'Balance',
       Remove: 'remove',
       CreateToken: 'Create token',
+    },
+    TopicSelector: {
+      Topics: 'Topics',
+      AddATopic: 'Add a topic',
     },
     // Transaction History
     when: 'Когда',
@@ -1796,6 +1812,10 @@ export default {
       Remove: 'remove',
       CreateToken: 'Create token',
     },
+    TopicSelector: {
+      Topics: 'Topics',
+      AddATopic: 'Add a topic',
+    },
   },
   // Vietnamese
   'vi': {
@@ -2094,6 +2114,10 @@ export default {
       Remove: 'remove',
       CreateToken: 'Create token',
     },
+    TopicSelector: {
+      Topics: 'Topics',
+      AddATopic: 'Add a topic',
+    },
   },
   // Thai
   'th': {
@@ -2391,6 +2415,10 @@ export default {
       Balance: 'Balance',
       Remove: 'remove',
       CreateToken: 'Create token',
+    },
+    TopicSelector: {
+      Topics: 'Topics',
+      AddATopic: 'Add a topic',
     },
   },
 }
