@@ -1,20 +1,20 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('publishFile') }}
+      {{ $t('PublishFile.PublishFile') }}
     </template>
 
     <template slot="body">
-      <b-field label="Title">
+      <b-field :label="$t('PublishFile.Title')">
         <b-input v-model="title"></b-input>
       </b-field>
 
-      <b-field label="Description">
+      <b-field :label="$t('PublishFile.Description')">
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-      <b-field label="Feed">
-        <b-select v-model="feedId" placeholder="Select a feed">
+      <b-field :label="$t('PublishFile.Feed')">
+        <b-select v-model="feedId" :placeholder="$t('PublishFile.SelectAFeed')">
           <option
             v-for="feed in feeds"
             :value="feed.itemId"
@@ -26,11 +26,11 @@
 
       <topic-selector v-model="topics"></topic-selector>
 
-      <b-field label="File" :message="filepath">
-        <button class="button" @click="chooseFile">{{ $t('chooseFile') }}</button>
+      <b-field :label="$t('PublishFile.File')" :message="filepath">
+        <button class="button" @click="chooseFile">{{ $t('PublishFile.ChooseFile') }}</button>
       </b-field>
       <code id="output" style="display: block; font-size:small"></code>
-      <button v-if="isDoneUploading" class="button is-primary" @click="publish">{{ $t('publish') }}</button>
+      <button v-if="isDoneUploading" class="button is-primary" @click="publish">{{ $t('PublishFile.Publish') }}</button>
     </template>
   </page>
 </template>
@@ -74,7 +74,7 @@
       }
     },
     async created() {
-      setTitle(this.$t('publishFile'))
+      setTitle(this.$t('PublishFile.PublishFile'))
 
       let feeds = await this.$activeAccount.get().call(this.$mixClient.accountFeeds, 'getAllItems')
       for (let itemId of feeds) {
@@ -94,14 +94,14 @@
       chooseFile(event) {
         const {dialog} = require('electron').remote
         dialog.showOpenDialog({
-          title: 'Choose File',
+          title: this.$t('PublishFile.ChooseFile'),
         }, (fileNames) => {
           this.isUploading = true
           this.fileUploadedSize = 0
           this.filePath = fileNames[0]
           let stats = fs.statSync(fileNames[0])
           this.fileTotalSize = stats.size
-          output.innerHTML = 'Uploading file...'
+          output.innerHTML = this.$t('PublishFile.UploadingFile')
           let req = request.post('http://127.0.0.1:5101/api/v0/add', (err, res, body) => {
             if (err) {
               console.log(err)
@@ -111,7 +111,9 @@
               this.fileName = jsonBody.Name
               this.fileSize = jsonBody.Size
               this.isDoneUploading = true
-              output.innerHTML = 'Name: '+ this.fileName + '<br/>' + 'Hash: '+ this.fileHash + '<br/>' + 'Size: ' +  formatByteCount(this.fileSize)
+              output.innerHTML = this.$t('PublishFile.Name') + ': '+ this.fileName + '<br/>' +
+                this.$t('PublishFile.Hash') + ': ' + this.fileHash + '<br/>' +
+                this.$t('PublishFile.Size') + ': ' +  formatByteCount(this.fileSize)
             }
           })
           let form = req.form()
