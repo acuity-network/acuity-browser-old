@@ -1,9 +1,9 @@
 <template>
   <page>
     <template slot="title">
-      Topic: {{ topic }}
-      <button v-if="!isSubscribed" class="button is-primary" @click="subscribe">Subscribe</button>
-      <button v-if="isSubscribed" class="button is-primary" @click="unsubscribe">Unsubscribe</button>
+      {{ $t('ViewTopic.Topic') }}: {{ topic }}
+      <button v-if="!isSubscribed" class="button is-primary" @click="subscribe">{{ $t('ViewTopic.Subscribe') }}</button>
+      <button v-if="isSubscribed" class="button is-primary" @click="unsubscribe">{{ $t('ViewTopic.Unsubscribe') }}</button>
     </template>
 
     <template slot="subtitle">

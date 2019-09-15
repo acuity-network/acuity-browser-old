@@ -335,6 +335,11 @@ export default {
       JustNow: 'just now',
       ItemIdCopied: 'itemId copied',
     },
+    ViewTopic: {
+      Topic: 'Topic',
+      Subscribe: 'Subscribe',
+      Unsubscribe: 'Unsubscribe',
+    },
     // Wallet
     balance: 'Balance',
     unconfirmedBalance: 'Unconfirmed Balance',
@@ -688,6 +693,11 @@ export default {
       JustNow: 'just now',
       ItemIdCopied: 'itemId copied',
     },
+    ViewTopic: {
+      Topic: 'Topic',
+      Subscribe: 'Subscribe',
+      Unsubscribe: 'Unsubscribe',
+    },
   },
   // Chinese (Simplified)
   'zh-CN': {
@@ -1024,6 +1034,11 @@ export default {
       Published: 'Published',
       JustNow: 'just now',
       ItemIdCopied: 'itemId copied',
+    },
+    ViewTopic: {
+      Topic: 'Topic',
+      Subscribe: 'Subscribe',
+      Unsubscribe: 'Unsubscribe',
     },
   },
   // Korean
@@ -1362,6 +1377,11 @@ export default {
       JustNow: 'just now',
       ItemIdCopied: 'itemId copied',
     },
+    ViewTopic: {
+      Topic: 'Topic',
+      Subscribe: 'Subscribe',
+      Unsubscribe: 'Unsubscribe',
+    },
   },
   // Russian
   'ru': {
@@ -1698,6 +1718,11 @@ export default {
       Published: 'Published',
       JustNow: 'just now',
       ItemIdCopied: 'itemId copied',
+    },
+    ViewTopic: {
+      Topic: 'Topic',
+      Subscribe: 'Subscribe',
+      Unsubscribe: 'Unsubscribe',
     },
     // Wallet
     balance: 'Баланс',
@@ -2310,6 +2335,11 @@ export default {
       JustNow: 'just now',
       ItemIdCopied: 'itemId copied',
     },
+    ViewTopic: {
+      Topic: 'Topic',
+      Subscribe: 'Subscribe',
+      Unsubscribe: 'Unsubscribe',
+    },
   },
   // Vietnamese
   'vi': {
@@ -2647,6 +2677,11 @@ export default {
       JustNow: 'just now',
       ItemIdCopied: 'itemId copied',
     },
+    ViewTopic: {
+      Topic: 'Topic',
+      Subscribe: 'Subscribe',
+      Unsubscribe: 'Unsubscribe',
+    },
   },
   // Thai
   'th': {
@@ -2983,6 +3018,11 @@ export default {
       Published: 'Published',
       JustNow: 'just now',
       ItemIdCopied: 'itemId copied',
+    },
+    ViewTopic: {
+      Topic: 'Topic',
+      Subscribe: 'Subscribe',
+      Unsubscribe: 'Unsubscribe',
     },
   },
 }
