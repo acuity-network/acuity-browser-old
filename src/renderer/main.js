@@ -13,7 +13,7 @@ router.afterEach((to, from) => {
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 
-import messages from './translations.js'
+import messages from './i18n'
 
 let i18n = new VueI18n({
   messages,
