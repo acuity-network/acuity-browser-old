@@ -129,7 +129,7 @@ export default {
 		RecoverAccount: 'Recover account',
 	},
 	ManageAccountsNew: {
-		CreateAccount: 'Create account',
+		CreateAccount: 'Create Account',
 		Warning1: 'Everything published with MIX Acuity will be stored publically for eternity.',
 		Warning2: 'This software is immature. Do not store large quantities of MIX in the wallet.',
 		Warning3: 'There is NO WARRANTY.',
@@ -143,7 +143,7 @@ export default {
 		PasswordsDoNotMatch: 'Passwords do not match.',
 	},
 	ManageAccountsRecover: {
-		RecoverAccount: 'Recover account',
+		RecoverAccount: 'Recover Account',
 		Warning1: 'Everything published with MIX Acuity will be stored publically for eternity.',
 		Warning2: 'This software is immature. Do not store large quantities of MIX in the wallet.',
 		Warning3: 'There is NO WARRANTY.',
@@ -168,7 +168,7 @@ export default {
 		Start: 'Start',
 	},
 	NodeStatus: {
-		NodeStatus: 'Node status',
+		NodeStatus: 'Node Status',
 		AcuityVersion: 'Acuity version',
 		MixBlockchain: 'MIX Blockchain',
 		Agent: 'Agent',
@@ -183,7 +183,7 @@ export default {
 		RepoObjectCount: 'Repo object count',
 	},
 	Profile: {
-		EditProfile: 'Edit profile',
+		EditProfile: 'Edit Profile',
 		AccountType: 'Account type',
 		Bio: 'Bio',
 		Location: 'Location',
@@ -199,7 +199,7 @@ export default {
 		ItemIdCopied: 'itemId copied',
 	},
 	ProfileEdit: {
-		EditProfile: 'Edit profile',
+		EditProfile: 'Edit Profile',
 		Name: 'Name',
 		AccountType: 'Account type',
 		Anon: 'Anon',
@@ -218,7 +218,7 @@ export default {
 		Images: 'Images',
 	},
 	PublishFeed: {
-		PublishFeed: 'Publish feed',
+		PublishFeed: 'Publish Feed',
 		Title: 'Title',
 		Description: 'Description',
 		Image: 'Image',
@@ -227,7 +227,7 @@ export default {
 		Images: 'Images',
 	},
 	PublishFile: {
-		PublishFile: 'Publish file',
+		PublishFile: 'Publish File',
 		Title: 'Title',
 		Description: 'Description',
 		Feed: 'Feed',
@@ -241,7 +241,7 @@ export default {
 		Size: 'Size',
 	},
 	PublishImage: {
-		PublishImage: 'Publish image',
+		PublishImage: 'Publish Image',
 		Title: 'Title',
 		Description: 'Description',
 		Feed: 'Feed',
@@ -252,14 +252,14 @@ export default {
 		Images: 'Images',
 	},
 	PublishItem: {
-		PublishItem: 'Publish item',
-		PublishImage: 'Publish image',
-		PublishFeed: 'Publish feed',
-		PublishFile: 'Publish file',
-		PublishMixinType: 'Publish mixin type',
+		PublishItem: 'Publish Item',
+		PublishImage: 'Publish Image',
+		PublishFeed: 'Publish Feed',
+		PublishFile: 'Publish File',
+		PublishMixinType: 'Publish Mixin Type',
 	},
 	PublishMixinType: {
-		PublishMixinType: 'Publish mixin type',
+		PublishMixinType: 'Publish Mixin Type',
 		Title: 'Title',
 		Schema: 'Schema',
 		Description: 'Description',
@@ -301,7 +301,7 @@ export default {
 		AddATopic: 'Add a topic',
 	},
 	TransactionHistory: {
-		TransactionHistory: 'Transaction history',
+		TransactionHistory: 'Transaction History',
 		When: 'When',
 		Pending: 'pending',
 		Description: 'Description',
@@ -310,7 +310,7 @@ export default {
 		Amount: 'Amount',
 	},
 	TrustedAccounts: {
-		TrustedAccounts: 'Trusted accounts',
+		TrustedAccounts: 'Trusted Accounts',
 		Account: 'Account',
 		Remove: 'remove',
 		Whitelist: 'Whitelist',
@@ -343,7 +343,7 @@ export default {
 	Wallet: {
 		Wallet: 'Wallet',
 		Balance: 'Balance',
-		UnconfirmedBalance: 'Unconfirmed balance',
+		UnconfirmedBalance: 'Unconfirmed Balance',
 		Address: 'Address',
 		Transactions: 'Transactions',
 		When: 'When',

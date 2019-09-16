@@ -121,7 +121,7 @@
       },
     },
     async created() {
-      setTitle(this.$t('nodeStatus'))
+      setTitle(this.$t('NodeStatus.NodeStatus'))
       if (process.env.NODE_ENV == 'development') {
         this.acuityVersion = process.env.npm_package_version
       }
