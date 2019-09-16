@@ -6,21 +6,21 @@ import download from 'download'
 
 let urls = {
 	linux: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.7/x86_64-unknown-linux-gnu/parity',
+		parity: 'https://releases.parity.io/ethereum/v2.5.8/x86_64-unknown-linux-gnu/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz',
 	},
 	darwin: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.7/x86_64-apple-darwin/parity',
+		parity: 'https://releases.parity.io/ethereum/v2.5.8/x86_64-apple-darwin/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_darwin-amd64.tar.gz',
 	},
 	win32: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.7/x86_64-pc-windows-msvc/parity.exe',
+		parity: 'https://releases.parity.io/ethereum/v2.5.8/x86_64-pc-windows-msvc/parity.exe',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_windows-amd64.zip',
 	},
 }
 
 try {
-	if (parseInt(fs.readFileSync('download_rev')) >= 7) {
+	if (parseInt(fs.readFileSync('download_rev')) >= 8) {
 		process.exit(0)
 	}
 } catch (e) {}
@@ -39,7 +39,7 @@ let ipfs = download(archUrls['ipfs'], 'static', {extract: true})
 
 Promise.all([parity, ipfs])
 .then(() => {
-	fs.writeFileSync('download_rev', '7')
+	fs.writeFileSync('download_rev', '8')
 	process.exit(0)
 })
 .catch(e => {
