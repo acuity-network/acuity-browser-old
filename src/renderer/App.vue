@@ -93,8 +93,11 @@
       try {
         let controller = await this.$db.get('/active-account')
         this.$activeAccount.set(await new MixAccount(this.$root, controller).init())
+        this.$router.push({ name: 'home' })
       }
-      catch(e) {}
+      catch(e) {
+        this.$router.push({ name: 'manage-accounts-new' })
+      }
       window.downloads = []
       await this.$settings.init(this.$db)
       // Load previous selected language.
