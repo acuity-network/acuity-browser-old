@@ -50,7 +50,9 @@
           await this.$db.get('/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.topicHash)
           this.isSubscribed = true
         }
-        catch (e) {}
+        catch (e) {
+          this.isSubscribed = false
+        }
 
         this.itemIds = (await this.$mixClient.itemTopics.methods.getAllTopicItems(this.topicHash).call()).reverse()
       },
