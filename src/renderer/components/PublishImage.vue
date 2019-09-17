@@ -25,6 +25,7 @@
       </b-field>
 
       <topic-selector v-model="topics"></topic-selector>
+      <mention-selector v-model="mentions"></mention-selector>
 
       <b-field :label="$t('PublishImage.Image')" :message="filepath">
         <button class="button" @click="chooseFile">{{ $t('PublishImage.ChooseImage') }}</button>
@@ -38,6 +39,7 @@
 <script>
   import Page from './Page.vue'
   import TopicSelector from './TopicSelector.vue'
+  import MentionSelector from './MentionSelector.vue'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
@@ -52,6 +54,7 @@
     components: {
       Page,
       TopicSelector,
+      MentionSelector,
     },
     data() {
       return {
@@ -60,6 +63,7 @@
         feeds: [{itemId: '0', title: 'none'}],
         feedId: '0',
         topics: [],
+        mentions: [],
         filepath: '',
       }
     },

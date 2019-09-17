@@ -158,6 +158,10 @@ export default {
 		PasswordsDoNotMatch: 'Passwords do not match.',
 		AccountNotFound: 'Account not found.',
 	},
+	MentionSelector: {
+		Mentions: 'Mentions',
+		AddAMention: 'Add a mention',
+	},
 	Mining: {
 		Mining: 'Mining',
 		Stop: 'Stop',
