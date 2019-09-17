@@ -97,8 +97,10 @@
         let content = new MixContent(this.$root)
 
         // Image
-        let image = new Image(this.$root, this.filepath)
-        content.addMixinPayload(0x045eee8c, await image.createMixin())
+        if (this.filepath != '') {
+          let image = new Image(this.$root, this.filepath)
+          content.addMixinPayload(0x045eee8c, await image.createMixin())
+        }
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
