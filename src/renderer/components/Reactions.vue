@@ -36,25 +36,26 @@
       }
     },
     created() {
-      this.reactionsEmitter = this.$mixClient.reactions.events.allEvents({
-        toBlock: 'pending',
-        topics: [, this.itemId],
-      })
-      .on('data', log => {
-        this.loadData()
-      })
-      .on('changed', log => {
-        this.loadData()
-      })
-
+      this.subscribe()
       this.loadData()
-
       this.plus = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'})
     },
     destroyed() {
       this.reactionsEmitter.unsubscribe()
     },
     methods: {
+      subscribe() {
+        this.reactionsEmitter = this.$mixClient.reactions.events.allEvents({
+          toBlock: 'pending',
+          topics: [, this.itemId],
+        })
+        .on('data', log => {
+          this.loadData()
+        })
+        .on('changed', log => {
+          this.loadData()
+        })
+      },
       async loadData() {
         let trustedReactions = await this.$activeAccount.get().call(this.$mixClient.reactions, 'getTrustedReactions', [this.itemId])
         let accountReactions = await this.$activeAccount.get().call(this.$mixClient.reactions, 'getReactions', [this.itemId])
@@ -136,6 +137,13 @@
         this.addresses = reaction.addresses
       },
     },
+    watch: {
+      itemId(val, oldVal) {
+        this.reactionsEmitter.unsubscribe()
+        this.subscribe()
+        this.loadData()
+      },
+    }
   }
 
 </script>
