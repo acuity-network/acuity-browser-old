@@ -32,6 +32,7 @@
         @click="toggleTrust"></span><br />
       <span v-if="inFeed">{{ $t('ViewItem.in') }} <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
       <span v-if="topics.length > 0"><span class="topics">{{ $t('ViewItem.on') }} <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br /></span>
+      <span v-if="mentions.length > 0"><span class="topics">{{ $t('ViewItem.mentioning') }} <span v-for="mention in mentions" class="topic"><profile-link :address="mention"></profile-link></span></span><br /></span>
       {{ published }}
     </template>
     <template slot="body">
@@ -196,6 +197,7 @@
         data.feed = ''
         data.feedRoute = ''
         data.topics = []
+        data.mentions = []
         data.published = ''
         data.image = ''
         data.description = ''
@@ -256,6 +258,7 @@
         }
         this.topics = topics
 
+        this.mentions = await this.$mixClient.itemMentions.methods.getItemMentions(this.itemId).call()
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 

@@ -138,6 +138,10 @@
           await this.$activeAccount.get().sendData(this.$mixClient.itemTopics, 'addItem', [topicHash, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Add item to topic.')
         }
 
+        for (let mention of this.mentions) {
+          await this.$activeAccount.get().sendData(this.$mixClient.itemMentions, 'addItem', [mention.account, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Add item mention to account.')
+        }
+
         await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }

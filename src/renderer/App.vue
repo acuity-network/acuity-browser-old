@@ -14,7 +14,7 @@
           <li><router-link to="/home">{{ $t('App.Home') }}</router-link>
           <li><router-link to="/feeds">{{ $t('App.MyFeeds') }}</router-link>
           <li><router-link to="/subscriptions">{{ $t('App.Subscriptions') }}</router-link>
-          <li v-if="isDevelopment"><router-link to="/interactions">{{ $t('App.Interactions') }}</router-link>
+          <li><router-link to="/interactions">{{ $t('App.Interactions') }}</router-link>
           <li><router-link to="/browsing-history">{{ $t('App.BrowsingHistory') }}</router-link></li>
           <li><router-link to="/downloads">{{ $t('App.Downloads') }}</router-link></li>
           <li><router-link to="/publish-item">{{ $t('App.PublishItem') }}</router-link></li>

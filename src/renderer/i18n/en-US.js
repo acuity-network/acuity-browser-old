@@ -328,6 +328,7 @@ export default {
 		by: 'by',
 		in: 'in',
 		on: 'on',
+		mentioning: 'mentioning',
 		Size: 'Size',
 		Title: 'Title',
 		Description: 'Description',
