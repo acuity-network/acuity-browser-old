@@ -25,7 +25,6 @@ async function launch(vue) {
 		filter: {account: accounts},
 	})
 	.on('data', async log => {
-		console.log(log)
 		let item = await new MixItem(vue, log.returnValues.itemId).init()
 		let revision = await item.latestRevision().load()
 
