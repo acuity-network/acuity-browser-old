@@ -31,6 +31,25 @@ export default class MixRevision {
     return TitleMixinProto.TitleMixin.deserializeBinary(this.content.getPayloads('0x344f4812')[0]).getTitle()
   }
 
+  getImageUrl(widthMin, heightMin) {
+    let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x045eee8c')[0])
+    let width = imageMessage.getWidth()
+    let height = imageMessage.getHeight()
+    let mipmapList = imageMessage.getMipmapLevelList()
+
+    let i, scale
+    for (i = 0; i < mipmapList.length; i++) {
+      scale = 2 ** i
+      if (width / scale < widthMin * 4 || height / scale < heightMin * 4) {
+        break
+      }
+    }
+
+    let widthOut = Math.round(width / scale)
+    let heightOut = Math.round(height / scale)
+    return 'http://127.0.0.1:5102/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash())
+  }
+
   getImage(widthMin, heightMin) {
     let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x045eee8c')[0])
     let width = imageMessage.getWidth()

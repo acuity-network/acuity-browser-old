@@ -55,9 +55,10 @@
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
   import { ipcRenderer } from 'electron'
+  import mentionNotifications from '../lib/mentionNotifications.js'
 
   export default {
-    name: 'd-web',
+    name: 'app',
     components: {
       Splash,
       Navigation,
@@ -169,9 +170,11 @@
           })
         })
       })
+      mentionNotifications.launch(this.$root)
       this.splash = false
     },
     destroyed() {
+      mentionNotifications.kill()
       this.pinner.stop()
     },
   }
