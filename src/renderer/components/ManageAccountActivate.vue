@@ -1,7 +1,7 @@
 <template>
   <page>
     <template slot="title">
-      {{ $t('ManageAccountActivate.ActivateAccount') }}
+      {{ $t('ManageAccountActivate.DeployAccount') }}
     </template>
 
     <template slot="body">
@@ -30,7 +30,7 @@
         </b-field>
       </div>
       <div v-else>
-        {{ $t('ManageAccountActivate.Activating') }}
+        {{ $t('ManageAccountActivate.Deploying') }}
       </div>
     </template>
   </page>
@@ -100,7 +100,7 @@
       },
     },
     async created() {
-      setTitle(this.$t('ManageAccountActivate.ActivateAccount'))
+      setTitle(this.$t('ManageAccountActivate.DeployAccount'))
       this.account = await new MixAccount(this, this.controllerAddress).init()
       if ('contractAddress' in this.account) {
         this.$router.push({ name: 'profile' })
