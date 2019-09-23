@@ -200,7 +200,7 @@
 		},
     async created() {
 			await this.loadData()
-			let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
+			let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), this.address)
 			this.transferFromEmitter = token.events.Transfer({
 				filter: {
 					from: this.$activeAccount.get().contractAddress,
@@ -244,7 +244,7 @@
 		methods: {
 			async loadData() {
 				this.address = await this.$mixClient.tokenRegistry.methods.getToken(this.itemId).call()
-				this.token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
+				this.token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), this.address)
 				this.symbol = await this.token.methods.symbol().call()
 				this.name = await this.token.methods.name().call()
 				this.start =  new Date(await this.token.methods.start().call() * 1000).toLocaleDateString()
@@ -324,7 +324,7 @@
 	      this.isConfirm = false
 	    },
 	    async confirm(event) {
-				let contract = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/CreatorToken.abi.json'), this.address)
+				let contract = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), this.address)
 				await this.$activeAccount.get().sendData(contract, 'transfer', [this.to, this.$mixClient.web3.utils.toWei(this.amount)], 0, 'Send token')
 	      this.loadData()
 	      this.to = ''

@@ -36,7 +36,7 @@
       }
     },
     async created() {
-      this.token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/CreatorToken.abi.json'), this.address)
+      this.token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), this.address)
 
       let accountBalances = await this.token.methods.getAccountBalances().call()
       let data = []

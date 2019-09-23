@@ -120,7 +120,7 @@ export default class MixAccount {
         reject()
         return
       }
-      let byteCodePath = path.join(__static, 'CreatorToken.bin')
+      let byteCodePath = path.join(__static, 'MixCreatorToken.bin')
       let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
       let types = ['string', 'string', 'address', 'bytes32', 'address', 'uint', 'uint']
       let params = [symbol, name, this.vue.$mixClient.tokenRegistryAddress, itemId, this.contractAddress, initialBalance, dailyPayout]
