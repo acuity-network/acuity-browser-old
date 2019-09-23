@@ -60,11 +60,10 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import { remote } from 'electron'
   import Page from './Page.vue'
   import throttle from 'just-throttle'
-  import { ipcRenderer } from 'electron'
   import formatByteCount from '../../lib/formatByteCount.js'
   import setTitle from '../../lib/setTitle.js'
 

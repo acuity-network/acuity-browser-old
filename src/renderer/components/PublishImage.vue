@@ -36,14 +36,13 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import TopicSelector from './TopicSelector.vue'
   import MentionSelector from './MentionSelector.vue'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
-  import ImageMixinProto from '../../lib/protobuf/ImageMixin_pb.js'
   import Image from '../../lib/Image.js'
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'

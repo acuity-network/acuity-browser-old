@@ -14,10 +14,8 @@
 
 </template>
 
-<script>
+<script lang="ts">
   import twemoji from 'twemoji'
-  import MixAccount from '../../lib/MixAccount.js'
-  import MixItem from '../../lib/MixItem.js'
   import ProfileLink from './ProfileLink.vue'
 
   export default {

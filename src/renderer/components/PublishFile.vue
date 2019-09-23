@@ -48,7 +48,6 @@
   import MixContent from '../../lib/MixContent.js'
   import fs from 'fs'
   import request from 'request'
-  import File from '../../lib/File.js'
   import formatByteCount from '../../lib/formatByteCount.js'
   import Base58 from 'base-58'
   import setTitle from '../../lib/setTitle.js'

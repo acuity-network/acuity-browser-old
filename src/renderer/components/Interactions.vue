@@ -10,7 +10,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import setTitle from '../../lib/setTitle.js'
   import ViewItem from './ViewItem.vue'

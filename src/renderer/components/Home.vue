@@ -4,7 +4,7 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import ViewItem from './ViewItem.vue'
   import setTitle from '../../lib/setTitle.js'

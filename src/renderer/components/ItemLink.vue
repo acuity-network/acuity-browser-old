@@ -2,7 +2,7 @@
   <router-link v-if="itemId" :to="route">{{ title }}</router-link>
 </template>
 
-<script>
+<script lang="ts">
   import MixItem from '../../lib/MixItem.js'
 
   export default {

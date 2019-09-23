@@ -26,7 +26,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import MixContent from '../../lib/MixContent.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'

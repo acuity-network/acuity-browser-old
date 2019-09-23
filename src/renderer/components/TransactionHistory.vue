@@ -33,7 +33,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import setTitle from '../../lib/setTitle.js'
 
@@ -50,7 +50,6 @@
     methods: {
       async loadData() {
         let nonce = await this.$mixClient.web3.eth.getTransactionCount(this.$activeAccount.get().controllerAddress)
-        let transactions = []
         let data = []
         for (let i = nonce; i >= 0; i--) {
           try {

@@ -4,7 +4,7 @@
 	</b-field>
 </template>
 
-<script>
+<script lang="ts">
 	import MixAccount from '../../lib/MixAccount.js'
 	import MixItem from '../../lib/MixItem.js'
 

@@ -141,7 +141,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import TokenHolders from '../TokenHolders.vue'
   import ProfileLink from '../ProfileLink.vue'
 
@@ -311,11 +311,9 @@
           }
         }
 
-        if (error) {
-          return false
+        if (!error) {
+          this.isConfirm = true
         }
-
-        this.isConfirm = true
 			},
 			async cancel(event) {
 	      if (this.isSendAll) {

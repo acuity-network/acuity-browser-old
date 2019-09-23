@@ -40,14 +40,12 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
-  import ItemProto from '../../lib/protobuf/Item_pb.js'
   import ProfileMixinProto from '../../lib/protobuf/ProfileMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
-  import multihash from 'multihashes'
   import MixItem from '../../lib/MixItem.js'
   import Image from '../../lib/Image.js'
   import MixContent from '../../lib/MixContent.js'

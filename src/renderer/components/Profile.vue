@@ -23,7 +23,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import { clipboard } from 'electron'
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'

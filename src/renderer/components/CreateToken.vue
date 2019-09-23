@@ -27,16 +27,13 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import MixContent from '../../lib/MixContent.js'
   import Image from '../../lib/Image.js'
-  import ethTx from 'ethereumjs-tx'
-  import path from 'path'
-  import fs from 'fs'
   import setTitle from '../../lib/setTitle.js'
 
   export default {

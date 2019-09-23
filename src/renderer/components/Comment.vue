@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
   import VueMarkdown from 'vue-markdown'

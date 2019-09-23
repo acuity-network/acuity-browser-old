@@ -36,7 +36,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import QRCode from 'qrcode'
   import MixAccount from '../../lib/MixAccount.js'

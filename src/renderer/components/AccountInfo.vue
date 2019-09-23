@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import ItemLink from './ItemLink.vue'
   import ProfileLink from './ProfileLink.vue'
 

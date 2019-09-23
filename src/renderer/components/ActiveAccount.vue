@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import MixItem from '../../lib/MixItem.js'
 
   export default {

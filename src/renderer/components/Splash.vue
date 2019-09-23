@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 	import ProgressBar from 'vue-simple-progress'
 
   export default {

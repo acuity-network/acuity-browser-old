@@ -29,7 +29,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
   import setTitle from '../../lib/setTitle.js'

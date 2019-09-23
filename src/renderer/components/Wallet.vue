@@ -74,7 +74,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import QRCode from 'qrcode'
   import setTitle from '../../lib/setTitle.js'
@@ -206,11 +206,9 @@
           }
         }
 
-        if (error) {
-          return false
+        if (!error) {
+          this.isConfirm = true
         }
-
-        this.isConfirm = true
       },
       async cancel(event) {
         if (this.isSendAll) {

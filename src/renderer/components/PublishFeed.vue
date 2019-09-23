@@ -24,7 +24,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from './Page.vue'
   import TopicSelector from './TopicSelector.vue'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'

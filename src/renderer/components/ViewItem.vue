@@ -87,7 +87,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import MixItem from '../../lib/MixItem.js'
   import MixContent from '../../lib/MixContent.js'
   import Comment from './Comment.vue'
@@ -99,7 +99,6 @@
   import TokenView from './mixins/TokenView.vue'
   import VueMarkdown from 'vue-markdown'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
-  import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import { clipboard } from 'electron'
