@@ -54,6 +54,7 @@ export default class MixClient {
 		this.reactions = new this.web3.eth.Contract(require('./contracts/MixReactions.abi.json'), '0xd7051cd496a3a8373f9cf89476c04a7d51a5cc88')
 		this.tokenRegistryAddress = '0x5402efb80b307250b978cb1039a95e0c292b50c2'
 		this.tokenRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenRegistry.abi.json'), this.tokenRegistryAddress)
+		this.tokenBurn = new this.web3.eth.Contract(require('./contracts/MixTokenBurn.abi.json'), '0x6e3d6f2c462278dc21882554e9de333168c34b5a')
 		this.uniswapFactory = new this.web3.eth.Contract(require('./contracts/UniswapFactory.abi.json'), '0x1381a70fc605b7d7e54b7e1159afba1429a4bbb1')
 
 		// Emit sync info.
