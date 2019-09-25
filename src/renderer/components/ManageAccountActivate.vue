@@ -8,12 +8,13 @@
       <div v-if="!activating">
         <b-message type="is-info">
           <p>{{ $t('ManageAccountActivate.Info') }}</p>
+          <a href="https://doubleplus.io/#/faucet" target="_blank">https://doubleplus.io/#/faucet</a>
         </b-message>
         <img class="qr" :src="qrcode" />
         <b-field :label="$t('ManageAccountActivate.Address')">
           {{ controllerAddress }}
         </b-field>
-        <b-field :label="$t('ManageAccountActivate.DoublePlusFaucet')">
+        <b-field v-if="false" :label="$t('ManageAccountActivate.DoublePlusFaucet')">
           <div v-if="!requesting">
             <vue-recaptcha class="captcha" sitekey="6Ld3npIUAAAAAN3xMe83rYHUy0wkgGXajOU6f9OM" @verify="onVerify" :loadRecaptchaScript="true"></vue-recaptcha>
             <button v-if="captchaComplete" class="button is-primary" @click="request">{{ $t('requestMix') }}</button>
