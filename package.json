@@ -76,7 +76,7 @@
     "web3": "^2.0.0-alpha.1"
   },
   "devDependencies": {
-    "electron": "^5.0.6",
+    "electron": "^6.0.10",
     "electron-builder": "^20.44.4",
     "electron-webpack": "^2.7.2",
     "electron-webpack-ts": "^3.2.0",
@@ -87,8 +87,5 @@
     "sass-loader": "^7.0.1",
     "typescript": "^3.5.2",
     "webpack": "^4.33.0"
-  },
-  "resolutions": {
-    "builder-util-runtime": "8.2.5"
   }
 }
