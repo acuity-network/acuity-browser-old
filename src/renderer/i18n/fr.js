@@ -110,15 +110,13 @@ export default {
 	},
 	ManageAccountActivate: {
 		DeployAccount: 'Deploy Account',
-		Info: 'You need 0.01 MIX to get started. Either send MIX or use the DoublePlus faucet.',
+		Info: 'You need 0.01 MIX to get started. Either send MIX or use the faucet.',
 		Address: 'Address',
-		DoublePlusFaucet: 'DoublePlus Faucet',
+		Faucet: 'Faucet',
+		FaucetRequest: 'Request MIX',
 		Balance: 'Balance',
 		PendingBalance: 'Pending Balance',
 		Deploying: 'Deploying...',
-		Requesting: 'Requesting...',
-		RequestSuccessful: 'Request successful!',
-		RequestFailed: 'Request failed!',
 	},
 	ManageAccounts: {
 		Accounts: 'Accounts',

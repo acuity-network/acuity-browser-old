@@ -7,21 +7,17 @@
     <template slot="body">
       <div v-if="!activating">
         <b-message type="is-info">
-          <p>{{ $t('ManageAccountActivate.Info') }}</p>
-          <a href="https://doubleplus.io/#/faucet" target="_blank">https://doubleplus.io/#/faucet</a>
+          {{ $t('ManageAccountActivate.Info') }}
         </b-message>
         <img class="qr" :src="qrcode" />
         <b-field :label="$t('ManageAccountActivate.Address')">
           {{ controllerAddress }}
         </b-field>
-        <b-field v-if="false" :label="$t('ManageAccountActivate.DoublePlusFaucet')">
-          <div v-if="!requesting">
-            <vue-recaptcha class="captcha" sitekey="6Ld3npIUAAAAAN3xMe83rYHUy0wkgGXajOU6f9OM" @verify="onVerify" :loadRecaptchaScript="true"></vue-recaptcha>
-            <button v-if="captchaComplete" class="button is-primary" @click="request">{{ $t('requestMix') }}</button>
-          </div>
-          <div v-if="requesting">
-            {{ requestStatus}}
-          </div>
+        <b-field :label="$t('ManageAccountActivate.Faucet')">
+          <button v-if="!faucetRequested" class="button" @click="request">{{ $t('ManageAccountActivate.FaucetRequest') }}</button>
+          <b-message v-else :type="faucetMessageType">
+            {{ faucetMessage }}
+          </b-message>
         </b-field>
         <b-field :label="$t('ManageAccountActivate.Balance')">
           {{ balance }} MIX
@@ -55,12 +51,11 @@
       return {
         activating: false,
         qrcode: '',
+        faucetRequested: false,
+        faucetMessageType: '',
+        faucetMessage: '',
         balance: '',
         balancePending: '',
-        requestStatus: '',
-        key: '',
-        requesting: false,
-        captchaComplete: false,
       }
     },
     methods: {
@@ -79,25 +74,17 @@
         }
       },
       async request() {
-        this.requesting = true
-        this.requestStatus = this.$t('ManageAccountActivate.Requesting')
-        let _toAddr = this.controllerAddress;
-        this.$http.post("https://faucet.doubleplus.io/getMix", {
-          toAddr: _toAddr,
-          captcha: this.key,
-        }).then(res => {
-          if(res.status == 200) {
-            this.requestStatus = this.$t('ManageAccountActivate.RequestSuccessful') + ' TxHash: ' + res.data.txHash
-          } else {
-            this.requestStatus = this.$t('ManageAccountActivate.RequestFailed') + ' ' + res.data.error
-          }
-        }).catch(err =>{
-          this.requestStatus = this.$t('ManageAccountActivate.RequestFailed')
-        })
-      },
-      onVerify(response) {
-        this.captchaComplete = true
-        this.key = response
+        try {
+          let response = await this.$http.get('http://172.104.175.158:3000/' + this.controllerAddress)
+          this.faucetMessageType = 'is-success'
+          this.faucetMessage = response.data
+          this.faucetRequested = true
+        }
+        catch (error) {
+          this.faucetMessageType = 'is-danger'
+          this.faucetMessage = error.response.data
+          this.faucetRequested = true
+        }
       },
     },
     async created() {
