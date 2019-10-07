@@ -1,6 +1,7 @@
 <template>
   <page>
     <template slot="title">
+      <div class="avatar is-pulled-left" v-html="avatar"></div>
       <span v-if="isFeed">Feed: </span>
       <span v-if="isProfile">Profile: </span>
       <span v-if="isToken">Token: </span>
@@ -29,10 +30,10 @@
         @mouseover="ownerTrustedClassCurrent = ownerTrustedClassHover"
         @mouseleave="ownerTrustedClassCurrent = ownerTrustedClass"
         :class="ownerTrustedClassCurrent" class="clickable mdi mdi-24px"
-        @click="toggleTrust"></span><br />
-      <span v-if="inFeed">{{ $t('ViewItem.in') }} <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
-      <span v-if="topics.length > 0"><span class="topics">{{ $t('ViewItem.on') }} <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br /></span>
-      <span v-if="mentions.length > 0"><span class="topics">{{ $t('ViewItem.mentioning') }} <span v-for="mention in mentions" class="topic"><profile-link :address="mention"></profile-link></span></span><br /></span>
+        @click="toggleTrust"></span><br /><br />
+      <span v-if="inFeed">{{ $t('ViewItem.Feeds') }}: <router-link :to="feedRoute">{{ feed }}</router-link><br /></span>
+      <span v-if="topics.length > 0"><span class="topics">{{ $t('ViewItem.Topics') }}: <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br /></span>
+      <span v-if="mentions.length > 0"><span class="topics">{{ $t('ViewItem.Mentions') }}: <span v-for="mention in mentions" class="topic"><profile-link :address="mention"></profile-link></span></span><br /></span>
       {{ published }}
     </template>
     <template slot="body">
@@ -180,6 +181,7 @@
     },
     methods: {
       resetData(data) {
+        data.avatar = ''
         data.title = ''
         data.editable = false
         data.editing = false
@@ -236,6 +238,7 @@
         let profileItem = await new MixItem(this.$root, profileItemId).init()
         let profileRevision = await profileItem.latestRevision().load()
         this.owner = profileRevision.getTitle()
+        this.avatar = profileRevision.getImage(64, 64)
 
         let feedIds = await this.$mixClient.itemDagFeedItems.methods.getAllParentIds(this.itemId).call()
         if (feedIds.length > 0) {
@@ -270,27 +273,6 @@
         let firstRevision = await item.firstRevision().load()
         let revision = await item.latestRevision().load()
 
-        try {
-          this.title = revision.getTitle()
-          if (!this.short) {
-            setTitle(this.title)
-          }
-          let timestamp = firstRevision.getTimestamp()
-          this.published = this.$t('ViewItem.Published') + ' ' + ((timestamp > 0) ? this.$t('ViewItem.on') + ' ' + new Date(timestamp * 1000).toLocaleDateString() : this.$t('ViewItem.JustNow'))
-          this.image = revision.getImage(512)
-          this.description = revision.getBodyText()
-        }
-        catch (e) {}
-
-        if (revision.content.existMixin('0x3c5bba9c')) {
-          this.hasFile = true
-          let fileData = revision.getFile()
-          this.file = new File(this.$root, fileData.name, fileData.size, fileData.hash)
-          this.fileName = fileData.name
-          this.fileSize = formatByteCount(fileData.size)
-          this.fileHash = fileData.hash
-        }
-
         if (revision.content.existMixin('0xbeef2144')) {
           this.isProfile = true
         }
@@ -308,6 +290,29 @@
             this.isPortfolio = await this.$activeAccount.get().call(this.$mixClient.accountTokens, 'getItemExists', [this.itemId])
           }
           catch (e) {}
+        }
+
+        try {
+          this.title = revision.getTitle()
+          if (!this.short) {
+            setTitle(this.title)
+          }
+          let timestamp = firstRevision.getTimestamp()
+          this.published = this.$t('ViewItem.Published') + ': ' + ((timestamp > 0) ? new Date(timestamp * 1000).toLocaleDateString() : this.$t('ViewItem.JustNow'))
+          if (!this.isProfile) {
+            this.image = revision.getImage(512)
+          }
+          this.description = revision.getBodyText()
+        }
+        catch (e) {}
+
+        if (revision.content.existMixin('0x3c5bba9c')) {
+          this.hasFile = true
+          let fileData = revision.getFile()
+          this.file = new File(this.$root, fileData.name, fileData.size, fileData.hash)
+          this.fileName = fileData.name
+          this.fileSize = formatByteCount(fileData.size)
+          this.fileHash = fileData.hash
         }
 
         if (!this.short) {
@@ -438,6 +443,16 @@
   .clickable {
     cursor: pointer;
     user-select: none;
+  }
+
+  .avatar {
+    margin-right: 10px;
+  }
+
+  .avatar >>> img {
+    object-fit: cover;
+    width: 64px;
+    height: 64px;
   }
 
   .image {
