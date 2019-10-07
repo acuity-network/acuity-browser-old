@@ -28,7 +28,7 @@ async function createWindow () {
       nodeIntegration: true,
     },
     icon: path.join(__static, 'icon.png'),
-    title: 'MIX Acuity',
+    title: 'MIX Acuity Browser',
   }
 
   /**
