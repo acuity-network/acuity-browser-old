@@ -1,4 +1,3 @@
-import da from './da.js'
 import de from './de.js'
 import en_US from './en-US.js'
 import fr from './fr.js'
@@ -12,7 +11,6 @@ import zh_Hans from './zh-Hans.js'
 import zh_Hant from './zh-Hant.js'
 
 export default {
-	'da': da,
 	'de': de,
 	'en-US': en_US,
 	'fr': fr,
