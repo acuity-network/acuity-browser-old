@@ -38,14 +38,12 @@
   import QRCode from 'qrcode'
   import MixAccount from '../../lib/MixAccount.js'
   import setTitle from '../../lib/setTitle.js'
-  import VueRecaptcha from 'vue-recaptcha'
 
   export default {
     name: 'manage-account-activate',
     props: ['controllerAddress'],
     components: {
       Page,
-      VueRecaptcha,
     },
     data() {
       return {
