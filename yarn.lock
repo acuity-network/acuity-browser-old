@@ -2624,7 +2624,7 @@ css-hot-loader@^1.4.4:
     lodash "^4.17.5"
     normalize-url "^1.9.1"
 
-css-loader@^3.0.0:
+css-loader@^3.0.0, css-loader@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-3.2.0.tgz#bb570d89c194f763627fcf1f80059c6832d009b2"
   integrity sha512-QTF3Ud5H7DaZotgdcJjGMvyDj5F3Pn1j/sC6VBEOVp94cbwqyIBdcs/quzj4MC1BKQSrTpQznegH/5giYbhnCQ==
@@ -7494,11 +7494,6 @@ posthtml@^0.11.2, posthtml@^0.11.3:
     posthtml-parser "^0.4.1"
     posthtml-render "^1.1.5"
 
-postinstall-postinstall@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/postinstall-postinstall/-/postinstall-postinstall-2.0.0.tgz#7ba6711b4420575c4f561638836a81faad47f43f"
-  integrity sha512-3f6qWexsHiT4WKtZc5DRb0FPLilHtARi5KpY4fqban/DJNn8/YhZH8U7dVKVz51WbOxEnR31gV+qYQhvEdHtdQ==
-
 prebuild-install@^5.3.0:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-5.3.2.tgz#6392e9541ac0b879ef0f22b3d65037417eb2035e"
@@ -9828,11 +9823,6 @@ vue-markdown@^2.2.4:
     markdown-it-sup "^1.0.0"
     markdown-it-task-lists "^2.0.1"
     markdown-it-toc-and-anchor "^4.1.2"
-
-vue-recaptcha@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/vue-recaptcha/-/vue-recaptcha-1.2.0.tgz#a30ab08b4c79326d2e3ab1c1e76c367e02e6eb35"
-  integrity sha512-zgt8bAmlHbLT2XY0diwA/UgGcbp1cOYXJ8za17WM1zlOC8EiO0mpGvYzXaR1aeU0gaiv1qLO6GOUwQVVAjgwMw==
 
 vue-router@^3.0.1:
   version "3.1.3"
