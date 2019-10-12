@@ -56,6 +56,10 @@ export default class MixRevision {
     let height = imageMessage.getHeight()
     let mipmapList = imageMessage.getMipmapLevelList()
 
+    if (mipmapList.length == 0) {
+      return ''
+    }
+
     let i, scale
     for (i = 0; i < mipmapList.length; i++) {
       scale = 2 ** i
