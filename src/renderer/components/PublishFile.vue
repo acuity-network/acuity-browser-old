@@ -49,7 +49,7 @@
   import fs from 'fs'
   import request from 'request'
   import formatByteCount from '../../lib/formatByteCount.js'
-  import Base58 from 'base-58'
+  import bs58 from 'bs58'
   import setTitle from '../../lib/setTitle.js'
 
   export default {
@@ -147,7 +147,7 @@
         // File
         let fileMessage = new FileMixinProto.FileMixin()
         fileMessage.setFilename(this.fileName)
-        fileMessage.setIpfsHash(Base58.decode(this.fileHash))
+        fileMessage.setIpfsHash(bs58.decode(this.fileHash))
         fileMessage.setFilesize(this.fileSize)
         content.addMixinPayload(0x3c5bba9c, fileMessage.serializeBinary())
 

@@ -4,7 +4,7 @@ import MixContent from '../lib/MixContent.js'
 import ImageMixinProto from './protobuf/ImageMixin_pb.js'
 import FileMixinProto from './protobuf/FileMixin_pb.js'
 import multihashes from 'multihashes'
-import Base58 from 'base-58'
+import bs58 from 'bs58'
 
 export default class MixPinner {
 
@@ -26,7 +26,7 @@ export default class MixPinner {
       let mipmapList = imageMessage.getMipmapLevelList()
 
       for (let mipmap of mipmapList) {
-        let encodedIpfsHash = Base58.encode(mipmap.getIpfsHash())
+        let encodedIpfsHash = bs58.encode(Buffer.from(mipmap.getIpfsHash()))
         // Wait for response before continuing to try to avoid DOSing IPFS daemon.
         await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
       }
@@ -35,7 +35,7 @@ export default class MixPinner {
     let filePayloads = content.getPayloads('0x3c5bba9c')
     for (let payload of filePayloads) {
       let fileMessage = new FileMixinProto.FileMixin.deserializeBinary(payload)
-      let encodedIpfsHash = Base58.encode(fileMessage.getIpfsHash())
+      let encodedIpfsHash = bs58.encode(Buffer.from(fileMessage.getIpfsHash()))
       await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
     }
   }

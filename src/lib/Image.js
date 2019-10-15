@@ -1,6 +1,6 @@
 import sharp from 'sharp'
 import ImageMixinProto from './protobuf/ImageMixin_pb.js'
-import Base58 from 'base-58'
+import bs58 from 'bs58'
 
 export default class Image {
 
@@ -68,7 +68,7 @@ export default class Image {
     mipmaps.forEach(mipmap => {
       let mipmapLevelMessage = new ImageMixinProto.MipmapLevel()
       mipmapLevelMessage.setFilesize(mipmap.data.Size)
-      mipmapLevelMessage.setIpfsHash(Base58.decode(mipmap.data.Hash))
+      mipmapLevelMessage.setIpfsHash(bs58.decode(mipmap.data.Hash))
       imageMessage.addMipmapLevel(mipmapLevelMessage)
     })
 

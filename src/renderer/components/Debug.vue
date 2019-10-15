@@ -24,7 +24,7 @@
   import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
   import ImageMixinProto from '../../lib/protobuf/ImageMixin_pb.js'
   import brotli from 'iltorb'
-  import Base58 from 'base-58'
+  import bs58 from 'bs58'
   import multihashes from 'multihashes'
   import formatByteCount from '../../lib/formatByteCount.js'
   import setTitle from '../../lib/setTitle.js'
@@ -163,7 +163,7 @@
                 for (let j = 0; j < mipmaps.length; j++) {
                   this.output += '\n' + this.$t('Debug.MipmapLevel') + ': ' + j + '\n'
                   this.output += this.$t('Debug.MipmapFilesize') + ': ' + formatByteCount(mipmaps[j].getFilesize()) + '\n'
-                  this.output += '<img src="http://127.0.0.1:5102/ipfs/' + Base58.encode(mipmaps[j].getIpfsHash()) + '" width="256" height="' + renderHeight + '" style="display: block;">'
+                  this.output += '<img src="http://127.0.0.1:5102/ipfs/' + bs58.encode(Buffer.from(mipmaps[j].getIpfsHash())) + '" width="256" height="' + renderHeight + '" style="display: block;">'
                 }
                 break
 

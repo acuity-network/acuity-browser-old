@@ -7,7 +7,7 @@ import ProfileMixinProto from './protobuf/ProfileMixin_pb.js'
 import FileMixinProto from './protobuf/FileMixin_pb.js'
 import MixContent from './MixContent.js'
 import File from './File.js'
-import Base58 from 'base-58'
+import bs58 from 'bs58'
 
 export default class MixRevision {
 
@@ -47,7 +47,7 @@ export default class MixRevision {
 
     let widthOut = Math.round(width / scale)
     let heightOut = Math.round(height / scale)
-    return 'http://127.0.0.1:5102/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash())
+    return 'http://127.0.0.1:5102/ipfs/' + bs58.encode(Buffer.from(mipmapList[i].getIpfsHash()))
   }
 
   getImage(widthMin, heightMin) {
@@ -70,7 +70,8 @@ export default class MixRevision {
 
     let widthOut = Math.round(width / scale)
     let heightOut = Math.round(height / scale)
-    return '<img src="http://127.0.0.1:5102/ipfs/' + Base58.encode(mipmapList[i].getIpfsHash()) + '" width="' + widthOut + '" height="' + heightOut + '">'
+
+    return '<img src="http://127.0.0.1:5102/ipfs/' + bs58.encode(Buffer.from(mipmapList[i].getIpfsHash())) + '" width="' + widthOut + '" height="' + heightOut + '">'
   }
 
   getFile() {
@@ -78,7 +79,7 @@ export default class MixRevision {
     return {
       name: fileMessage.getFilename(),
       size: fileMessage.getFilesize(),
-      hash: Base58.encode(fileMessage.getIpfsHash()),
+      hash: bs58.encode(Buffer.from(fileMessage.getIpfsHash())),
     }
   }
 
