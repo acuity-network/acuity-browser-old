@@ -24,7 +24,7 @@
             {{ networkId }}
           </b-field>
           <b-field :label="$t('NodeStatus.BlockNumber')">
-            {{ blockNumber }}
+            {{ blockNumber }} (<timeago :datetime="blockTimestamp" :autoUpdate="1"></timeago>)
           </b-field>
           <b-field :label="$t('NodeStatus.PeerCount')">
             {{ peerCount }}
@@ -80,6 +80,7 @@
         protocolVersion: '',
         networkId: '',
         blockNumber: '',
+        blockTimestamp: null,
         peerCount: '',
         ipfsAgent: '',
         ipfsProtocol: '',
@@ -93,6 +94,8 @@
       async loadMixData() {
         let blockNumber = await this.$mixClient.web3.eth.getBlockNumber()
         this.blockNumber = blockNumber.toLocaleString()
+        let block = await this.$mixClient.web3.eth.getBlock(blockNumber)
+        this.blockTimestamp = new Date(block.timestamp * 1000)
         this.peerCount = await this.$mixClient.web3.eth.net.getPeerCount()
       },
       async loadIpfsData() {
