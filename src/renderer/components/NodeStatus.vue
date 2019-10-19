@@ -91,19 +91,16 @@
       }
     },
     methods: {
-      async loadMixData() {
+      async loadBlockData() {
         let blockNumber = await this.$mixClient.web3.eth.getBlockNumber()
         this.blockNumber = blockNumber.toLocaleString()
         let block = await this.$mixClient.web3.eth.getBlock(blockNumber)
         this.blockTimestamp = new Date(block.timestamp * 1000)
-        this.peerCount = await this.$mixClient.web3.eth.net.getPeerCount()
       },
-      async loadIpfsData() {
-        try {
-          let ipfsId = await this.$ipfsClient.get('id')
-          this.ipfsAgent = ipfsId.AgentVersion
-          this.ipfsProtocol = ipfsId.ProtocolVersion
+      async loadPeriodicData() {
+          this.peerCount = await this.$mixClient.web3.eth.net.getPeerCount()
 
+          let ipfsId = await this.$ipfsClient.get('id')
           let addresses = []
           for (let address of ipfsId.Addresses) {
             addresses.push(address.split('/ipfs/')[0])
@@ -116,10 +113,6 @@
           let repoStat = await this.$ipfsClient.get('repo/stat')
           this.ipfsRepoSize = formatByteCount(repoStat.RepoSize)
           this.ipfsRepoObjectCount = repoStat.NumObjects
-        }
-        catch (e) {
-          setTimeout(this.loadIpfsData, 500)
-        }
       },
     },
     async created() {
@@ -135,17 +128,19 @@
       let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
       this.protocolVersion = this.$mixClient.web3.utils.hexToNumber(protocolVersion)
       this.networkId = await this.$mixClient.web3.eth.net.getId()
+      let ipfsId = await this.$ipfsClient.get('id')
+      this.ipfsAgent = ipfsId.AgentVersion
+      this.ipfsProtocol = ipfsId.ProtocolVersion
 
-      let loadMixData = throttle(this.loadMixData, 500, true)
-
+      let loadBlockData = throttle(this.loadBlockData, 500, true)
       this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
       .on('data', block => {
-        loadMixData()
+        loadBlockData()
       })
+      loadBlockData()
 
-      loadMixData()
-      this.ipfsInterval = setInterval(this.loadIpfsData, 10000)
-      this.loadIpfsData()
+      this.ipfsInterval = setInterval(this.loadPeriodicData, 10000)
+      this.loadPeriodicData()
     },
     destroyed() {
       this.newBlockHeadersEmitter.unsubscribe()
