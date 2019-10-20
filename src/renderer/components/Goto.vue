@@ -6,7 +6,7 @@
 
     <template slot="body">
       <b-field label="itemId" :message="message">
-        <b-input v-model.trim="itemId" @keydown.native.enter="goto" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+        <b-input v-model.trim="encodedItemId" @keydown.native.enter="goto" autocomplete="off" inputmode="verbatim" spellcheck="false" size="44"></b-input>
       </b-field>
 
       <button class="button is-primary" @click="goto">{{ $t('Goto.Goto') }}</button>
@@ -19,6 +19,7 @@
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
   import setTitle from '../../lib/setTitle.js'
+  import bs58 from 'bs58'
 
   export default {
     name: 'goto',
@@ -27,29 +28,41 @@
     },
     data() {
       return {
-        itemId: '',
+        encodedItemId: '',
         message: '',
       }
     },
     created() {
       setTitle(this.$t('Goto.GotoItem'))
       let clipboardText: string = clipboard.readText()
-      if (this.$mixClient.web3.utils.isHexStrict(clipboardText) && clipboardText.length == 66) {
-        this.itemId = clipboardText
+
+      try {
+        bs58.decode(clipboardText)
+        if (clipboardText.length == 44) {
+          this.encodedItemId = clipboardText
+        }
       }
+      catch (e) {}
     },
     methods: {
       async goto(event) {
+        let itemId: string = '0x' + bs58.decode(this.encodedItemId).toString('hex')
         try {
-          await new MixItem(this.$root, this.itemId).init()
+          await new MixItem(this.$root, itemId).init()
         }
         catch (e) {
           this.message = this.$t('Goto.ItemNotFound')
           return
         }
 
-        this.$router.push({ name: 'item', params: { itemId: this.itemId }})
+        this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     }
   }
 </script>
+
+<style scoped>
+  div >>> input {
+    font-family: 'Source Code Pro';
+  }
+</style>

@@ -28,6 +28,7 @@
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem.js'
   import setTitle from '../../lib/setTitle.js'
+  import bs58 from 'bs58'
 
   export default {
     name: 'profile',
@@ -98,7 +99,7 @@
     },
     methods: {
       async copyItemId(event) {
-        clipboard.writeText(this.itemId)
+        clipboard.writeText(bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(this.itemId))))
         this.$buefy.toast.open(this.$t('Profile.ItemIdCopied'))
       },
     },

@@ -107,6 +107,7 @@
   import File from '../../lib/File.js'
   import twemoji from 'twemoji'
   import setTitle from '../../lib/setTitle.js'
+  import bs58 from 'bs58'
 
   export default {
     name: 'view-item',
@@ -345,7 +346,7 @@
         }
       },
       copyItemId(event) {
-        clipboard.writeText(this.itemId)
+        clipboard.writeText(bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(this.itemId))))
         this.$buefy.toast.open(this.$t('ViewItem.ItemIdCopied'))
       },
       async toggleEdit(event) {

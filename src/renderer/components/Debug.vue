@@ -6,7 +6,7 @@
 
     <template slot="body">
       <b-field label="itemId">
-        <b-input v-model.trim="itemId" @keydown.native.enter="read" autocomplete="off" inputmode="verbatim" placeholder="0x0000000000000000000000000000000000000000000000000000000000000000" spellcheck="false" size="66" style="font-family: monospace;"></b-input>
+        <b-input v-model.trim="encodedItemId" @keydown.native.enter="read" autocomplete="off" inputmode="verbatim" spellcheck="false" size="44"></b-input>
       </b-field>
       <button class="button is-primary" @click="read">{{ $t('Debug.ReadItem') }}</button>
       <code v-html="output" style="display: block; white-space: pre;"></code>
@@ -41,27 +41,33 @@
     },
     data() {
       return {
-        itemId: '',
+        encodedItemId: '',
         output: '',
       }
     },
     created() {
       setTitle(this.$t('Debug.DebugItem'))
       let clipboardText: string = clipboard.readText()
-      if (this.$mixClient.web3.utils.isHexStrict(clipboardText) && clipboardText.length == 66) {
-        this.itemId = clipboardText
+
+      try {
+        bs58.decode(clipboardText)
+        if (clipboardText.length == 44) {
+          this.encodedItemId = clipboardText
+        }
       }
+      catch (e) {}
     },
     methods: {
       async read(event) {
         this.output = ''
+        let itemId: string = '0x' + bs58.decode(this.encodedItemId).toString('hex')
 
-        let shortId = await this.$mixClient.itemStoreShortId.methods.getShortId(this.itemId).call()
+        let shortId = await this.$mixClient.itemStoreShortId.methods.getShortId(itemId).call()
         this.output += 'shortId: '  + shortId + '\n'
 
         let itemStoreAddress
         try {
-          itemStoreAddress = await this.$mixClient.itemStoreRegistry.methods.getItemStore(this.itemId).call()
+          itemStoreAddress = await this.$mixClient.itemStoreRegistry.methods.getItemStore(itemId).call()
         }
         catch (e) {
           this.output += this.$t('Debug.itemStoreNotFound') + '\n'
@@ -72,7 +78,7 @@
         let itemStoreAbi = require('../../lib/contracts/MixItemStoreInterface.abi.json')
         let itemStore = new this.$mixClient.web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
-        let inUse = await itemStore.methods.getInUse(this.itemId).call()
+        let inUse = await itemStore.methods.getInUse(itemId).call()
         if (!inUse) {
           this.output += this.$t('Debug.ItemNotFound') + '\n'
           return
@@ -85,7 +91,7 @@
         }
         this.output += 'itemStore: ItemStoreIpfsSha256\n'
 
-        let item = await this.$mixClient.itemStoreIpfsSha256.methods.getItem(this.itemId).call()
+        let item = await this.$mixClient.itemStoreIpfsSha256.methods.getItem(itemId).call()
         this.output += this.$t('Debug.Updatable') + ': ' + ((item.flags & 0x01) ? 'true' : 'false') + '\n' +
           this.$t('Debug.EnforceRevisions') + ': ' + ((item.flags & 0x02) ? 'true' : "false") + '\n' +
           this.$t('Debug.Retractable') + ': ' + ((item.flags & 0x04) ? 'true' : 'false') + '\n' +
@@ -177,3 +183,9 @@
     }
   }
 </script>
+
+<style scoped>
+  div >>> input {
+    font-family: 'Source Code Pro';
+  }
+</style>
