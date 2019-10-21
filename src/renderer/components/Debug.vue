@@ -51,7 +51,7 @@
 
       try {
         bs58.decode(clipboardText)
-        if (clipboardText.length == 44) {
+        if (clipboardText.length == 33) {
           this.encodedItemId = clipboardText
         }
       }
@@ -60,7 +60,7 @@
     methods: {
       async read(event) {
         this.output = ''
-        let itemId: string = '0x' + bs58.decode(this.encodedItemId).toString('hex')
+        let itemId: string = '0x' + bs58.decode(this.encodedItemId).toString('hex') + 'f1b5847865d2094d'
 
         let shortId = await this.$mixClient.itemStoreShortId.methods.getShortId(itemId).call()
         this.output += 'shortId: '  + shortId + '\n'

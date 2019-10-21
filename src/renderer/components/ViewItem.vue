@@ -346,7 +346,7 @@
         }
       },
       copyItemId(event) {
-        clipboard.writeText(bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(this.itemId))))
+        clipboard.writeText(bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(this.itemId.substr(0, 50)))))
         this.$buefy.toast.open(this.$t('ViewItem.ItemIdCopied'))
       },
       async toggleEdit(event) {

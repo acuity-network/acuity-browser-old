@@ -38,7 +38,7 @@
 
       try {
         bs58.decode(clipboardText)
-        if (clipboardText.length == 44) {
+        if (clipboardText.length == 33) {
           this.encodedItemId = clipboardText
         }
       }
@@ -46,7 +46,7 @@
     },
     methods: {
       async goto(event) {
-        let itemId: string = '0x' + bs58.decode(this.encodedItemId).toString('hex')
+        let itemId: string = '0x' + bs58.decode(this.encodedItemId).toString('hex') + 'f1b5847865d2094d'
         try {
           await new MixItem(this.$root, itemId).init()
         }
