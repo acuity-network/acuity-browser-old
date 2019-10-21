@@ -7,11 +7,20 @@ import ipfs from '../lib/Ipfs.js'
 import { shell } from 'electron'
 import windowStateKeeper from 'electron-window-state'
 import { format as formatUrl } from 'url'
+import contextMenu from 'electron-context-menu'
 
 let isDevelopment = process.env.NODE_ENV !== 'production'
 let mainWindow
 
 async function createWindow () {
+  // Set up context menu.
+  contextMenu({
+    menu: actions => [
+      actions.cut(),
+      actions.copy(),
+      actions.paste(),
+    ],
+  })
   // Load the previous state with fallback to defaults
   let mainWindowState = windowStateKeeper({
     defaultWidth: 1000,
