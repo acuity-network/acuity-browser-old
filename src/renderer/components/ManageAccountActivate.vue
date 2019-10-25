@@ -36,8 +36,8 @@
 <script lang="ts">
   import Page from './Page.vue'
   import QRCode from 'qrcode'
-  import MixAccount from '../../lib/MixAccount.js'
-  import setTitle from '../../lib/setTitle.js'
+  import MixAccount from '../../lib/MixAccount'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'manage-account-activate',

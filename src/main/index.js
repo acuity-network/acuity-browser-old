@@ -2,8 +2,8 @@
 
 import { app, BrowserWindow, Menu } from 'electron'
 import path from 'path'
-import parity from '../lib/Parity.js'
-import ipfs from '../lib/Ipfs.js'
+import parity from '../lib/Parity'
+import ipfs from '../lib/Ipfs'
 import { shell } from 'electron'
 import windowStateKeeper from 'electron-window-state'
 import { format as formatUrl } from 'url'

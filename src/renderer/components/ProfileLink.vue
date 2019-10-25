@@ -6,8 +6,8 @@
 </template>
 
 <script lang="ts">
-  import MixAccount from '../../lib/MixAccount.js'
-  import MixItem from '../../lib/MixItem.js'
+  import MixAccount from '../../lib/MixAccount'
+  import MixItem from '../../lib/MixItem'
 
   export default {
     name: 'profile-link',

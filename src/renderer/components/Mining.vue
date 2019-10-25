@@ -26,7 +26,7 @@
 
 <script lang="ts">
   import Page from './Page.vue'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
   import os from 'os'
   import fs from 'fs'
   import path from 'path'

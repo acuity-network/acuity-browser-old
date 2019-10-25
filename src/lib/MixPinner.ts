@@ -1,12 +1,14 @@
-import MixAccount from '../lib/MixAccount.js'
-import MixItem from '../lib/MixItem.js'
-import MixContent from '../lib/MixContent.js'
+import MixAccount from '../lib/MixAccount'
+import MixContent from '../lib/MixContent'
 import ImageMixinProto from './protobuf/ImageMixin_pb.js'
 import FileMixinProto from './protobuf/FileMixin_pb.js'
 import multihashes from 'multihashes'
 import bs58 from 'bs58'
 
 export default class MixPinner {
+  vue: any
+  accountsToWatch: any
+  itemStoreIpfsSha256Emitter: any
 
   constructor(vue) {
     this.vue = vue

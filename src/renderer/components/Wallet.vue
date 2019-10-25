@@ -77,7 +77,7 @@
 <script lang="ts">
   import Page from './Page.vue'
   import QRCode from 'qrcode'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'wallet',

@@ -1,15 +1,17 @@
-import multihashes from 'multihashes'
 import TitleMixinProto from './protobuf/TitleMixin_pb.js'
 import ImageMixinProto from './protobuf/ImageMixin_pb.js'
 import BodyTextMixinProto from './protobuf/BodyTextMixin_pb.js'
 import MixinSchemaMixinProto from './protobuf/MixinSchemaMixin_pb.js'
 import ProfileMixinProto from './protobuf/ProfileMixin_pb.js'
 import FileMixinProto from './protobuf/FileMixin_pb.js'
-import MixContent from './MixContent.js'
-import File from './File.js'
+import MixContent from './MixContent'
 import bs58 from 'bs58'
 
 export default class MixRevision {
+  vue: any
+  item: any
+  revisionId: number
+  content: MixContent
 
   constructor(vue, item, revisionId) {
     this.vue = vue
@@ -45,8 +47,6 @@ export default class MixRevision {
       }
     }
 
-    let widthOut = Math.round(width / scale)
-    let heightOut = Math.round(height / scale)
     return 'http://127.0.0.1:5102/ipfs/' + bs58.encode(Buffer.from(mipmapList[i].getIpfsHash()))
   }
 

@@ -28,12 +28,12 @@
 
 <script lang="ts">
   import Page from './Page.vue'
-  import MixContent from '../../lib/MixContent.js'
+  import MixContent from '../../lib/MixContent'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'publish-mixin-type',

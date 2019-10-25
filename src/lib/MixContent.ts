@@ -5,6 +5,8 @@ import ItemProto from './protobuf/Item_pb.js'
 let contentCache = []
 
 export default class MixContent {
+  vue: any
+  mixins: any[]
 
   constructor(vue) {
     this.vue = vue
@@ -91,7 +93,7 @@ export default class MixContent {
     return false
   }
 
-  addMixinPayload(mixinId, payload) {
+  addMixinPayload(mixinId, payload?) {
     this.mixins.push({
       mixinId: mixinId,
       payload: payload,

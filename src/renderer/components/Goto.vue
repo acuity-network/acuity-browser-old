@@ -17,8 +17,8 @@
 <script lang="ts">
   import { clipboard } from 'electron'
   import Page from './Page.vue'
-  import MixItem from '../../lib/MixItem.js'
-  import setTitle from '../../lib/setTitle.js'
+  import MixItem from '../../lib/MixItem'
+  import setTitle from '../../lib/setTitle'
   import bs58 from 'bs58'
 
   export default {

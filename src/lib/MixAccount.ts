@@ -2,14 +2,20 @@ let erc165Abi = require('./contracts/ERC165.abi.json')
 let accountAbi = require('./contracts/MixAccount.abi.json')
 let accountAbi2 = require('./contracts/MixAccount2.abi.json')
 import ethTx from 'ethereumjs-tx'
-import { remote } from 'electron'
 import path from 'path'
 import fs from 'fs'
 import keythereum from 'keythereum'
 
+declare let __static: string
+
 let privateKeys = {}
 
 export default class MixAccount {
+  vue: any
+  controllerAddress: string
+  contractAddress: string
+  abiVersion: number
+  contract: any
 
   constructor(vue, address, isContract = false) {
     this.vue = vue
@@ -66,8 +72,9 @@ export default class MixAccount {
       to: to,
       gasPrice: '0x3b9aca00',
       data: data,
+      gas: 50000,
     }
-    rawTx.gas = 50000//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+    //rawTx.gas = await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
     let tx = new ethTx(rawTx)
     let privateKey = privateKeys[this.controllerAddress]
     tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
@@ -91,6 +98,7 @@ export default class MixAccount {
         from: this.controllerAddress,
         gasPrice: '0x3b9aca00',
         data: '0x' + accountBytecode,
+        gas: 0,
       }
       rawTx.gas = this.vue.$mixClient.web3.utils.toHex(await this.vue.$mixClient.web3.eth.estimateGas(rawTx))
       let tx = new ethTx(rawTx)
@@ -191,8 +199,9 @@ export default class MixAccount {
         gasPrice: '0x3b9aca00',
         data: data,
         value: this.vue.$mixClient.web3.utils.toHex(value),
+        gas: gas,
       }
-      rawTx.gas = gas//await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
+      //rawTx.gas = await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
       // Check if there is sufficient balance.
       let toBN = this.vue.$mixClient.web3.utils.toBN
       let controllerBalance = toBN(await this.getUnconfirmedControllerBalance())

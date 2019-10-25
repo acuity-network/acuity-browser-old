@@ -1,9 +1,9 @@
 import { app } from 'electron'
 import path from 'path'
-import Web3 from 'web3'
-import net from 'net'
 import os from 'os'
 import { spawn } from 'child_process'
+
+declare let __static: string
 
 let parityProcess
 
@@ -77,12 +77,12 @@ function kill() {
 			resolve()
 			return
 		}
-		let emitter = parityProcess.on('exit', (code) => {
+		parityProcess.on('exit', (code) => {
 			console.log('Parity exited.')
 			resolve(code)
 		})
 		console.log('Exiting Parity.')
-		let timeout = setTimeout(() => {
+		setTimeout(() => {
 			console.log('Killing Parity.')
 			parityProcess.kill('SIGKILL')
 		}, 10000)

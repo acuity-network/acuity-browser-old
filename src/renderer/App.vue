@@ -49,13 +49,13 @@
 </template>
 
 <script>
-  import MixAccount from '../lib/MixAccount.js'
-  import MixPinner from '../lib/MixPinner.js'
+  import MixAccount from '../lib/MixAccount'
+  import MixPinner from '../lib/MixPinner'
   import Splash from './components/Splash.vue'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
   import { ipcRenderer } from 'electron'
-  import mentionNotifications from '../lib/mentionNotifications.js'
+  import mentionNotifications from '../lib/mentionNotifications'
 
   export default {
     name: 'app',

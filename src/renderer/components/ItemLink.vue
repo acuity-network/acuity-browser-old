@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-  import MixItem from '../../lib/MixItem.js'
+  import MixItem from '../../lib/MixItem'
 
   export default {
     name: 'item-link',

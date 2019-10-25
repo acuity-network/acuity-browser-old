@@ -12,7 +12,7 @@
 
 <script lang="ts">
   import Page from './Page.vue'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
   import ViewItem from './ViewItem.vue'
 
   export default {

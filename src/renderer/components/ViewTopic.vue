@@ -17,7 +17,7 @@
 <script lang="ts">
   import Page from './Page.vue'
   import ViewItem from './ViewItem.vue'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'view-topic',

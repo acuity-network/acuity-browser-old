@@ -3,7 +3,7 @@ import request from 'request'
 import { remote, shell } from 'electron'
 import path from 'path'
 import unusedFilename from 'unused-filename'
-import formatByteCount from './formatByteCount.js'
+import formatByteCount from './formatByteCount'
 import EventEmitter from 'events'
 import fs from 'fs'
 

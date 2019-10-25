@@ -37,19 +37,19 @@ let dbPath = path.join(remote.app.getPath('userData'), 'state.db')
 console.log('Initializing database: ' + dbPath)
 Vue.prototype.$db = level(dbPath)
 
-import MixClient from '../lib/MixClient.js'
+import MixClient from '../lib/MixClient'
 Vue.prototype.$mixClient = new MixClient()
 
-import notifications from '../lib/notifications.js'
+import notifications from '../lib/notifications'
 Vue.prototype.$notifications = notifications
 
-import Settings from '../lib/Settings.js'
+import Settings from '../lib/Settings'
 Vue.prototype.$settings = new Settings()
 
-import IpfsClient from '../lib/IpfsClient.js'
+import IpfsClient from '../lib/IpfsClient'
 Vue.prototype.$ipfsClient = new IpfsClient()
 
-import activeAccount from '../lib/activeAccount.js'
+import activeAccount from '../lib/activeAccount'
 Vue.prototype.$activeAccount = activeAccount
 
 new Vue({

@@ -44,13 +44,13 @@
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import FileMixinProto from '../../lib/protobuf/FileMixin_pb.js'
-  import MixItem from '../../lib/MixItem.js'
-  import MixContent from '../../lib/MixContent.js'
+  import MixItem from '../../lib/MixItem'
+  import MixContent from '../../lib/MixContent'
   import fs from 'fs'
   import request from 'request'
-  import formatByteCount from '../../lib/formatByteCount.js'
+  import formatByteCount from '../../lib/formatByteCount'
   import bs58 from 'bs58'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'publish-file',

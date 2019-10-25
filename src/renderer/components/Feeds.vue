@@ -18,8 +18,8 @@
 
 <script lang="ts">
   import Page from './Page.vue'
-  import MixItem from '../../lib/MixItem.js'
-  import setTitle from '../../lib/setTitle.js'
+  import MixItem from '../../lib/MixItem'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'feeds',

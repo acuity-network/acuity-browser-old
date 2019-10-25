@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-  import MixItem from '../../lib/MixItem.js'
+  import MixItem from '../../lib/MixItem'
 
   export default {
     name: 'active-account',
@@ -30,7 +30,7 @@
         this.unlocked = this.$activeAccount.get().isUnlocked()
         try {
           let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
-          let item = await new MixItem(this, itemId).init()
+          let item: MixItem = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
           this.title = revision.getTitle()
           this.image = revision.getImage(100, 100)

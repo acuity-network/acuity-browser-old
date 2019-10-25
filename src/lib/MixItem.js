@@ -1,7 +1,7 @@
 let itemStoreAbi = require('./contracts/MixItemStoreInterface.abi.json')
 import ItemProto from './protobuf/Item_pb.js'
-import MixRevision from './MixRevision.js'
-import MixAccount from './MixAccount.js'
+import MixRevision from './MixRevision'
+import MixAccount from './MixAccount'
 
 export default class MixItem {
 

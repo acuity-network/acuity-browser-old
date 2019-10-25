@@ -43,10 +43,10 @@
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
-  import Image from '../../lib/Image.js'
-  import MixItem from '../../lib/MixItem.js'
-  import MixContent from '../../lib/MixContent.js'
-  import setTitle from '../../lib/setTitle.js'
+  import Image from '../../lib/Image'
+  import MixItem from '../../lib/MixItem'
+  import MixContent from '../../lib/MixContent'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'publish-image',

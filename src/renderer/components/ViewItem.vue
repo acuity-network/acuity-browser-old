@@ -89,8 +89,8 @@
 </template>
 
 <script lang="ts">
-  import MixItem from '../../lib/MixItem.js'
-  import MixContent from '../../lib/MixContent.js'
+  import MixItem from '../../lib/MixItem'
+  import MixContent from '../../lib/MixContent'
   import Comment from './Comment.vue'
   import AccountInfo from './AccountInfo.vue'
   import ItemLink from './ItemLink.vue'
@@ -103,10 +103,10 @@
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import { clipboard } from 'electron'
-  import formatByteCount from '../../lib/formatByteCount.js'
+  import formatByteCount from '../../lib/formatByteCount'
   import File from '../../lib/File.js'
   import twemoji from 'twemoji'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
   import bs58 from 'bs58'
 
   export default {

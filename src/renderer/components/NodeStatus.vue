@@ -64,8 +64,8 @@
   import { remote } from 'electron'
   import Page from './Page.vue'
   import throttle from 'just-throttle'
-  import formatByteCount from '../../lib/formatByteCount.js'
-  import setTitle from '../../lib/setTitle.js'
+  import formatByteCount from '../../lib/formatByteCount'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'node-status',

@@ -35,7 +35,7 @@
 
 <script>
   import Page from './Page.vue'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'downloads',

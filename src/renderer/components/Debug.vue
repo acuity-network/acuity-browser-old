@@ -26,8 +26,8 @@
   import brotli from 'iltorb'
   import bs58 from 'bs58'
   import multihashes from 'multihashes'
-  import formatByteCount from '../../lib/formatByteCount.js'
-  import setTitle from '../../lib/setTitle.js'
+  import formatByteCount from '../../lib/formatByteCount'
+  import setTitle from '../../lib/setTitle'
 
   // https://github.com/jasonmoo/t.js/blob/master/t.js
   function scrub(val) {

@@ -38,8 +38,8 @@
   import * as bip39  from 'bip39'
   import keythereum from 'keythereum'
   import Page from './Page.vue'
-  import MixAccount from '../../lib/MixAccount.js'
-  import setTitle from '../../lib/setTitle.js'
+  import MixAccount from '../../lib/MixAccount'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'manage-accounts-new',

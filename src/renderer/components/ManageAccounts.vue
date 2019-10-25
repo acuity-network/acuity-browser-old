@@ -32,10 +32,10 @@
 
 <script lang="ts">
   import Page from './Page.vue'
-  import MixAccount from '../../lib/MixAccount.js'
-  import MixItem from '../../lib/MixItem.js'
+  import MixAccount from '../../lib/MixAccount'
+  import MixItem from '../../lib/MixItem'
   import ManageAccountsNew from './ManageAccountsNew.vue'
-  import setTitle from '../../lib/setTitle.js'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'manage-accounts',

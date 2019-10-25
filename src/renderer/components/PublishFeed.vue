@@ -30,9 +30,9 @@
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
-  import MixContent from '../../lib/MixContent.js'
-  import Image from '../../lib/Image.js'
-  import setTitle from '../../lib/setTitle.js'
+  import MixContent from '../../lib/MixContent'
+  import Image from '../../lib/Image'
+  import setTitle from '../../lib/setTitle'
 
   export default {
     name: 'publish-feed',

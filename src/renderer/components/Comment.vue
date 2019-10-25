@@ -29,8 +29,8 @@
 </template>
 
 <script lang="ts">
-  import MixItem from '../../lib/MixItem.js'
-  import MixContent from '../../lib/MixContent.js'
+  import MixItem from '../../lib/MixItem'
+  import MixContent from '../../lib/MixContent'
   import VueMarkdown from 'vue-markdown'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
