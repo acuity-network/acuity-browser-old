@@ -322,7 +322,7 @@
         else if (revision.content.existMixin('0xbcec8faa')) {
           this.isFeed = true
           try {
-            await this.$db.get('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
+            await this.$db.get('/accountSubscribed/' + this.vue.$activeAccount.get().contractAddress + '/' + this.itemId)
             this.isSubscribed = true
           }
           catch (e) {}
@@ -330,7 +330,7 @@
         else if (revision.content.existMixin('0x9fbbfaad')) {
           this.isToken = true
           try {
-            await this.$db.get('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId)
+            await this.$db.get('/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/' + this.itemId)
             this.isPortfolio = true
           }
           catch (e) {}
@@ -384,11 +384,11 @@
         this.isSubscribed = false
       },
       async portfolio(event) {
-        await this.$db.put('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId, this.itemId)
+        await this.$db.put('/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/' + this.itemId, this.itemId)
         this.isPortfolio = true
       },
       async unportfolio(event) {
-        await this.$db.del('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId)
+        await this.$db.del('/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/' + this.itemId)
         this.isPortfolio = false
       },
       async publish(event) {

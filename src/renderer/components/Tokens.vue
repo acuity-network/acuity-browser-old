@@ -49,8 +49,8 @@
       async loadData() {
         this.data = []
         this.$db.createValueStream({
-          'gte': '/accountPortfolio/' + window.activeAccount.contractAddress + '/',
-          'lt': '/accountPortfolio/' + window.activeAccount.contractAddress + '/z',
+          'gte': '/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/z',
         })
         .on('data', async itemId => {
           try {
@@ -68,7 +68,7 @@
         })
       },
       async remove(event) {
-        await this.$db.del('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + event.target.dataset.itemid)
+        await this.$db.del('/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/' + event.target.dataset.itemid)
         this.loadData()
       }
     }
