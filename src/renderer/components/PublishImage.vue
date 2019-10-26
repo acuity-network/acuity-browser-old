@@ -24,6 +24,7 @@
         </b-select>
       </b-field>
 
+      <token-selector v-model="tokenItemId"></token-selector>
       <topic-selector v-model="topics"></topic-selector>
       <mention-selector v-model="mentions"></mention-selector>
 
@@ -38,6 +39,7 @@
 
 <script lang="ts">
   import Page from './Page.vue'
+  import TokenSelector from './TokenSelector.vue'
   import TopicSelector from './TopicSelector.vue'
   import MentionSelector from './MentionSelector.vue'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
@@ -52,6 +54,7 @@
     name: 'publish-image',
     components: {
       Page,
+      TokenSelector,
       TopicSelector,
       MentionSelector,
     },
@@ -59,6 +62,7 @@
       return {
         title: '',
         description: '',
+        tokenItemId: '',
         feeds: [{itemId: '0', title: 'none'}],
         feedId: '0',
         topics: [],

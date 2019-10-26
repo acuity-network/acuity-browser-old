@@ -298,6 +298,9 @@ export default {
 		Remove: 'удалить',
 		CreateToken: 'Создать токен',
 	},
+	TokenSelector: {
+	  Token: 'Токен',
+	},
 	TopicSelector: {
 		Topics: 'Темы (теги)',
 		AddATopic: 'Добавить тему',

@@ -298,6 +298,9 @@ export default {
 		Remove: 'remove',
 		CreateToken: 'Create token',
 	},
+	TokenSelector: {
+		Token: 'Token',
+	},
 	TopicSelector: {
 		Topics: 'Topics',
 		AddATopic: 'Add a topic',
