@@ -288,7 +288,8 @@
         else if (revision.content.existMixin('0x9fbbfaad')) {
           this.isToken = true
           try {
-            this.isPortfolio = await this.$activeAccount.get().call(this.$mixClient.accountTokens, 'getItemExists', [this.itemId])
+            await this.$db.get('/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/' + this.itemId)
+            this.isPortfolio = true
           }
           catch (e) {}
         }
@@ -314,26 +315,6 @@
           this.fileName = fileData.name
           this.fileSize = formatByteCount(fileData.size)
           this.fileHash = fileData.hash
-        }
-
-        if (revision.content.existMixin('0xbeef2144')) {
-          this.isProfile = true
-        }
-        else if (revision.content.existMixin('0xbcec8faa')) {
-          this.isFeed = true
-          try {
-            await this.$db.get('/accountSubscribed/' + this.vue.$activeAccount.get().contractAddress + '/' + this.itemId)
-            this.isSubscribed = true
-          }
-          catch (e) {}
-        }
-        else if (revision.content.existMixin('0x9fbbfaad')) {
-          this.isToken = true
-          try {
-            await this.$db.get('/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/' + this.itemId)
-            this.isPortfolio = true
-          }
-          catch (e) {}
         }
 
         if (!this.short) {
@@ -384,11 +365,11 @@
         this.isSubscribed = false
       },
       async portfolio(event) {
-        await this.$db.put('/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/' + this.itemId, this.itemId)
+        await this.$db.put('/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/' + this.itemId, this.itemId)
         this.isPortfolio = true
       },
       async unportfolio(event) {
-        await this.$db.del('/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/' + this.itemId)
+        await this.$db.del('/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/' + this.itemId)
         this.isPortfolio = false
       },
       async publish(event) {

@@ -75,8 +75,8 @@
       catch (e) {}
 
       this.$db.createValueStream({
-        'gte': '/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/',
-        'lt': '/accountPortfolio/' + this.vue.$activeAccount.get().contractAddress + '/z',
+        'gte': '/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/',
+        'lt': '/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/z',
       })
       .on('data', async itemId => {
         try {
