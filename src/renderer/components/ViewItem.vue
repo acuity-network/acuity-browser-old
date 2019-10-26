@@ -316,6 +316,26 @@
           this.fileHash = fileData.hash
         }
 
+        if (revision.content.existMixin('0xbeef2144')) {
+          this.isProfile = true
+        }
+        else if (revision.content.existMixin('0xbcec8faa')) {
+          this.isFeed = true
+          try {
+            await this.$db.get('/accountSubscribed/' + window.activeAccount.contractAddress + '/' + this.itemId)
+            this.isSubscribed = true
+          }
+          catch (e) {}
+        }
+        else if (revision.content.existMixin('0x9fbbfaad')) {
+          this.isToken = true
+          try {
+            await this.$db.get('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId)
+            this.isPortfolio = true
+          }
+          catch (e) {}
+        }
+
         if (!this.short) {
           // Try to delete the old entry
           try {
@@ -364,11 +384,11 @@
         this.isSubscribed = false
       },
       async portfolio(event) {
-        await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'addItem', [this.itemId], 0, 'Add token to portfolio')
+        await this.$db.put('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId, this.itemId)
         this.isPortfolio = true
       },
       async unportfolio(event) {
-        await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'removeItem', [this.itemId], 0, 'Remove token from portfolio')
+        await this.$db.del('/accountPortfolio/' + window.activeAccount.contractAddress + '/' + this.itemId)
         this.isPortfolio = false
       },
       async publish(event) {
