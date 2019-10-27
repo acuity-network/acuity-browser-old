@@ -157,6 +157,10 @@
 
         let ipfsHash = await content.save()
 
+        if (this.tokenItemId != '') {
+          await this.$activeAccount.get().sendData(this.$mixClient.itemDagTokenItems, 'addChild', [this.tokenItemId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach token item')
+        }
+
         if (this.feedId != '0') {
           await this.$activeAccount.get().sendData(this.$mixClient.itemDagFeedItems, 'addChild', [this.feedId, '0x26b10bb026700148962c4a948b08ae162d18c0af', flagsNonce], 0, 'Attach feed item')
         }

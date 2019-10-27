@@ -68,6 +68,8 @@
       <div v-if="!short">
         <token-view v-if="isToken" :itemId="itemId"></token-view>
 
+        Token: <item-link :itemId="tokenItemId" :key="tokenItemId"></item-link>
+
         <div v-if="isFeed">
           <view-item v-for="itemId in feedItemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
         </div>
@@ -211,6 +213,7 @@
         data.isProfile = ''
         data.isFeed = false
         data.isToken = false
+        data.tokenItemId = '',
         data.commentIds = []
         data.feedItemIds = []
         data.reply = ''
@@ -264,6 +267,11 @@
         this.mentions = await this.$mixClient.itemMentions.methods.getItemMentions(this.itemId).call()
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
+
+        try {
+          this.tokenItemId = await this.$mixClient.itemDagTokenItems.methods.getParentId(this.itemId).call()
+        }
+        catch (e) {}
 
         if (this.short && !trustLevel) {
           this.title = ''
