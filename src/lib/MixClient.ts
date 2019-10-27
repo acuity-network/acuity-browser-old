@@ -15,6 +15,7 @@ export default class MixClient {
 	itemDagMixins: any
 	itemDagComments: any
 	itemDagFeedItems: any
+	itemDagTokenItems: any
 	itemTopics: any
 	itemMentions: any
 	accountRegistry: any
@@ -64,6 +65,7 @@ export default class MixClient {
 		this.itemDagMixins = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParent.abi.json'), '0x341518c5b28d3564b39ab7560e47b4486ddb762a')
 		this.itemDagComments = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParent.abi.json'), '0x2a37382ea172d0a28905052ee79f802cd7fd74b4')
 		this.itemDagFeedItems = new this.web3.eth.Contract(require('./contracts/MixItemDagOnlyOwner.abi.json'), '0x622d9bd5adf631c6e190f8d2beebcd5533ffa5e6')
+		this.itemDagTokenItems = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParentOnlyOwner.abi.json'), '0xdcf42fa746e0a9f8c5a407ec43ea92b3a9eac94e')
 		this.itemTopics = new this.web3.eth.Contract(require('./contracts/MixItemTopics.abi.json'), '0xcc64d1519d4e2be2b025204f5b3470d5f14a1a99')
 		this.itemMentions = new this.web3.eth.Contract(require('./contracts/MixItemMentions.abi.json'), '0xed279A14f93dDF8dCE9A73B4b281687051214E87')
 		this.accountRegistry = new this.web3.eth.Contract(require('./contracts/MixAccountRegistry.abi.json'), '0xbcab5026b4d79396b222abc4d1ca36db10984c73')
