@@ -310,17 +310,35 @@ export default class MixAccount {
     }
   }
 
+  private decodeError(returnData: string) {
+    let error: string
+
+    try {
+      let encoded = '0x' + returnData.slice(10)
+      error = this.vue.$mixClient.web3.eth.abi.decodeParameter('string', encoded)
+    }
+    catch (e) {
+      error = 'Unknown.'
+    }
+
+    return error
+  }
+
   async sendData(contract, method, params, value, description, gas) {
     let to = contract.options.address
     let data = contract.methods[method].apply(this, params).encodeABI()
     // Test this transaction.
-    let success;
+    let success: boolean
+    let error: string
     switch (this.abiVersion) {
       case 0:
         success = await this.contract.methods.sendData(to, data).call({
           from: this.controllerAddress,
           value: this.vue.$mixClient.web3.utils.toHex(value),
         })
+        if (!success) {
+          error = 'Unknown.'
+        }
         break;
 
       case 1:
@@ -329,10 +347,13 @@ export default class MixAccount {
           value: this.vue.$mixClient.web3.utils.toHex(value),
         })
         success = result.success
+        if (!success) {
+          error = this.decodeError(result.returnData)
+        }
         break;
     }
     if (!success) {
-      this.vue.$buefy.toast.open({message: 'Transaction error', type: 'is-danger'})
+      this.vue.$buefy.toast.open({message: 'Transaction error: ' + error, type: 'is-danger'})
       return
     }
     let inner = (this.abiVersion == 0) ? this.contract.methods.sendData(to, data) : this.contract.methods.sendCallNoReturn(to, data)
@@ -389,13 +410,7 @@ export default class MixAccount {
 
       for (let event of events) {
         if (event.transactionHash == info.hash) {
-          try {
-            let encoded = '0x' + event.returnValues.returnData.slice(10)
-            info.error = this.vue.$mixClient.web3.eth.abi.decodeParameter('string', encoded)
-          }
-          catch (e) {
-            info.error = 'Unknown.'
-          }
+          info.error = this.decodeError(event.returnValues.returnData)
         }
       }
     }
