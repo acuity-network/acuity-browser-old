@@ -163,8 +163,8 @@ export default class MixAccount {
     this.vue.$root.$emit('change-active-account', this)
   }
 
-  call(contract, method, params = []) {
-    return contract.methods[method].apply(this, params).call({
+  async call(contract, method, params = []) {
+    return await contract.methods[method](...params).call({
       from: this.contractAddress
     })
   }
@@ -326,7 +326,7 @@ export default class MixAccount {
 
   async sendData(contract, method, params, value, description, gas) {
     let to = contract.options.address
-    let data = contract.methods[method].apply(this, params).encodeABI()
+    let data = contract.methods[method](...params).encodeABI()
     // Test this transaction.
     let success: boolean
     let error: string
