@@ -81,14 +81,13 @@
       this.location = profile.location
     },
     methods: {
-      chooseFile(event) {
+      async chooseFile(event) {
         let {dialog} = require('electron').remote
-        dialog.showOpenDialog({
+        let result: any = await dialog.showOpenDialog(null, {
           title: this.$t('ProfileEdit.ChooseImage'),
           filters: [{name: this.$t('ProfileEdit.Images'), extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
-        }, (fileNames) => {
-          this.filepath = fileNames[0]
         })
+        this.filepath = result.filePaths[0]
       },
       async publish(event) {
         let content = new MixContent(this.$root)

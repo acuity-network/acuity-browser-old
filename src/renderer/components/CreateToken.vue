@@ -54,14 +54,13 @@
       setTitle(this.$t('CreateToken.CreateToken'))
     },
     methods: {
-      chooseFile(event) {
+      async chooseFile(event) {
         let {dialog} = require('electron').remote
-        dialog.showOpenDialog({
+        let result: any = await dialog.showOpenDialog(null, {
           title: this.$t('CreateToken.ChooseImage'),
           filters: [{name: 'Images', extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
-        }, (fileNames) => {
-          this.filepath = fileNames[0]
         })
+        this.filepath = result.filePaths[0]
       },
       async create(event) {
         let flagsNonce = '0x03' + this.$mixClient.web3.utils.randomHex(31).substr(2)
