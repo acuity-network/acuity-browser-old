@@ -1,5 +1,5 @@
 diff --git a/node_modules/keyv/src/index.js b/node_modules/keyv/src/index.js
-index ab714b2..9ef0488 100644
+index 02af495..a0ccb1e 100644
 --- a/node_modules/keyv/src/index.js
 +++ b/node_modules/keyv/src/index.js
 @@ -15,7 +15,6 @@ const loadStore = opts => {
