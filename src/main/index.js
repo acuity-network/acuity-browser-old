@@ -48,6 +48,7 @@ async function createWindow () {
 
   if (isDevelopment) {
     mainWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
+    require('vue-devtools').install()
   }
   else {
     mainWindow.loadURL(formatUrl({
