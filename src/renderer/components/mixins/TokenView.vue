@@ -249,6 +249,7 @@
         catch (e) {
           this.address = await this.$mixClient.tokenItemRegistryOld.methods.getToken(this.itemId).call()
           await this.$activeAccount.get().sendData(this.$mixClient.tokenItemRegistry, 'register', [this.address, this.itemId], 0, 'Register token item')
+          await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'addItem', [this.itemId], 0, 'Add token item to account.')
         }
 				this.token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), this.address)
 				this.symbol = await this.token.methods.symbol().call()
