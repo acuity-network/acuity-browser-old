@@ -93,8 +93,9 @@
         let ipfsHash = await content.save()
 
         await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create token item')
-        let tokenContract = await this.$activeAccount.get().deployToken(this.symbol, this.name, itemId, this.$mixClient.web3.utils.toWei(this.initialBalance), this.$mixClient.web3.utils.toWei(this.dailyPayout))
-        await this.$activeAccount.get().sendData(this.$mixClient.uniswapFactory, 'createExchange', [tokenContract], 0, 'Deploy Uniswap exchange', 1000000)
+        let tokenAddress = await this.$activeAccount.get().deployToken(this.symbol, this.name, this.$mixClient.web3.utils.toWei(this.initialBalance), this.$mixClient.web3.utils.toWei(this.dailyPayout))
+        await this.$activeAccount.get().sendData(this.$mixClient.tokenItemRegistry, 'register', [tokenAddress, itemId], 0, 'Register token item')
+        await this.$activeAccount.get().sendData(this.$mixClient.uniswapFactory, 'createExchange', [tokenAddress], 0, 'Deploy Uniswap exchange', 1000000)
         await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'addItem', [itemId], 0, 'Add token item to account.')
         this.$router.push({ name: 'item', params: { itemId: itemId }})
       }

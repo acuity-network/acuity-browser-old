@@ -121,7 +121,7 @@ export default class MixAccount {
     })
   }
 
-  deployToken(symbol, name, itemId, initialBalance, dailyPayout) {
+  deployToken(symbol, name, initialBalance, dailyPayout) {
     return new Promise(async (resolve, reject) => {
       if (!this.isUnlocked()) {
         this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
@@ -130,8 +130,8 @@ export default class MixAccount {
       }
       let byteCodePath = path.join(__static, 'MixCreatorToken.bin')
       let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
-      let types = ['string', 'string', 'address', 'bytes32', 'address', 'uint', 'uint']
-      let params = [symbol, name, this.vue.$mixClient.tokenRegistryAddress, itemId, this.contractAddress, initialBalance, dailyPayout]
+      let types = ['string', 'string', 'address', 'uint', 'uint']
+      let params = [symbol, name, this.contractAddress, initialBalance, dailyPayout]
       let paramsBytecode = this.vue.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let rawTx = {

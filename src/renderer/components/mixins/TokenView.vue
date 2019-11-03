@@ -243,7 +243,7 @@
     },
 		methods: {
 			async loadData() {
-				this.address = await this.$mixClient.tokenRegistry.methods.getToken(this.itemId).call()
+				this.address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.itemId).call()
 				this.token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), this.address)
 				this.symbol = await this.token.methods.symbol().call()
 				this.name = await this.token.methods.name().call()
