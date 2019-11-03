@@ -26,6 +26,7 @@ export default class MixClient {
 	reactions: any
 	tokenItemRegistryAddress: any
 	tokenItemRegistry: any
+	tokenItemRegistryOld: any
 	tokenBurn: any
 	uniswapFactory: any
 
@@ -74,9 +75,10 @@ export default class MixClient {
 		this.accountTokens = new this.web3.eth.Contract(require('./contracts/MixAccountItems2.abi.json'), '0xb0b4e45fa5b19383657ffdc2166cbd92a2aeff83')
 		this.trustedAccounts = new this.web3.eth.Contract(require('./contracts/MixTrustedAccounts.abi.json'), '0x70e2e2d6b31cd25e00c034ac9cfc79575efa26a9')
 		this.reactions = new this.web3.eth.Contract(require('./contracts/MixReactions.abi.json'), '0xd7051cd496a3a8373f9cf89476c04a7d51a5cc88')
-		this.tokenItemRegistryAddress = '0x66545a52eecb62d108237a9458da7c0074951797'
+		this.tokenItemRegistryAddress = '0x8856f2ca138c3d9742eedeef4091c34b3f7b5f6e'
 		this.tokenItemRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenItemRegistry.abi.json'), this.tokenItemRegistryAddress)
-		this.tokenBurn = new this.web3.eth.Contract(require('./contracts/MixTokenBurn.abi.json'), '0x70257f71018150222d339ae79035e2674a79d69a')
+		this.tokenItemRegistryOld = new this.web3.eth.Contract(require('./contracts/MixTokenItemRegistry.abi.json'), '0x5402efb80b307250b978cb1039a95e0c292b50c2')
+		this.tokenBurn = new this.web3.eth.Contract(require('./contracts/MixTokenBurn.abi.json'), '0x047e823290ce4b3cf6cb7048fe19343c653b7a0e')
 		this.uniswapFactory = new this.web3.eth.Contract(require('./contracts/UniswapFactory.abi.json'), '0x1381a70fc605b7d7e54b7e1159afba1429a4bbb1')
 
 		// Emit sync info.

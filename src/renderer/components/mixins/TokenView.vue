@@ -243,7 +243,13 @@
     },
 		methods: {
 			async loadData() {
-				this.address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.itemId).call()
+        try {
+  				this.address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.itemId).call()
+        }
+        catch (e) {
+          this.address = await this.$mixClient.tokenItemRegistryOld.methods.getToken(this.itemId).call()
+          await this.$activeAccount.get().sendData(this.$mixClient.tokenItemRegistry, 'register', [this.address, this.itemId], 0, 'Register token item')
+        }
 				this.token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), this.address)
 				this.symbol = await this.token.methods.symbol().call()
 				this.name = await this.token.methods.name().call()
