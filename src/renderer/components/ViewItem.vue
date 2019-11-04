@@ -68,7 +68,7 @@
       <div v-if="!short">
         <token-view v-if="isToken" :itemId="itemId"></token-view>
 
-        Token: <item-link :itemId="tokenItemId" :key="tokenItemId"></item-link>
+        <item-token :itemId="itemId"></item-token>
 
         <div v-if="isFeed">
           <view-item v-for="itemId in feedItemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
@@ -99,6 +99,7 @@
   import ProfileLink from './ProfileLink.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
+  import ItemToken from './ItemToken.vue'
   import TokenView from './mixins/TokenView.vue'
   import VueMarkdown from 'vue-markdown'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
@@ -130,6 +131,7 @@
       AccountInfo,
       ItemLink,
       ProfileLink,
+      ItemToken,
       TokenView,
       VueMarkdown,
       Reactions,
@@ -213,7 +215,6 @@
         data.isProfile = ''
         data.isFeed = false
         data.isToken = false
-        data.tokenItemId = '',
         data.commentIds = []
         data.feedItemIds = []
         data.reply = ''
@@ -267,11 +268,6 @@
         this.mentions = await this.$mixClient.itemMentions.methods.getItemMentions(this.itemId).call()
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
-
-        try {
-          this.tokenItemId = await this.$mixClient.itemDagTokenItems.methods.getParentId(this.itemId).call()
-        }
-        catch (e) {}
 
         if (this.short && !trustLevel) {
           this.title = ''

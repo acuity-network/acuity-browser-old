@@ -163,9 +163,10 @@ export default class MixAccount {
     this.vue.$root.$emit('change-active-account', this)
   }
 
-  async call(contract, method, params = []) {
+  async call(contract, method, params = [], value = 0) {
     return await contract.methods[method](...params).call({
-      from: this.contractAddress
+      from: this.contractAddress,
+      value: value,
     })
   }
 

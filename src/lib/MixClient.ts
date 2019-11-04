@@ -27,6 +27,7 @@ export default class MixClient {
 	tokenItemRegistryAddress: any
 	tokenItemRegistry: any
 	tokenItemRegistryOld: any
+  tokenBurnAddress: any
 	tokenBurn: any
 	uniswapFactory: any
 
@@ -78,7 +79,8 @@ export default class MixClient {
 		this.tokenItemRegistryAddress = '0x8856f2ca138c3d9742eedeef4091c34b3f7b5f6e'
 		this.tokenItemRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenItemRegistry.abi.json'), this.tokenItemRegistryAddress)
 		this.tokenItemRegistryOld = new this.web3.eth.Contract(require('./contracts/MixTokenItemRegistry.abi.json'), '0x5402efb80b307250b978cb1039a95e0c292b50c2')
-		this.tokenBurn = new this.web3.eth.Contract(require('./contracts/MixTokenBurn.abi.json'), '0x047e823290ce4b3cf6cb7048fe19343c653b7a0e')
+    this.tokenBurnAddress = '0x047e823290ce4b3cf6cb7048fe19343c653b7a0e'
+		this.tokenBurn = new this.web3.eth.Contract(require('./contracts/MixTokenBurn.abi.json'), this.tokenBurnAddress)
 		this.uniswapFactory = new this.web3.eth.Contract(require('./contracts/UniswapFactory.abi.json'), '0x1381a70fc605b7d7e54b7e1159afba1429a4bbb1')
 
 		// Emit sync info.
