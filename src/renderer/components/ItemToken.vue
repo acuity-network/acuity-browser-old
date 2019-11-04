@@ -39,16 +39,44 @@
 		    </article>
 			</div>
 		</div>
-		<b-table :data="data">
-			<template slot-scope="props">
-				<b-table-column label="Account">
-					<profile-link :address="props.row.account"></profile-link>
-				</b-table-column>
-				<b-table-column label="Burned">
-					{{ props.row.burned }}
-				</b-table-column>
-			</template>
-		</b-table>
+    <div class="tile is-ancestor">
+      <div class="tile is-parent is-6">
+        <article class="tile is-child notification is-primary">
+          <p class="title">Leaderboard</p>
+      		<b-table :data="data">
+      			<template slot-scope="props">
+      				<b-table-column label="Account">
+      					<profile-link :address="props.row.account"></profile-link>
+      				</b-table-column>
+      				<b-table-column label="Burned" numeric>
+      					{{ props.row.burned }}
+      				</b-table-column>
+      			</template>
+      		</b-table>
+        </article>
+      </div>
+      <div class="tile is-parent is-6">
+        <article class="tile is-child notification is-danger">
+          <p class="title">Your Burn History</p>
+          <b-table :data="burnHistory" default-sort="timestamp" default-sort-direction="desc">
+            <template slot-scope="props">
+              <b-table-column field="timestamp" :visible="false" sortable>
+                {{ props.row.timestamp }}
+              </b-table-column>
+
+              <b-table-column :label="$t('TokenView.When')">
+                <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true"></timeago>
+                <span v-else>{{ $t('TokenView.Pending') }}</span>
+              </b-table-column>
+
+              <b-table-column :label="$t('TokenView.Amount')" numeric>
+                {{ props.row.amount }}
+              </b-table-column>
+            </template>
+          </b-table>
+        </article>
+      </div>
+    </div>
 	</div>
 </template>
 
@@ -79,6 +107,7 @@
         mixToTokensTokens: '',
 				tokensToBurn: '',
 				data: [],
+        burnHistory: [],
       }
     },
 		async created() {
@@ -93,9 +122,32 @@
   			this.exchange = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/UniswapExchange.abi.json'), this.exchangeAddress)
   			this.loadData()
         this.show = true
+
+        this.burnHistoryEmitter = this.$mixClient.tokenBurn.events.BurnToken({
+  				filter: {
+            itemId: this.itemId,
+  					account: this.$activeAccount.get().contractAddress,
+  				},
+  				fromBlock: 0,
+  				toBlock: 'pending',
+  			})
+  			.on('data', async log => {
+  				let block = await this.$mixClient.web3.eth.getBlock(log.blockNumber)
+  				this.burnHistory.push({
+  					'timestamp': block ? block.timestamp : 4000000000,
+            'confirmed': block != null,
+  					'when': block ? new Date(block.timestamp * 1000) : null,
+  					'amount': this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(log.returnValues.amount)),
+  				})
+  			})
       }
-      catch (e) {}
+      catch (e) {
+        this.show = false
+      }
 		},
+    destroyed() {
+      this.burnHistoryEmitter.unsubscribe()
+    },
 		methods: {
 			async loadData() {
 				let toBN = this.$mixClient.web3.utils.toBN
@@ -108,15 +160,16 @@
         catch (e) {
           this.mixPerToken = 'N/A'
         }
-				let data = await this.$mixClient.tokenBurn.methods.getItemAccountsBurned(this.itemId, 0, 200).call()
-				let count = data.accounts.length
+				let accountsBurned: object = await this.$mixClient.tokenBurn.methods.getItemAccountsBurned(this.itemId, 0, 200).call()
+				let count: number = accountsBurned.accounts.length
+        let data: object[] = []
 				for (let i = 0; i < count; i++) {
-					this.data.push({
-						'account': data.accounts[i],
-						'burned': this.$mixClient.web3.utils.fromWei(toBN(data.amounts[i])),
+					data.push({
+						'account': accountsBurned.accounts[i],
+						'burned': this.$mixClient.web3.utils.fromWei(toBN(accountsBurned.amounts[i])),
 					})
 				}
-
+        this.data = data
 			},
       async tryMixToTokens(event) {
         try {
@@ -145,7 +198,9 @@
 </script>
 
 <style scoped>
-  .item-token >>> label.label {
+  .item-token >>> label.label,
+  .item-token >>> table,
+  .item-token >>> th {
     color: white;
   }
 
@@ -159,5 +214,13 @@
     object-fit: cover;
     width: 70px;
     height: 70px;
+  }
+
+  .item-token >>> table {
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  .item-token  {
+    margin-bottom: 24px;
   }
 </style>
