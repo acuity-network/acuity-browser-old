@@ -160,7 +160,7 @@
         catch (e) {
           this.mixPerToken = 'N/A'
         }
-				let accountsBurned: object = await this.$mixClient.tokenBurn.methods.getItemAccountsBurned(this.itemId, 0, 200).call()
+				let accountsBurned: any = await this.$mixClient.tokenBurn.methods.getItemAccountsBurned(this.itemId, 0, 200).call()
 				let count: number = accountsBurned.accounts.length
         let data: object[] = []
 				for (let i = 0; i < count; i++) {
