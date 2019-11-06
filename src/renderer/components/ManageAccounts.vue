@@ -12,12 +12,16 @@
             <span class="clickable">{{ props.row.name }}</span>
           </b-table-column>
 
-          <b-table-column field="balance" :label="$t('ManageAccounts.Balance')">
+          <b-table-column field="balance" :label="$t('ManageAccounts.Balance')" numeric>
             {{ props.row.balance }}
           </b-table-column>
 
-          <b-table-column field="operations">
+          <b-table-column field="deploy" custom-key="deploy">
             <router-link v-if="props.row.deploy" :to="props.row.deploy">{{ $t('ManageAccounts.deploy') }}</router-link>
+          </b-table-column>
+
+          <b-table-column field="delete" custom-key="delete">
+            <router-link :to="props.row.delete">{{ $t('ManageAccounts.delete') }}</router-link>
           </b-table-column>
 
         </template>
@@ -70,7 +74,8 @@
             account: address,
             name: name,
             balance: this.$mixClient.web3.utils.fromWei(await account.getBalance()),
-            deploy: account.contractAddress ? '' : '/manage-accounts/controller/' + address
+            deploy: account.contractAddress ? '' : '/manage-accounts/controller/' + address,
+            delete: '/manage-accounts/delete/' + address,
           }
           this.data.push(row)
           if (this.$activeAccount.get() && address == this.$activeAccount.get().controllerAddress) {

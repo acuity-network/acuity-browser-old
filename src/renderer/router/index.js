@@ -128,6 +128,12 @@ export default new Router({
       props: true,
     },
     {
+      path: '/manage-accounts/delete/:controllerAddress',
+      name: 'manage-account-delete',
+      component: require('@/components/ManageAccountDelete').default,
+      props: true,
+    },
+    {
       path: '/node-status',
       name: 'node-status',
       component: require('@/components/NodeStatus').default
