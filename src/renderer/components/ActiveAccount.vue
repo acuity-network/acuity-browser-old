@@ -7,6 +7,7 @@
     <b-field v-if="enterPassword" :type="passwordFieldType">
       <b-input type="password" v-model="password" password-reveal @keydown.native.enter="unlock"></b-input>
     </b-field>
+    <div>{{ balance }} MIX</div>
   </div>
 </template>
 
@@ -23,12 +24,14 @@
         enterPassword: false,
         passwordFieldType: '',
         password: '',
+        balance: '',
       }
     },
     methods: {
       async loadData() {
         this.unlocked = this.$activeAccount.get().isUnlocked()
         try {
+          this.balance = Number.parseFloat(this.$mixClient.web3.utils.fromWei(await this.$activeAccount.get().getBalance())).toFixed(2)
           let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
           let item: MixItem = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
@@ -62,10 +65,15 @@
     },
     created() {
       this.$root.$on('change-active-account', this.changeActiveAccount)
+      this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
+      .on('data', block => {
+        this.loadData()
+      })
       this.loadData()
     },
     destroyed() {
       this.$root.$off('change-active-account', this.changeActiveAccount)
+      this.newBlockHeadersEmitter.unsubscribe()
     },
   }
 </script>
