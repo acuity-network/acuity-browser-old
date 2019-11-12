@@ -301,10 +301,6 @@ export default {
 		Remove: 'remove',
 		Topic: 'Topic',
 	},
-	TokenHolders: {
-		Holder: 'Holder',
-		Amount: 'Amount',
-	},
 	Tokens: {
 		Tokens: 'Tokens',
 		Token: 'Token',

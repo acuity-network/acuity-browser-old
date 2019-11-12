@@ -301,10 +301,6 @@ export default {
 		Remove: 'удалить',
 		Topic: 'Темы (теги)',
 	},
-	TokenHolders: {
-		Holder: 'Держатели',
-		Amount: 'Сумма',
-	},
 	Tokens: {
 		Tokens: 'Токены',
 		Token: 'Токен',
