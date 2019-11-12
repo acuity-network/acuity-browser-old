@@ -150,7 +150,6 @@
     },
 		methods: {
 			async loadData() {
-				let toBN = this.$mixClient.web3.utils.toBN
 				this.totalBurned = this.$mixClient.formatWei(await this.$mixClient.tokenBurn.methods.getItemBurnedTotal(this.itemId).call())
 				this.burned = this.$mixClient.formatWei(await this.$mixClient.tokenBurn.methods.getAccountItemBurned(this.$activeAccount.get().contractAddress, this.itemId).call())
 				this.balance = this.$mixClient.formatWei(await this.token.methods.balanceOf(this.$activeAccount.get().contractAddress).call())

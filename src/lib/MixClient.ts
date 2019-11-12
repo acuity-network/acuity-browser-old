@@ -8,6 +8,7 @@ import throttle from 'just-throttle'
 
 export default class MixClient {
 	web3: any
+  formatWei: any
 	parityApi: any
 	itemStoreRegistry: any
 	itemStoreIpfsSha256: any
