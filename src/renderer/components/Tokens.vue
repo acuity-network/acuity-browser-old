@@ -56,8 +56,7 @@
           try {
             let address = await this.$mixClient.tokenItemRegistry.methods.getToken(itemId).call()
             let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), address)
-            let toBN = this.$mixClient.web3.utils.toBN
-    				let balance = this.$mixClient.web3.utils.fromWei(toBN(await token.methods.balanceOf(this.$activeAccount.get().contractAddress).call()))
+    				let balance = this.$mixClient.formatWei(await token.methods.balanceOf(this.$activeAccount.get().contractAddress).call())
 
             this.data.push({
               itemId: itemId,

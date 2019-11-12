@@ -73,7 +73,7 @@
           let row = {
             account: address,
             name: name,
-            balance: this.$mixClient.web3.utils.fromWei(await account.getBalance()),
+            balance: this.$mixClient.formatWei(await account.getBalance()),
             deploy: account.contractAddress ? '' : '/manage-accounts/controller/' + address,
             delete: '/manage-accounts/delete/' + address,
           }

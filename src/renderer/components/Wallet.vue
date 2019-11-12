@@ -101,10 +101,8 @@
     },
     methods: {
       async loadData() {
-        let balance = await this.$activeAccount.get().getBalance()
-        this.balance = this.$mixClient.web3.utils.fromWei(balance)
-        balance = await this.$activeAccount.get().getUnconfirmedBalance()
-        this.unconfirmedBalance = this.$mixClient.web3.utils.fromWei(balance)
+        this.balance = this.$mixClient.formatWei(await this.$activeAccount.get().getBalance())
+        this.unconfirmedBalance = this.$mixClient.formatWei(await this.$activeAccount.get().getUnconfirmedBalance())
         let data = []
 
         let count = 0
@@ -136,7 +134,7 @@
                 'confirmed': results[i].timestamp != null,
                 'when': results[i].timestamp ? new Date(results[i].timestamp * 1000) : null,
                 'who': results[i].sender,
-                'amount': this.$mixClient.web3.utils.fromWei(results[i].amount),
+                'amount': this.$mixClient.formatWei(results[i].amount),
               })
             } catch (e) {}
           }
@@ -157,7 +155,7 @@
               'confirmed': results[i].block != null,
               'when': results[i].block ? new Date(results[i].block.timestamp * 1000) : null,
               'who': results[i].to,
-              'amount': '-' + this.$mixClient.web3.utils.fromWei(results[i].transaction.value),
+              'amount': '-' + this.$mixClient.formatWei(results[i].transaction.value),
             })
           }
         }

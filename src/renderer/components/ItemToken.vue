@@ -137,7 +137,7 @@
   					'timestamp': block ? block.timestamp : 4000000000,
             'confirmed': block != null,
   					'when': block ? new Date(block.timestamp * 1000) : null,
-  					'amount': this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(log.returnValues.amount)),
+  					'amount': this.$mixClient.formatWei(log.returnValues.amount),
   				})
   			})
       }
@@ -151,11 +151,11 @@
 		methods: {
 			async loadData() {
 				let toBN = this.$mixClient.web3.utils.toBN
-				this.totalBurned = this.$mixClient.web3.utils.fromWei(toBN(await this.$mixClient.tokenBurn.methods.getItemBurnedTotal(this.itemId).call()))
-				this.burned = this.$mixClient.web3.utils.fromWei(toBN(await this.$mixClient.tokenBurn.methods.getAccountItemBurned(this.$activeAccount.get().contractAddress, this.itemId).call()))
-				this.balance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.balanceOf(this.$activeAccount.get().contractAddress).call()))
+				this.totalBurned = this.$mixClient.formatWei(await this.$mixClient.tokenBurn.methods.getItemBurnedTotal(this.itemId).call())
+				this.burned = this.$mixClient.formatWei(await this.$mixClient.tokenBurn.methods.getAccountItemBurned(this.$activeAccount.get().contractAddress, this.itemId).call())
+				this.balance = this.$mixClient.formatWei(await this.token.methods.balanceOf(this.$activeAccount.get().contractAddress).call())
         try {
-          this.mixPerToken = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.getEthToTokenOutputPrice(this.$mixClient.web3.utils.toWei('1')).call()))
+          this.mixPerToken = this.$mixClient.formatWei(await this.exchange.methods.getEthToTokenOutputPrice(this.$mixClient.web3.utils.toWei('1')).call())
         }
         catch (e) {
           this.mixPerToken = 'N/A'
@@ -166,7 +166,7 @@
 				for (let i = 0; i < count; i++) {
 					data.push({
 						'account': accountsBurned.accounts[i],
-						'burned': this.$mixClient.web3.utils.fromWei(toBN(accountsBurned.amounts[i])),
+						'burned': this.$mixClient.formatWei(accountsBurned.amounts[i]),
 					})
 				}
         this.data = data
@@ -174,8 +174,7 @@
       async tryMixToTokens(event) {
         try {
           let mix = this.$mixClient.web3.utils.toWei(this.mixToTokensMix)
-          let toBN = this.$mixClient.web3.utils.toBN
-          this.mixToTokensTokens = this.$mixClient.web3.utils.fromWei(toBN(await this.$activeAccount.get().call(this.exchange, 'ethToTokenSwapInput', [1, '4000000000'], mix)))
+          this.mixToTokensTokens = this.$mixClient.formatWei(await this.$activeAccount.get().call(this.exchange, 'ethToTokenSwapInput', [1, '4000000000'], mix))
         }
         catch (e) {
           this.mixToTokensTokens = ''

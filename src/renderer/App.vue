@@ -126,7 +126,7 @@
           }
           // Only show notifications for TX that occurred since logging in.
           if (log.blockNumber >= startingBlock) {
-            let notification = this.$notifications.mixReceived(account.contractAddress, this.$mixClient.web3.utils.fromWei(payment.amount, 'Ether'))
+            let notification = this.$notifications.mixReceived(account.contractAddress, this.$mixClient.formatWei(payment.amount))
             new Notification(notification.title, notification)
           }
           this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)

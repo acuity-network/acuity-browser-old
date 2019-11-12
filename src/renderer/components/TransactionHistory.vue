@@ -60,7 +60,7 @@
               'description': info.description,
               'error': info.error ? info.error : '',
               'fee': info.receipt ? this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(info.receipt.gasUsed * info.transaction.gasPrice)) : '?',
-              'amount': this.$mixClient.web3.utils.fromWei(info.transaction.value),
+              'amount': this.$mixClient.formatWei(info.transaction.value),
             })
           }
           catch (e) {}

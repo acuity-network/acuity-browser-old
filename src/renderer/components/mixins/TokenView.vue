@@ -210,7 +210,7 @@
 					'confirmed': block != null,
 					'when': block ? new Date(block.timestamp * 1000) : null,
 					'who': log.returnValues.to,
-					'amount': '-' + this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(log.returnValues.value)),
+					'amount': '-' + this.$mixClient.formatWei(log.returnValues.value),
 				})
 			})
 
@@ -228,7 +228,7 @@
 					'confirmed': block != null,
 					'when': block ? new Date(block.timestamp * 1000) : null,
 					'who': log.returnValues.from,
-					'amount': this.$mixClient.web3.utils.fromWei(this.$mixClient.web3.utils.toBN(log.returnValues.value)),
+					'amount': this.$mixClient.formatWei(log.returnValues.value),
 				})
 			})
     },
@@ -251,19 +251,18 @@
 				this.name = await this.token.methods.name().call()
 				this.start =  new Date(await this.token.methods.start().call() * 1000).toLocaleDateString()
 				this.owner = await this.token.methods.owner().call()
-				let toBN = this.$mixClient.web3.utils.toBN
-        this.initialBalance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.initialBalance().call()))
-				this.dailyPayout = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.dailyPayout().call()))
-				this.totalSupply = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.totalSupply().call()))
-				this.balance = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.balanceOf(this.$activeAccount.get().contractAddress).call()))
+        this.initialBalance = this.$mixClient.formatWei(await this.token.methods.initialBalance().call())
+				this.dailyPayout = this.$mixClient.formatWei(await this.token.methods.dailyPayout().call())
+				this.totalSupply = this.$mixClient.formatWei(await this.token.methods.totalSupply().call())
+				this.balance = this.$mixClient.formatWei(await this.token.methods.balanceOf(this.$activeAccount.get().contractAddress).call())
 
         this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(this.address).call()
         this.exchange = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/UniswapExchange.abi.json'), this.exchangeAddress)
-        this.liquidityMix = this.$mixClient.web3.utils.fromWei(toBN(await this.$mixClient.web3.eth.getBalance(this.exchangeAddress, 'pending')))
-        this.liquidityToken = this.$mixClient.web3.utils.fromWei(toBN(await this.token.methods.balanceOf(this.exchangeAddress).call()))
-        this.liquidityMine = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.balanceOf(this.$activeAccount.get().contractAddress).call()))
+        this.liquidityMix = this.$mixClient.formatWei(await this.$mixClient.web3.eth.getBalance(this.exchangeAddress, 'pending'))
+        this.liquidityToken = this.$mixClient.formatWei(await this.token.methods.balanceOf(this.exchangeAddress).call())
+        this.liquidityMine = this.$mixClient.formatWei(await this.exchange.methods.balanceOf(this.$activeAccount.get().contractAddress).call())
         try {
-          this.mixPerToken = this.$mixClient.web3.utils.fromWei(toBN(await this.exchange.methods.getEthToTokenOutputPrice(this.$mixClient.web3.utils.toWei('1')).call()))
+          this.mixPerToken = this.$mixClient.formatWei(await this.exchange.methods.getEthToTokenOutputPrice(this.$mixClient.web3.utils.toWei('1')).call())
         }
         catch (e) {
           this.mixPerToken = this.$t('TokenView.NA')

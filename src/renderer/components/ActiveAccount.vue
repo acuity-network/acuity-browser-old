@@ -31,7 +31,7 @@
       async loadData() {
         this.unlocked = this.$activeAccount.get().isUnlocked()
         try {
-          this.balance = Number.parseFloat(this.$mixClient.web3.utils.fromWei(await this.$activeAccount.get().getBalance())).toFixed(2)
+          this.balance = this.$mixClient.formatWei(await this.$activeAccount.get().getBalance())
           let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
           let item: MixItem = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
