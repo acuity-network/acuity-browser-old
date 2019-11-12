@@ -111,44 +111,59 @@
       }
     },
 		async created() {
-      try {
-  			this.tokenItemId = await this.$mixClient.itemDagTokenItems.methods.getParentId(this.itemId).call()
-        let item = await new MixItem(this.$root, this.tokenItemId).init()
-        let revision = await item.latestRevision().load()
-        this.image = revision.getImage(64, 64)
-        this.address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.tokenItemId).call()
-  			this.token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), this.address)
-  			this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(this.address).call()
-  			this.exchange = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/UniswapExchange.abi.json'), this.exchangeAddress)
-  			this.loadData()
-        this.show = true
-
-        this.burnHistoryEmitter = this.$mixClient.tokenBurn.events.BurnToken({
-  				filter: {
-            itemId: this.itemId,
-  					account: this.$activeAccount.get().contractAddress,
-  				},
-  				fromBlock: 0,
-  				toBlock: 'pending',
-  			})
-  			.on('data', async log => {
-  				let block = await this.$mixClient.web3.eth.getBlock(log.blockNumber)
-  				this.burnHistory.push({
-  					'timestamp': block ? block.timestamp : 4000000000,
-            'confirmed': block != null,
-  					'when': block ? new Date(block.timestamp * 1000) : null,
-  					'amount': this.$mixClient.formatWei(log.returnValues.amount),
-  				})
-  			})
-      }
-      catch (e) {
-        this.show = false
-      }
+      this.start()
 		},
     destroyed() {
-      this.burnHistoryEmitter.unsubscribe()
+      this.stop()
+    },
+    watch: {
+      itemId() {
+        this.stop()
+        this.start()
+      }
     },
 		methods: {
+      async start() {
+        try {
+    			this.tokenItemId = await this.$mixClient.itemDagTokenItems.methods.getParentId(this.itemId).call()
+          let item = await new MixItem(this.$root, this.tokenItemId).init()
+          let revision = await item.latestRevision().load()
+          this.image = revision.getImage(64, 64)
+          this.address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.tokenItemId).call()
+    			this.token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), this.address)
+    			this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(this.address).call()
+    			this.exchange = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/UniswapExchange.abi.json'), this.exchangeAddress)
+    			this.loadData()
+          this.show = true
+
+          this.burnHistoryEmitter = this.$mixClient.tokenBurn.events.BurnToken({
+    				filter: {
+              itemId: this.itemId,
+    					account: this.$activeAccount.get().contractAddress,
+    				},
+    				fromBlock: 0,
+    				toBlock: 'pending',
+    			})
+    			.on('data', async log => {
+    				let block = await this.$mixClient.web3.eth.getBlock(log.blockNumber)
+    				this.burnHistory.push({
+    					'timestamp': block ? block.timestamp : 4000000000,
+              'confirmed': block != null,
+    					'when': block ? new Date(block.timestamp * 1000) : null,
+    					'amount': this.$mixClient.formatWei(log.returnValues.amount),
+    				})
+    			})
+        }
+        catch (e) {
+          this.show = false
+          this.burnHistoryEmitter = null
+        }
+      },
+      stop() {
+        if (this.burnHistoryEmitter) {
+          this.burnHistoryEmitter.unsubscribe()
+        }
+      },
 			async loadData() {
 				this.totalBurned = this.$mixClient.formatWei(await this.$mixClient.tokenBurn.methods.getItemBurnedTotal(this.itemId).call())
 				this.burned = this.$mixClient.formatWei(await this.$mixClient.tokenBurn.methods.getAccountItemBurned(this.$activeAccount.get().contractAddress, this.itemId).call())
