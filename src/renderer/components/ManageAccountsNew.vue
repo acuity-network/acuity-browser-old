@@ -20,6 +20,9 @@
       <b-field :label="$t('ManageAccountsNew.RecoveryPhrase')">
         {{ recoveryPhrase }}
       </b-field>
+      <b-field :label="$t('ManageAccountsNew.RepeatRecoveryPhrase')" :type="recoveryPhraseRepeatType" :message="recoveryPhraseRepeatMessage">
+        <b-input type="input" v-model.trim="recoveryPhraseRepeat"></b-input>
+      </b-field>
       <b-field :label="$t('ManageAccountsNew.Password')" :type="passwordType" :message="passwordMessage">
         <b-input type="password" v-model="password" password-reveal></b-input>
       </b-field>
@@ -49,6 +52,9 @@
     data() {
       return {
         recoveryPhrase: '',
+        recoveryPhraseRepeat: '',
+        recoveryPhraseRepeatType: '',
+        recoveryPhraseRepeatMessage: '',
         password: '',
         passwordType: '',
         passwordMessage: '',
@@ -59,6 +65,22 @@
     },
     methods: {
       async create(event) {
+        // Repeat recovery phrase is required.
+        if (this.recoveryPhraseRepeat == '') {
+          this.recoveryPhraseRepeatType = 'is-danger'
+          this.recoveryPhraseRepeatMessage = this.$t('ManageAccountsNew.RepeatRecoveryPhraseIsRequired')
+          return
+        }
+        // Repeat recovery phrase must match recovery phrase.
+        else if (this.recoveryPhraseRepeat != this.recoveryPhrase) {
+          this.recoveryPhraseRepeatType = 'is-danger'
+          this.recoveryPhraseRepeatMessage = this.$t('ManageAccountsNew.RepeatRecoveryPhraseIsIncorrect')
+          return
+        }
+        else {
+          this.recoveryPhraseRepeatType = ''
+          this.recoveryPhraseRepeatMessage = ''
+        }
         // Password is required.
         if (this.password == '') {
           this.passwordType = 'is-danger'
@@ -69,8 +91,14 @@
           this.passwordType = ''
           this.passwordMessage = ''
         }
+        // Repeat password is required.
+        if (this.passwordRepeat == '') {
+          this.passwordRepeatType = 'is-danger'
+          this.passwordRepeatMessage = this.$t('ManageAccountsNew.RepeatPasswordIsRequired')
+          return
+        }
         // Check passwords match.
-        if (this.password != this.passwordRepeat) {
+        else if (this.password != this.passwordRepeat) {
           this.passwordRepeatType = 'is-danger'
           this.passwordRepeatMessage = this.$t('ManageAccountsNew.PasswordsDoNotMatch')
           return

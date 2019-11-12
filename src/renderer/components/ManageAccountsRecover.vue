@@ -80,8 +80,14 @@
           this.passwordType = ''
           this.passwordMessage = ''
         }
+        // Repeat password is required.
+        if (this.passwordRepeat == '') {
+          this.passwordRepeatType = 'is-danger'
+          this.passwordRepeatMessage = this.$t('ManageAccountsNew.RepeatPasswordIsRequired')
+          return
+        }
         // Check passwords match.
-        if (this.password != this.passwordRepeat) {
+        else if (this.password != this.passwordRepeat) {
           this.passwordRepeatType = 'is-danger'
           this.passwordRepeatMessage = this.$t('ManageAccountsRecover.PasswordsDoNotMatch')
           return
