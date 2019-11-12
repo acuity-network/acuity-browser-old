@@ -134,22 +134,17 @@
           </div>
         </div>
       </b-tab-item>
-      <b-tab-item :label="$t('TokenView.Holders')">
-        <token-holders v-if="address" :address="address" :itemId="itemId"></token-holders>
-      </b-tab-item>
 		</b-tabs>
   </div>
 </template>
 
 <script lang="ts">
-  import TokenHolders from '../TokenHolders.vue'
   import ProfileLink from '../ProfileLink.vue'
 
   export default {
     name: 'token-view',
     props: ['itemId'],
     components: {
-      TokenHolders,
       ProfileLink,
     },
     data() {
