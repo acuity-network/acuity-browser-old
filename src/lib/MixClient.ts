@@ -70,19 +70,19 @@ export default class MixClient {
 		this.itemDagMixins = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParent.abi.json'), '0x341518c5b28d3564b39ab7560e47b4486ddb762a')
 		this.itemDagComments = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParent.abi.json'), '0x2a37382ea172d0a28905052ee79f802cd7fd74b4')
 		this.itemDagFeedItems = new this.web3.eth.Contract(require('./contracts/MixItemDagOnlyOwner.abi.json'), '0x622d9bd5adf631c6e190f8d2beebcd5533ffa5e6')
-		this.itemDagTokenItems = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParentOnlyOwner.abi.json'), '0xdcf42fa746e0a9f8c5a407ec43ea92b3a9eac94e')
+		this.itemDagTokenItems = new this.web3.eth.Contract(require('./contracts/MixItemDagOneParentOnlyOwner.abi.json'), '0x45093c3dc9e494ac447dc9f4108e436536e7cbd3')
 		this.itemTopics = new this.web3.eth.Contract(require('./contracts/MixItemTopics.abi.json'), '0xcc64d1519d4e2be2b025204f5b3470d5f14a1a99')
 		this.itemMentions = new this.web3.eth.Contract(require('./contracts/MixItemMentions.abi.json'), '0xed279A14f93dDF8dCE9A73B4b281687051214E87')
 		this.accountRegistry = new this.web3.eth.Contract(require('./contracts/MixAccountRegistry.abi.json'), '0xbcab5026b4d79396b222abc4d1ca36db10984c73')
 		this.accountProfile = new this.web3.eth.Contract(require('./contracts/MixAccountProfile.abi.json'), '0x994abe0212b5dcc1fb0b0e7336e7980316c3fe19')
 		this.accountFeeds = new this.web3.eth.Contract(require('./contracts/MixAccountItems.abi.json'), '0xc9ba9507d9f5be1d13ff2dca6f7e43dbfa859645')
-		this.accountTokens = new this.web3.eth.Contract(require('./contracts/MixAccountItems2.abi.json'), '0xb0b4e45fa5b19383657ffdc2166cbd92a2aeff83')
+		this.accountTokens = new this.web3.eth.Contract(require('./contracts/MixAccountItems2.abi.json'), '0xcea97006bb67782e7c4d70246a23b048c2029c90')
 		this.trustedAccounts = new this.web3.eth.Contract(require('./contracts/MixTrustedAccounts.abi.json'), '0x70e2e2d6b31cd25e00c034ac9cfc79575efa26a9')
 		this.reactions = new this.web3.eth.Contract(require('./contracts/MixReactions.abi.json'), '0xd7051cd496a3a8373f9cf89476c04a7d51a5cc88')
-		this.tokenItemRegistryAddress = '0x8856f2ca138c3d9742eedeef4091c34b3f7b5f6e'
+		this.tokenItemRegistryAddress = '0x27e21076d763fc4a83bb3a220369d27f67d6767f'
 		this.tokenItemRegistry = new this.web3.eth.Contract(require('./contracts/MixTokenItemRegistry.abi.json'), this.tokenItemRegistryAddress)
 		this.tokenItemRegistryOld = new this.web3.eth.Contract(require('./contracts/MixTokenItemRegistry.abi.json'), '0x5402efb80b307250b978cb1039a95e0c292b50c2')
-    this.tokenBurnAddress = '0x047e823290ce4b3cf6cb7048fe19343c653b7a0e'
+    this.tokenBurnAddress = '0x8f1696583cd62e13bcf3f9c511915b3404113e12'
 		this.tokenBurn = new this.web3.eth.Contract(require('./contracts/MixTokenBurn.abi.json'), this.tokenBurnAddress)
 		this.uniswapFactory = new this.web3.eth.Contract(require('./contracts/UniswapFactory.abi.json'), '0x1381a70fc605b7d7e54b7e1159afba1429a4bbb1')
 
