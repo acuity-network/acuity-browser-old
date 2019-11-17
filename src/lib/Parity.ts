@@ -82,11 +82,7 @@ function kill() {
 			resolve(code)
 		})
 		console.log('Exiting Parity.')
-		setTimeout(() => {
-			console.log('Killing Parity.')
-			parityProcess.kill('SIGKILL')
-		}, 10000)
-		parityProcess.kill('SIGQUIT')		// Parity needs SIGQUIT for some reason.
+		parityProcess.kill()
 	})
 }
 
