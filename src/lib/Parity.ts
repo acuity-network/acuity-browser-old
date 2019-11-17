@@ -1,3 +1,5 @@
+import Web3 from 'web3'
+import net from 'net'
 import { app } from 'electron'
 import path from 'path'
 import os from 'os'
@@ -8,19 +10,37 @@ declare let __static: string
 let parityProcess
 
 async function launch(window) {
-	let isWindows = os.platform() === 'win32'
-	let parityPath = path.join(__static, isWindows ? 'parity.exe' : 'parity')
+  let isWindows: boolean = os.platform() === 'win32'
+  let ipcPath: string
+  // Check if Parity is already running.
+  if (isWindows) {
+    ipcPath = '\\\\.\\pipe\\mix.ipc'
+  }
+  else {
+    ipcPath = '/mix.ipc'
+  }
+  try {
+    let web3: Web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
+    await web3.eth.getProtocolVersion()
+    console.log('Parity IPC path: ' + ipcPath)
+    window.webContents.on('ipc-message', (e, msg) => {
+      if (msg == 'get-parity-ipc-path') {
+        window.webContents.send('parity-ipc-path', ipcPath)
+      }
+    })
+    window.webContents.send('parity-ipc-path', ipcPath)
+    return
+  }
+  catch (e) {}
+  // Start Parity.
+	let parityPath: string = path.join(__static, isWindows ? 'parity.exe' : 'parity')
 	console.log('Parity path: ' + parityPath)
-
-	let ipcPath
-
-	if (os.platform() === 'win32') {
+	if (isWindows) {
 		ipcPath = '\\\\.\\pipe\\mix.ipc'
 	}
 	else {
 		ipcPath = path.join(app.getPath('userData'), 'parity.ipc')
 	}
-
 	console.log('Parity IPC path: ' + ipcPath)
 
 	let args = [
@@ -69,6 +89,13 @@ async function launch(window) {
 			window.webContents.send('parity-stderr', data.toString())
 		} catch (e) {}
 	})
+
+  window.webContents.on('ipc-message', (e, msg) => {
+    if (msg == 'get-parity-ipc-path') {
+      window.webContents.send('parity-ipc-path', ipcPath)
+    }
+  })
+  window.webContents.send('parity-ipc-path', ipcPath)
 }
 
 function kill() {

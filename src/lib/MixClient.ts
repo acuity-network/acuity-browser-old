@@ -1,10 +1,8 @@
 import Web3 from 'web3'
 import net from 'net'
-import os from 'os'
-import path from 'path'
-import { remote } from 'electron'
 import Api from '@parity/api'
 import throttle from 'just-throttle'
+import { ipcRenderer } from 'electron'
 
 export default class MixClient {
 	web3: any
@@ -33,15 +31,14 @@ export default class MixClient {
 	uniswapFactory: any
 
 	async init(vue) {
-		let ipcPath
-
-		if (os.platform() === 'win32') {
-		  ipcPath = '\\\\.\\pipe\\mix.ipc'
-		}
-		else {
-		  ipcPath = path.join(remote.app.getPath('userData'), 'parity.ipc')
-		}
-
+    // Wait to get Parity IPC Path.
+    let ipcPath: string = await new Promise((resolve, reject) => {
+      ipcRenderer.on('parity-ipc-path', (event, ipcPath: string) => {
+        console.log('Parity IPC path: ' + ipcPath)
+        resolve(ipcPath)
+      })
+      ipcRenderer.send('get-parity-ipc-path')
+    });
 		// Wait for IPC to come up.
 		await new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {
