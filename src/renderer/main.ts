@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App'
+import App from './App.vue'
 import router from './router'
 
 router.afterEach((to, from) => {
@@ -28,7 +28,7 @@ Vue.use(VueTimeago, { locale: 'en' })
 import '@mdi/font/css/materialdesignicons.min.css'
 
 import axios from 'axios'
-Vue.http = Vue.prototype.$http = axios
+Vue.prototype.$http = axios
 
 import level from 'level'
 import { remote } from 'electron'
