@@ -1,5 +1,5 @@
-import MixAccount from '../lib/MixAccount'
-import MixItem from '../lib/MixItem'
+import MixAccount from './MixAccount'
+import MixItem from './MixItem'
 
 
 let emitter

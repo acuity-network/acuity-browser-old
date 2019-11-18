@@ -1,5 +1,5 @@
-import MixAccount from '../lib/MixAccount'
-import MixContent from '../lib/MixContent'
+import MixAccount from './MixAccount'
+import MixContent from './MixContent'
 import ImageMixinProto from './protobuf/ImageMixin_pb.js'
 import FileMixinProto from './protobuf/FileMixin_pb.js'
 import multihashes from 'multihashes'

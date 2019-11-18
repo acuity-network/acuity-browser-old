@@ -28,14 +28,14 @@ try {
 let archUrls = urls[os.platform()]
 
 console.log('Downloading ' + archUrls['parity'])
-let parity = download(archUrls['parity'], 'static')
+let parity = download(archUrls['parity'], 'public')
 .then(result => {
-	let parityPath = path.join('static', (os.platform() == 'win32') ? 'parity.exe' : 'parity')
+	let parityPath = path.join('public', (os.platform() == 'win32') ? 'parity.exe' : 'parity')
 	fs.chmodSync(parityPath, '755');
 })
 
 console.log('Downloading ' + archUrls['ipfs'])
-let ipfs = download(archUrls['ipfs'], 'static', {extract: true})
+let ipfs = download(archUrls['ipfs'], 'public', {extract: true})
 
 Promise.all([parity, ipfs])
 .then(() => {
