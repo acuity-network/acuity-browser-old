@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import parity from '../lib/Parity'
 import ipfs from '../lib/Ipfs'
@@ -9,16 +9,23 @@ import windowStateKeeper from 'electron-window-state'
 import { format as formatUrl } from 'url'
 import contextMenu from 'electron-context-menu'
 
+declare let __static: string
 let isDevelopment = process.env.NODE_ENV !== 'production'
+
+if (isDevelopment) {
+  app.name = 'MIX Acuity'
+  app.setPath('userData', path.join(app.getPath('appData'), app.name))
+}
+
 let mainWindow
 
 async function createWindow () {
   // Set up context menu.
   contextMenu({
     menu: actions => [
-      actions.cut(),
-      actions.copy(),
-      actions.paste(),
+      actions.cut({}),
+      actions.copy({}),
+      actions.paste({}),
     ],
   })
   // Load the previous state with fallback to defaults
@@ -61,51 +68,6 @@ async function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-
-  if (process.platform === 'darwin') {
-    let template = [{
-      label: 'FromScratch',
-      submenu: [{
-        label: 'Quit',
-        accelerator: 'CmdOrCtrl+Q',
-        click: function() {
-          app.quit();
-        }
-      }]
-    }, {
-      label: 'Edit',
-      submenu: [{
-        label: 'Undo',
-        accelerator: 'CmdOrCtrl+Z',
-        selector: 'undo:'
-      }, {
-        label: 'Redo',
-        accelerator: 'Shift+CmdOrCtrl+Z',
-        selector: 'redo:'
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Cut',
-        accelerator: 'CmdOrCtrl+X',
-        selector: 'cut:'
-      }, {
-        label: 'Copy',
-        accelerator: 'CmdOrCtrl+C',
-        selector: 'copy:'
-      }, {
-        label: 'Paste',
-        accelerator: 'CmdOrCtrl+V',
-        selector: 'paste:'
-      }, {
-        label: 'Select All',
-        accelerator: 'CmdOrCtrl+A',
-        selector: 'selectAll:'
-      }]
-    }];
-
-    let osxMenu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(osxMenu);
-  }
 
   // Force links to open in web browser.
   mainWindow.webContents.on('new-window', (event, url) => {
