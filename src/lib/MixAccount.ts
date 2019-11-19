@@ -4,7 +4,6 @@ let accountAbi2 = require('./contracts/MixAccount2.abi.json')
 import ethTx from 'ethereumjs-tx'
 import path from 'path'
 import fs from 'fs'
-import keythereum from 'keythereum'
 
 declare let __static: string
 
@@ -171,8 +170,8 @@ export default class MixAccount {
   }
 
   async unlock(password) {
-    let keyObject = JSON.parse(await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/keyObject'))
-    privateKeys[this.controllerAddress] = '0x' + keythereum.recover(password, keyObject).toString('hex')
+    let keyObjectJson: string = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/keyObject')
+    privateKeys[this.controllerAddress] = this.vue.$mixClient.web3.accounts.decrypt(keyObjectJson, password).privateKey
     this.consolidateMix()
   }
 

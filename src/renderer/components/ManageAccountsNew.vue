@@ -35,11 +35,9 @@
 </template>
 
 <script lang="ts">
-  import crypto from 'crypto'
   import * as bip32 from 'bip32'
   import { BIP32Interface } from 'bip32'
   import * as bip39  from 'bip39'
-  import keythereum from 'keythereum'
   import Page from './Page.vue'
   import MixAccount from '../../lib/MixAccount'
   import setTitle from '../../lib/setTitle'
@@ -109,12 +107,10 @@
         }
         // Calculate private key and controller address.
         let node: BIP32Interface = bip32.fromSeed(await bip39.mnemonicToSeed(this.recoveryPhrase))
-        let privateKey: Buffer = Buffer.from(node.derivePath("m/44'/76'/0'/0/0").privateKey)
-        let controllerAddress: String = keythereum.privateKeyToAddress(privateKey)
+        let privateKey: string = '0x' + node.derivePath("m/44'/76'/0'/0/0").privateKey.toString('hex')
+        let controllerAddress: string = this.$mixClient.web3.eth.accounts.privateKeyToAccount(privateKey).address
         // Encrypt private key.
-        let salt: Buffer = crypto.randomBytes(32)
-        let iv: Buffer = crypto.randomBytes(16)
-        let keyObject: Object = keythereum.dump(this.password, privateKey, salt, iv)
+        let keyObject: object = this.$mixClient.web3.eth.accounts.encrypt(privateKey, this.password);
         // Store account in database.
         await this.$db.batch()
         .put('/account/controllerAddress/' + controllerAddress, controllerAddress)
