@@ -31,7 +31,7 @@
 <script lang="ts">
   import MixItem from '../../lib/MixItem'
   import MixContent from '../../lib/MixContent'
-  import VueMarkdown from 'vue-markdown'
+  import VueMarkdown from 'vue-markdown-v2'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import Reactions from './Reactions.vue'

@@ -800,6 +800,12 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@iktakahiro/markdown-it-katex@git+https://github.com/iktakahiro/markdown-it-katex.git":
+  version "3.1.0"
+  resolved "git+https://github.com/iktakahiro/markdown-it-katex.git#e494b209c8e8886da9372c7a61bc806dfa3f0cdd"
+  dependencies:
+    katex "^0.10.0"
+
 "@intervolga/optimize-cssnano-plugin@^1.0.5":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@intervolga/optimize-cssnano-plugin/-/optimize-cssnano-plugin-1.0.6.tgz#be7c7846128b88f6a9b1d1261a0ad06eb5c0fdf8"
@@ -1840,14 +1846,6 @@ babel-plugin-module-resolver@^3.2.0:
     pkg-up "^2.0.0"
     reselect "^3.0.1"
     resolve "^1.4.0"
-
-babel-runtime@^6.26.0:
-  version "6.26.0"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
-  integrity sha1-llxwWGaOgrVde/4E/yM3vItWR/4=
-  dependencies:
-    core-js "^2.4.0"
-    regenerator-runtime "^0.11.0"
 
 balanced-match@^0.4.2:
   version "0.4.2"
@@ -3185,11 +3183,6 @@ core-js-pure@^3.0.0:
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.4.1.tgz#483dbc687016b45cab4c185cf998c2c59e772c2a"
   integrity sha512-q3FgAYoFGS0LaqV4K7oMsJUpGU7Ud3IR6D2qcu7BAvg0OQPuwakrdNlal+0Zsm3bUPBpI5i/r9C6W3uQCcCrSw==
 
-core-js@^2.4.0:
-  version "2.6.10"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.10.tgz#8a5b8391f8cc7013da703411ce5b585706300d7f"
-  integrity sha512-I39t74+4t+zau64EN1fE5v2W31Adtc/REhzWN+gWRRXg6WH5qAsZm62DHpQ1+Yhe4047T55jvzz7MUqF/dBBlA==
-
 core-js@^3.3.2, core-js@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.4.1.tgz#76dd6828412900ab27c8ce0b22e6114d7ce21b18"
@@ -4241,6 +4234,11 @@ emoji-regex@^8.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
+emojione@^3.1.2:
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/emojione/-/emojione-3.1.7.tgz#2d3c725c696f179c9dde3acb655c621ee9429b1e"
+  integrity sha1-LTxyXGlvF5yd3jrLZVxiHulCmx4=
+
 emojis-list@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
@@ -5017,6 +5015,11 @@ follow-redirects@^1.0.0:
   integrity sha512-CRcPzsSIbXyVDl0QI01muNDu69S8trU4jArW9LpOt2WtC6LyUJetcIrmfHsRBx7/Jb6GHJUiuqyYxPooFfNt6A==
   dependencies:
     debug "^3.0.0"
+
+font-awesome-icon-chars@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/font-awesome-icon-chars/-/font-awesome-icon-chars-1.3.0.tgz#c2cd1628ce67e14f66803044216d91b65e94b741"
+  integrity sha1-ws0WKM5n4U9mgDBEIW2Rtl6Ut0E=
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -6683,12 +6686,12 @@ just-throttle@^1.1.0:
   resolved "https://registry.yarnpkg.com/just-throttle/-/just-throttle-1.1.0.tgz#178d305ece9876a8a0759abd8d403aafcc6e4849"
   integrity sha512-iePC/13XYX1Tyn9C6jY+DG3UEejkDvrKsw5xxgGhtGUwYWmoJm4CoKexscBKELOu3FTyCDzjr21ZJ67AXnz+bg==
 
-katex@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/katex/-/katex-0.6.0.tgz#12418e09121c05c92041b6b3b9fb6bab213cb6f3"
-  integrity sha1-EkGOCRIcBckgQbazuftrqyE8tvM=
+katex@^0.10.0:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.10.2.tgz#39973edbb65eda5b6f9e7f41648781e557dd4932"
+  integrity sha512-cQOmyIRoMloCoSIOZ1+gEwsksdJZ1EW4SWm3QzxSza/QsnZr6D4U1V9S4q+B/OLm2OQ8TCBecQ8MaIfnScI7cw==
   dependencies:
-    match-at "^0.1.0"
+    commander "^2.19.0"
 
 keccak@1.4.0, keccak@^1.0.2:
   version "1.4.0"
@@ -6902,10 +6905,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-linkify-it@~1.2.2:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-1.2.4.tgz#0773526c317c8fd13bd534ee1d180ff88abf881a"
-  integrity sha1-B3NSbDF8j9E71TTuHRgP+Iq/iBo=
+linkify-it@^2.0.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-2.2.0.tgz#e3b54697e78bf915c70a38acd78fd09e0058b1cf"
+  integrity sha512-GnAl/knGn+i1U/wjBz3akz2stz+HrHLsxMwHQGofCDfPvlf+gDKN58UtfmUquTY4/MXeE2x7k19KQmeoZi94Iw==
   dependencies:
     uc.micro "^1.0.1"
 
@@ -7132,42 +7135,59 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-markdown-it-abbr@^1.0.3:
+markdown-it-abbr@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/markdown-it-abbr/-/markdown-it-abbr-1.0.4.tgz#d66b5364521cbb3dd8aa59dadfba2fb6865c8fd8"
   integrity sha1-1mtTZFIcuz3Yqlna37ovtoZcj9g=
 
-markdown-it-deflist@^2.0.1:
+markdown-it-container@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-it-container/-/markdown-it-container-2.0.0.tgz#0019b43fd02eefece2f1960a2895fba81a404695"
+  integrity sha1-ABm0P9Au7+zi8ZYKKJX7qBpARpU=
+
+markdown-it-deflist@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/markdown-it-deflist/-/markdown-it-deflist-2.0.3.tgz#5727db04184d3cb2bc6ee4a9641e3a1091d5fd6f"
   integrity sha512-/BNZ8ksW42bflm1qQLnRI09oqU2847Z7MVavrR0MORyKLtiUYOMpwtlAfMSZAQU9UCvaUZMpgVAqoS3vpToJxw==
 
-markdown-it-emoji@^1.1.1:
+markdown-it-emoji@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/markdown-it-emoji/-/markdown-it-emoji-1.4.0.tgz#9bee0e9a990a963ba96df6980c4fddb05dfb4dcc"
   integrity sha1-m+4OmpkKljupbfaYDE/dsF37Tcw=
 
-markdown-it-footnote@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/markdown-it-footnote/-/markdown-it-footnote-2.0.0.tgz#14e9c4f68ff12cf354fa365ae378276e8104ca94"
-  integrity sha1-FOnE9o/xLPNU+jZa43gnboEEypQ=
+markdown-it-footnote@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/markdown-it-footnote/-/markdown-it-footnote-3.0.2.tgz#1575ee7a093648d4e096aa33386b058d92ac8bc1"
+  integrity sha512-JVW6fCmZWjvMdDQSbOT3nnOQtd9iAXmw7hTSh26+v42BnvXeVyGMDBm5b/EZocMed2MbCAHiTX632vY0FyGB8A==
+
+markdown-it-icons@^0.4:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-icons/-/markdown-it-icons-0.4.1.tgz#40a3a688237a3d76c7902f98670b5b12c98197fb"
+  integrity sha512-FFo5pkIq5Ovdq53lJ+lzhVz9wl+JjNv5wDaQM2DPGWmmi4ygfYQjD1zgHdiTUWGxTLEioDlIyPwh8LMeQ74+zg==
+  dependencies:
+    emojione "^3.1.2"
+    font-awesome-icon-chars "^1.3.0"
+    markdown-it-regex "^0.1.4"
 
 markdown-it-ins@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/markdown-it-ins/-/markdown-it-ins-2.0.0.tgz#a5aa6a30f1e2f71e9497567cfdff40f1fde67483"
   integrity sha1-papqMPHi9x6Ul1Z8/f9A8f3mdIM=
 
-markdown-it-katex@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/markdown-it-katex/-/markdown-it-katex-2.0.3.tgz#d7b86a1aea0b9d6496fab4e7919a18fdef589c39"
-  integrity sha1-17hqGuoLnWSW+rTnkZoY/e9YnDk=
-  dependencies:
-    katex "^0.6.0"
-
 markdown-it-mark@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/markdown-it-mark/-/markdown-it-mark-2.0.0.tgz#46a1aa947105aed8188978e0a016179e404f42c7"
   integrity sha1-RqGqlHEFrtgYiXjgoBYXnkBPQsc=
+
+markdown-it-regex@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/markdown-it-regex/-/markdown-it-regex-0.1.4.tgz#ca3209fca7665f7b80b23fecb6998c1d252a585a"
+  integrity sha1-yjIJ/KdmX3uAsj/stpmMHSUqWFo=
+
+markdown-it-source-map@^0.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-source-map/-/markdown-it-source-map-0.1.1.tgz#8d8c3eab35ed1eb5399ec71814a4b435e275556f"
+  integrity sha1-jYw+qzXtHrU5nscYFKS0NeJ1VW8=
 
 markdown-it-sub@^1.0.0:
   version "1.0.0"
@@ -7179,12 +7199,12 @@ markdown-it-sup@^1.0.0:
   resolved "https://registry.yarnpkg.com/markdown-it-sup/-/markdown-it-sup-1.0.0.tgz#cb9c9ff91a5255ac08f3fd3d63286e15df0a1fc3"
   integrity sha1-y5yf+RpSVawI8/09YyhuFd8KH8M=
 
-markdown-it-task-lists@^2.0.1:
+markdown-it-task-lists@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/markdown-it-task-lists/-/markdown-it-task-lists-2.1.1.tgz#f68f4d2ac2bad5a2c373ba93081a1a6848417088"
   integrity sha512-TxFAc76Jnhb2OUu+n3yz9RMu4CwGfaT788br6HhEDlvWfdeJcLUsxk1Hgw2yJio0OXsxv7pyIPmvECY7bMbluA==
 
-markdown-it-toc-and-anchor@^4.1.2:
+markdown-it-toc-and-anchor@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/markdown-it-toc-and-anchor/-/markdown-it-toc-and-anchor-4.2.0.tgz#d1613327cc63c61f82cd66cbac5564f4db12c0e9"
   integrity sha512-DusSbKtg8CwZ92ztN7bOojDpP4h0+w7BVOPuA3PHDIaabMsERYpwsazLYSP/UlKedoQjOz21mwlai36TQ04EpA==
@@ -7192,21 +7212,16 @@ markdown-it-toc-and-anchor@^4.1.2:
     clone "^2.1.0"
     uslug "^1.0.4"
 
-markdown-it@^6.0.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-6.1.1.tgz#ced037f4473ee9f5153ac414f77dc83c91ba927c"
-  integrity sha1-ztA39Ec+6fUVOsQU933IPJG6knw=
+markdown-it@^8.4.2:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-8.4.2.tgz#386f98998dc15a37722aa7722084f4020bdd9b54"
+  integrity sha512-GcRz3AWTqSUphY3vsUqQSFMbgR38a4Lh3GWlHRh/7MRwz8mcu9n2IO7HOh+bXHrR9kOPDl5RNCaEsrneb+xhHQ==
   dependencies:
     argparse "^1.0.7"
     entities "~1.1.1"
-    linkify-it "~1.2.2"
-    mdurl "~1.0.1"
-    uc.micro "^1.0.1"
-
-match-at@^0.1.0:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/match-at/-/match-at-0.1.1.tgz#25d040d291777704d5e6556bbb79230ec2de0540"
-  integrity sha512-h4Yd392z9mST+dzc+yjuybOGFNOZjmXIPKWjxBd1Bb23r4SmDOsk2NYCU2BMUBGbSpZqwVsZYNq26QS3xfaT3Q==
+    linkify-it "^2.0.0"
+    mdurl "^1.0.1"
+    uc.micro "^1.0.5"
 
 matcher@^2.0.0:
   version "2.0.0"
@@ -7234,7 +7249,7 @@ mdn-data@2.0.4:
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.4.tgz#699b3c38ac6f1d728091a64650b65d388502fd5b"
   integrity sha512-iV3XNKw06j5Q7mi6h+9vbx23Tv7JkjEVgKHW4pimwyDGWm0OIQntJJ+u1C6mg6mK1EaTv42XQ7w76yuzH7M2cA==
 
-mdurl@~1.0.1:
+mdurl@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
   integrity sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
@@ -9557,11 +9572,6 @@ regenerate@^1.4.0:
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
   integrity sha512-1G6jJVDWrt0rK99kBjvEtziZNCICAuvIPkSiUFIQxVP06RCVpq3dmDo2oi6ABpYaDYaTRr67BEhL8r1wgEZZKg==
 
-regenerator-runtime@^0.11.0:
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
-  integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
-
 regenerator-runtime@^0.13.2:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.3.tgz#7cf6a77d8f5c6f60eb73c5fc1955b2ceb01e6bf5"
@@ -11308,7 +11318,7 @@ typescript@~3.5.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
   integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
 
-uc.micro@^1.0.1:
+uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
   integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
@@ -11745,24 +11755,27 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-markdown@^2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/vue-markdown/-/vue-markdown-2.2.4.tgz#db0f774178f3bc91ee18c626d86a3a0d2de22746"
-  integrity sha512-hoTX/W1UIdHZrp/b0vpHSsJXAEfWsafaQLgtE2VX4gY8O/C3L2Gabqu95gyG429rL4ML1SwGv+xsPABX7yfFIQ==
+vue-markdown-v2@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/vue-markdown-v2/-/vue-markdown-v2-0.1.7.tgz#a24099f470ce9690a532ca51b998d4edf70c132f"
+  integrity sha512-nVe6aLVZyGFOdi1UtZTE/ss/trcBvCs3MoI3RE/BZ9nV0tfIR5//jARa0Zuw25UaZyOwY5Fz/4Cq5vZYQJm7SA==
   dependencies:
+    "@iktakahiro/markdown-it-katex" "git+https://github.com/iktakahiro/markdown-it-katex.git"
     highlight.js "^9.12.0"
-    markdown-it "^6.0.1"
-    markdown-it-abbr "^1.0.3"
-    markdown-it-deflist "^2.0.1"
-    markdown-it-emoji "^1.1.1"
-    markdown-it-footnote "^2.0.0"
+    markdown-it "^8.4.2"
+    markdown-it-abbr "^1.0.4"
+    markdown-it-container "^2.0.0"
+    markdown-it-deflist "^2.0.3"
+    markdown-it-emoji "^1.4.0"
+    markdown-it-footnote "^3.0.1"
+    markdown-it-icons "^0.4"
     markdown-it-ins "^2.0.0"
-    markdown-it-katex "^2.0.3"
     markdown-it-mark "^2.0.0"
+    markdown-it-source-map "^0.1"
     markdown-it-sub "^1.0.0"
     markdown-it-sup "^1.0.0"
-    markdown-it-task-lists "^2.0.1"
-    markdown-it-toc-and-anchor "^4.1.2"
+    markdown-it-task-lists "^2.1.1"
+    markdown-it-toc-and-anchor "^4.2.0"
 
 vue-router@^3.1.3:
   version "3.1.3"

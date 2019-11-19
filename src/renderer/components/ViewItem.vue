@@ -101,7 +101,7 @@
   import Reactions from './Reactions.vue'
   import ItemToken from './ItemToken.vue'
   import TokenView from './mixins/TokenView.vue'
-  import VueMarkdown from 'vue-markdown'
+  import VueMarkdown from 'vue-markdown-v2'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
