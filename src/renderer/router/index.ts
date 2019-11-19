@@ -7,156 +7,156 @@ export default new Router({
     {
       path: '/item/:itemId',
       name: 'item',
-      component: require('@/components/ViewItem').default,
+      component: require('../components/ViewItem').default,
       props: true,
     },
     {
       path: '/topic/:topicHash',
       name: 'topic',
-      component: require('@/components/ViewTopic').default,
+      component: require('../components/ViewTopic').default,
       props: true,
     },
     {
       path: '/home',
       name: 'home',
-      component: require('@/components/Home').default
+      component: require('../components/Home').default
     },
     {
       path: '/feeds',
       name: 'feeds',
-      component: require('@/components/Feeds').default
+      component: require('../components/Feeds').default
     },
     {
       path: '/subscriptions',
       name: 'subscriptions',
-      component: require('@/components/Subscriptions').default
+      component: require('../components/Subscriptions').default
     },
     {
       path: '/interactions',
       name: 'interactions',
-      component: require('@/components/Interactions').default
+      component: require('../components/Interactions').default
     },
     {
       path: '/goto',
       name: 'goto',
-      component: require('@/components/Goto').default
+      component: require('../components/Goto').default
     },
     {
       path: '/transaction-history',
       name: 'transaction-history',
-      component: require('@/components/TransactionHistory').default
+      component: require('../components/TransactionHistory').default
     },
     {
       path: '/browsing-history',
       name: 'browsing-history',
-      component: require('@/components/BrowsingHistory').default
+      component: require('../components/BrowsingHistory').default
     },
     {
       path: '/publish-item',
       name: 'publish-item',
-      component: require('@/components/PublishItem').default
+      component: require('../components/PublishItem').default
     },
     {
       path: '/publish-item/mixin-type',
       name: 'publish-mixin-type',
-      component: require('@/components/PublishMixinType').default
+      component: require('../components/PublishMixinType').default
     },
     {
       path: '/publish-item/image',
       name: 'publish-image',
-      component: require('@/components/PublishImage').default
+      component: require('../components/PublishImage').default
     },
     {
       path: '/publish-item/feed',
       name: 'publish-feed',
-      component: require('@/components/PublishFeed').default
+      component: require('../components/PublishFeed').default
     },
     {
       path: '/publish-item/file',
       name: 'publish-file',
-      component: require('@/components/PublishFile').default
+      component: require('../components/PublishFile').default
     },
     {
       path: '/profile',
       name: 'profile',
-      component: require('@/components/Profile').default
+      component: require('../components/Profile').default
     },
     {
       path: '/profile/edit',
       name: 'profile-edit',
-      component: require('@/components/ProfileEdit').default
+      component: require('../components/ProfileEdit').default
     },
     {
       path: '/trusted-accounts',
       name: 'trusted-accounts',
-      component: require('@/components/TrustedAccounts').default
+      component: require('../components/TrustedAccounts').default
     },
     {
       path: '/wallet',
       name: 'wallet',
-      component: require('@/components/Wallet').default
+      component: require('../components/Wallet').default
     },
     {
       path: '/tokens',
       name: 'tokens',
-      component: require('@/components/Tokens').default
+      component: require('../components/Tokens').default
     },
     {
       path: '/tokens/create',
       name: 'tokens-create',
-      component: require('@/components/CreateToken').default
+      component: require('../components/CreateToken').default
     },
     {
       path: '/manage-accounts',
       name: 'manage-accounts',
-      component: require('@/components/ManageAccounts').default
+      component: require('../components/ManageAccounts').default
     },
     {
       path: '/manage-accounts/new',
       name: 'manage-accounts-new',
-      component: require('@/components/ManageAccountsNew').default
+      component: require('../components/ManageAccountsNew').default
     },
     {
       path: '/manage-accounts/recover',
       name: 'manage-accounts-recover',
-      component: require('@/components/ManageAccountsRecover').default
+      component: require('../components/ManageAccountsRecover').default
     },
     {
       path: '/manage-accounts/controller/:controllerAddress',
       name: 'manage-account-activate',
-      component: require('@/components/ManageAccountActivate').default,
+      component: require('../components/ManageAccountActivate').default,
       props: true,
     },
     {
       path: '/manage-accounts/delete/:controllerAddress',
       name: 'manage-account-delete',
-      component: require('@/components/ManageAccountDelete').default,
+      component: require('../components/ManageAccountDelete').default,
       props: true,
     },
     {
       path: '/node-status',
       name: 'node-status',
-      component: require('@/components/NodeStatus').default
+      component: require('../components/NodeStatus').default
     },
     {
       path: '/mining',
       name: 'mining',
-      component: require('@/components/Mining').default
+      component: require('../components/Mining').default
     },
     {
       path: '/settings',
       name: 'settings',
-      component: require('@/components/Settings').default
+      component: require('../components/Settings').default
     },
     {
       path: '/debug',
       name: 'debug',
-      component: require('@/components/Debug').default
+      component: require('../components/Debug').default
     },
     {
       path: '/downloads',
       name: 'downloads',
-      component: require('@/components/Downloads').default
+      component: require('../components/Downloads').default
     }
 
   ]
