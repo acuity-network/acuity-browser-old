@@ -1,7 +1,7 @@
 import level from 'level'
 
 function init() {
-  let dbPath: 'mix-acuity'
+  let dbPath: string = 'mix-acuity'
   console.log('Initializing database: ' + dbPath)
   return level(dbPath)
 }
