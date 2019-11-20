@@ -3,6 +3,7 @@ const path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
+  runtimeCompiler: true,
   configureWebpack: {
 //    context: path.join(__dirname, 'src', 'renderer'),
     entry: path.join(__dirname, 'src', 'renderer', 'main.ts'),
