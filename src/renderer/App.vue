@@ -50,7 +50,6 @@
 
 <script>
   import MixAccount from '../lib/MixAccount'
-  import MixPinner from '../lib/MixPinner'
   import Splash from './components/Splash.vue'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
@@ -87,9 +86,6 @@
         console.error('Parity: ' + msg)
       })
       await Promise.all([this.$mixClient.init(this.$root), this.$ipfsClient.init(this.$root)])
-      // Start the pinner.
-      this.pinner = new MixPinner(this.$root)
-      this.pinner.start()
       // Load previous active account.
       try {
         let controller = await this.$db.get('/active-account')
@@ -175,7 +171,6 @@
     },
     destroyed() {
       mentionNotifications.kill()
-      this.pinner.stop()
     },
   }
 </script>
