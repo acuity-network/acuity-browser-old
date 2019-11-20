@@ -27,6 +27,10 @@ module.exports = {
         /\/src\/lib\/IpfsClient\.ts/,
         'web/IpfsClient.ts'
       ),
+      new webpack.NormalModuleReplacementPlugin(
+        /\/src\/lib\/clipboard\.ts/,
+        'web/clipboard.ts'
+      ),
     ]
   },
 }

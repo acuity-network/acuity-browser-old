@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts">
-  import { clipboard } from 'electron'
   import Page from './Page.vue'
   import ItemProto from '../../lib/protobuf/Item_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
@@ -28,6 +27,7 @@
   import multihashes from 'multihashes'
   import formatByteCount from '../../lib/formatByteCount'
   import setTitle from '../../lib/setTitle'
+  import clipboard from '../../lib/clipboard'
 
   // https://github.com/jasonmoo/t.js/blob/master/t.js
   function scrub(val) {

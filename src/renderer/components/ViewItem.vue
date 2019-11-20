@@ -105,11 +105,11 @@
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
-  import { clipboard } from 'electron'
   import formatByteCount from '../../lib/formatByteCount'
   import File from '../../lib/File.js'
   import twemoji from 'twemoji'
   import setTitle from '../../lib/setTitle'
+  import clipboard from '../../lib/clipboard'
   import bs58 from 'bs58'
 
   export default {
