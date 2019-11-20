@@ -24,12 +24,16 @@ module.exports = {
         'web/MixClient.ts'
       ),
       new webpack.NormalModuleReplacementPlugin(
-        /\/src\/lib\/IpfsClient\.ts/,
-        'web/IpfsClient.ts'
+        /\/src\/lib\/IpfsClient\.js/,
+        'web/IpfsClient.js'
       ),
       new webpack.NormalModuleReplacementPlugin(
         /\/src\/lib\/clipboard\.ts/,
         'web/clipboard.ts'
+      ),
+      new webpack.NormalModuleReplacementPlugin(
+        /\/src\/lib\/setTitle\.ts/,
+        'web/setTitle.ts'
       ),
     ]
   },
