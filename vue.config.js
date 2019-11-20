@@ -19,6 +19,10 @@ module.exports = {
         /\/src\/lib\/db\.ts/,
         'web/db.ts'
       ),
+      new webpack.NormalModuleReplacementPlugin(
+        /\/src\/lib\/MixClient\.ts/,
+        'web/MixClient.ts'
+      ),
     ]
   },
 }
