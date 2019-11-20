@@ -23,6 +23,10 @@ module.exports = {
         /\/src\/lib\/MixClient\.ts/,
         'web/MixClient.ts'
       ),
+      new webpack.NormalModuleReplacementPlugin(
+        /\/src\/lib\/IpfsClient\.ts/,
+        'web/IpfsClient.ts'
+      ),
     ]
   },
 }
