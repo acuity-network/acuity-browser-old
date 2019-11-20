@@ -53,7 +53,6 @@
   import Splash from './components/Splash.vue'
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
-  import { ipcRenderer } from 'electron'
   import mentionNotifications from '../lib/mentionNotifications'
 
   export default {
@@ -72,18 +71,6 @@
     async created() {
       this.$root.$on('development', isDevelopment => {
 				this.isDevelopment = isDevelopment
-      })
-      ipcRenderer.on('ipfs-stdout', (event, msg) => {
-        console.log('IPFS: ' + msg)
-      })
-      ipcRenderer.on('ipfs-stderr', (event, msg) => {
-        console.error('IPFS: ' + msg)
-      })
-      ipcRenderer.on('parity-stdout', (event, msg) => {
-        console.log('Parity: ' + msg)
-      })
-      ipcRenderer.on('parity-stderr', (event, msg) => {
-        console.error('Parity: ' + msg)
       })
       await Promise.all([this.$mixClient.init(this.$root), this.$ipfsClient.init(this.$root)])
       // Load previous active account.

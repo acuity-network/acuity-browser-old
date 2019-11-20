@@ -1,5 +1,6 @@
 import http from 'http'
 import { randomHex } from 'web3-utils'
+import { ipcRenderer } from 'electron'
 
 export default class IpfsClient {
 
@@ -11,6 +12,13 @@ export default class IpfsClient {
 
 		if (!vue) return;
 
+    // Log IPFS output.
+    ipcRenderer.on('ipfs-stdout', (event, msg) => {
+      console.log('IPFS: ' + msg)
+    })
+    ipcRenderer.on('ipfs-stderr', (event, msg) => {
+      console.error('IPFS: ' + msg)
+    })
 		// Wait for IPFS API to start working.
 		await new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {

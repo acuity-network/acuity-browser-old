@@ -31,6 +31,13 @@ export default class MixClient {
 	uniswapFactory: any
 
 	async init(vue) {
+    // Log Parity output.
+    ipcRenderer.on('parity-stdout', (event, msg) => {
+      console.log('Parity: ' + msg)
+    })
+    ipcRenderer.on('parity-stderr', (event, msg) => {
+      console.error('Parity: ' + msg)
+    })
     // Wait to get Parity IPC Path.
     let ipcPath: string = await new Promise((resolve, reject) => {
       ipcRenderer.on('parity-ipc-path', (event, ipcPath: string) => {
