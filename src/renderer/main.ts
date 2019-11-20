@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import db from '../lib/db'
 
 router.afterEach((to, from) => {
   // Ensure arrow keys work after clicking on route.
@@ -30,12 +31,7 @@ import '@mdi/font/css/materialdesignicons.min.css'
 import axios from 'axios'
 Vue.prototype.$http = axios
 
-import level from 'level'
-import { remote } from 'electron'
-import path from 'path'
-let dbPath = path.join(remote.app.getPath('userData'), 'state.db')
-console.log('Initializing database: ' + dbPath)
-Vue.prototype.$db = level(dbPath)
+Vue.prototype.$db = db.init()
 
 import MixClient from '../lib/MixClient'
 Vue.prototype.$mixClient = new MixClient()

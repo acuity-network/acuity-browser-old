@@ -1,5 +1,5 @@
 import multihashes from 'multihashes'
-import brotli from 'iltorb'
+import brotli from './brotli'
 import ItemProto from './protobuf/Item_pb.js'
 
 let contentCache = []

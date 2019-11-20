@@ -23,7 +23,7 @@
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
   import ImageMixinProto from '../../lib/protobuf/ImageMixin_pb.js'
-  import brotli from 'iltorb'
+  import brotli from '../../lib/brotli'
   import bs58 from 'bs58'
   import multihashes from 'multihashes'
   import formatByteCount from '../../lib/formatByteCount'
