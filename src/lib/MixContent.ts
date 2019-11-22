@@ -29,7 +29,7 @@ export default class MixContent {
     }
 
     try {
-      let itemPayload = Buffer.from(await brotli.decompress(response))
+      let itemPayload = Buffer.from(await brotli.decompress(Buffer.from(response.toString('utf8'), "binary")))
       let mixins = ItemProto.Item.deserializeBinary(itemPayload).getMixinPayloadList()
 
       for (let i = 0; i < mixins.length; i++) {

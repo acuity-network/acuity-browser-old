@@ -33,7 +33,7 @@ export default class MixRevision {
     return TitleMixinProto.TitleMixin.deserializeBinary(this.content.getPayloads('0x344f4812')[0]).getTitle()
   }
 
-  getImageUrl(widthMin, heightMin) {
+  async getImageUrl(widthMin, heightMin) {
     let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x045eee8c')[0])
     let width = imageMessage.getWidth()
     let height = imageMessage.getHeight()
@@ -47,10 +47,12 @@ export default class MixRevision {
       }
     }
 
-    return 'http://127.0.0.1:5102/ipfs/' + bs58.encode(Buffer.from(mipmapList[i].getIpfsHash()))
+    let response = await this.vue.$ipfsClient.get(bs58.encode(Buffer.from(mipmapList[i].getIpfsHash())))
+
+    return 'data:image/png;base64, ' + response.toString('base64')
   }
 
-  getImage(widthMin, heightMin) {
+  async getImage(widthMin, heightMin) {
     let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x045eee8c')[0])
     let width = imageMessage.getWidth()
     let height = imageMessage.getHeight()
@@ -71,7 +73,9 @@ export default class MixRevision {
     let widthOut = Math.round(width / scale)
     let heightOut = Math.round(height / scale)
 
-    return '<img src="http://127.0.0.1:5102/ipfs/' + bs58.encode(Buffer.from(mipmapList[i].getIpfsHash())) + '" width="' + widthOut + '" height="' + heightOut + '">'
+    let response = await this.vue.$ipfsClient.get(bs58.encode(Buffer.from(mipmapList[i].getIpfsHash())))
+
+    return '<img src="data:image/png;base64, ' + response.toString('base64') + '" width="' + widthOut + '" height="' + heightOut + '">'
   }
 
   getFile() {

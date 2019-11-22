@@ -243,7 +243,7 @@
         let profileItem = await new MixItem(this.$root, profileItemId).init()
         let profileRevision = await profileItem.latestRevision().load()
         this.owner = profileRevision.getTitle()
-        this.avatar = profileRevision.getImage(64, 64)
+        this.avatar = await profileRevision.getImage(64, 64)
 
         let feedIds = await this.$mixClient.itemDagFeedItems.methods.getAllParentIds(this.itemId).call()
         if (feedIds.length > 0) {
@@ -306,7 +306,7 @@
           let timestamp = firstRevision.getTimestamp()
           this.published = this.$t('ViewItem.Published') + ': ' + ((timestamp > 0) ? new Date(timestamp * 1000).toLocaleDateString() : this.$t('ViewItem.JustNow'))
           if (!this.isProfile) {
-            this.image = revision.getImage(512)
+            this.image = await revision.getImage(512)
           }
           this.description = revision.getBodyText()
         }

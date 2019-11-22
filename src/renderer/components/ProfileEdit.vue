@@ -75,7 +75,7 @@
       this.name = revision.getTitle()
       setTitle(this.name)
       this.bio = revision.getBodyText()
-      this.image = revision.getImage(256)
+      this.image = await revision.getImage(256)
       let profile = revision.getProfile()
       this.type = profile.type
       this.location = profile.location

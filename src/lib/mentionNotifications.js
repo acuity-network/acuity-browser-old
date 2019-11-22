@@ -32,7 +32,7 @@ async function launch(vue) {
 		let profileItemId = await account.call(vue.$mixClient.accountProfile, 'getProfile')
 		let profileItem = await new MixItem(vue, profileItemId).init()
 		let profileRevision = await profileItem.latestRevision().load()
-		let avatarUrl = profileRevision.getImageUrl(200, 200)
+		let avatarUrl = await profileRevision.getImageUrl(200, 200)
 
 		let notification = {
 			tag: log.returnValues.itemId,
@@ -43,7 +43,7 @@ async function launch(vue) {
 		}
 
 		try {
-			notification.image = revision.getImageUrl(1000, 1000)
+			notification.image = await revision.getImageUrl(1000, 1000)
 		}
 		catch(e) {
 

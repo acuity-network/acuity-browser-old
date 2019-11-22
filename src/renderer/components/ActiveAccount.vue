@@ -36,7 +36,7 @@
           let item: MixItem = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
           this.title = revision.getTitle()
-          this.image = revision.getImage(100, 100)
+          this.image = await revision.getImage(100, 100)
         }
         catch (error) {
           this.title = ''

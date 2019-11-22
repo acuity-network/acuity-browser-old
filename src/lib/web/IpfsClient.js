@@ -49,9 +49,7 @@ export default class IpfsClient {
   		try {
         await this.node.swarm.connect(bootnode)
   		}
-  		catch (e) {
-        console.log(e)
-      }
+  		catch (e) {}
   	}
   }
 
@@ -68,8 +66,7 @@ export default class IpfsClient {
   }
 
   async get(ipfsHash) {
-    let result = await this.node.cat('/ipfs/' + ipfsHash)
-    return Buffer.from(result.toString('utf8'), "binary")
+    return await this.node.cat('/ipfs/' + ipfsHash)
   }
 
   async add(data) {
