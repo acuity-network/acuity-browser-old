@@ -105,8 +105,8 @@
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
-  import formatByteCount from '../../lib/formatByteCount'
-  import File from '../../lib/File.js'
+//  import formatByteCount from '../../lib/formatByteCount'
+//  import File from '../../lib/File.js'
   import twemoji from 'twemoji'
   import setTitle from '../../lib/setTitle'
   import clipboard from '../../lib/clipboard'
@@ -311,7 +311,7 @@
           this.description = revision.getBodyText()
         }
         catch (e) {}
-
+/*
         if (revision.content.existMixin('0x3c5bba9c')) {
           this.hasFile = true
           let fileData = revision.getFile()
@@ -320,7 +320,7 @@
           this.fileSize = formatByteCount(fileData.size)
           this.fileHash = fileData.hash
         }
-
+*/
         if (!this.short) {
           // Try to delete the old entry
           try {
@@ -418,7 +418,7 @@
         this.loadData()
       },
       async downloadFile() {
-        this.file.download()
+//        this.file.download()
         this.hasDownloaded = true
       },
       toggleTrust(event) {

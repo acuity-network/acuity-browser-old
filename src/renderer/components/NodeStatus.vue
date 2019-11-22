@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-  import { remote } from 'electron'
+//  import { remote } from 'electron'
   import Page from './Page.vue'
   import throttle from 'just-throttle'
   import formatByteCount from '../../lib/formatByteCount'
@@ -100,19 +100,20 @@
       async loadPeriodicData() {
           this.peerCount = await this.$mixClient.web3.eth.net.getPeerCount()
 
-          let ipfsId = await this.$ipfsClient.get('id')
+          let ipfsId = await this.$ipfsClient.id()
           let addresses = []
-          for (let address of ipfsId.Addresses) {
-            addresses.push(address.split('/ipfs/')[0])
+          for (let address of ipfsId.addresses) {
+//            addresses.push(address.split('/ipfs/')[0])
+            addresses.push(address)
           }
           this.ipfsAddresses = addresses.sort();
 
-          let peers = await this.$ipfsClient.get('swarm/peers')
-          this.ipfsPeerCount = (peers.Peers === null) ? 0 : peers.Peers.length
+          let peers = await this.$ipfsClient.peers()
+          this.ipfsPeerCount = peers.length
 
-          let repoStat = await this.$ipfsClient.get('repo/stat')
-          this.ipfsRepoSize = formatByteCount(repoStat.RepoSize)
-          this.ipfsRepoObjectCount = repoStat.NumObjects
+          let repoStat = await this.$ipfsClient.repoStat()
+          this.ipfsRepoSize = formatByteCount(repoStat.repoSize)
+          this.ipfsRepoObjectCount = repoStat.numObjects
       },
     },
     async created() {
@@ -121,16 +122,17 @@
         this.acuityVersion = process.env.npm_package_version
       }
       else {
-        this.acuityVersion = remote.app.getVersion()
+//        this.acuityVersion = remote.app.getVersion()
       }
       this.agent = (await this.$mixClient.web3.eth.getNodeInfo()).split('-stable-')[0]
       this.web3Version = this.$mixClient.web3.version
       let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
       this.protocolVersion = this.$mixClient.web3.utils.hexToNumber(protocolVersion)
       this.networkId = await this.$mixClient.web3.eth.net.getId()
-      let ipfsId = await this.$ipfsClient.get('id')
-      this.ipfsAgent = ipfsId.AgentVersion
-      this.ipfsProtocol = ipfsId.ProtocolVersion
+
+      let ipfsId = await this.$ipfsClient.id()
+      this.ipfsAgent = ipfsId.agentVersion
+      this.ipfsProtocol = ipfsId.protocolVersion
 
       let loadBlockData = throttle(this.loadBlockData, 500, true)
       this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')

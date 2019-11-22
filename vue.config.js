@@ -8,13 +8,19 @@ module.exports = {
 //    context: path.join(__dirname, 'src', 'renderer'),
     entry: path.join(__dirname, 'src', 'renderer', 'main.ts'),
     plugins: [
+      /*
+      new webpack.ProvidePlugin({
+        setImmediate: ['setimmediate', 'setImmedate'],
+        clearImmediate: ['setimmediate', 'clearImmedate']
+      }),
+*/
       new webpack.NormalModuleReplacementPlugin(
         /\/src\/lib\/Image\.js/,
         'web/Image.js'
       ),
       new webpack.NormalModuleReplacementPlugin(
-        /\/src\/lib\/brotli\.ts/,
-        'web/brotli.ts'
+        /\/src\/lib\/brotli\.js/,
+        'web/brotli.js'
       ),
       new webpack.NormalModuleReplacementPlugin(
         /\/src\/lib\/db\.ts/,
@@ -38,4 +44,12 @@ module.exports = {
       ),
     ]
   },
+  chainWebpack: config => {
+    config.module
+      .rule('raw')
+      .test(/\.bin$/)
+      .use('raw-loader')
+      .loader('raw-loader')
+      .end()
+  }
 }

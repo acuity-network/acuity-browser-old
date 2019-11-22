@@ -1,7 +1,6 @@
 import multihashes from 'multihashes'
 import brotli from './brotli'
 import ItemProto from './protobuf/Item_pb.js'
-
 let contentCache = []
 
 export default class MixContent {
@@ -23,14 +22,14 @@ export default class MixContent {
 
     try {
       let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), "hex"), 'sha2-256'))
-      response = await this.vue.$ipfsClient.get('cat?arg=/ipfs/' + encodedIpfsHash, false)
+      response = await this.vue.$ipfsClient.get(encodedIpfsHash)
     }
     catch (e) {
       return this
     }
 
     try {
-      let itemPayload = await brotli.decompress(Buffer.from(response, "binary"))
+      let itemPayload = Buffer.from(await brotli.decompress(response))
       let mixins = ItemProto.Item.deserializeBinary(itemPayload).getMixinPayloadList()
 
       for (let i = 0; i < mixins.length; i++) {
@@ -40,7 +39,9 @@ export default class MixContent {
         })
       }
     }
-    catch (e) {}
+    catch (e) {
+      console.log(e)
+    }
 
     contentCache[ipfsHash] = this.mixins
 
@@ -60,8 +61,8 @@ export default class MixContent {
     }
 
     let payload = await brotli.compress(Buffer.from(itemMessage.serializeBinary()))
-    let response = await this.vue.$ipfsClient.post('add', payload)
-    let decodedHash = multihashes.decode(multihashes.fromB58String(response.Hash))
+    let response = await this.vue.$ipfsClient.add(payload)
+    let decodedHash = multihashes.decode(multihashes.fromB58String(response.hash))
 
     if (decodedHash.name != 'sha2-256') {
       throw 'Wrong type of multihash.'

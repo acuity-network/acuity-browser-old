@@ -1,11 +1,17 @@
+import accountBytecode from './contracts/MixAccount.bin'
+import creatorTokenBytecode from './contracts/MixCreatorToken.bin'
+
 let erc165Abi = require('./contracts/ERC165.abi.json')
 let accountAbi = require('./contracts/MixAccount.abi.json')
 let accountAbi2 = require('./contracts/MixAccount2.abi.json')
 import ethTx from 'ethereumjs-tx'
+
+/*
 import path from 'path'
 import fs from 'fs'
 
 declare let __static: string
+*/
 
 let privateKeys = {}
 
@@ -89,14 +95,12 @@ export default class MixAccount {
         reject()
         return
       }
-      let byteCodePath = path.join(__static, 'MixAccount.bin')
-      let accountBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
       let nonce = await this.vue.$mixClient.web3.eth.getTransactionCount(this.controllerAddress)
       let rawTx = {
         nonce: this.vue.$mixClient.web3.utils.toHex(nonce),
         from: this.controllerAddress,
         gasPrice: '0x3b9aca00',
-        data: '0x' + accountBytecode,
+        data: '0x' + accountBytecode.trim(),
         gas: 0,
       }
       rawTx.gas = this.vue.$mixClient.web3.utils.toHex(await this.vue.$mixClient.web3.eth.estimateGas(rawTx))
@@ -127,8 +131,10 @@ export default class MixAccount {
         reject()
         return
       }
+      /*
       let byteCodePath = path.join(__static, 'MixCreatorToken.bin')
       let tokenBytecode = fs.readFileSync(byteCodePath, 'ascii').trim()
+      */
       let types = ['string', 'string', 'address', 'uint', 'uint']
       let params = [symbol, name, this.contractAddress, initialBalance, dailyPayout]
       let paramsBytecode = this.vue.$mixClient.web3.eth.abi.encodeParameters(types, params).slice(2)
@@ -138,7 +144,7 @@ export default class MixAccount {
         from: this.controllerAddress,
         gas: this.vue.$mixClient.web3.utils.toHex(2000000),
         gasPrice: '0x3b9aca00',
-        data: '0x' + tokenBytecode + paramsBytecode,
+        data: '0x' + creatorTokenBytecode.trim() + paramsBytecode,
       }
 
       let tx = new ethTx(rawTx)
