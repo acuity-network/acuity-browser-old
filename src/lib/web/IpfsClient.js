@@ -70,9 +70,8 @@ export default class IpfsClient {
   }
 
   async add(data) {
-    let result = await this.node.add(Buffer.from(data, "binary"))
-    console.log(result)
-    return result[0]
+    let result = await this.node.add(data)
+    return result[0].hash
   }
 
 }
