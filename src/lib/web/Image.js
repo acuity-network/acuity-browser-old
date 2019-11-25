@@ -52,7 +52,6 @@ export default class MixImage {
           let imageMessage = new ImageMixinProto.ImageMixin()
           imageMessage.setWidth(img.width)
           imageMessage.setHeight(img.height)
-          console.log(mipmaps)
           for (let mipmap of mipmaps) {
             let mipmapLevelMessage = new ImageMixinProto.MipmapLevel()
             mipmapLevelMessage.setFilesize(mipmap.size)
