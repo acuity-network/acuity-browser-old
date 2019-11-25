@@ -10,30 +10,6 @@
 			<span :class="ipfsApiClass">IPFS API</span><br />
 			<span :class="ipfsGatewayClass">{{ $t('Splash.IpfsGateway') }}</span>
 		</div>
-    <div class="br-c6"></div>
-    <div class="br-c5"></div>
-    <div class="br-c4"></div>
-    <div class="br-c3"></div>
-    <div class="br-c2"></div>
-    <div class="br-c1"></div>
-    <div class="bl-c6"></div>
-    <div class="tl-c6"></div>
-    <div class="tr-c6"></div>
-    <div class="bl-c5"></div>
-    <div class="tl-c5"></div>
-    <div class="tr-c5"></div>
-    <div class="bl-c4"></div>
-    <div class="tl-c4"></div>
-    <div class="tr-c4"></div>
-    <div class="bl-c3"></div>
-    <div class="tl-c3"></div>
-    <div class="tr-c3"></div>
-    <div class="bl-c2"></div>
-    <div class="tl-c2"></div>
-    <div class="tr-c2"></div>
-    <div class="bl-c1"></div>
-    <div class="tl-c1"></div>
-    <div class="tr-c1"></div>
   </div>
 </template>
 
