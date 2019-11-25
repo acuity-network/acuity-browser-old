@@ -50,8 +50,7 @@ import activeAccount from '../lib/activeAccount'
 Vue.prototype.$activeAccount = activeAccount
 
 new Vue({
-  components: { App },
   router,
   i18n,
-  template: '<App/>'
+  render: h => h(App)
 }).$mount('#app')
