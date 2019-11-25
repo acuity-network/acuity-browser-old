@@ -4,6 +4,7 @@
 
 <script lang="ts">
   import MixItem from '../../lib/MixItem'
+  import bs58 from 'bs58'
 
   export default {
     name: 'item-link',
@@ -19,7 +20,7 @@
         if (this.itemId) {
           let item = await new MixItem(this.$root, this.itemId).init()
           let revision = await item.latestRevision().load()
-          this.route = '/item/' + this.itemId
+          this.route = '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(this.itemId.substr(0, 50))))
           this.title = await revision.getTitle()
         }
       },

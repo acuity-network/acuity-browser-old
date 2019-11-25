@@ -55,7 +55,7 @@
           return
         }
 
-        this.$router.push({ name: 'item', params: { itemId: itemId }})
+        this.$router.push({ name: 'item', params: { encodedItemId: this.encodedItemId }})
       }
     }
   }

@@ -27,6 +27,7 @@
 <script lang="ts">
   import Page from './Page.vue'
   import setTitle from '../../lib/setTitle'
+  import bs58 from 'bs58'
 
   export default {
     name: 'browsing-history',
@@ -49,7 +50,7 @@
           data.push({
             timestamp: item.timestamp,
             when: new Date(item.timestamp),
-            route: '/item/' + item.itemId,
+            route: '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(item.itemId.substr(0, 50)))),
             title: item.title,
             owner: item.owner ? item.owner : '',
             ownerRoute: item.ownerRoute ? item.ownerRoute : '',

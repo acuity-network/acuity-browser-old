@@ -5,7 +5,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/item/:itemId',
+      path: '/item/:encodedItemId',
       name: 'item',
       component: require('../components/ViewItem').default,
       props: true,

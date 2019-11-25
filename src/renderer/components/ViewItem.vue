@@ -72,7 +72,7 @@
         <item-token :itemId="itemId"></item-token>
 
         <div v-if="isFeed">
-          <view-item v-for="itemId in feedItemIds" :short="true" :itemId="itemId" :key="itemId"></view-item>
+          <view-item v-for="itemId in feedItemIds" :short="true" :hexItemId="itemId" :key="itemId"></view-item>
         </div>
         <div v-else>
           <comment v-for="itemId in commentIds" :itemId="itemId" :key="itemId"></comment>
@@ -116,9 +116,13 @@
   export default {
     name: 'view-item',
     props: {
-      itemId: {
+      encodedItemId: {
         type: String,
-        required: true,
+        required: false,
+      },
+      hexItemId: {
+        type: String,
+        required: false,
       },
       short: {
         type: Boolean,
@@ -141,6 +145,16 @@
       let data = {}
       this.resetData(data)
       return data
+    },
+    computed: {
+      itemId() {
+        if (this.hexItemId != null) {
+          return this.hexItemId
+        }
+        else {
+          return '0x' + bs58.decode(this.encodedItemId).toString('hex') + 'f1b5847865d2094d'
+        }
+      }
     },
     created() {
       this.itemStoreIpfsSha256Emitter = this.$mixClient.itemStoreIpfsSha256.events.allEvents({
@@ -180,10 +194,14 @@
       this.itemDagCommentsEmitter.unsubscribe()
     },
     watch: {
-      itemId() {
+      encodedItemId() {
         this.resetData(this)
         this.loadData()
-      }
+      },
+      hexItemId() {
+        this.resetData(this)
+        this.loadData()
+      },
     },
     methods: {
       resetData(data) {
@@ -250,7 +268,7 @@
 
         let feedIds = await this.$mixClient.itemDagFeedItems.methods.getAllParentIds(this.itemId).call()
         if (feedIds.length > 0) {
-          this.feedRoute = '/item/' + feedIds[0]
+          this.feedRoute = '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(feedIds[0].substr(0, 50))))
           let feedItem = await new MixItem(this.$root, feedIds[0]).init()
           let feedRevision = await feedItem.latestRevision().load()
           this.feed = feedRevision.getTitle()
