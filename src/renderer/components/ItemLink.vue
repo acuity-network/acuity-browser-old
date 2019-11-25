@@ -1,5 +1,5 @@
 <template>
-  <router-link v-if="itemId" :to="route">{{ title }}</router-link>
+  <router-link v-if="route" :to="route">{{ title }}</router-link>
 </template>
 
 <script lang="ts">
@@ -20,8 +20,8 @@
         if (this.itemId) {
           let item = await new MixItem(this.$root, this.itemId).init()
           let revision = await item.latestRevision().load()
+          this.title = revision.getTitle()
           this.route = '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(this.itemId.substr(0, 50))))
-          this.title = await revision.getTitle()
         }
       },
     },
@@ -30,6 +30,7 @@
     },
     watch: {
       address(val, oldVal) {
+        this.route = ''
         this.loadData()
       },
     }

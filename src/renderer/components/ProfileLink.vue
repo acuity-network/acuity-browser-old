@@ -1,5 +1,5 @@
 <template>
-  <span v-if="address">
+  <span v-if="title">
     <router-link v-if="route" :to="route">{{ title }}</router-link>
     <span v-else>{{ title }}</span>
   </span>
@@ -28,10 +28,10 @@
             let profile = await new MixItem(this.$root, itemId).init()
             let revision = await profile.latestRevision().load()
             this.route = '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(itemId.substr(0, 50))))
-            this.title = await revision.getTitle()
+            this.title = revision.getTitle()
           }
           catch (e) {
-            this.route = null
+            this.route = ''
             this.title = this.address
           }
         }
@@ -42,6 +42,7 @@
     },
     watch: {
       address(val, oldVal) {
+        this.title = ''
         this.loadData()
       },
     }

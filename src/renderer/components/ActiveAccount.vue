@@ -39,7 +39,6 @@
       async loadData() {
         this.unlocked = this.$activeAccount.get().isUnlocked()
         try {
-          this.address = ''
           this.address = await this.$activeAccount.get().contractAddress
           this.balance = this.$mixClient.formatWei(await this.$activeAccount.get().getBalance())
           let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
