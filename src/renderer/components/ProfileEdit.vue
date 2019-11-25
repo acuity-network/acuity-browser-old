@@ -58,6 +58,7 @@
   import Image from '../../lib/Image'
   import MixContent from '../../lib/MixContent'
   import setTitle from '../../lib/setTitle'
+  import bs58 from 'bs58'
 
   export default {
     name: 'profile-edit',
@@ -138,7 +139,8 @@
         }
 
         this.$root.$emit('change-active-account', this.$activeAccount.get())
-        this.$router.push({ name: 'item', params: { itemId: itemId }})
+        let encodedItemId = bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(itemId.substr(0, 50))))
+        this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       }
     }
   }

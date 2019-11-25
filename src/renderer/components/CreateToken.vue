@@ -35,6 +35,7 @@
   import MixContent from '../../lib/MixContent'
   import Image from '../../lib/Image'
   import setTitle from '../../lib/setTitle'
+  import bs58 from 'bs58'
 
   export default {
     name: 'create-token',
@@ -97,7 +98,8 @@
         await this.$activeAccount.get().sendData(this.$mixClient.tokenItemRegistry, 'register', [tokenAddress, itemId], 0, 'Register token item')
         await this.$activeAccount.get().sendData(this.$mixClient.uniswapFactory, 'createExchange', [tokenAddress], 0, 'Deploy Uniswap exchange', 1000000)
         await this.$activeAccount.get().sendData(this.$mixClient.accountTokens, 'addItem', [itemId], 0, 'Add token item to account.')
-        this.$router.push({ name: 'item', params: { itemId: itemId }})
+        let encodedItemId = bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(itemId.substr(0, 50))))
+        this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       }
     },
   }

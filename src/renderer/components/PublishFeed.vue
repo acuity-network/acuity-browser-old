@@ -41,6 +41,7 @@
   import MixContent from '../../lib/MixContent'
   import Image from '../../lib/Image'
   import setTitle from '../../lib/setTitle'
+  import bs58 from 'bs58'
 
   export default {
     name: 'publish-feed',
@@ -105,7 +106,8 @@
 
         await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create feed')
         await this.$activeAccount.get().sendData(this.$mixClient.accountFeeds, 'addItem', [itemId], 0, 'Add feed to account')
-        this.$router.push({ name: 'item', params: { itemId: itemId }})
+        let encodedItemId = bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(itemId.substr(0, 50))))
+        this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       }
     },
   }

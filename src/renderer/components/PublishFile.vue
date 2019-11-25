@@ -177,7 +177,8 @@
         }
 
         await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create image')
-        this.$router.push({ name: 'item', params: { itemId: itemId }})
+        let encodedItemId = bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(itemId.substr(0, 50))))
+        this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       }
     },
   }

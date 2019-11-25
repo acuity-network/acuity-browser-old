@@ -35,6 +35,7 @@
   import Page from './Page.vue'
   import MixAccount from '../../lib/MixAccount'
   import setTitle from '../../lib/setTitle'
+  import bs58 from 'bs58'
 
   export default {
     name: 'manage-accounts-recover',
@@ -121,7 +122,7 @@
         let account: MixAccount = await new MixAccount(this, controllerAddress).init()
         account.unlock(this.password)
         account.select()
-        this.$router.push({ name: 'item', params: { itemId: await account.call(this.$mixClient.accountProfile, 'getProfile') }})
+        this.$router.push({ name: 'item', params: { hexItemId: await account.call(this.$mixClient.accountProfile, 'getProfile') }})
       },
     },
     async created() {
