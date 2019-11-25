@@ -1,5 +1,5 @@
-let accountBytecode = require('./contracts/MixAccount.bin')
-let creatorTokenBytecode = require('./contracts/MixCreatorToken.bin')
+let accountBytecode = require('./contracts/MixAccount.bin').default
+let creatorTokenBytecode = require('./contracts/MixCreatorToken.bin').default
 let erc165Abi = require('./contracts/ERC165.abi.json')
 let accountAbi = require('./contracts/MixAccount.abi.json')
 let accountAbi2 = require('./contracts/MixAccount2.abi.json')
