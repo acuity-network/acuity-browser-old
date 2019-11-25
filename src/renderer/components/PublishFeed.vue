@@ -13,8 +13,16 @@
         <b-input v-model="description" type="textarea"></b-input>
       </b-field>
 
-      <b-field :label="$t('PublishFeed.Image')" :message="filepath">
-        <button class="button" @click="chooseFile">{{ $t('PublishFeed.ChooseImage') }}</button>
+      <b-field class="file">
+        <b-upload v-model="file">
+          <a class="button is-primary">
+            <b-icon icon="upload"></b-icon>
+            <span>{{ $t('PublishFeed.ChooseImage') }}</span>
+          </a>
+        </b-upload>
+        <span class="file-name" v-if="file">
+          {{ file.name }}
+        </span>
       </b-field>
 
       <topic-selector v-model="topics"></topic-selector>
@@ -45,21 +53,13 @@
         title: '',
         description: '',
         topics: [],
-        filepath: '',
+        file: null,
       }
     },
     created() {
       setTitle(this.$t('PublishFeed.PublishFeed'))
     },
     methods: {
-      async chooseFile(event) {
-        let {dialog} = require('electron').remote
-        let result: any = await dialog.showOpenDialog(null, {
-          title: this.$t('PublishFeed.ChooseImage'),
-          filters: [{name: this.$t('PublishFeed.Images'), extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
-        })
-        this.filepath = result.filePaths[0]
-      },
       async publish(event) {
         let flagsNonce = '0x0f' + this.$mixClient.web3.utils.randomHex(31).substr(2)
         let itemId = await this.$activeAccount.get().call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [this.$activeAccount.get().contractAddress, flagsNonce])
@@ -85,8 +85,8 @@
         content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
 
         // Image
-        if (this.filepath != '') {
-          let image = new Image(this.$root, this.filepath)
+        if (this.file != null) {
+          let image = new Image(this.$root, this.file)
           content.addMixinPayload(0x045eee8c, await image.createMixin())
         }
 

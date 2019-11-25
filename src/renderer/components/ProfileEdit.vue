@@ -31,8 +31,16 @@
         <b-input v-model="bio" type="textarea"></b-input>
       </b-field>
 
-      <b-field label="Image" :message="filepath">
-        <button class="button" @click="chooseFile">{{ $t('ProfileEdit.ChooseImage') }}</button>
+      <b-field class="file">
+        <b-upload v-model="file">
+          <a class="button is-primary">
+            <b-icon icon="upload"></b-icon>
+            <span>{{ $t('ProfileEdit.ChooseImage') }}</span>
+          </a>
+        </b-upload>
+        <span class="file-name" v-if="file">
+          {{ file.name }}
+        </span>
       </b-field>
 
       <button class="button is-primary" @click="publish">{{ $t('ProfileEdit.Publish') }}</button>
@@ -62,7 +70,7 @@
         bio: '',
         location: '',
         type: '',
-        filepath: '',
+        file: null,
       }
     },
     async created() {
@@ -81,14 +89,6 @@
       this.location = profile.location
     },
     methods: {
-      async chooseFile(event) {
-        let {dialog} = require('electron').remote
-        let result: any = await dialog.showOpenDialog(null, {
-          title: this.$t('ProfileEdit.ChooseImage'),
-          filters: [{name: this.$t('ProfileEdit.Images'), extensions: ['webp', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'svgz', 'ppm']}],
-        })
-        this.filepath = result.filePaths[0]
-      },
       async publish(event) {
         let content = new MixContent(this.$root)
 
@@ -114,8 +114,8 @@
         content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
 
         // Image
-        if (this.filepath != '') {
-          let image = new Image(this.$root, this.filepath)
+        if (this.file != null) {
+          let image = new Image(this.$root, this.file)
           content.addMixinPayload(0x045eee8c, await image.createMixin())
         }
 
