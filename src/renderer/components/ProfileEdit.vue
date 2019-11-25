@@ -78,7 +78,7 @@
         return
       }
       let itemId = await this.$activeAccount.get().getProfile()
-      let item = await new MixItem(this, itemId).init()
+      let item = await new MixItem(this.$root, itemId).init()
       let revision = await item.latestRevision().load()
       this.name = revision.getTitle()
       setTitle(this.name)
@@ -114,7 +114,13 @@
         content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
 
         // Image
-        if (this.file != null) {
+        if (this.file == null) {
+          let itemId = await this.$activeAccount.get().getProfile()
+          let item = await new MixItem(this.$root, itemId).init()
+          let revision = await item.latestRevision().load()
+          content.addMixinPayload(0x045eee8c, revision.content.getPayloads('0x045eee8c')[0])
+        }
+        else {
           let image = new Image(this.$root, this.file)
           content.addMixinPayload(0x045eee8c, await image.createMixin())
         }
