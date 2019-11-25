@@ -31,8 +31,6 @@ export default class MixClient {
 	async init(vue) {
 		this.web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8546'))
 
-    console.log('mix-client-web3')
-
 		vue.$emit('mix-client-web3')
 
 		this.web3.eth.defaultBlock = 'pending'
