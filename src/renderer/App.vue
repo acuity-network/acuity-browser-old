@@ -25,7 +25,6 @@
         </p>
         <ul class="menu-list">
           <li><router-link to="/transaction-history">{{ $t('App.TransactionHistory') }}</router-link></li>
-          <li><router-link to="/profile">{{ $t('App.Profile') }}</router-link></li>
           <li><router-link to="/trusted-accounts">{{ $t('App.TrustedAccounts') }}</router-link></li>
           <li><router-link to="/wallet">{{ $t('App.Wallet') }}</router-link></li>
           <li><router-link to="/tokens">{{ $t('App.Tokens') }}</router-link></li>

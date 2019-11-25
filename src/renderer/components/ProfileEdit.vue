@@ -60,7 +60,7 @@
   import setTitle from '../../lib/setTitle'
 
   export default {
-    name: 'profile',
+    name: 'profile-edit',
     components: {
       Page,
     },
@@ -120,19 +120,20 @@
         }
 
         let ipfsHash = await content.save()
+        let itemId
         try {
-          let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
+          itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
           await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [itemId, ipfsHash], 0, 'Update profile')
         }
         catch(e) {
           let flagsNonce = '0x01' + this.$mixClient.web3.utils.randomHex(31).substr(2)
-          let itemId = await this.$activeAccount.get().call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [this.$activeAccount.get().contractAddress, flagsNonce])
+          itemId = await this.$activeAccount.get().call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [this.$activeAccount.get().contractAddress, flagsNonce])
           await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'create', [flagsNonce, ipfsHash], 0, 'Create profile item')
           await this.$activeAccount.get().sendData(this.$mixClient.accountProfile, 'setProfile', [itemId], 0, 'Set profile item')
         }
 
         this.$root.$emit('change-active-account', this.$activeAccount.get())
-        this.$router.push({ name: 'profile' })
+        this.$router.push({ name: 'item', params: { itemId: itemId }})
       }
     }
   }

@@ -35,6 +35,7 @@
       <span v-if="topics.length > 0"><span class="topics">{{ $t('ViewItem.Topics') }}: <span v-for="topic in topics" class="topic"><router-link  :key="topic.hash" :to="topic.route">{{ topic.topic }}</router-link></span></span><br /></span>
       <span v-if="mentions.length > 0"><span class="topics">{{ $t('ViewItem.Mentions') }}: <span v-for="mention in mentions" class="topic"><profile-link :address="mention"></profile-link></span></span><br /></span>
       {{ published }}
+      <div v-if="isOwnProfile"><router-link to="/profile/edit">{{ $t('ViewItem.EditProfile') }}</router-link></div>
     </template>
     <template slot="body">
       <div class="columns">
@@ -214,6 +215,7 @@
         data.fileSize = ''
         data.fileHash = ''
         data.isProfile = ''
+        data.isOwnProfile = false
         data.isFeed = false
         data.isToken = false
         data.commentIds = []
@@ -281,6 +283,9 @@
 
         if (revision.content.existMixin('0xbeef2144')) {
           this.isProfile = true
+          if (await this.$activeAccount.get().getProfile() == this.itemId) {
+            this.isOwnProfile = true
+          }
         }
         else if (revision.content.existMixin('0xbcec8faa')) {
           this.isFeed = true

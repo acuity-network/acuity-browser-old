@@ -77,11 +77,6 @@ export default new Router({
       component: require('../components/PublishFile').default
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: require('../components/Profile').default
-    },
-    {
       path: '/profile/edit',
       name: 'profile-edit',
       component: require('../components/ProfileEdit').default

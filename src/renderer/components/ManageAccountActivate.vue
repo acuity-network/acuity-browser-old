@@ -89,7 +89,7 @@
       setTitle(this.$t('ManageAccountActivate.DeployAccount'))
       this.account = await new MixAccount(this, this.controllerAddress).init()
       if ('contractAddress' in this.account) {
-        this.$router.push({ name: 'profile' })
+        this.$router.push({ name: 'profile-edit' })
       }
       else {
         this.qrcode = await QRCode.toDataURL(this.controllerAddress, {

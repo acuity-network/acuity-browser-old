@@ -1,7 +1,7 @@
 <template>
-  <div class="is-clearfix">
+  <div id="active-account" class="is-clearfix">
     <div v-html="image" class="avatar"></div>
-    {{ title }}
+    <profile-link :address="address"></profile-link>
     <span v-if="unlocked" class="clickable mdi mdi-12px mdi-lock-open" style="color: #228B22;" @click="lock"></span>
     <span v-else class="clickable mdi mdi-12px mdi-lock" style="color: #CE2029;" @click="passwordFieldType = ''; password = ''; enterPassword = !enterPassword"></span>
     <b-field v-if="enterPassword" :type="passwordFieldType">
@@ -13,12 +13,16 @@
 
 <script lang="ts">
   import MixItem from '../../lib/MixItem'
+  import ProfileLink from './ProfileLink.vue'
 
   export default {
     name: 'active-account',
+    components: {
+      ProfileLink,
+    },
     data() {
       return {
-        title: '',
+        address: '',
         image: '',
         unlocked: false,
         enterPassword: false,
@@ -31,11 +35,12 @@
       async loadData() {
         this.unlocked = this.$activeAccount.get().isUnlocked()
         try {
+          this.address = ''
+          this.address = await this.$activeAccount.get().contractAddress
           this.balance = this.$mixClient.formatWei(await this.$activeAccount.get().getBalance())
           let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
           let item: MixItem = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
-          this.title = revision.getTitle()
           this.image = await revision.getImage(100, 100)
         }
         catch (error) {
@@ -79,6 +84,12 @@
 </script>
 
 <style scoped>
+
+  #active-account >>> .router-link-active {
+    color: #3273dc;
+    background-color: rgb(32,32,32);
+  }
+
   .clickable {
     cursor: pointer;
     user-select: none;

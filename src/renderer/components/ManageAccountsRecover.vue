@@ -121,7 +121,7 @@
         let account: MixAccount = await new MixAccount(this, controllerAddress).init()
         account.unlock(this.password)
         account.select()
-        this.$router.push({ name: 'profile', params: { controllerAddress: controllerAddress } })
+        this.$router.push({ name: 'item', params: { itemId: await account.call(this.$mixClient.accountProfile, 'getProfile') }})
       },
     },
     async created() {
