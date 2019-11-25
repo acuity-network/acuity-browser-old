@@ -52,7 +52,7 @@ export default class MixRevision {
     return 'data:image/png;base64, ' + response.toString('base64')
   }
 
-  async getImage(widthMin, heightMin) {
+  getImage(widthMin, heightMin) {
     let imageMessage = new ImageMixinProto.ImageMixin.deserializeBinary(this.content.getPayloads('0x045eee8c')[0])
     let width = imageMessage.getWidth()
     let height = imageMessage.getHeight()
@@ -70,12 +70,7 @@ export default class MixRevision {
       }
     }
 
-    let widthOut = Math.round(width / scale)
-    let heightOut = Math.round(height / scale)
-
-    let response = await this.vue.$ipfsClient.get(bs58.encode(Buffer.from(mipmapList[i].getIpfsHash())))
-
-    return '<img src="data:image/png;base64, ' + response.toString('base64') + '" width="' + widthOut + '" height="' + heightOut + '">'
+    return bs58.encode(Buffer.from(mipmapList[i].getIpfsHash()))
   }
 
   getFile() {

@@ -3,7 +3,9 @@
 		<div class="tile is-ancestor">
 		  <div class="tile is-parent is-4">
         <article class="tile is-child notification is-info">
-          <div class="token-image is-pulled-right" v-html="image"></div>
+          <div class="token-image is-pulled-right">
+            <ipfs-image :ipfsHash="image" :key="image"></ipfs-image>
+          </div>
           <p class="title">Token</p>
           <p class="subtitle"><item-link :itemId="tokenItemId" :key="tokenItemId"></item-link></p>
 					<b-field label="Your balance">
@@ -84,6 +86,7 @@
 	import ItemLink from './ItemLink.vue'
 	import ProfileLink from './ProfileLink.vue'
 	import MixItem from '../../lib/MixItem'
+  import IpfsImage from './IpfsImage.vue'
 
   export default {
     name: 'item-token',
@@ -93,6 +96,7 @@
 		components: {
       ItemLink,
 			ProfileLink,
+      IpfsImage,
     },
 		data() {
       return {
@@ -128,8 +132,7 @@
     			this.tokenItemId = await this.$mixClient.itemDagTokenItems.methods.getParentId(this.itemId).call()
           let item = await new MixItem(this.$root, this.tokenItemId).init()
           let revision = await item.latestRevision().load()
-          revision.getImage(64, 64)
-          .then(image => {this.image = image})
+          this.image = revision.getImage(64, 64)
           this.address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.tokenItemId).call()
     			this.token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), this.address)
     			this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(this.address).call()

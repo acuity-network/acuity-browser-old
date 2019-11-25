@@ -1,6 +1,8 @@
 <template>
   <div id="active-account" class="is-clearfix">
-    <div v-html="image" class="avatar"></div>
+    <div class="avatar">
+      <ipfs-image :ipfsHash="image" :key="image"></ipfs-image>
+    </div>
     <profile-link :address="address"></profile-link>
     <span v-if="unlocked" class="clickable mdi mdi-12px mdi-lock-open" style="color: #228B22;" @click="lock"></span>
     <span v-else class="clickable mdi mdi-12px mdi-lock" style="color: #CE2029;" @click="passwordFieldType = ''; password = ''; enterPassword = !enterPassword"></span>
@@ -14,11 +16,13 @@
 <script lang="ts">
   import MixItem from '../../lib/MixItem'
   import ProfileLink from './ProfileLink.vue'
+  import IpfsImage from './IpfsImage.vue'
 
   export default {
     name: 'active-account',
     components: {
       ProfileLink,
+      IpfsImage,
     },
     data() {
       return {
@@ -41,8 +45,7 @@
           let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
           let item: MixItem = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
-          revision.getImage(100, 100)
-          .then(image => {this.image = image})
+          this.image = revision.getImage(100, 100)
         }
         catch (error) {
           this.title = ''

@@ -1,7 +1,9 @@
 <template>
   <div v-if="trusted" class="comment">
     <div class="profile is-clearfix">
-      <div class="avatar is-pulled-left" v-html="avatar"></div>
+      <div class="avatar is-pulled-left">
+        <ipfs-image :ipfsHash="avatar" :key="avatar"></ipfs-image>
+      </div>
       <profile-link :address="ownerAddress"></profile-link>
         <span v-if="timestamp > 0">
           <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
@@ -36,6 +38,7 @@
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
   import Reactions from './Reactions.vue'
   import ProfileLink from './ProfileLink.vue'
+  import IpfsImage from './IpfsImage.vue'
   import twemoji from 'twemoji'
   let plusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'})
   let minusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2796'), {folder: 'svg', ext: '.svg'})
@@ -47,6 +50,7 @@
       VueMarkdown,
       Reactions,
       ProfileLink,
+      IpfsImage,
     },
     data() {
       return {
@@ -71,8 +75,7 @@
         let itemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
         let profile = await new MixItem(this.$root, itemId).init()
         let revision = await profile.latestRevision().load()
-        revision.getImage(32, 32)
-        .then(image => {this.avatar = image})
+        this.avatar = revision.getImage(32, 32)
 
         let commentRevision = await item.latestRevision().load()
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000)

@@ -1,7 +1,9 @@
 <template>
   <page>
     <template slot="title">
-      <div class="avatar is-pulled-left" v-html="avatar"></div>
+      <div class="avatar is-pulled-left">
+        <ipfs-image :ipfsHash="avatar" :key="avatar"></ipfs-image>
+      </div>
       <span v-if="isFeed">Feed: </span>
       <span v-if="isProfile">Profile: </span>
       <span v-if="isToken">Token: </span>
@@ -40,7 +42,9 @@
     <template slot="body">
       <div class="columns">
         <div class="column">
-          <div class="image" v-html="image"></div>
+          <div class="image">
+            <ipfs-image :ipfsHash="image" :key="image"></ipfs-image>
+          </div>
           <div v-if="hasFile" class="file">
             <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
             <span v-if="hasDownloaded" class="check" v-html="checkIcon" ></span>
@@ -98,6 +102,7 @@
   import AccountInfo from './AccountInfo.vue'
   import ItemLink from './ItemLink.vue'
   import ProfileLink from './ProfileLink.vue'
+  import IpfsImage from './IpfsImage.vue'
   import Page from './Page.vue'
   import Reactions from './Reactions.vue'
   import ItemToken from './ItemToken.vue'
@@ -140,6 +145,7 @@
       TokenView,
       VueMarkdown,
       Reactions,
+      IpfsImage,
     },
     data() {
       let data = {}
@@ -264,8 +270,7 @@
         let profileItem = await new MixItem(this.$root, profileItemId).init()
         let profileRevision = await profileItem.latestRevision().load()
         this.owner = profileRevision.getTitle()
-        profileRevision.getImage(64, 64)
-        .then(image => {this.avatar = image})
+        this.avatar = profileRevision.getImage(64, 64)
 
         let feedIds = await this.$mixClient.itemDagFeedItems.methods.getAllParentIds(this.itemId).call()
         if (feedIds.length > 0) {
@@ -331,8 +336,7 @@
           let timestamp = firstRevision.getTimestamp()
           this.published = this.$t('ViewItem.Published') + ': ' + ((timestamp > 0) ? new Date(timestamp * 1000).toLocaleDateString() : this.$t('ViewItem.JustNow'))
           if (!this.isProfile) {
-            revision.getImage(512)
-            .then(image => {this.image = image})
+            this.image = revision.getImage(512)
           }
           this.description = revision.getBodyText()
         }
