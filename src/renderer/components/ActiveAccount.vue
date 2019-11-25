@@ -41,7 +41,8 @@
           let itemId = await this.$activeAccount.get().call(this.$mixClient.accountProfile, 'getProfile')
           let item: MixItem = await new MixItem(this, itemId).init()
           let revision = await item.latestRevision().load()
-          this.image = await revision.getImage(100, 100)
+          revision.getImage(100, 100)
+          .then(image => {this.image = image})
         }
         catch (error) {
           this.title = ''

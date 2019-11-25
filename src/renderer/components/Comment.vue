@@ -71,7 +71,8 @@
         let itemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
         let profile = await new MixItem(this.$root, itemId).init()
         let revision = await profile.latestRevision().load()
-        this.avatar = await revision.getImage(32, 32)
+        revision.getImage(32, 32)
+        .then(image => {this.avatar = image})
 
         let commentRevision = await item.latestRevision().load()
         this.timestamp = new Date(commentRevision.getTimestamp() * 1000)
