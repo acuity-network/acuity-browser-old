@@ -1,5 +1,5 @@
 <template>
-  <img v-if="ipfsHash" :src="src">
+  <img v-if="src" :src="src">
 </template>
 
 <script lang="ts">
@@ -24,6 +24,7 @@
     },
     watch: {
       ipfsHash(val, oldVal) {
+        this.src = ''
         this.loadData()
       },
     }
