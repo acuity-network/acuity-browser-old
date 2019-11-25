@@ -6,9 +6,9 @@
     <div v-if="!splash">
       <div id="sidebar">
         <active-account></active-account>
-        <navigation></navigation>
+        <navigation v-if="isDesktopApp"></navigation>
         <p class="menu-label">
-         {{ $t('App.General') }}
+          {{ $t('App.General') }}
         </p>
         <ul class="menu-list">
           <li><router-link to="/home">{{ $t('App.Home') }}</router-link>
@@ -36,7 +36,7 @@
         <ul class="menu-list">
           <li><router-link to="/manage-accounts">{{ $t('App.Accounts') }}</router-link></li>
           <li><router-link to="/node-status">{{ $t('App.NodeStatus') }}</router-link></li>
-          <li><router-link to="/mining">{{ $t('App.Mining') }}</router-link></li>
+          <li v-if="isDesktopApp"><router-link to="/mining">{{ $t('App.Mining') }}</router-link></li>
           <li><router-link to="/settings">{{ $t('App.Settings') }}</router-link></li>
           <li v-if="isDevelopment"><router-link to="/debug">{{ $t('App.DebugItem') }}</router-link></li>
         </ul>
@@ -66,6 +66,7 @@
       return {
         splash: true,
         isDevelopment: false,
+        isDesktopApp: false,
       }
     },
     async created() {
@@ -82,7 +83,6 @@
       catch(e) {
         this.$router.push({ name: 'manage-accounts-new' })
       }
-      window.downloads = []
       await this.$settings.init(this.$db)
       // Load previous selected language.
       this.$root.$i18n.locale = this.$settings.get('locale')
