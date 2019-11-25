@@ -7,7 +7,7 @@
       <span v-if="isToken">Token: </span>
       <item-link v-if="short" :itemId="itemId"></item-link>
       <span v-else>{{ title }}</span>
-      <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
+      <span v-if="!isWeb" @click="copyItemId" class="clickable mdi mdi-24px mdi-link">
       </span>
       <span
         v-if="!short && editable"
@@ -186,6 +186,7 @@
     },
     methods: {
       resetData(data) {
+        data.isWeb = true
         data.avatar = ''
         data.title = ''
         data.editable = false

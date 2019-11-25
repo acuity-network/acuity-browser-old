@@ -2,7 +2,7 @@
   <page>
     <template slot="title">
       {{ title }}
-      <span @click="copyItemId" class="clickable mdi mdi-24px mdi-link"></span>
+      <span v-if="!isWeb" @click="copyItemId" class="clickable mdi mdi-24px mdi-link"></span>
     </template>
 
     <template slot="body">
@@ -37,6 +37,7 @@
     },
     data() {
       return {
+        isWeb: true,
         itemId: '',
         title: '',
         bio: '',
