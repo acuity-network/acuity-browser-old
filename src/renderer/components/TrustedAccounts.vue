@@ -46,6 +46,7 @@
   import MixAccount from '../../lib/MixAccount'
   import MixItem from '../../lib/MixItem'
   import setTitle from '../../lib/setTitle'
+  import bs58 from 'bs58'
 
   export default {
     name: 'trusted-accounts',
@@ -73,7 +74,7 @@
           trusted.push({
             account: account.contractAddress,
             title: profileRevision.getTitle(),
-            route: '/item/' + profileItemId,
+            route: '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(profileItemId.substr(0, 50)))),
           })
         })
 
@@ -93,7 +94,7 @@
               whitelist.push({
                 account: accountAddress,
                 title: profileRevision.getTitle(),
-                route: '/item/' + profileItemId,
+                route: '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(profileItemId.substr(0, 50)))),
               })
               break;
 
@@ -101,7 +102,7 @@
               blacklist.push({
                 account: accountAddress,
                 title: profileRevision.getTitle(),
-                route: '/item/' + profileItemId,
+                route: '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(profileItemId.substr(0, 50)))),
               })
               break;
           }

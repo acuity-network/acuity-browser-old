@@ -33,6 +33,7 @@
   import Page from './Page.vue'
   import MixItem from '../../lib/MixItem'
   import setTitle from '../../lib/setTitle'
+  import bs58 from 'bs58'
 
   export default {
     name: 'subscriptions',
@@ -63,7 +64,7 @@
 
             this.feeds.push({
               title: revision.getTitle(),
-              route: '/item/' + itemId,
+              route: '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(itemId.substr(0, 50)))),
               itemId: itemId,
             })
           }
