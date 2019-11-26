@@ -5,7 +5,7 @@
     </template>
 
     <template slot="body">
-      <b-field :label="$t('NodeStatus.AcuityVersion')">
+      <b-field v-show="false" :label="$t('NodeStatus.AcuityVersion')">
         {{ acuityVersion }}
       </b-field>
       <div class="columns">
@@ -118,12 +118,14 @@
     },
     async created() {
       setTitle(this.$t('NodeStatus.NodeStatus'))
+/*
       if (process.env.NODE_ENV == 'development') {
         this.acuityVersion = process.env.npm_package_version
       }
       else {
-//        this.acuityVersion = remote.app.getVersion()
+        this.acuityVersion = remote.app.getVersion()
       }
+*/
       this.agent = (await this.$mixClient.web3.eth.getNodeInfo()).split('-stable-')[0]
       this.web3Version = this.$mixClient.web3.version
       let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
