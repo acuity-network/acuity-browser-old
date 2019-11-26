@@ -57,8 +57,6 @@
   import FileMixinProto from '../../lib/protobuf/FileMixin_pb.js'
   import MixItem from '../../lib/MixItem'
   import MixContent from '../../lib/MixContent'
-  import fs from 'fs'
-  import request from 'request'
   import formatByteCount from '../../lib/formatByteCount'
   import bs58 from 'bs58'
   import setTitle from '../../lib/setTitle'
