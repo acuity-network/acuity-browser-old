@@ -122,7 +122,9 @@
         let account: MixAccount = await new MixAccount(this, controllerAddress).init()
         account.unlock(this.password)
         account.select()
-        this.$router.push({ name: 'item', params: { hexItemId: await account.call(this.$mixClient.accountProfile, 'getProfile') }})
+        let itemId = await account.getProfile()
+        let encodedItemId = bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(itemId.substr(0, 50))))
+        this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       },
     },
     async created() {
