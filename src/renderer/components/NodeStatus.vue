@@ -113,7 +113,7 @@
 
           let repoStat = await this.$ipfsClient.repoStat()
           this.ipfsRepoSize = formatByteCount(repoStat.repoSize)
-          this.ipfsRepoObjectCount = repoStat.numObjects
+          this.ipfsRepoObjectCount = repoStat.numObjects.toLocaleString()
       },
     },
     async created() {
