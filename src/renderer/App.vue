@@ -78,7 +78,9 @@
         let controller = await this.$db.get('/active-account')
         this.$activeAccount.set(await new MixAccount(this.$root, controller).init())
       }
-      catch (e) {}
+      catch (e) {
+        this.$activeAccount.set(await new MixAccount(this.$root))
+      }
       await this.$settings.init(this.$db)
       // Load previous selected language.
       this.$root.$i18n.locale = this.$settings.get('locale')
