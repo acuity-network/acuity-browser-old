@@ -29,7 +29,7 @@ export default class MixClient {
 	uniswapFactory: any
 
 	async init(vue) {
-		this.web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8546'))
+		this.web3 = new Web3(new Web3.providers.WebsocketProvider('ws://74.207.240.177:8546'))
 
 		vue.$emit('mix-client-web3')
 
