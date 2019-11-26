@@ -74,8 +74,11 @@
       })
       await Promise.all([this.$mixClient.init(this.$root), this.$ipfsClient.init(this.$root)])
       // Load previous active account.
-      let controller = await this.$db.get('/active-account')
-      this.$activeAccount.set(await new MixAccount(this.$root, controller).init())
+      try {
+        let controller = await this.$db.get('/active-account')
+        this.$activeAccount.set(await new MixAccount(this.$root, controller).init())
+      }
+      catch (e) {}
       await this.$settings.init(this.$db)
       // Load previous selected language.
       this.$root.$i18n.locale = this.$settings.get('locale')
