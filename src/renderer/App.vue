@@ -16,7 +16,7 @@
           <li><router-link to="/subscriptions">{{ $t('App.Subscriptions') }}</router-link>
           <li><router-link to="/interactions">{{ $t('App.Interactions') }}</router-link>
           <li><router-link to="/browsing-history">{{ $t('App.BrowsingHistory') }}</router-link></li>
-          <li><router-link to="/downloads">{{ $t('App.Downloads') }}</router-link></li>
+          <li v-if="isDesktopApp"><router-link to="/downloads">{{ $t('App.Downloads') }}</router-link></li>
           <li><router-link to="/publish-item">{{ $t('App.PublishItem') }}</router-link></li>
           <li><router-link to="/goto">{{ $t('App.GotoItem') }}</router-link></li>
         </ul>

@@ -28,9 +28,18 @@
       <topic-selector v-model="topics"></topic-selector>
       <mention-selector v-model="mentions"></mention-selector>
 
-      <b-field :label="$t('PublishFile.File')" :message="filepath">
-        <button class="button" @click="chooseFile">{{ $t('PublishFile.ChooseFile') }}</button>
+      <b-field class="file">
+        <b-upload v-model="file" @input="fileUploaded">
+          <a class="button is-primary">
+            <b-icon icon="upload"></b-icon>
+            <span>{{ $t('PublishFile.ChooseFile') }}</span>
+          </a>
+        </b-upload>
+        <span class="file-name" v-if="file">
+          {{ file.name }}
+        </span>
       </b-field>
+
       <code v-html="output" style="display: block; font-size:small"></code>
       <button v-if="isDoneUploading" class="button is-primary" @click="publish">{{ $t('PublishFile.Publish') }}</button>
     </template>
@@ -71,9 +80,7 @@
         feedId: '0',
         topics: [],
         mentions: [],
-        filepath: '',
-        fileTotalSize: 0,
-        isUploading: false,
+        file: null,
         isDoneUploading: false,
         output: '',
       }
@@ -96,36 +103,15 @@
       }
     },
     methods: {
-      async chooseFile(event) {
-        let {dialog} = require('electron').remote
-        let result: any = await dialog.showOpenDialog(null, {
-          title: this.$t('PublishFile.ChooseFile'),
-        })
-        this.filepath = result.filePaths[0]
-        if (!result.canceled) {
-          this.isUploading = true
-          this.fileUploadedSize = 0
-          this.filePath = result.filePaths[0]
-          let stats = fs.statSync(this.filePath)
-          this.fileTotalSize = stats.size
-          this.output = this.$t('PublishFile.UploadingFile')
-          let req = request.post('http://127.0.0.1:5101/api/v0/add', (err, res, body) => {
-            if (err) {
-              console.log(err)
-            } else {
-              let jsonBody = JSON.parse(body)
-              this.fileHash = jsonBody.Hash
-              this.fileName = jsonBody.Name
-              this.fileSize = jsonBody.Size
-              this.isDoneUploading = true
-              this.output = this.$t('PublishFile.Name') + ': '+ this.fileName + '<br/>' +
-                this.$t('PublishFile.Hash') + ': ' + this.fileHash + '<br/>' +
-                this.$t('PublishFile.Size') + ': ' +  formatByteCount(this.fileSize)
-            }
-          })
-          let form = req.form()
-          form.append('file', fs.createReadStream(this.filePath))
-        }
+      async fileUploaded(file) {
+        this.output = this.$t('PublishFile.UploadingFile')
+        this.fileHash = await this.$ipfsClient.add(file)
+        this.fileName = file.name
+        this.fileSize = file.size
+        this.isDoneUploading = true
+        this.output = this.$t('PublishFile.Name') + ': '+ this.fileName + '<br/>' +
+          this.$t('PublishFile.Hash') + ': ' + this.fileHash + '<br/>' +
+          this.$t('PublishFile.Size') + ': ' +  formatByteCount(this.fileSize)
       },
       async publish(event) {
         let flagsNonce = '0x0f' + this.$mixClient.web3.utils.randomHex(31).substr(2)
