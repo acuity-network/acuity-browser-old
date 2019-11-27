@@ -35,12 +35,13 @@ export default class IpfsClient {
       },
       config: {
         Addresses: {
-          Swarm: ["/ip4/0.0.0.0/tcp/0/ws", "/ip6/::/tcp/0/ws"],
+          // This needs to be specified for production build.
+          Swarm: [],
         },
         Bootstrap: bootnodes,
       },
     }
-    this.node = await Ipfs.create()
+    this.node = await Ipfs.create(options)
     setInterval(this.connect.bind(this), 30000)
   }
 
