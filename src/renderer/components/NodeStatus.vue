@@ -103,8 +103,7 @@
           let ipfsId = await this.$ipfsClient.id()
           let addresses = []
           for (let address of ipfsId.addresses) {
-//            addresses.push(address.split('/ipfs/')[0])
-            addresses.push(address)
+            addresses.push(address.split('/ipfs/')[0])
           }
           this.ipfsAddresses = addresses.sort();
 
