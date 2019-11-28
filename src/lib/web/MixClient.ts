@@ -38,7 +38,7 @@ export default class MixClient {
 
     this.formatWei = (wei: string) => Number(this.web3.utils.fromWei(this.web3.utils.toBN(wei))).toLocaleString()
 
-		this.parityApi = new Api(new Api.Provider.Http('http://localhost:8645'))
+//		this.parityApi = new Api(new Api.Provider.Http('http://localhost:8645'))
 
 		this.itemStoreRegistry = new this.web3.eth.Contract(require('../contracts/MixItemStoreRegistry.abi.json'), '0xb7aead157809d83234ae1a9ac42d8846ebceba6e')
 		this.itemStoreIpfsSha256 = new this.web3.eth.Contract(require('../contracts/MixItemStoreIpfsSha256.abi.json'), '0x26b10bb026700148962c4a948b08ae162d18c0af')
