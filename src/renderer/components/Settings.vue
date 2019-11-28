@@ -11,6 +11,19 @@
           <option value="ru">русский</option>
         </b-select>
       </b-field>
+      <b-field label="MIX Blockchain endpoint">
+        <b-select v-model="mixEndpoint">
+          <option value="atlanta">Atlanta, GA</option>
+          <option value="dallas">Dallas, TX</option>
+          <option value="frankfurt">Frankfurt</option>
+          <option value="freemont">Freemont, CA</option>
+          <option value="london">London</option>
+          <option value="newark">Newark, NJ</option>
+          <option value="singapore">Singapore</option>
+          <option value="tokyo">Tokyo</option>
+          <option value="toronto">Toronto</option>
+        </b-select>
+      </b-field>
       <b-field :label="$t('Settings.Advanced')">
         <b-checkbox v-model="development">
           {{ $t('Settings.DevelopmentMode') }}
@@ -32,16 +45,21 @@
     data() {
       return {
         locale: this.$settings.get('locale'),
+        mixEndpoint: this.$settings.get('mixEndpoint'),
         development: this.$settings.get('development'),
       }
     },
     watch: {
       locale() {
-        this.$root.$i18n.locale = this.locale;
-        this.$settings.set('locale', this.locale);
+        this.$settings.set('locale', this.locale)
+        this.$root.$i18n.locale = this.locale
+      },
+      mixEndpoint() {
+        this.$settings.set('mixEndpoint', this.mixEndpoint)
+        this.$mixClient.init(this.$root, this.mixEndpoint)
       },
       development() {
-        this.$settings.set('development', this.development);
+        this.$settings.set('development', this.development)
         this.$root.$emit('development', this.development)
       },
     },

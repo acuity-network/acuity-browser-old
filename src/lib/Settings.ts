@@ -25,6 +25,7 @@ export default class Settings {
 
 		let defaults = {
 			locale: 'en-US',
+      mixEndpoint: 'freemont',
 			development: false,
 		}
 

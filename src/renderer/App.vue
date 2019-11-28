@@ -72,7 +72,8 @@
       this.$root.$on('development', isDevelopment => {
 				this.isDevelopment = isDevelopment
       })
-      await Promise.all([this.$mixClient.init(this.$root), this.$ipfsClient.init(this.$root)])
+      await this.$settings.init(this.$db)
+      await Promise.all([this.$mixClient.init(this.$root, this.$settings.get('mixEndpoint')), this.$ipfsClient.init(this.$root)])
       // Load previous active account.
       try {
         let controller = await this.$db.get('/active-account')
@@ -81,7 +82,7 @@
       catch (e) {
         this.$activeAccount.set(await new MixAccount(this.$root))
       }
-      await this.$settings.init(this.$db)
+      this.splash = false
       // Load previous selected language.
       this.$root.$i18n.locale = this.$settings.get('locale')
       this.isDevelopment = this.$settings.get('development')
@@ -152,7 +153,6 @@
         })
       })
       mentionNotifications.launch(this.$root)
-      this.splash = false
     },
     destroyed() {
       mentionNotifications.kill()

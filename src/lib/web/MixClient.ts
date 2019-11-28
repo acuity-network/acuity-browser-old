@@ -1,10 +1,8 @@
 import Web3 from 'web3'
-import throttle from 'just-throttle'
 
 export default class MixClient {
 	web3: any
   formatWei: any
-	parityApi: any
 	itemStoreRegistry: any
 	itemStoreIpfsSha256: any
 	itemStoreShortId: any
@@ -27,10 +25,16 @@ export default class MixClient {
 	tokenBurn: any
 	uniswapFactory: any
 
-	async init(vue) {
-		this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://freemont.mix-blockchain.org:8547'))
+	async init(vue, endpoint) {
 
-		vue.$emit('mix-client-web3')
+    let uri: string = 'wss://' + endpoint + '.mix-blockchain.org:8547'
+
+    if (this.web3) {
+      this.web3.setProvider(new Web3.providers.WebsocketProvider(uri))
+    }
+    else {
+      this.web3 = new Web3(new Web3.providers.WebsocketProvider(uri))
+    }
 
 		this.web3.eth.defaultBlock = 'pending'
 		this.web3.eth.transactionConfirmationBlocks = 1
@@ -59,8 +63,8 @@ export default class MixClient {
 		this.tokenBurn = new this.web3.eth.Contract(require('../contracts/MixTokenBurn.abi.json'), this.tokenBurnAddress)
 		this.uniswapFactory = new this.web3.eth.Contract(require('../contracts/UniswapFactory.abi.json'), '0x1381a70fc605b7d7e54b7e1159afba1429a4bbb1')
 
-      vue.$emit('mix-client-web3')
-      vue.$emit('mix-client-sync')
-      vue.$emit('mix-client-state')
+    vue.$emit('mix-client-web3')
+    vue.$emit('mix-client-sync')
+    vue.$emit('mix-client-state')
   }
 }
