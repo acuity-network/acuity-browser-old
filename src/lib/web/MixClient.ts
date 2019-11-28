@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import Api from '@parity/api'
+//import Api from '@parity/api'
 import throttle from 'just-throttle'
 
 export default class MixClient {
