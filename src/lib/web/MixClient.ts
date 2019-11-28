@@ -1,5 +1,4 @@
 import Web3 from 'web3'
-//import Api from '@parity/api'
 import throttle from 'just-throttle'
 
 export default class MixClient {
@@ -38,8 +37,6 @@ export default class MixClient {
 
     this.formatWei = (wei: string) => Number(this.web3.utils.fromWei(this.web3.utils.toBN(wei))).toLocaleString()
 
-//		this.parityApi = new Api(new Api.Provider.Http('http://localhost:8645'))
-
 		this.itemStoreRegistry = new this.web3.eth.Contract(require('../contracts/MixItemStoreRegistry.abi.json'), '0xb7aead157809d83234ae1a9ac42d8846ebceba6e')
 		this.itemStoreIpfsSha256 = new this.web3.eth.Contract(require('../contracts/MixItemStoreIpfsSha256.abi.json'), '0x26b10bb026700148962c4a948b08ae162d18c0af')
 		this.itemStoreShortId = new this.web3.eth.Contract(require('../contracts/MixItemStoreShortId.abi.json'), '0xf40f0ae20067f5095e2b5fe1c21da8b8e61d3cac')
@@ -62,52 +59,8 @@ export default class MixClient {
 		this.tokenBurn = new this.web3.eth.Contract(require('../contracts/MixTokenBurn.abi.json'), this.tokenBurnAddress)
 		this.uniswapFactory = new this.web3.eth.Contract(require('../contracts/UniswapFactory.abi.json'), '0x1381a70fc605b7d7e54b7e1159afba1429a4bbb1')
 
-		// Emit sync info.
-		let startingBlock, currentBlock
-		let newBlockHeaders = throttle(async () => {
-			let isSyncing = await this.web3.eth.isSyncing()
-
-			if (isSyncing !== false) {
-				if (isSyncing.currentBlock != currentBlock) {
-					currentBlock = isSyncing.currentBlock
-
-					if (!startingBlock) {
-						startingBlock = currentBlock
-					}
-
-					isSyncing.startingBlock = startingBlock
-					vue.$emit('mix-client-syncing', isSyncing)
-				}
-			}
-		}, 100, true)
-
-		this.web3.eth.subscribe('newBlockHeaders')
-		.on('data', newBlockHeaders)
-
-		// Wait for Parity to sync.
-		await new Promise((resolve, reject) => {
-			let intervalId = setInterval(async () => {
-				let isSyncing = await this.web3.eth.isSyncing()
-
-				if (isSyncing === false) {
-					vue.$emit('mix-client-sync')
-					clearInterval(intervalId)
-					resolve()
-				}
-			}, 100);
-		})
-
-		// Wait for Parity to start working.
-		return new Promise((resolve, reject) => {
-			let intervalId = setInterval(async () => {
-				try {
-					await this.itemStoreIpfsSha256.methods.getItem('0x7c8239285dc6053f835f70d5dc1f2979da95f6e4484d04dff1b5847865d2094d').call()
-					vue.$emit('mix-client-state')
-					clearInterval(intervalId)
-					resolve()
-				}
-				catch (e) {}
-			}, 100);
-		})
-	}
+      vue.$emit('mix-client-web3')
+      vue.$emit('mix-client-sync')
+      vue.$emit('mix-client-state')
+  }
 }
