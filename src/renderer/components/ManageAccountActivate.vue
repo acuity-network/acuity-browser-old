@@ -73,7 +73,7 @@
       },
       async request() {
         try {
-          let response = await this.$http.get('http://172.104.175.158:3000/' + this.controllerAddress)
+          let response = await this.$http.get('https://singapore.mix-blockchain.org:3001/' + this.controllerAddress)
           this.faucetMessageType = 'is-success'
           this.faucetMessage = response.data
           this.faucetRequested = true
