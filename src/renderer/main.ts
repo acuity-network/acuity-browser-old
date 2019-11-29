@@ -1,5 +1,6 @@
 import 'setimmediate'
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
 import db from '../lib/db'
@@ -12,6 +13,7 @@ router.afterEach((to, from) => {
   }
 })
 
+Vue.use(Vuex)
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 
