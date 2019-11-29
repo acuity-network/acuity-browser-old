@@ -5,7 +5,10 @@
     </template>
 
     <template slot="body">
-      <div v-if="!activating">
+      <template v-if="activating">
+        <b-progress type="is-info"></b-progress>
+      </template>
+      <template v-else>
         <b-message type="is-info">
           {{ $t('ManageAccountActivate.Info') }}
         </b-message>
@@ -25,10 +28,7 @@
         <b-field :label="$t('ManageAccountActivate.PendingBalance')">
           {{ balancePending }} MIX
         </b-field>
-      </div>
-      <div v-else>
-        {{ $t('ManageAccountActivate.Deploying') }}
-      </div>
+      </template>
     </template>
   </page>
 </template>
