@@ -323,6 +323,7 @@ export default {
 		TrustedAccounts: 'Trusted Accounts',
 		Account: 'Account',
 		Remove: 'remove',
+    Trusters: 'Trusters',
 		Whitelist: 'Whitelist',
 		Blacklist: 'Blacklist',
 	},

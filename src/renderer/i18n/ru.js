@@ -323,6 +323,7 @@ export default {
 		TrustedAccounts: 'Аккаунты, которым доверяю',
 		Account: 'Аккаунт',
 		Remove: 'удалить',
+    Trusters: 'Trusters',
 		Whitelist: 'Белый список',
 		Blacklist: 'Черный список',
 	},

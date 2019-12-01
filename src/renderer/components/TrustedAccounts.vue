@@ -15,6 +15,12 @@
           </b-table-column>
         </template>
       </b-table>
+      <h2 class="subtitle">{{ $t('TrustedAccounts.Trusters') }}</h2>
+      <ul>
+        <li v-for="address in trusters" :key="address">
+          <profile-link :address="address"></profile-link>
+        </li>
+      </ul>
       <h2 class="subtitle">{{ $t('TrustedAccounts.Whitelist') }}</h2>
       <b-table :data="whitelist" default-sort="account" default-sort-direction="asc">
         <template slot-scope="props">
@@ -47,15 +53,18 @@
   import MixItem from '../../lib/MixItem'
   import setTitle from '../../lib/setTitle'
   import bs58 from 'bs58'
+  import ProfileLink from './ProfileLink.vue'
 
   export default {
     name: 'trusted-accounts',
     components: {
       Page,
+      ProfileLink,
     },
     data() {
       return {
         trusted: [],
+        trusters: [],
         whitelist: [],
         blacklist: [],
       }
@@ -77,6 +86,26 @@
             route: '/item/' + bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(profileItemId.substr(0, 50)))),
           })
         })
+
+        let events = await this.$mixClient.trustedAccounts.getPastEvents('allEvents', {
+          fromBlock: 0,
+          toBlock: 'pending',
+          topics: [,, ['0x000000000000000000000000' + this.$activeAccount.get().contractAddress.substr(2)]],
+        })
+
+        for (let event of events) {
+          switch (event.event) {
+            case 'TrustAccount':
+              this.trusters.push(event.returnValues.account)
+              break;
+            case 'UntrustAccount':
+              let i = this.trusters.indexOf(event.returnValues.account);
+              if (i > -1) {
+                this.trusters.splice(i, 1);
+              }
+              break;
+          }
+        }
 
         await this.$db.createReadStream({
           'gte': '/accountVisibility/' + this.$activeAccount.get().contractAddress + '/',
