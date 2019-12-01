@@ -17,6 +17,10 @@ export default new Router({
       props: true,
     },
     {
+      path: '/',
+      redirect: '/home',
+    },
+    {
       path: '/home',
       name: 'home',
       component: require('../components/Home').default
