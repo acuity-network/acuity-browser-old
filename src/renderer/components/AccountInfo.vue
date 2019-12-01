@@ -27,7 +27,7 @@
         </li>
       </ul>
     </b-field>
-    <b-field :label="$t('AccountInfo.VisibilityOverride')">
+    <b-field  v-if="!isOwnProfile" :label="$t('AccountInfo.VisibilityOverride')">
       <b-select v-model="visibility">
         <option value="none">None</option>
         <option value="whitelist">{{ $t('AccountInfo.Whitelist') }}</option>
@@ -65,6 +65,7 @@
     },
     data() {
       return {
+        isOwnProfile: false,
         type: '',
         location: '',
         feeds: [],
@@ -77,6 +78,9 @@
     async created() {
       let account = await new MixAccount(this.$root, this.address, true).init()
       let itemId = await account.getProfile()
+      if (await this.$activeAccount.get().getProfile() == itemId) {
+        this.isOwnProfile = true
+      }
       let item = await new MixItem(this, itemId).init()
       let revision = await item.latestRevision().load()
       let profile = revision.getProfile()
