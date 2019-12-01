@@ -38,6 +38,10 @@
         })
       })
 
+      if (feedIds.length == 0) {
+        feedIds.push('0x86e5019a26041a2805d500f5aa135795bd907eed0126c41bf1b5847865d2094d')
+      }
+
       let topicsPromise = new Promise((resolve, reject) => {
         this.$db.createValueStream({
           'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
