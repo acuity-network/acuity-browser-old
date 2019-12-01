@@ -1,7 +1,6 @@
 <template>
   <span v-if="title">
-    <router-link v-if="route" :to="route">{{ title }}</router-link>
-    <span v-else>{{ title }}</span>
+    <router-link :to="route">{{ title }}</router-link>
   </span>
 </template>
 
@@ -31,8 +30,8 @@
             this.title = revision.getTitle()
           }
           catch (e) {
-            this.route = ''
-            this.title = this.address
+            this.route = '/profile/edit'
+            this.title = 'Unnamed'
           }
         }
       },
