@@ -13,8 +13,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "install": "node --experimental-modules download.mjs",
-    "postinstall": "patch-package && electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postinstall": "patch-package"
   },
   "main": "background.js",
   "electronWebpack": {
