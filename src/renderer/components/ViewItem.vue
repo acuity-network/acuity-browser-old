@@ -76,7 +76,7 @@
         <item-token :itemId="itemId"></item-token>
 
         <div v-if="isFeed">
-          <view-item v-for="itemId in feedItemIds" :short="true" :hexItemId="itemId" :key="itemId"></view-item>
+          <view-item v-for="itemId in feedItemIds" :short="true" :trust="true" :hexItemId="itemId" :key="itemId"></view-item>
         </div>
         <div v-else>
           <comment v-for="itemId in commentIds" :itemId="itemId" :key="itemId"></comment>
@@ -130,6 +130,11 @@
         required: false,
       },
       short: {
+        type: Boolean,
+        default: false,
+        required: false,
+      },
+      trust: {
         type: Boolean,
         default: false,
         required: false,
@@ -296,7 +301,7 @@
         this.commentIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.feedItemIds = (await this.$mixClient.itemDagFeedItems.methods.getAllChildIds(this.itemId).call()).reverse()
 
-        if (this.short && !trustLevel) {
+        if (this.short && !trustLevel && !this.trust) {
           this.title = ''
           this.description = this.$t('ViewItem.AuthorNotTrusted')
           return
