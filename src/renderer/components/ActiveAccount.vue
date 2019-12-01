@@ -68,6 +68,7 @@
         this.loadData()
       },
       changeActiveAccount() {
+        this.address = ''
         this.loadData()
       },
     },
