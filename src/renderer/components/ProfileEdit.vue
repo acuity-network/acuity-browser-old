@@ -123,10 +123,13 @@
 
           // Image
           if (this.file == null) {
-            let itemId = await this.$activeAccount.get().getProfile()
-            let item = await new MixItem(this.$root, itemId).init()
-            let revision = await item.latestRevision().load()
-            content.addMixinPayload(0x045eee8c, revision.content.getPayloads('0x045eee8c')[0])
+            try {
+              let itemId = await this.$activeAccount.get().getProfile()
+              let item = await new MixItem(this.$root, itemId).init()
+              let revision = await item.latestRevision().load()
+              content.addMixinPayload(0x045eee8c, revision.content.getPayloads('0x045eee8c')[0])
+            }
+            catch (e) {}
           }
           else {
             let image = new Image(this.$root, this.file)
