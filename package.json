@@ -18,7 +18,10 @@
   },
   "main": "background.js",
   "electronWebpack": {
-    "staticSourceDirectory": "public"
+    "staticSourceDirectory": "public",
+    "renderer": {
+      "webpackConfig": "webpack.renderer.additions.js"
+    }
   },
   "build": {
     "asarUnpack": [
