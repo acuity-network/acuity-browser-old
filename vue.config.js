@@ -18,8 +18,8 @@ module.exports = {
         'web/Image.js'
       ),
       new webpack.NormalModuleReplacementPlugin(
-        /\/src\/lib\/brotli\.js/,
-        'web/brotli.js'
+        /\/src\/lib\/brotli\.ts/,
+        'web/brotli.ts'
       ),
       new webpack.NormalModuleReplacementPlugin(
         /\/src\/lib\/db\.ts/,
