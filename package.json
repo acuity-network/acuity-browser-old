@@ -107,6 +107,6 @@
     "webpack": "^4.41.2"
   },
   "resolutions": {
-    "websocket": "1.0.30"
+    "websocket": "1.0.31"
   }
 }
