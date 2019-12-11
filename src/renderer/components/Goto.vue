@@ -38,8 +38,10 @@
 
       try {
         bs58.decode(clipboardText)
-        if (clipboardText.length == 33) {
-          this.encodedItemId = clipboardText
+        switch (clipboardText.length) {
+          case 32:
+          case 33:
+            this.encodedItemId = clipboardText
         }
       }
       catch (e) {}
