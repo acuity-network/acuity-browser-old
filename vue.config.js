@@ -30,8 +30,8 @@ module.exports = {
         'web/MixClient.ts'
       ),
       new webpack.NormalModuleReplacementPlugin(
-        /\/src\/lib\/IpfsClient\.js/,
-        'web/IpfsClient.js'
+        /\/src\/lib\/IpfsClient\.ts/,
+        'web/IpfsClient.ts'
       ),
       new webpack.NormalModuleReplacementPlugin(
         /\/src\/lib\/clipboard\.ts/,

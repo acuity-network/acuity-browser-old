@@ -23,6 +23,7 @@ let bootnodes = [
 
 
 export default class IpfsClient {
+  node: any
 
   async init(vue) {
     let options = {

@@ -3,7 +3,9 @@ import path from 'path'
 import { spawn } from 'child_process'
 import os from 'os'
 import fs from 'fs'
-import IpfsClient from './IpfsClient.js'
+import IpfsClient from './IpfsClient'
+
+declare let __static: string
 
 let ipfsProcess
 let ipfsClient
@@ -133,12 +135,12 @@ function kill() {
 			return
 		}
 		clearInterval(ipfsInterval)
-		let emitter = ipfsProcess.on('exit', (code) => {
+		ipfsProcess.on('exit', (code) => {
 			console.log('IPFS exited.')
 			resolve(code)
 		})
 		console.log('Exiting IPFS.')
-		let timeout = setTimeout(() => {
+		setTimeout(() => {
 			console.log('Killing IPFS.')
 			ipfsProcess.kill('SIGKILL')
 		}, 10000)
