@@ -51,6 +51,8 @@ Vue.prototype.$ipfsClient = new IpfsClient()
 import activeAccount from '../lib/activeAccount'
 Vue.prototype.$activeAccount = activeAccount
 
+Vue.prototype.$isDesktop = process.env.ELECTRON_WEBPACK_APP_DESKTOP == 'true'
+
 new Vue({
   router,
   i18n,

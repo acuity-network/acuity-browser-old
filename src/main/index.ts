@@ -19,6 +19,8 @@ if (isDevelopment) {
 
 let mainWindow
 
+process.env.ELECTRON_WEBPACK_APP_DESKTOP = 'true'
+
 async function createWindow () {
   // Set up context menu.
   contextMenu({

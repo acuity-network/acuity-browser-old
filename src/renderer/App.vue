@@ -6,7 +6,7 @@
     <div v-if="!splash">
       <div id="sidebar">
         <active-account></active-account>
-        <navigation v-if="isDesktopApp"></navigation>
+        <navigation v-if="isDesktop"></navigation>
         <p class="menu-label">
           {{ $t('App.General') }}
         </p>
@@ -16,7 +16,7 @@
           <li><router-link to="/subscriptions">{{ $t('App.Subscriptions') }}</router-link>
           <li><router-link to="/interactions">{{ $t('App.Interactions') }}</router-link>
           <li><router-link to="/browsing-history">{{ $t('App.BrowsingHistory') }}</router-link></li>
-          <li v-if="isDesktopApp"><router-link to="/downloads">{{ $t('App.Downloads') }}</router-link></li>
+          <li v-if="isDesktop"><router-link to="/downloads">{{ $t('App.Downloads') }}</router-link></li>
           <li><router-link to="/publish-item">{{ $t('App.PublishItem') }}</router-link></li>
           <li><router-link to="/goto">{{ $t('App.GotoItem') }}</router-link></li>
         </ul>
@@ -35,7 +35,7 @@
         <ul class="menu-list">
           <li><router-link to="/manage-accounts">{{ $t('App.Accounts') }}</router-link></li>
           <li><router-link to="/node-status">{{ $t('App.NodeStatus') }}</router-link></li>
-          <li v-if="isDesktopApp"><router-link to="/mining">{{ $t('App.Mining') }}</router-link></li>
+          <li v-if="isDesktop"><router-link to="/mining">{{ $t('App.Mining') }}</router-link></li>
           <li><router-link to="/settings">{{ $t('App.Settings') }}</router-link></li>
           <li v-if="isDevelopment"><router-link to="/debug">{{ $t('App.DebugItem') }}</router-link></li>
         </ul>
@@ -65,7 +65,7 @@
       return {
         splash: true,
         isDevelopment: false,
-        isDesktopApp: false,
+        isDesktop: this.$isDesktop,
       }
     },
     async created() {
