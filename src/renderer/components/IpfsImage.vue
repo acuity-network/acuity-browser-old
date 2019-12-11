@@ -14,8 +14,13 @@
     methods: {
       async loadData() {
         if (this.ipfsHash) {
-          let response = await this.$ipfsClient.get(this.ipfsHash)
-          this.src = 'data:image/png;base64, ' + response.toString('base64')
+          if (this.$isDesktop) {
+            this.src = 'http://127.0.0.1:5102/ipfs/' + this.ipfsHash
+          }
+          else {
+            let response = await this.$ipfsClient.get(this.ipfsHash)
+            this.src = 'data:image/png;base64, ' + response.toString('base64')
+          }
         }
       },
     },
