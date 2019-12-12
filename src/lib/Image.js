@@ -4,9 +4,9 @@ import bs58 from 'bs58'
 
 export default class Image {
 
-  constructor(vue, filepath) {
+  constructor(vue, file) {
     this.vue = vue
-    this.filepath = filepath
+    this.filepath = file.path
   }
 
   async createMixin() {
