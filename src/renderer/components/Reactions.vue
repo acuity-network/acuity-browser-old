@@ -118,16 +118,16 @@
         }
       },
       async addReaction(emoji) {
-        await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(emoji, "utf8")], 0, 'Add reaction')
+        await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(emoji, 'utf8')], 0, 'Add reaction')
         this.loadData()
       },
       async toggle(reaction) {
         if (reaction.current) {
-          await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'removeReaction', [this.itemId, Buffer.from(reaction.emoji, "utf8")], 0, 'Remove reaction')
+          await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'removeReaction', [this.itemId, Buffer.from(reaction.emoji, 'utf8')], 0, 'Remove reaction')
           this.loadData()
         }
         else {
-          await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(reaction.emoji, "utf8")], 0, 'Add reaction')
+          await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(reaction.emoji, 'utf8')], 0, 'Add reaction')
           this.loadData()
         }
       },

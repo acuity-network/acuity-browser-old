@@ -15,7 +15,7 @@ export default class MixPinner {
   }
 
   async pinIpfsHash(ipfsHash) {
-    let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), "hex"), 'sha2-256'))
+    let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), 'hex'), 'sha2-256'))
     // Wait for response before continuing to try to avoid DOSing IPFS daemon.
     await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
 

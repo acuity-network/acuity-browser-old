@@ -105,7 +105,7 @@
           let timestamp = new Date(item.timestamps[i] * 1000)
           this.output += this.$t('Debug.Timestamp') + ': ' + timestamp + '\n'
 
-          let ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
+          let ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), 'hex'), 'sha2-256'))
           this.output += this.$t('Debug.IpfsHash') + ': ' + ipfsHash + '\n'
 
           let response = await this.$ipfsClient.get(ipfsHash)
