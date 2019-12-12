@@ -3,11 +3,11 @@ import brotliHaxe from './brotliHaxe.js'
 
 var brotli = new brotliHaxe.Brotli();
 
-function compress(input: Buffer) {
+function compress(input) {
   return brotli.compressArray(input, 11)
 }
 
-function decompress(input: Buffer) {
+function decompress(input) {
   return BrotliDecode(input)
 }
 

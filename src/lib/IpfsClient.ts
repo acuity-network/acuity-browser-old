@@ -121,7 +121,6 @@ export default class IpfsClient {
 		})
 	}
 
-
   id() {
     return this._get('id').then((result: any) => {
       return {
@@ -152,7 +151,9 @@ export default class IpfsClient {
   }
 
   add(data) {
-    return this._post('add', data)
+    return this._post('add', data).then((result: any) => {
+      return result.Hash
+    })
   }
 
 }

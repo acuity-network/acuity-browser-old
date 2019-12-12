@@ -69,13 +69,14 @@ export default class IpfsClient {
     return this.node.repo.stat()
   }
 
-  async get(ipfsHash) {
-    return await this.node.cat('/ipfs/' + ipfsHash)
+  get(ipfsHash) {
+    return this.node.cat('/ipfs/' + ipfsHash)
   }
 
-  async add(data) {
-    let result = await this.node.add(data)
-    return result[0].hash
+  add(data) {
+    return this.node.add(data).then((result: any) => {
+      return result[0].hash
+    })
   }
 
 }

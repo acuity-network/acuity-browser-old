@@ -1,10 +1,10 @@
 import brotli from 'iltorb'
 
-function compress(input: Buffer) {
-  return brotli.decompress(input)
+function compress(input) {
+  return brotli.compress(Buffer.from(input))
 }
 
-function decompress(input: Buffer) {
+function decompress(input) {
   return brotli.decompress(input)
 }
 
