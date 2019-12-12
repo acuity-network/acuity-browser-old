@@ -108,11 +108,11 @@
           let ipfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(item.ipfsHashes[i].substr(2), "hex"), 'sha2-256'))
           this.output += this.$t('Debug.IpfsHash') + ': ' + ipfsHash + '\n'
 
-          let response = await this.$ipfsClient.get('cat?arg=/ipfs/' + ipfsHash, false)
-          let containerPayload = Buffer.from(response, "binary")
+          let response = await this.$ipfsClient.get(ipfsHash)
+          let containerPayload = Buffer.from(response.toString('utf8'), 'binary')
           this.output += this.$t('Debug.CompressedLength') + ': ' + formatByteCount(containerPayload.length) + '\n'
 
-          let itemPayload = await brotli.decompress(Buffer.from(containerPayload))
+          let itemPayload = Buffer.from(await brotli.decompress(containerPayload))
           this.output += this.$t('Debug.UncompressedLength') + ': ' + formatByteCount(itemPayload.length) + '\n'
 
           let itemMessage = ItemProto.Item.deserializeBinary(itemPayload)

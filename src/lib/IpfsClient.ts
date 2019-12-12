@@ -147,7 +147,7 @@ export default class IpfsClient {
   }
 
   get(ipfsHash) {
-   return this._get('cat?arg=/ipfs/' + ipfsHash, false)
+    return this._get('cat?arg=/ipfs/' + ipfsHash, false)
   }
 
   add(data) {
