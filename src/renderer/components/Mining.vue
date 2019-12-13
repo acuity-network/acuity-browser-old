@@ -27,23 +27,22 @@
 <script lang="ts">
   import Page from './Page.vue'
   import setTitle from '../../lib/setTitle'
-//  import os from 'os'
+  import os from 'os'
   import fs from 'fs'
-//  import path from 'path'
+  import path from 'path'
   import { spawn } from 'child_process'
-//  import download from 'download'
+  import download from 'download'
   import ProgressBar from 'vue-simple-progress'
-//  import { remote } from 'electron'
+  import { remote } from 'electron'
 
-  let ethminerPath = ''//path.join(remote.app.getPath('userData'), 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
+  let ethminerPath = path.join(remote.app.getPath('userData'), 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
   let ethminerProcess
-  /*
+
   let urls = {
     linux: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-linux-x86_64.tar.gz',
     darwin: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-darwin-x86_64.tar.gz',
     win32: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-cuda10.0-windows-amd64.zip',
   }
-*/
 
   export default {
     name: 'mining',
@@ -69,15 +68,13 @@
         fs.statSync(ethminerPath)
       }
       catch (e) {
-        /*
-        let url = urls[os.platform()]
-        await download(url, path.join(remote.app.getPath('userData'), 'ethminer'), {extract: true})
-          .on('downloadProgress', progress => {
-            this.downloading = true
-            this.transferred = progress.transferred
-            this.total = progress.total
-          })
-          */
+      let url = urls[os.platform()]
+      await download(url, path.join(remote.app.getPath('userData'), 'ethminer'), {extract: true})
+        .on('downloadProgress', progress => {
+          this.downloading = true
+          this.transferred = progress.transferred
+          this.total = progress.total
+        })
         this.downloading = false
       }
 

@@ -34,6 +34,10 @@ module.exports = {
         /\/src\/lib\/setTitle\.ts/,
         'web/setTitle.ts'
       ),
+      new webpack.NormalModuleReplacementPlugin(
+        /\/src\/renderer\/components\/Mining\.vue/,
+        'web/Mining.vue'
+      ),
     ]
   },
   chainWebpack: config => {
