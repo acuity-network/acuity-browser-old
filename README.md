@@ -8,9 +8,18 @@
 # install dependencies
 yarn
 
-# serve with hot reload
+# serve development web version
 yarn dev
 
-# build electron application for production
-yarn dist
+# build production web version
+yarn build
+
+# setup electron version
+yarn electron
+
+# run development electron version
+yarn electron:dev
+
+# build production electron version
+yarn electron:build
 ```

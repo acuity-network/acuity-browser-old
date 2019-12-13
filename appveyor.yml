@@ -10,5 +10,6 @@ install:
   - choco install yarn --ignore-dependencies
   - yarn
 build_script:
-  - yarn dist
+  - yarn electron
+  - yarn electron:build
 test: off

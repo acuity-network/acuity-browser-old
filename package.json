@@ -6,15 +6,12 @@
   "description": "Reference application for MIX Blockchain.",
   "license": "Apache-2.0",
   "scripts": {
-    "install": "node --experimental-modules download.mjs",
     "postinstall": "patch-package",
-    "serve": "vue-cli-service serve",
+    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "electron": "electron-builder install-app-deps",
-    "dev": "electron-webpack dev",
-    "compile": "electron-webpack",
-    "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
+    "electron": "node --experimental-modules download.mjs && electron-builder install-app-deps",
+    "electron:dev": "electron-webpack dev",
+    "electron:build": "electron-webpack && electron-builder"
   },
   "main": "background.js",
   "electronWebpack": {
