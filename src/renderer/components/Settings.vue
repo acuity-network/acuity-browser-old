@@ -11,7 +11,7 @@
           <option value="ru">русский</option>
         </b-select>
       </b-field>
-      <b-field label="MIX Blockchain endpoint">
+      <b-field  v-if="isWeb" label="MIX Blockchain endpoint">
         <b-select v-model="mixEndpoint">
           <option value="atlanta">Atlanta, GA</option>
           <option value="dallas">Dallas, TX</option>
@@ -44,6 +44,7 @@
     },
     data() {
       return {
+        isWeb: !this.$isDesktop,
         locale: this.$settings.get('locale'),
         mixEndpoint: this.$settings.get('mixEndpoint'),
         development: this.$settings.get('development'),
