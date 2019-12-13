@@ -4,15 +4,8 @@ var webpack = require('webpack')
 
 module.exports = {
   configureWebpack: {
-//    context: path.join(__dirname, 'src', 'renderer'),
     entry: path.join(__dirname, 'src', 'renderer', 'main.ts'),
     plugins: [
-      /*
-      new webpack.ProvidePlugin({
-        setImmediate: ['setimmediate', 'setImmedate'],
-        clearImmediate: ['setimmediate', 'clearImmedate']
-      }),
-*/
       new webpack.NormalModuleReplacementPlugin(
         /\/src\/lib\/Image\.js/,
         'web/Image.js'
