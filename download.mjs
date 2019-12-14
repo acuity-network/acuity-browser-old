@@ -3,46 +3,81 @@ import os from 'os'
 import path from 'path'
 import process from 'process'
 import download from 'download'
+import child_process from 'child_process'
+import util from 'util'
+let exec = util.promisify(child_process.exec)
+
+let rev = 10
 
 let urls = {
 	linux: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.10/x86_64-unknown-linux-gnu/parity',
+		parity: 'https://releases.parity.io/ethereum/v2.5.11/x86_64-unknown-linux-gnu/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz',
+    ffmpeg: 'https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz',
 	},
 	darwin: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.10/x86_64-apple-darwin/parity',
+		parity: 'https://releases.parity.io/ethereum/v2.5.11/x86_64-apple-darwin/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_darwin-amd64.tar.gz',
+    ffmpeg: 'https://ffmpeg.zeranoe.com/builds/macos64/shared/ffmpeg-4.2.1-macos64-shared.zip',
 	},
 	win32: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.10/x86_64-pc-windows-msvc/parity.exe',
+		parity: 'https://releases.parity.io/ethereum/v2.5.11/x86_64-pc-windows-msvc/parity.exe',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_windows-amd64.zip',
+    ffmpeg: 'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.2.1-win64-shared.zip',
 	},
 }
 
 try {
-	if (parseInt(fs.readFileSync('download_rev')) >= 9) {
+	if (parseInt(fs.readFileSync('download_rev')) >= rev) {
 		process.exit(0)
 	}
 } catch (e) {}
 
-let archUrls = urls[os.platform()]
+let platform = os.platform()
+
+let archUrls = urls[platform]
 
 console.log('Downloading ' + archUrls['parity'])
 let parity = download(archUrls['parity'], 'public')
 .then(result => {
-	let parityPath = path.join('public', (os.platform() == 'win32') ? 'parity.exe' : 'parity')
+	let parityPath = path.join('public', (platform == 'win32') ? 'parity.exe' : 'parity')
 	fs.chmodSync(parityPath, '755');
 })
 
 console.log('Downloading ' + archUrls['ipfs'])
 let ipfs = download(archUrls['ipfs'], 'public', {extract: true})
 
-Promise.all([parity, ipfs])
-.then(() => {
-	fs.writeFileSync('download_rev', '9')
+console.log('Downloading ' + archUrls['ffmpeg'])
+let ffmpeg = download(archUrls['ffmpeg'], 'public', {extract: (platform == 'linux') ? false : true})
+
+Promise.all([parity, ipfs, ffmpeg])
+.then(async () => {
+  await exec('rm -rf public/ffmpeg')
+  switch (platform) {
+    case 'linux':
+      await exec('rm -rf temp')
+      fs.mkdirSync('temp')
+      // needs xz-utils
+      await exec('tar xf public/ffmpeg-release-amd64-static.tar.xz -C temp')
+      fs.unlinkSync('public/ffmpeg-release-amd64-static.tar.xz')
+      fs.mkdirSync('public/ffmpeg')
+      fs.mkdirSync('public/ffmpeg/bin')
+      fs.renameSync('temp/ffmpeg-4.2.1-amd64-static/ffmpeg', 'public/ffmpeg/bin/ffmpeg')
+      await exec('rm -rf temp')
+      break
+
+    case 'darwin':
+      fs.renameSync('public/ffmpeg-4.2.1-macos64-shared', 'public/ffmpeg')
+      break
+
+    case 'win32':
+      fs.renameSync('public/ffmpeg-4.2.1-win64-shared', 'public/ffmpeg')
+      break
+  }
+	fs.writeFileSync('download_rev', rev)
 	process.exit(0)
 })
 .catch(e => {
-	console.log("Downloading failed.")
+	console.log("Downloading failed: " + e)
 	process.exit(1)
 })
