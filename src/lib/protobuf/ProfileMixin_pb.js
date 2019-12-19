@@ -1,3 +1,4 @@
+// source: ProfileMixin.proto
 /**
  * @fileoverview
  * @enhanceable
@@ -39,13 +40,15 @@ if (goog.DEBUG && !COMPILED) {
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.ProfileMixin.prototype.toObject = function(opt_includeInstance) {
@@ -55,15 +58,15 @@ proto.ProfileMixin.prototype.toObject = function(opt_includeInstance) {
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.ProfileMixin} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.ProfileMixin.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     type: jspb.Message.getFieldWithDefault(msg, 1, 0),
     location: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
@@ -165,9 +168,12 @@ proto.ProfileMixin.prototype.getType = function() {
 };
 
 
-/** @param {!proto.AccountType} value */
+/**
+ * @param {!proto.AccountType} value
+ * @return {!proto.ProfileMixin} returns this
+ */
 proto.ProfileMixin.prototype.setType = function(value) {
-  jspb.Message.setProto3EnumField(this, 1, value);
+  return jspb.Message.setProto3EnumField(this, 1, value);
 };
 
 
@@ -180,9 +186,12 @@ proto.ProfileMixin.prototype.getLocation = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.ProfileMixin} returns this
+ */
 proto.ProfileMixin.prototype.setLocation = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

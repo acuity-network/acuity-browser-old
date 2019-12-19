@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+message Encoding {
+  uint64 filesize = 1;    // Size of the file addressed by ipfs_hash (bytes).
+  bytes ipfs_hash = 2;    // Base58 decoded IPFS multihash of the WebP file of this mipmap level.
+  uint32 width = 3;
+  uint32 height = 4;
+  uint32 frame_rate = 5;
+}
+
+message VideoMixin {
+  // Inherited from FileMixin
+  string filename = 1;    // Filename of the file.
+  uint64 filesize = 2;    // Size of the file addressed by ipfs_hash (bytes).
+  bytes ipfs_hash = 3;    // Base58 decoded IPFS multihash of the file.
+  // Video-specific
+  uint32 duration = 4;
+  repeated Encoding encoding = 5;    // Array of video encodings.
+}

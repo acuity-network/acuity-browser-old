@@ -19,6 +19,7 @@ export default {
 		Tokens: 'Tokens',
 		Administration: 'Administration',
 		Accounts: 'Accounts',
+    Transcoding: 'Transcoding',
 		NodeStatus: 'Node Status',
 		Mining: 'Mining',
 		Settings: 'Settings',
@@ -265,6 +266,7 @@ export default {
 	PublishItem: {
 		PublishItem: 'Publish Item',
 		PublishImage: 'Publish Image',
+    PublishVideo: 'Publish Video',
 		PublishFeed: 'Publish Feed',
 		PublishFile: 'Publish File',
 		PublishMixinType: 'Publish Mixin Type',
@@ -275,6 +277,15 @@ export default {
 		Schema: 'Schema',
 		Description: 'Description',
 		ParentItemId: 'Parent itemId',
+		Publish: 'Publish',
+	},
+  PublishVideo: {
+		PublishVideo: 'Publish Video',
+		Title: 'Title',
+		Description: 'Description',
+		Feed: 'Feed',
+		SelectAFeed: 'Select a feed',
+		Video: 'Video',
 		Publish: 'Publish',
 	},
 	Settings: {
@@ -319,6 +330,12 @@ export default {
 		Fee: 'Fee',
 		Amount: 'Amount',
 	},
+  Transcoding: {
+		Transcoding: 'Transcoding',
+    Item: 'Item',
+    Width: 'Width',
+    Height: 'Height',
+	},
 	TrustedAccounts: {
 		TrustedAccounts: 'Trusted Accounts',
 		Account: 'Account',
@@ -348,6 +365,9 @@ export default {
 		JustNow: 'just now',
 		ItemIdCopied: 'itemId copied',
 	},
+  VideoEdit: {
+    ChooseVideo: 'Choose video',
+  },
 	ViewTopic: {
 		Topic: 'Topic',
 		Subscribe: 'Subscribe',

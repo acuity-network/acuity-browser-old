@@ -1,3 +1,4 @@
+// source: Item.proto
 /**
  * @fileoverview
  * @enhanceable
@@ -60,13 +61,15 @@ if (goog.DEBUG && !COMPILED) {
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.MixinPayload.prototype.toObject = function(opt_includeInstance) {
@@ -76,15 +79,15 @@ proto.MixinPayload.prototype.toObject = function(opt_includeInstance) {
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.MixinPayload} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.MixinPayload.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     mixinId: jspb.Message.getFieldWithDefault(msg, 1, 0),
     payload: msg.getPayload_asB64()
   };
@@ -186,9 +189,12 @@ proto.MixinPayload.prototype.getMixinId = function() {
 };
 
 
-/** @param {number} value */
+/**
+ * @param {number} value
+ * @return {!proto.MixinPayload} returns this
+ */
 proto.MixinPayload.prototype.setMixinId = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -225,9 +231,12 @@ proto.MixinPayload.prototype.getPayload_asU8 = function() {
 };
 
 
-/** @param {!(string|Uint8Array)} value */
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.MixinPayload} returns this
+ */
 proto.MixinPayload.prototype.setPayload = function(value) {
-  jspb.Message.setProto3BytesField(this, 2, value);
+  return jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 
@@ -243,13 +252,15 @@ proto.Item.repeatedFields_ = [1];
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.Item.prototype.toObject = function(opt_includeInstance) {
@@ -259,15 +270,15 @@ proto.Item.prototype.toObject = function(opt_includeInstance) {
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.Item} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.Item.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     mixinPayloadList: jspb.Message.toObjectList(msg.getMixinPayloadList(),
     proto.MixinPayload.toObject, includeInstance)
   };
@@ -361,9 +372,12 @@ proto.Item.prototype.getMixinPayloadList = function() {
 };
 
 
-/** @param {!Array<!proto.MixinPayload>} value */
+/**
+ * @param {!Array<!proto.MixinPayload>} value
+ * @return {!proto.Item} returns this
+*/
 proto.Item.prototype.setMixinPayloadList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 1, value);
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
 
 
@@ -379,9 +393,10 @@ proto.Item.prototype.addMixinPayload = function(opt_value, opt_index) {
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.Item} returns this
  */
 proto.Item.prototype.clearMixinPayloadList = function() {
-  this.setMixinPayloadList([]);
+  return this.setMixinPayloadList([]);
 };
 
 

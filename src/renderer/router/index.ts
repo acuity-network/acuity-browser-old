@@ -81,6 +81,11 @@ export default new Router({
       component: require('../components/PublishFile').default
     },
     {
+      path: '/publish-item/video',
+      name: 'publish-video',
+      component: require('../components/PublishVideo').default
+    },
+    {
       path: '/profile/edit',
       name: 'profile-edit',
       component: require('../components/ProfileEdit').default
@@ -131,6 +136,11 @@ export default new Router({
       name: 'manage-account-delete',
       component: require('../components/ManageAccountDelete').default,
       props: true,
+    },
+    {
+      path: '/transcoding',
+      name: 'transcoding',
+      component: require('../components/Transcoding').default
     },
     {
       path: '/node-status',

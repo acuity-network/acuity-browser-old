@@ -4,6 +4,7 @@ import BodyTextMixinProto from './protobuf/BodyTextMixin_pb.js'
 import MixinSchemaMixinProto from './protobuf/MixinSchemaMixin_pb.js'
 import ProfileMixinProto from './protobuf/ProfileMixin_pb.js'
 import FileMixinProto from './protobuf/FileMixin_pb.js'
+import VideoMixinProto from './protobuf/VideoMixin_pb.js'
 import MixContent from './MixContent'
 import bs58 from 'bs58'
 
@@ -80,6 +81,11 @@ export default class MixRevision {
       size: fileMessage.getFilesize(),
       hash: bs58.encode(Buffer.from(fileMessage.getIpfsHash())),
     }
+  }
+
+  getVideo() {
+    let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(this.content.getPayloads('0x045eee8d')[0])
+    return videoMessage.toObject()
   }
 
   getBodyText() {

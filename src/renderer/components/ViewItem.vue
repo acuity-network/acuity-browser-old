@@ -52,6 +52,7 @@
               {{ $t('ViewItem.Size') }}: {{ fileSize }}
             </span>
           </div>
+          <video-view v-if="videoMessage" :message="videoMessage"></video-view>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
           <account-info v-if="isProfile" :address="ownerAddress"></account-info>
         </div>
@@ -107,10 +108,12 @@
   import Reactions from './Reactions.vue'
   import ItemToken from './ItemToken.vue'
   import TokenView from './mixins/TokenView.vue'
+  import VideoView from './mixins/VideoView.vue'
   import VueMarkdown from 'vue-markdown-v2'
   import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
   import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
+  import VideoMixinProto from '../../lib/protobuf/VideoMixin_pb.js'
 //  import formatByteCount from '../../lib/formatByteCount'
 //  import File from '../../lib/File.js'
   import twemoji from 'twemoji'
@@ -148,6 +151,7 @@
       ProfileLink,
       ItemToken,
       TokenView,
+      VideoView,
       VueMarkdown,
       Reactions,
       IpfsImage,
@@ -243,6 +247,7 @@
         data.fileName = ''
         data.fileSize = ''
         data.fileHash = ''
+        data.videoMessage = null
         data.isProfile = ''
         data.isOwnProfile = false
         data.isFeed = false
@@ -356,6 +361,11 @@
           this.fileHash = fileData.hash
         }
 */
+
+        if (revision.content.existMixin('0x045eee8d')) {
+          this.videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x045eee8d')[0])
+        }
+
         if (!this.short) {
           // Try to delete the old entry
           try {

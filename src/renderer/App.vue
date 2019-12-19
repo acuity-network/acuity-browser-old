@@ -34,6 +34,7 @@
         </p>
         <ul class="menu-list">
           <li><router-link to="/manage-accounts">{{ $t('App.Accounts') }}</router-link></li>
+          <li v-if="isDesktop"><router-link to="/transcoding">{{ $t('App.Transcoding') }}</router-link></li>
           <li><router-link to="/node-status">{{ $t('App.NodeStatus') }}</router-link></li>
           <li v-if="isDesktop"><router-link to="/mining">{{ $t('App.Mining') }}</router-link></li>
           <li><router-link to="/settings">{{ $t('App.Settings') }}</router-link></li>
@@ -53,6 +54,7 @@
   import Navigation from './components/Navigation.vue'
   import ActiveAccount from './components/ActiveAccount.vue'
   import mentionNotifications from '../lib/mentionNotifications'
+  import transcoder from '../lib/transcoder'
 
   export default {
     name: 'app',
@@ -153,6 +155,8 @@
         })
       })
       mentionNotifications.launch(this.$root)
+      transcoder.init(this.$root)
+      this.$root.$emit('transcode')
     },
     destroyed() {
       mentionNotifications.kill()

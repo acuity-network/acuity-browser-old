@@ -1,4 +1,5 @@
 import { app } from 'electron'
+import { remote } from 'electron'
 import path from 'path'
 import { spawn } from 'child_process'
 import os from 'os'
@@ -148,4 +149,26 @@ function kill() {
 	})
 }
 
-export default { launch, kill }
+function add(filepath) {
+  return new Promise(async (resolve, reject) => {
+    let isWindows = os.platform() === 'win32'
+  	let commandPath = path.join(__static, 'go-ipfs', isWindows ? 'ipfs.exe' : 'ipfs')
+    let options = {
+  		env: {
+  			'IPFS_PATH': path.join(remote.app.getPath('userData'), 'ipfs'),
+  		}
+  	}
+    let args = ['add', '-Q', filepath]
+    let process = spawn(commandPath, args, options)
+
+    process.stdout.on('data', (data) => {
+      resolve(data.toString().trim())
+  	})
+
+    process.stderr.on('data', (data) => {
+      reject(data.toString())
+  	})
+  })
+}
+
+export default { launch, kill, add }
