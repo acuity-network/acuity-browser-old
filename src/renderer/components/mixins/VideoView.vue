@@ -1,12 +1,12 @@
 <template>
   <div>
-    <video v-if="src" :src="src" controls width="1024" height="768"></video>
+    <video v-if="src" :src="src" ref="video" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
     <b-field label="Resolution">
-      <b-select v-model="src">
+      <b-select v-model="src" @input="input">
         <option
           v-for="resolution in resolutions"
           :value="resolution.url">
-          {{ resolution.height }}
+          {{ resolution.width }} x {{ resolution.height }}
         </option>
       </b-select>
     </b-field>
@@ -27,6 +27,7 @@
       return {
         src: null,
         resolutions: [],
+        currentTime: null,
       }
     },
     async created() {
@@ -36,6 +37,7 @@
         let ipfsHash = bs58.encode(Buffer.from(encoding.getIpfsHash()))
         this.resolutions.push({
           url: 'http://127.0.0.1:5102/ipfs/' + ipfsHash,
+          width: encoding.getWidth(),
           height: encoding.getHeight(),
         })
       }
@@ -43,6 +45,14 @@
     destroyed() {
     },
 		methods: {
+      input() {
+        this.$refs.video.pause()
+        this.currentTime = this.$refs.video.currentTime
+      },
+      loadedmetadata() {
+        this.$refs.video.currentTime = this.currentTime
+        this.$refs.video.play()
+      },
 		},
   }
 </script>
