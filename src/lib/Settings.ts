@@ -27,6 +27,8 @@ export default class Settings {
 			locale: 'en-US',
       mixEndpoint: 'freemont',
 			development: false,
+      'h264.crf': 23,
+      'h264.preset': 'medium',
 		}
 
 		return defaults[key]

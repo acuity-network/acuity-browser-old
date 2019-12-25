@@ -21,6 +21,23 @@
           </b-table-column>
         </template>
       </b-table>
+      <b-field label="H.264 CRF" message="18 to 28. Lower value increases quality and bitrate.">
+        <b-input v-model="crf" type="number" min="18" max="28">
+        </b-input>
+      </b-field>
+      <b-field label="H.264 Encoding Speed" message="Affects bitrate, not quality.">
+        <b-select v-model="preset">
+          <option value="ultrafast">Ultrafast</option>
+          <option value="superfast">Superfast</option>
+          <option value="veryfast">Veryfast</option>
+          <option value="faster">Faster</option>
+          <option value="fast">Fast</option>
+          <option value="medium">Medium</option>
+          <option value="slow">Slow</option>
+          <option value="slower">Slower</option>
+          <option value="veryslow">Veryslow</option>
+        </b-select>
+      </b-field>
     </template>
   </page>
 </template>
@@ -39,6 +56,8 @@
     data() {
       return {
         data: [],
+        crf: this.$settings.get('h264.crf'),
+        preset: this.$settings.get('h264.preset'),
       }
     },
     async created() {
@@ -63,6 +82,14 @@
         await this.$db.del(event.target.dataset.key)
         this.loadData()
       }
+    },
+    watch: {
+      crf() {
+        this.$settings.set('h264.crf', this.crf)
+      },
+      preset() {
+        this.$settings.set('h264.preset', this.preset)
+      },
     },
   }
 </script>
