@@ -75,8 +75,8 @@
         return videoMessage.serializeBinary()
       },
       async postSave(itemId) {
-        let supported_resolutions = [16, 20, 24, 28, 32, 40, 48, 64, 80, 120, 160, 192, 240, 320, 376, 480]
-        let resolutions = []
+        let supported_resolutions = [20, 40, 80, 120, 160, 240, 320, 480]
+        let resolutions = []  
 
         for (let b of supported_resolutions) {
           if (b * 9 <= this.height) {
