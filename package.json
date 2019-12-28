@@ -64,7 +64,7 @@
     "events": "^3.0.0",
     "google-protobuf": "^3.5.0",
     "iltorb": "^2.4.0",
-    "ipfs": "^0.39.0",
+    "ipfs": "^0.40.0",
     "just-throttle": "^1.1.0",
     "level": "^5.0.1",
     "multihashes": "^0.4.13",
