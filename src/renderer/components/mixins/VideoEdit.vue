@@ -15,6 +15,8 @@
     <div>Frame rate: {{ frameRate }}</div>
     <div>Width: {{ width }}</div>
     <div>Height: {{ height }}</div>
+    <div>Video codec: {{ video }}</div>
+    <div>Audio codec: {{ audio }}</div>
   </div>
 </template>
 
@@ -42,6 +44,8 @@
         frameRate: null,
         width: null,
         height: null,
+        video: null,
+        audio: null,
       }
     },
 		async created() {
@@ -62,6 +66,10 @@
             this.width = parseInt(matches[1])
             this.height = parseInt(matches[2])
             this.frameRate = parseFloat(matches[3])
+            matches = e.toString().match(/Video: (\w*)/)
+            this.video = matches[1]
+            matches = e.toString().match(/Audio: (\w*)/)
+            this.audio = matches[1]
           }
         }
   		},
@@ -76,7 +84,7 @@
       },
       async postSave(itemId) {
         let supported_resolutions = [20, 40, 80, 120, 160, 240, 320, 480]
-        let resolutions = []  
+        let resolutions = []
 
         for (let b of supported_resolutions) {
           if (b * 9 <= this.height) {
