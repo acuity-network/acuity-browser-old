@@ -15,8 +15,8 @@
     <div>Frame rate: {{ frameRate }}</div>
     <div>Width: {{ width }}</div>
     <div>Height: {{ height }}</div>
-    <div>Video codec: {{ video }}</div>
-    <div>Audio codec: {{ audio }}</div>
+    <div>Video codec: {{ codecVideo }}</div>
+    <div>Audio codec: {{ codecAudio }}</div>
   </div>
 </template>
 
@@ -44,8 +44,8 @@
         frameRate: null,
         width: null,
         height: null,
-        video: null,
-        audio: null,
+        codecVideo: null,
+        codecAudio: null,
       }
     },
 		async created() {
@@ -59,17 +59,18 @@
             await exec('"' + commandPath + '"' + ' -i "' + this.file.path + '"')
           }
           catch (e) {
-            let matches = e.toString().match(/Duration: (\d*):(\d*):(\d*)\./)
+            let output = e.toString()
+            let matches = output.match(/Duration: (\d*):(\d*):(\d*)\./)
             this.duration = (parseInt(matches[1]) * 60 + parseInt(matches[2])) * 60 + parseInt(matches[3])
             this.durationFormatted = new Date(1000 * this.duration).toISOString().substr(11, 8)
-            matches = e.toString().match(/Video: .*, (\d*)x(\d*).*, ([0-9.]*) fps, /)
+            matches = output.match(/Video: .*, (\d*)x(\d*).*, ([0-9.]*) fps, /)
             this.width = parseInt(matches[1])
             this.height = parseInt(matches[2])
             this.frameRate = parseFloat(matches[3])
-            matches = e.toString().match(/Video: (\w*)/)
-            this.video = matches[1]
-            matches = e.toString().match(/Audio: (\w*)/)
-            this.audio = matches[1]
+            matches = output.match(/Video: (\w*)/)
+            this.codecVideo = matches[1]
+            matches = output.match(/Audio: (\w*)/)
+            this.codecAudio = matches[1]
           }
         }
   		},
@@ -125,6 +126,7 @@
             ipfsHash: this.ipfsHash,
             height: height,
             width: width,
+            audioPassthrough: this.codecAudio == 'opus' || this.codecAudio == 'aac',
           }))
 
           id++

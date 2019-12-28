@@ -68,11 +68,20 @@ function transcode(key, job) {
     args.push('-vf')
     args.push('scale=' + job.width + ':' + job.height)
     args.push('-c:a')
-    args.push('aac')
+    if (job.audioPassthrough) {
+      args.push('copy')
+    }
+    else {
+      args.push('libopus')
+    }
     args.push('-movflags')
     args.push('+faststart')
+    args.push('-strict')
+    args.push('-2')
     args.push('-y')
     args.push(outFilepath)
+
+    console.log(args)
 
     let isWindows = os.platform() == 'win32'
     let commandPath = path.join(__static, 'ffmpeg', 'bin', 'ffmpeg', isWindows ? '.exe' : '')
@@ -83,7 +92,7 @@ function transcode(key, job) {
     })
 
     process.stderr.on('data', (data) => {
-      console.error(data.toString())
+      console.log(data.toString())
     })
 
     process.on('close', async (code) => {
