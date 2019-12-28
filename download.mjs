@@ -7,23 +7,26 @@ import child_process from 'child_process'
 import util from 'util'
 let exec = util.promisify(child_process.exec)
 
-let rev = 10
+let rev = 11
 
 let urls = {
 	linux: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.11/x86_64-unknown-linux-gnu/parity',
+		parity: 'https://releases.parity.io/ethereum/v2.5.12/x86_64-unknown-linux-gnu/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz',
     ffmpeg: 'https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz',
+    youtubeDl: 'https://yt-dl.org/downloads/2019.12.25/youtube-dl',
 	},
 	darwin: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.11/x86_64-apple-darwin/parity',
+		parity: 'https://releases.parity.io/ethereum/v2.5.12/x86_64-apple-darwin/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_darwin-amd64.tar.gz',
     ffmpeg: 'https://ffmpeg.zeranoe.com/builds/macos64/shared/ffmpeg-4.2.1-macos64-shared.zip',
+    youtubeDl: 'https://yt-dl.org/downloads/2019.12.25/youtube-dl',
 	},
 	win32: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.11/x86_64-pc-windows-msvc/parity.exe',
+		parity: 'https://releases.parity.io/ethereum/v2.5.12/x86_64-pc-windows-msvc/parity.exe',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_windows-amd64.zip',
     ffmpeg: 'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.2.1-win64-shared.zip',
+    youtubeDl: 'https://yt-dl.org/downloads/2019.12.25/youtube-dl.exe',
 	},
 }
 
@@ -50,7 +53,14 @@ let ipfs = download(archUrls['ipfs'], 'public', {extract: true})
 console.log('Downloading ' + archUrls['ffmpeg'])
 let ffmpeg = download(archUrls['ffmpeg'], 'public', {extract: (platform == 'linux') ? false : true})
 
-Promise.all([parity, ipfs, ffmpeg])
+console.log('Downloading ' + archUrls['youtubeDl'])
+let youtubeDl = download(archUrls['youtubeDl'], 'public')
+.then(result => {
+	let youtubeDlPath = path.join('public', (platform == 'win32') ? 'youtube-dl.exe' : 'youtube-dl')
+	fs.chmodSync(youtubeDlPath, '755');
+})
+
+Promise.all([parity, ipfs, ffmpeg, youtubeDl])
 .then(async () => {
   await exec('rm -rf public/ffmpeg')
   switch (platform) {
