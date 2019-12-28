@@ -35,8 +35,16 @@ module.exports = {
         'web/setTitle.ts'
       ),
       new webpack.NormalModuleReplacementPlugin(
+        /\/src\/lib\/transcoder\.ts/,
+        'web/transcoder.ts'
+      ),
+      new webpack.NormalModuleReplacementPlugin(
         /\/src\/renderer\/components\/Mining\.vue/,
         'web/Mining.vue'
+      ),
+      new webpack.NormalModuleReplacementPlugin(
+        /\/src\/renderer\/components\/mixins\/VideoEdit\.vue/,
+        'web/VideoEdit.vue'
       ),
     ]
   },
