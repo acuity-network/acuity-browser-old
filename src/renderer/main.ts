@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 import db from '../lib/db'
 
 router.afterEach((to, from) => {
@@ -13,7 +14,6 @@ router.afterEach((to, from) => {
   }
 })
 
-Vue.use(Vuex)
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 
@@ -55,6 +55,7 @@ Vue.prototype.$isDesktop = process.env.ELECTRON_WEBPACK_APP_DESKTOP == 'true'
 
 new Vue({
   router,
+  store,
   i18n,
   render: h => h(App)
 }).$mount('#app')

@@ -118,18 +118,18 @@
           let height = b * 9
           let width = (height * this.width) / this.height
 
-          console.log(height, width)
-
-          batch.put('/transcode/' + id, JSON.stringify({
+          let transcoding = {
+            id: id++,
             itemId: itemId,
             filepath: this.file.path,
             ipfsHash: this.ipfsHash,
             height: height,
             width: width,
             audioPassthrough: this.codecAudio == 'opus' || this.codecAudio == 'aac',
-          }))
+          }
 
-          id++
+          batch.put('/transcode/' + id, JSON.stringify(transcoding))
+          this.$store.commit('transcodingsAdd', transcoding)
         }
 
         await batch.put('/transcodeCount', id).write()

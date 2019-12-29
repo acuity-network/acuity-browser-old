@@ -5,7 +5,7 @@
     </template>
 
     <template slot="body">
-      <b-table :data="data">
+      <b-table :data="transcodings">
         <template slot-scope="props">
           <b-table-column :label="$t('Transcoding.Item')">
             <item-link :itemId="props.row.itemId"></item-link>
@@ -17,7 +17,7 @@
             {{ props.row.height }}
           </b-table-column>
           <b-table-column>
-            <a @click="deleteJob" :data-key="props.row.key">delete</a>
+            <a @click="deleteJob" :data-id="props.row.id">delete</a>
           </b-table-column>
         </template>
       </b-table>
@@ -55,32 +55,22 @@
     },
     data() {
       return {
-        data: [],
         crf: this.$settings.get('h264.crf'),
         preset: this.$settings.get('h264.preset'),
       }
     },
     async created() {
       setTitle(this.$t('Transcoding.Transcoding'))
-      this.loadData()
+    },
+    computed: {
+      transcodings() {
+        return this.$store.state.transcodings
+      }
     },
     methods: {
-      loadData() {
-        this.data = []
-
-        this.$db.createReadStream({
-          'gt': '/transcode/',
-          'lt': '/transcode/z',
-        })
-        .on('data', transcode => {
-          let row = JSON.parse(transcode.value)
-          row.key = transcode.key
-          this.data.push(row)
-        })
-      },
       async deleteJob(event) {
-        await this.$db.del(event.target.dataset.key)
-        this.loadData()
+        await this.$db.del('/transcode/' + event.target.dataset.id)
+        this.$store.commit('transcodingsRemove', event.target.dataset.id)
       }
     },
     watch: {

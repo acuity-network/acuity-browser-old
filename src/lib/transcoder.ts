@@ -14,6 +14,14 @@ let vue: any
 function init(_vue) {
   vue = _vue
 
+  vue.$db.createReadStream({
+    'gt': '/transcode/',
+    'lt': '/transcode/z',
+  })
+  .on('data', data => {
+    vue.$store.commit('transcodingsAdd', JSON.parse(data.value))
+  })
+
   vue.$on('transcode', async () => {
     while(true) {
       try {
@@ -115,6 +123,7 @@ function transcode(key, job) {
         ipfsHash = await revision.content.save()
         await vue.$activeAccount.get().sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, ipfsHash], 0, 'Add video encoding to item')
         vue.$db.del(key)
+        vue.$store.commit('transcodingsRemove', job.id)
         resolve()
       }
       else {
