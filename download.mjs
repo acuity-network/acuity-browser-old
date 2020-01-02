@@ -7,26 +7,26 @@ import child_process from 'child_process'
 import util from 'util'
 let exec = util.promisify(child_process.exec)
 
-let rev = 11
+let rev = 12
 
 let urls = {
 	linux: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.12/x86_64-unknown-linux-gnu/parity',
+		parity: 'https://releases.parity.io/ethereum/v2.5.13/x86_64-unknown-linux-gnu/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz',
     ffmpeg: 'https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz',
-    youtubeDl: 'https://yt-dl.org/downloads/2019.12.25/youtube-dl',
+    youtubeDl: 'https://yt-dl.org/downloads/2020.01.01/youtube-dl',
 	},
 	darwin: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.12/x86_64-apple-darwin/parity',
+		parity: 'https://releases.parity.io/ethereum/v2.5.13/x86_64-apple-darwin/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_darwin-amd64.tar.gz',
-    ffmpeg: 'https://ffmpeg.zeranoe.com/builds/macos64/shared/ffmpeg-4.2.1-macos64-shared.zip',
-    youtubeDl: 'https://yt-dl.org/downloads/2019.12.25/youtube-dl',
+    ffmpeg: 'https://ffmpeg.zeranoe.com/builds/macos64/shared/ffmpeg-4.2.2-macos64-shared.zip',
+    youtubeDl: 'https://yt-dl.org/downloads/2020.01.01/youtube-dl',
 	},
 	win32: {
-		parity: 'https://releases.parity.io/ethereum/v2.5.12/x86_64-pc-windows-msvc/parity.exe',
+		parity: 'https://releases.parity.io/ethereum/v2.5.13/x86_64-pc-windows-msvc/parity.exe',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.22/go-ipfs_v0.4.22_windows-amd64.zip',
-    ffmpeg: 'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.2.1-win64-shared.zip',
-    youtubeDl: 'https://yt-dl.org/downloads/2019.12.25/youtube-dl.exe',
+    ffmpeg: 'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.2.2-win64-shared.zip',
+    youtubeDl: 'https://yt-dl.org/downloads/2020.01.01/youtube-dl.exe',
 	},
 }
 
@@ -72,16 +72,16 @@ Promise.all([parity, ipfs, ffmpeg, youtubeDl])
       fs.unlinkSync('public/ffmpeg-release-amd64-static.tar.xz')
       fs.mkdirSync('public/ffmpeg')
       fs.mkdirSync('public/ffmpeg/bin')
-      fs.renameSync('temp/ffmpeg-4.2.1-amd64-static/ffmpeg', 'public/ffmpeg/bin/ffmpeg')
+      fs.renameSync('temp/ffmpeg-4.2.2-amd64-static/ffmpeg', 'public/ffmpeg/bin/ffmpeg')
       await exec('rm -rf temp')
       break
 
     case 'darwin':
-      fs.renameSync('public/ffmpeg-4.2.1-macos64-shared', 'public/ffmpeg')
+      fs.renameSync('public/ffmpeg-4.2.2-macos64-shared', 'public/ffmpeg')
       break
 
     case 'win32':
-      fs.renameSync('public/ffmpeg-4.2.1-win64-shared', 'public/ffmpeg')
+      fs.renameSync('public/ffmpeg-4.2.2-win64-shared', 'public/ffmpeg')
       break
   }
 	fs.writeFileSync('download_rev', rev)
