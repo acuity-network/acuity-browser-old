@@ -108,7 +108,7 @@
           this.ipfsAddresses = addresses.sort();
 
           let peers = await this.$ipfsClient.peers()
-          this.ipfsPeerCount = peers.length
+          this.ipfsPeerCount = peers ? peers.length : 0
 
           let repoStat = await this.$ipfsClient.repoStat()
           this.ipfsRepoSize = formatByteCount(repoStat.repoSize)
