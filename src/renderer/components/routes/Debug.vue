@@ -15,19 +15,19 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import ItemProto from '../../lib/protobuf/Item_pb.js'
-  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
-  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
-  import MixinSchemaMixinProto from '../../lib/protobuf/MixinSchemaMixin_pb.js'
-  import ImageMixinProto from '../../lib/protobuf/ImageMixin_pb.js'
-  import brotli from '../../lib/brotli'
+  import Page from '../Page.vue'
+  import ItemProto from '../../../lib/protobuf/Item_pb.js'
+  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
+  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
+  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
+  import MixinSchemaMixinProto from '../../../lib/protobuf/MixinSchemaMixin_pb.js'
+  import ImageMixinProto from '../../../lib/protobuf/ImageMixin_pb.js'
+  import brotli from '../../../lib/brotli'
   import bs58 from 'bs58'
   import multihashes from 'multihashes'
-  import formatByteCount from '../../lib/formatByteCount'
-  import setTitle from '../../lib/setTitle'
-  import clipboard from '../../lib/clipboard'
+  import formatByteCount from '../../../lib/formatByteCount'
+  import setTitle from '../../../lib/setTitle'
+  import clipboard from '../../../lib/clipboard'
 
   // https://github.com/jasonmoo/t.js/blob/master/t.js
   function scrub(val) {
@@ -87,7 +87,7 @@
         }
         this.output += 'itemStoreAddress: '  + itemStoreAddress + '\n'
 
-        let itemStoreAbi = require('../../lib/contracts/MixItemStoreInterface.abi.json')
+        let itemStoreAbi = require('../../../lib/contracts/MixItemStoreInterface.abi.json')
         let itemStore = new this.$mixClient.web3.eth.Contract(itemStoreAbi, itemStoreAddress)
 
         let inUse = await itemStore.methods.getInUse(itemId).call()

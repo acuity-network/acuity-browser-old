@@ -39,7 +39,7 @@ module.exports = {
         'web/transcoder.ts'
       ),
       new webpack.NormalModuleReplacementPlugin(
-        /\/src\/renderer\/components\/Mining\.vue/,
+        /\/src\/renderer\/components\/routes\/Mining\.vue/,
         'web/Mining.vue'
       ),
       new webpack.NormalModuleReplacementPlugin(

@@ -47,19 +47,19 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import TokenSelector from './TokenSelector.vue'
-  import TopicSelector from './TopicSelector.vue'
-  import MentionSelector from './MentionSelector.vue'
-  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
-  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
-  import FileMixinProto from '../../lib/protobuf/FileMixin_pb.js'
-  import MixItem from '../../lib/MixItem'
-  import MixContent from '../../lib/MixContent'
-  import formatByteCount from '../../lib/formatByteCount'
+  import Page from '../Page.vue'
+  import TokenSelector from '../TokenSelector.vue'
+  import TopicSelector from '../TopicSelector.vue'
+  import MentionSelector from '../MentionSelector.vue'
+  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
+  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
+  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
+  import FileMixinProto from '../../../lib/protobuf/FileMixin_pb.js'
+  import MixItem from '../../../lib/MixItem'
+  import MixContent from '../../../lib/MixContent'
+  import formatByteCount from '../../../lib/formatByteCount'
   import bs58 from 'bs58'
-  import setTitle from '../../lib/setTitle'
+  import setTitle from '../../../lib/setTitle'
 
   export default {
     name: 'publish-file',

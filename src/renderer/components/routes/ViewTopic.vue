@@ -15,9 +15,9 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
+  import Page from '../Page.vue'
   import ViewItem from './ViewItem.vue'
-  import setTitle from '../../lib/setTitle'
+  import setTitle from '../../../lib/setTitle'
 
   export default {
     name: 'view-topic',

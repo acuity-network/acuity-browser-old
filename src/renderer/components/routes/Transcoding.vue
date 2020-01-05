@@ -43,9 +43,9 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import ItemLink from './ItemLink.vue'
-  import setTitle from '../../lib/setTitle'
+  import Page from '../Page.vue'
+  import ItemLink from '../ItemLink.vue'
+  import setTitle from '../../../lib/setTitle'
 
   export default {
     name: 'transcoding',

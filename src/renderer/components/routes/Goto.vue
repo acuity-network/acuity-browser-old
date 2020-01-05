@@ -15,10 +15,10 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import MixItem from '../../lib/MixItem'
-  import setTitle from '../../lib/setTitle'
-  import clipboard from '../../lib/clipboard'
+  import Page from '../Page.vue'
+  import MixItem from '../../../lib/MixItem'
+  import setTitle from '../../../lib/setTitle'
+  import clipboard from '../../../lib/clipboard'
   import bs58 from 'bs58'
 
   export default {

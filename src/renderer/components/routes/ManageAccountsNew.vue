@@ -38,9 +38,9 @@
   import * as bip32 from 'bip32'
   import { BIP32Interface } from 'bip32'
   import * as bip39  from 'bip39'
-  import Page from './Page.vue'
-  import MixAccount from '../../lib/MixAccount'
-  import setTitle from '../../lib/setTitle'
+  import Page from '../Page.vue'
+  import MixAccount from '../../../lib/MixAccount'
+  import setTitle from '../../../lib/setTitle'
 
   export default {
     name: 'manage-accounts-new',

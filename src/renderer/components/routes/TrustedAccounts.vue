@@ -48,12 +48,12 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import MixAccount from '../../lib/MixAccount'
-  import MixItem from '../../lib/MixItem'
-  import setTitle from '../../lib/setTitle'
+  import Page from '../Page.vue'
+  import MixAccount from '../../../lib/MixAccount'
+  import MixItem from '../../../lib/MixItem'
+  import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
-  import ProfileLink from './ProfileLink.vue'
+  import ProfileLink from '../ProfileLink.vue'
 
   export default {
     name: 'trusted-accounts',

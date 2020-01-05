@@ -54,15 +54,15 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import ProfileMixinProto from '../../lib/protobuf/ProfileMixin_pb.js'
-  import TitleMixinProto from '../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
-  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
-  import MixItem from '../../lib/MixItem'
-  import Image from '../../lib/Image'
-  import MixContent from '../../lib/MixContent'
-  import setTitle from '../../lib/setTitle'
+  import Page from '../Page.vue'
+  import ProfileMixinProto from '../../../lib/protobuf/ProfileMixin_pb.js'
+  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
+  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
+  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
+  import MixItem from '../../../lib/MixItem'
+  import Image from '../../../lib/Image'
+  import MixContent from '../../../lib/MixContent'
+  import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
   export default {

@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import MixItem from '../../lib/MixItem'
-  import setTitle from '../../lib/setTitle'
+  import Page from '../Page.vue'
+  import MixItem from '../../../lib/MixItem'
+  import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
   export default {

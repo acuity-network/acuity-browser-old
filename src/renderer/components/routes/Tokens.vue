@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import ItemLink from './ItemLink.vue'
-  import setTitle from '../../lib/setTitle'
+  import Page from '../Page.vue'
+  import ItemLink from '../ItemLink.vue'
+  import setTitle from '../../../lib/setTitle'
 
   export default {
     name: 'tokens',
@@ -55,7 +55,7 @@
         .on('data', async itemId => {
           try {
             let address = await this.$mixClient.tokenItemRegistry.methods.getToken(itemId).call()
-            let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), address)
+            let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), address)
     				let balance = this.$mixClient.formatWei(await token.methods.balanceOf(this.$activeAccount.get().contractAddress).call())
 
             this.data.push({

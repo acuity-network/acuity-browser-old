@@ -35,17 +35,15 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import MixAccount from '../../lib/MixAccount'
-  import MixItem from '../../lib/MixItem'
-  import ManageAccountsNew from './ManageAccountsNew.vue'
-  import setTitle from '../../lib/setTitle'
+  import Page from '../Page.vue'
+  import MixAccount from '../../../lib/MixAccount'
+  import MixItem from '../../../lib/MixItem'
+  import setTitle from '../../../lib/setTitle'
 
   export default {
     name: 'manage-accounts',
     components: {
       Page,
-      ManageAccountsNew,
     },
     data() {
       return {

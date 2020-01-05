@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts">
-  import Page from './Page.vue'
-  import setTitle from '../../lib/setTitle'
+  import Page from '../Page.vue'
+  import setTitle from '../../../lib/setTitle'
 
   export default {
     name: 'create-item',
