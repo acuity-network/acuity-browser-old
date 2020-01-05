@@ -6,7 +6,7 @@
 
     <template slot="body">
       <b-field label="itemId" :message="message">
-        <b-input v-model.trim="encodedItemId" @keydown.native.enter="goto" autocomplete="off" inputmode="verbatim" spellcheck="false" size="44"></b-input>
+        <b-input v-model.trim="itemId" @keydown.native.enter="goto" autocomplete="off" inputmode="verbatim" spellcheck="false" size="66"></b-input>
       </b-field>
 
       <button class="button is-primary" @click="goto">{{ $t('Goto.Goto') }}</button>
@@ -28,7 +28,7 @@
     },
     data() {
       return {
-        encodedItemId: '',
+        itemId: '',
         message: '',
       }
     },
@@ -41,23 +41,35 @@
         switch (clipboardText.length) {
           case 32:
           case 33:
-            this.encodedItemId = clipboardText
+            this.itemId = clipboardText
         }
       }
-      catch (e) {}
+      catch (e) {
+        if (this.$mixClient.web3.utils.isHexStrict(clipboardText) && clipboardText.length == 66) {
+          this.itemId = clipboardText
+        }
+      }
     },
     methods: {
       async goto(event) {
-        let itemId: string = '0x' + bs58.decode(this.encodedItemId).toString('hex') + 'f1b5847865d2094d'
+        let encodedItemId: string
         try {
+          let itemId: string
+          if (this.$mixClient.web3.utils.isHexStrict(this.itemId) && this.itemId.length == 66) {
+            itemId = this.itemId
+            encodedItemId = bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(itemId.substr(0, 50))))
+          }
+          else {
+            itemId = '0x' + bs58.decode(this.itemId).toString('hex') + 'f1b5847865d2094d'
+            encodedItemId = this.itemId
+          }
           await new MixItem(this.$root, itemId).init()
         }
         catch (e) {
           this.message = this.$t('Goto.ItemNotFound')
           return
         }
-
-        this.$router.push({ name: 'item', params: { encodedItemId: this.encodedItemId }})
+        this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       }
     }
   }

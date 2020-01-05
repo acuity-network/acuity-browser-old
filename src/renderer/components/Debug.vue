@@ -6,7 +6,7 @@
 
     <template slot="body">
       <b-field label="itemId">
-        <b-input v-model.trim="encodedItemId" @keydown.native.enter="read" autocomplete="off" inputmode="verbatim" spellcheck="false" size="44"></b-input>
+        <b-input v-model.trim="itemId" @keydown.native.enter="read" autocomplete="off" inputmode="verbatim" spellcheck="false" size="66"></b-input>
       </b-field>
       <button class="button is-primary" @click="read">{{ $t('Debug.ReadItem') }}</button>
       <code v-html="output" style="display: block; white-space: pre;"></code>
@@ -41,7 +41,7 @@
     },
     data() {
       return {
-        encodedItemId: '',
+        itemId: '',
         output: '',
       }
     },
@@ -51,16 +51,28 @@
 
       try {
         bs58.decode(clipboardText)
-        if (clipboardText.length == 33) {
-          this.encodedItemId = clipboardText
+        switch (clipboardText.length) {
+          case 32:
+          case 33:
+            this.itemId = clipboardText
         }
       }
-      catch (e) {}
+      catch (e) {
+        if (this.$mixClient.web3.utils.isHexStrict(clipboardText) && clipboardText.length == 66) {
+          this.itemId = clipboardText
+        }
+      }
     },
     methods: {
       async read(event) {
         this.output = ''
-        let itemId: string = '0x' + bs58.decode(this.encodedItemId).toString('hex') + 'f1b5847865d2094d'
+        let itemId: string
+        if (this.$mixClient.web3.utils.isHexStrict(this.itemId) && this.itemId.length == 66) {
+          itemId = this.itemId
+        }
+        else {
+          itemId = '0x' + bs58.decode(this.itemId).toString('hex') + 'f1b5847865d2094d'
+        }
 
         let shortId = await this.$mixClient.itemStoreShortId.methods.getShortId(itemId).call()
         this.output += 'shortId: '  + shortId + '\n'
