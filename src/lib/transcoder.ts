@@ -110,15 +110,15 @@ function transcode(key, job) {
 
         let item = await new MixItem(vue, job.itemId).init()
         let revision = await item.latestRevision().load()
-        let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x045eee8d')[0])
+        let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
         let encodingMessage = new VideoMixinProto.Encoding()
   //      encodingMessage.setFilesize()
         encodingMessage.setIpfsHash(bs58.decode(ipfsHash))
         encodingMessage.setWidth(job.width)
         encodingMessage.setHeight(job.height)
         videoMessage.addEncoding(encodingMessage)
-        revision.content.removeMixins(0x045eee8d)
-        revision.content.addMixinPayload(0x045eee8d, videoMessage.serializeBinary())
+        revision.content.removeMixins(0x51108feb)
+        revision.content.addMixinPayload(0x51108feb, videoMessage.serializeBinary())
 
         ipfsHash = await revision.content.save()
         await vue.$activeAccount.get().sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, ipfsHash], 0, 'Add video encoding to item')

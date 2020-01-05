@@ -101,7 +101,7 @@
           let content = new MixContent(this.$root)
 
           // Video
-          content.addMixinPayload(0x045eee8d, await this.$refs.videoEdit.save())
+          content.addMixinPayload(0x51108feb, await this.$refs.videoEdit.save())
 
           // Language
           let languageMessage = new LanguageMixinProto.LanguageMixin()

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 message Encoding {
   uint64 filesize = 1;    // Size of the file addressed by ipfs_hash (bytes).
-  bytes ipfs_hash = 2;    // Base58 decoded IPFS multihash of the WebP file of this mipmap level.
+  bytes ipfs_hash = 2;    // Base58 decoded IPFS multihash of the file of this encoding.
   uint32 width = 3;
   uint32 height = 4;
   uint32 frame_rate = 5;

@@ -84,7 +84,7 @@ export default class MixRevision {
   }
 
   getVideo() {
-    let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(this.content.getPayloads('0x045eee8d')[0])
+    let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(this.content.getPayloads('0x51108feb')[0])
     return videoMessage.toObject()
   }
 

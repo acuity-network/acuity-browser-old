@@ -362,8 +362,8 @@
         }
 */
 
-        if (revision.content.existMixin('0x045eee8d')) {
-          this.videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x045eee8d')[0])
+        if (revision.content.existMixin('0x51108feb')) {
+          this.videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
         }
 
         if (!this.short) {
