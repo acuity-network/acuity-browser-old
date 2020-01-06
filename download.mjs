@@ -77,11 +77,11 @@ Promise.all([parity, ipfs, ffmpeg, youtubeDl])
       break
 
     case 'darwin':
-      fs.renameSync('public/ffmpeg-4.2.2-macos64-shared', 'public/ffmpeg')
+      fs.renameSync('public/ffmpeg-4.2.1-macos64-shared', 'public/ffmpeg')
       break
 
     case 'win32':
-      fs.renameSync('public/ffmpeg-4.2.2-win64-shared', 'public/ffmpeg')
+      fs.renameSync('public/ffmpeg-4.2.1-win64-shared', 'public/ffmpeg')
       break
   }
 	fs.writeFileSync('download_rev', rev)
