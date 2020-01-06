@@ -28,7 +28,7 @@
               </b-table-column>
 
               <b-table-column :label="$t('Wallet.When')">
-                <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true"></timeago>
+                <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true" :locale="$i18n.locale"></timeago>
                 <span v-else>pending</span>
               </b-table-column>
 

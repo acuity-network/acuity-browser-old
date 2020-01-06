@@ -8,7 +8,7 @@
       <b-table :data="data">
         <template slot-scope="props">
           <b-table-column field="when" :label="$t('BrowsingHistory.LastAccess')">
-            <timeago :datetime="props.row.when" :autoUpdate="true"></timeago>
+            <timeago :datetime="props.row.when" :autoUpdate="true" :locale="$i18n.locale"></timeago>
           </b-table-column>
 
           <b-table-column field="item" :label="$t('BrowsingHistory.Item')">

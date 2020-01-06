@@ -6,7 +6,7 @@
       </div>
       <profile-link :address="ownerAddress"></profile-link>
         <span v-if="timestamp > 0">
-          <timeago :datetime="timestamp" :autoUpdate="true"></timeago>
+          <timeago :datetime="timestamp" :autoUpdate="true" :locale="$i18n.locale"></timeago>
         </span>
         <span v-else>
           just now

@@ -24,7 +24,7 @@
             {{ networkId }}
           </b-field>
           <b-field :label="$t('NodeStatus.BlockNumber')">
-            {{ blockNumber }} (<timeago :datetime="blockTimestamp" :autoUpdate="true"></timeago>)
+            {{ blockNumber }} (<timeago :datetime="blockTimestamp" :autoUpdate="true" :locale="$i18n.locale"></timeago>)
           </b-field>
           <b-field :label="$t('NodeStatus.PeerCount')">
             {{ peerCount }}

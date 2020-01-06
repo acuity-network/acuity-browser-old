@@ -8,7 +8,7 @@
       <b-table :data="data" :row-class="(row, index) => (row.error == '') ? '' : 'error'">
         <template slot-scope="props">
           <b-table-column :label="$t('TransactionHistory.When')">
-            <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true"></timeago>
+            <timeago v-if="props.row.confirmed" :datetime="props.row.when" :autoUpdate="true" :locale="$i18n.locale"></timeago>
             <span v-else>{{ $t('TransactionHistory.Pending') }}</span>
           </b-table-column>
 

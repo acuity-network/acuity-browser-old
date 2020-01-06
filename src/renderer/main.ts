@@ -27,7 +27,13 @@ import Buefy from 'buefy'
 Vue.use(Buefy)
 
 import VueTimeago from 'vue-timeago'
-Vue.use(VueTimeago, { locale: 'en' })
+Vue.use(VueTimeago, {
+  locale: 'en',
+  locales: {
+    ru: require('date-fns/locale/ru'),
+    th: require('date-fns/locale/th'),
+  },
+})
 
 import '@mdi/font/css/materialdesignicons.min.css'
 
