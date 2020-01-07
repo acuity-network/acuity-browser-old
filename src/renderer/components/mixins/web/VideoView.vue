@@ -3,9 +3,7 @@
     <video ref="video" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
     <b-field label="Resolution">
       <b-select v-model="ipfsHash" @input="input">
-        <option
-          v-for="resolution in resolutions"
-          :value="resolution.ipfsHash">
+        <option v-for="resolution in resolutions" :value="resolution.ipfsHash">
           {{ resolution.width }} x {{ resolution.height }}
         </option>
       </b-select>
@@ -22,8 +20,6 @@
     props: [
       'message'
     ],
-    components: {
-    },
     data() {
       return {
         ipfsHash: null,
@@ -46,7 +42,7 @@
     mounted() {
       this.$refs.video.addEventListener('error', console.error)
     },
-		methods: {
+    methods: {
       startVideo() {
         this.$refs.video.removeEventListener('abort', this.startVideo)
 
@@ -82,7 +78,7 @@
         this.$refs.video.currentTime = this.currentTime
         this.$refs.video.play()
       },
-		},
+    },
   }
 </script>
 
