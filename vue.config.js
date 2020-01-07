@@ -46,6 +46,10 @@ module.exports = {
         /\/src\/renderer\/components\/mixins\/VideoEdit\.vue/,
         'web/VideoEdit.vue'
       ),
+      new webpack.NormalModuleReplacementPlugin(
+        /\/src\/renderer\/components\/mixins\/VideoView\.vue/,
+        'web/VideoView.vue'
+      ),
     ]
   },
   chainWebpack: config => {

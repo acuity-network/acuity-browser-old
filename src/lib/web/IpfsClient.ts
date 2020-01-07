@@ -73,6 +73,10 @@ export default class IpfsClient {
     return this.node.cat('/ipfs/' + ipfsHash)
   }
 
+  getReadableStream(ipfsHash, options) {
+    return this.node.catReadableStream('/ipfs/' + ipfsHash, options)
+  }
+
   add(data) {
     return this.node.add(data).then((result: any) => {
       return result[0].hash
