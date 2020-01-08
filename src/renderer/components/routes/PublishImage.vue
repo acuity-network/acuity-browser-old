@@ -8,7 +8,7 @@
       <template v-if="publishing">
         <b-progress type="is-info"></b-progress>
       </template>
-      <template v-else>
+      <div v-show="!publishing">
         <b-field :label="$t('PublishImage.Title')">
           <b-input v-model="title"></b-input>
         </b-field>
@@ -31,34 +31,23 @@
         <token-selector v-model="tokenItemId"></token-selector>
         <topic-selector v-model="topics"></topic-selector>
         <mention-selector v-model="mentions"></mention-selector>
-
-        <b-field class="file">
-          <b-upload v-model="file">
-            <a class="button is-primary">
-              <b-icon icon="upload"></b-icon>
-              <span>{{ $t('PublishImage.ChooseImage') }}</span>
-            </a>
-          </b-upload>
-          <span class="file-name" v-if="file">
-            {{ file.name }}
-          </span>
-        </b-field>
+        <image-edit v-model="imageMixin" ref="imageEdit"></image-edit>
 
         <button class="button is-primary" @click="publish">{{ $t('PublishImage.Publish') }}</button>
-      </template>
+      </div>
     </template>
   </page>
 </template>
 
 <script lang="ts">
   import Page from '../Page.vue'
+  import ImageEdit from '../mixins/ImageEdit.vue'
   import TokenSelector from '../TokenSelector.vue'
   import TopicSelector from '../TopicSelector.vue'
   import MentionSelector from '../MentionSelector.vue'
   import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
   import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
   import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
-  import Image from '../../../lib/Image'
   import MixItem from '../../../lib/MixItem'
   import MixContent from '../../../lib/MixContent'
   import setTitle from '../../../lib/setTitle'
@@ -68,6 +57,7 @@
     name: 'publish-image',
     components: {
       Page,
+      ImageEdit,
       TokenSelector,
       TopicSelector,
       MentionSelector,
@@ -82,7 +72,7 @@
         feedId: '0',
         topics: [],
         mentions: [],
-        file: null,
+        imageMixin: null,
       }
     },
     async created() {
@@ -112,10 +102,7 @@
           let content = new MixContent(this.$root)
 
           // Image
-          if (this.file != null) {
-            let image = new Image(this.$root, this.file)
-            content.addMixinPayload(0x045eee8c, await image.createMixin())
-          }
+          content.addMixinPayload(0x045eee8c, await this.$refs.imageEdit.save())
 
           // Language
           let languageMessage = new LanguageMixinProto.LanguageMixin()

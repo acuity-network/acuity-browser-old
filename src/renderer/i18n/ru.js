@@ -116,6 +116,9 @@ export default {
 	Home: {
 		Home: 'Главная',
 	},
+  ImageEdit: {
+    ChooseImage: 'Выберите картинку',
+  },
 	Interactions: {
 		Interactions: 'Упоминания',
 	},
@@ -142,7 +145,7 @@ export default {
 		Account: 'Аккаунт',
 		Balance: 'Баланс',
 		deploy: 'активировать',
-    delete: 'delete',
+    delete: 'удалять',
 		CreateAccount: 'Создать аккаунт',
 		RecoverAccount: 'Восстановить аккаунт',
 	},
@@ -258,7 +261,6 @@ export default {
 		Feed: 'Канал',
 		SelectAFeed: 'Выберите канал',
 		Image: 'Изображение',
-		ChooseImage: 'Выберите картинку',
 		Publish: 'Опубликовать',
 		Images: 'Изображение',
 	},

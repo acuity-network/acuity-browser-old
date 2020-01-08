@@ -117,6 +117,9 @@ export default {
 	Home: {
 		Home: 'Home',
 	},
+  ImageEdit: {
+    ChooseImage: 'Choose image',
+  },
 	Interactions: {
 		Interactions: 'Interactions',
 	},
@@ -259,7 +262,6 @@ export default {
 		Feed: 'Feed',
 		SelectAFeed: 'Select a feed',
 		Image: 'Image',
-		ChooseImage: 'Choose image',
 		Publish: 'Publish',
 		Images: 'Images',
 	},
