@@ -22,13 +22,13 @@
     name: 'image-edit',
     props: {
       value: '',
-		},
-		data() {
+    },
+    data() {
       return {
         file: null,
       }
     },
-		methods: {
+    methods: {
       async save() {
         let image = new Image(this.$root, this.file)
         return image.createMixin()
