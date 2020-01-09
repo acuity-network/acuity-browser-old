@@ -27,15 +27,13 @@
       </b-field>
       <b-field label="H.264 Encoding Speed" message="Affects bitrate, not quality.">
         <b-select v-model="preset">
-          <option value="ultrafast">Ultrafast</option>
-          <option value="superfast">Superfast</option>
-          <option value="veryfast">Veryfast</option>
-          <option value="faster">Faster</option>
-          <option value="fast">Fast</option>
-          <option value="medium">Medium</option>
-          <option value="slow">Slow</option>
+          <option value="veryslow">Very slow</option>
           <option value="slower">Slower</option>
-          <option value="veryslow">Veryslow</option>
+          <option value="slow">Slow</option>
+          <option value="medium">Medium</option>
+          <option value="fast">Fast</option>
+          <option value="faster">Faster</option>
+          <option value="veryfast">Very fast</option>
         </b-select>
       </b-field>
     </template>
