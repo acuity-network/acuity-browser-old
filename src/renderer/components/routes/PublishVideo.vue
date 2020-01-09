@@ -31,6 +31,7 @@
         <token-selector v-model="tokenItemId"></token-selector>
         <topic-selector v-model="topics"></topic-selector>
         <mention-selector v-model="mentions"></mention-selector>
+        <image-edit v-model="imageMixin" ref="imageEdit"></image-edit>
         <video-edit v-model="videoMixin" ref="videoEdit"></video-edit>
 
         <button class="button is-primary" @click="publish">{{ $t('PublishVideo.Publish') }}</button>
@@ -42,6 +43,7 @@
 <script lang="ts">
   import Page from '../Page.vue'
   import VideoEdit from '../mixins/VideoEdit.vue'
+  import ImageEdit from '../mixins/ImageEdit.vue'
   import TokenSelector from '../TokenSelector.vue'
   import TopicSelector from '../TopicSelector.vue'
   import MentionSelector from '../MentionSelector.vue'
@@ -58,6 +60,7 @@
     components: {
       Page,
       VideoEdit,
+      ImageEdit,
       TokenSelector,
       TopicSelector,
       MentionSelector,
@@ -73,6 +76,7 @@
         topics: [],
         mentions: [],
         videoMixin: null,
+        imageMixin: null,
       }
     },
     async created() {
@@ -102,6 +106,9 @@
 
           // Video
           content.addMixinPayload(0x51108feb, await this.$refs.videoEdit.save())
+
+          // Image
+          content.addMixinPayload(0x045eee8c, await this.$refs.imageEdit.save())
 
           // Language
           let languageMessage = new LanguageMixinProto.LanguageMixin()
