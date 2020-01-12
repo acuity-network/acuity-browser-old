@@ -16,6 +16,9 @@
           <b-table-column :label="$t('Transcoding.Height')">
             {{ props.row.height }}
           </b-table-column>
+          <b-table-column :label="$t('Transcoding.Progress')">
+            {{ props.row.progress }}
+          </b-table-column>
           <b-table-column>
             <a @click="deleteJob" :data-id="props.row.id">{{ $t('Transcoding.delete') }}</a>
           </b-table-column>

@@ -158,7 +158,7 @@ function vp9Pass2Args(job) {
   return args
 }
 
-function ffmpeg(args) {
+function ffmpeg(args, id, pass) {
   console.log(args)
   return new Promise((resolve, reject) => {
     let isWindows = os.platform() == 'win32'
@@ -170,7 +170,14 @@ function ffmpeg(args) {
     })
 
     process.stderr.on('data', (data) => {
-      console.log(data.toString())
+      let output = data.toString()
+      try {
+        let matches = output.match(/frame= *(\d*)/)
+        let frame = parseInt(matches[1])
+        vue.$store.commit('transcodingsSetProgress', {id: id, frame: frame, pass: pass})
+      }
+      catch (e) {}
+      console.log(output)
     })
 
     process.on('close', resolve)
@@ -189,14 +196,14 @@ function transcode(key, job) {
       case 'h264':
         args = h264Args(job)
         args.push(outFilepath)
-        code = await ffmpeg(args)
+        code = await ffmpeg(args, job.id, 0)
         break
       case 'vp9':
         args = vp9Pass1Args(job)
-        code = await ffmpeg(args)
+        code = await ffmpeg(args, job.id, 1)
         args = vp9Pass2Args(job)
         args.push(outFilepath)
-        code = await ffmpeg(args)
+        code = await ffmpeg(args, job.id, 2)
         break
     }
 

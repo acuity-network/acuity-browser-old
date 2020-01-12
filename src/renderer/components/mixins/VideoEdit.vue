@@ -96,14 +96,6 @@
           }
         }
 
-        let frameRates = [this.frameRate]
-
-        let rate = this.frameRate
-        while (rate >= 48) {
-          rate /= 2
-          frameRates.push(rate)
-        }
-
         let id
         try {
           id = parseInt(await this.$db.get('/transcodeCount'))
@@ -125,6 +117,7 @@
             ipfsHash: this.ipfsHash,
             height: height,
             width: width,
+            frames: Math.floor(this.duration * this.frameRate),
             // Use h264 for <= 720 for safari
             codec: (b <= 80) ? 'h264' : 'vp9',
             audioPassthrough: this.codecAudio == 'opus' || this.codecAudio == 'aac',
