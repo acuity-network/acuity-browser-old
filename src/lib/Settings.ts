@@ -27,6 +27,8 @@ export default class Settings {
 			locale: 'en-US',
       mixEndpoint: 'freemont',
 			development: false,
+      'vp9.crf': 31,
+      'vp9.speed': 2,
       'h264.crf': 23,
       'h264.preset': 'medium',
 		}

@@ -17,16 +17,28 @@
             {{ props.row.height }}
           </b-table-column>
           <b-table-column>
-            <a @click="deleteJob" :data-id="props.row.id">delete</a>
+            <a @click="deleteJob" :data-id="props.row.id">{{ $t('Transcoding.delete') }}</a>
           </b-table-column>
         </template>
       </b-table>
-      <b-field label="H.264 CRF" message="18 to 28. Lower value increases quality and bitrate.">
-        <b-input v-model="crf" type="number" min="18" max="28">
+      <b-field label="VP9 CRF" :message="$t('Transcoding.vp9CrfMessage')">
+        <b-input v-model="vp9Crf" type="number" min="0" max="63">
         </b-input>
       </b-field>
-      <b-field label="H.264 Encoding Speed" message="Affects bitrate, not quality.">
-        <b-select v-model="preset">
+      <b-field :label="$t('Transcoding.vp9EncodingSpeed')" :message="$t('Transcoding.vp9EncodingSpeedMessage')">
+        <b-select v-model="vp9Speed">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </b-select>
+      </b-field>
+      <b-field label="H.264 CRF" :message="$t('Transcoding.h264CrfMessage')">
+        <b-input v-model="h264Crf" type="number" min="18" max="28">
+        </b-input>
+      </b-field>
+      <b-field :label="$t('Transcoding.h264EncodingSpeed')" :message="$t('Transcoding.h264EncodingSpeedMessage')">
+        <b-select v-model="h264Preset">
           <option value="veryslow">Very slow</option>
           <option value="slower">Slower</option>
           <option value="slow">Slow</option>
@@ -53,8 +65,10 @@
     },
     data() {
       return {
-        crf: this.$settings.get('h264.crf'),
-        preset: this.$settings.get('h264.preset'),
+        vp9Crf: this.$settings.get('vp9.crf'),
+        vp9Speed: this.$settings.get('vp9.speed'),
+        h264Crf: this.$settings.get('h264.crf'),
+        h264Preset: this.$settings.get('h264.preset'),
       }
     },
     async created() {
@@ -72,11 +86,17 @@
       }
     },
     watch: {
-      crf() {
-        this.$settings.set('h264.crf', this.crf)
+      vp9Crf() {
+        this.$settings.set('vp9.crf', this.vp9Crf)
       },
-      preset() {
-        this.$settings.set('h264.preset', this.preset)
+      vp9Speed() {
+        this.$settings.set('vp9.speed', this.vp9Speed)
+      },
+      h264Crf() {
+        this.$settings.set('h264.crf', this.h264Crf)
+      },
+      h264Preset() {
+        this.$settings.set('h264.preset', this.h264Preset)
       },
     },
   }

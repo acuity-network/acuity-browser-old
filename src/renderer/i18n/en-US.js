@@ -337,6 +337,13 @@ export default {
     Item: 'Item',
     Width: 'Width',
     Height: 'Height',
+    delete: 'delete',
+    vp9CrfMessage: '15 to 35. Lower value increases quality and bitrate.',
+    vp9EncodingSpeed: 'VP9 Encoding Speed',
+    vp9EncodingSpeedMessage: 'Higher number is faster. Affects bitrate, not quality.',
+    h264CrfMessage: '18 to 28. Lower value increases quality and bitrate.',
+    h264EncodingSpeed: 'H.264 Encoding Speed',
+    h264EncodingSpeedMessage: 'Affects bitrate, not quality.',
 	},
 	TrustedAccounts: {
 		TrustedAccounts: 'Trusted Accounts',

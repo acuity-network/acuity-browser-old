@@ -119,16 +119,18 @@
           let width = (height * this.width) / this.height
 
           let transcoding = {
-            id: id++,
+            id: id,
             itemId: itemId,
             filepath: this.file.path,
             ipfsHash: this.ipfsHash,
             height: height,
             width: width,
+            // Use h264 for <= 720 for safari
+            codec: (b <= 80) ? 'h264' : 'vp9',
             audioPassthrough: this.codecAudio == 'opus' || this.codecAudio == 'aac',
           }
 
-          batch.put('/transcode/' + id, JSON.stringify(transcoding))
+          batch.put('/transcode/' + id++, JSON.stringify(transcoding))
           this.$store.commit('transcodingsAdd', transcoding)
         }
 

@@ -57,40 +57,110 @@ function findJob() {
   })
 }
 
-function transcode(key, job) {
-  return new Promise(async (resolve, reject) => {
-    console.log(job)
+function h264Args(job) {
+  let args = []
 
-    let outFilepath = path.join(remote.app.getPath('userData'), 'output.mp4')
+  args.push('-i')
+  args.push(job.filepath)
+  args.push('-c:v')
+  args.push('libx264')
+  args.push('-crf')
+  args.push(vue.$settings.get('h264.crf'))
+  args.push('-preset')
+  args.push(vue.$settings.get('h264.preset'))
+  args.push('-vf')
+  args.push('scale=' + job.width + ':' + job.height)
+  args.push('-g')
+  args.push('240')
+  args.push('-c:a')
+  if (job.audioPassthrough) {
+    args.push('copy')
+  }
+  else {
+    args.push('libopus')
+  }
+  args.push('-movflags')
+  args.push('+faststart')
+  args.push('-strict')
+  args.push('-2')
+  args.push('-y')
 
-    let args = []
+  return args
+}
 
-    args.push('-i')
-    args.push(job.filepath)
-    args.push('-c:v')
-    args.push('libx264')
-    args.push('-crf')
-    args.push(vue.$settings.get('h264.crf'))
-    args.push('-preset')
-    args.push(vue.$settings.get('h264.preset'))
-    args.push('-vf')
-    args.push('scale=' + job.width + ':' + job.height)
-    args.push('-c:a')
-    if (job.audioPassthrough) {
-      args.push('copy')
-    }
-    else {
-      args.push('libopus')
-    }
-    args.push('-movflags')
-    args.push('+faststart')
-    args.push('-strict')
-    args.push('-2')
-    args.push('-y')
-    args.push(outFilepath)
+function vp9Args(job) {
+  let args = []
 
-    console.log(args)
+  args.push('-i')
+  args.push(job.filepath)
+  args.push('-c:v')
+  args.push('libvpx-vp9')
+  args.push('-b:v')
+  args.push('0')
+  args.push('-crf')
+  args.push(vue.$settings.get('vp9.crf'))
+  args.push('-tile-columns')
+  args.push('6')
+  args.push('-frame-parallel')
+  args.push('1')
+  args.push('-vf')
+  args.push('scale=' + job.width + ':' + job.height)
+  args.push('-g')
+  args.push('240')
+  args.push('-f')
+  args.push('matroska')
 
+  return args
+}
+
+function vp9Pass1Args(job) {
+  let args = vp9Args(job)
+
+  args.push('-cpu-used')
+  args.push('4')
+  args.push('-pass')
+  args.push('1')
+  args.push('-an')
+  args.push('-y')
+
+  if (os.platform() == 'win32') {
+    args.push('NUL')
+  }
+  else {
+    args.push('/dev/null')
+  }
+
+  return args
+}
+
+function vp9Pass2Args(job) {
+  let args = vp9Args(job)
+
+  args.push('-cpu-used')
+  args.push(vue.$settings.get('vp9.speed'))
+  args.push('-row-mt')
+  args.push('1')
+  args.push('-auto-alt-ref')
+  args.push('1')
+  args.push('-lag-in-frames')
+  args.push('25')
+  args.push('-pass')
+  args.push('2')
+  args.push('-c:a')
+  if (job.audioPassthrough) {
+    args.push('copy')
+  }
+  else {
+    args.push('libopus')
+  }
+  args.push('-y')
+
+  return args
+}
+
+function ffmpeg(args) {
+  console.log(args)
+  return new Promise((resolve, reject) => {
     let isWindows = os.platform() == 'win32'
     let commandPath = path.join(__static, 'ffmpeg', 'bin', 'ffmpeg', isWindows ? '.exe' : '')
 
@@ -103,33 +173,58 @@ function transcode(key, job) {
       console.log(data.toString())
     })
 
-    process.on('close', async (code) => {
-      if (code == 0) {
-        let ipfsHash = await ipfs.add(outFilepath)
-        console.log(ipfsHash)
+    process.on('close', resolve)
+  })
+}
 
-        let item = await new MixItem(vue, job.itemId).init()
-        let revision = await item.latestRevision().load()
-        let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
-        let encodingMessage = new VideoMixinProto.Encoding()
-  //      encodingMessage.setFilesize()
-        encodingMessage.setIpfsHash(bs58.decode(ipfsHash))
-        encodingMessage.setWidth(job.width)
-        encodingMessage.setHeight(job.height)
-        videoMessage.addEncoding(encodingMessage)
-        revision.content.removeMixins(0x51108feb)
-        revision.content.addMixinPayload(0x51108feb, videoMessage.serializeBinary())
+function transcode(key, job) {
+  return new Promise(async (resolve, reject) => {
+    console.log(job)
 
-        ipfsHash = await revision.content.save()
-        await vue.$activeAccount.get().sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, ipfsHash], 0, 'Add video encoding to item')
-        vue.$db.del(key)
-        vue.$store.commit('transcodingsRemove', job.id)
-        resolve()
-      }
-      else {
-        reject()
-      }
-    })
+    let outFilepath = path.join(remote.app.getPath('userData'), 'output.mp4')
+    let code
+    let args
+
+    switch (job.codec) {
+      case 'h264':
+        args = h264Args(job)
+        args.push(outFilepath)
+        code = await ffmpeg(args)
+        break
+      case 'vp9':
+        args = vp9Pass1Args(job)
+        code = await ffmpeg(args)
+        args = vp9Pass2Args(job)
+        args.push(outFilepath)
+        code = await ffmpeg(args)
+        break
+    }
+
+    if (code == 0) {
+      let ipfsHash = await ipfs.add(outFilepath)
+      console.log(ipfsHash)
+
+      let item = await new MixItem(vue, job.itemId).init()
+      let revision = await item.latestRevision().load()
+      let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
+      let encodingMessage = new VideoMixinProto.Encoding()
+//      encodingMessage.setFilesize()
+      encodingMessage.setIpfsHash(bs58.decode(ipfsHash))
+      encodingMessage.setWidth(job.width)
+      encodingMessage.setHeight(job.height)
+      videoMessage.addEncoding(encodingMessage)
+      revision.content.removeMixins(0x51108feb)
+      revision.content.addMixinPayload(0x51108feb, videoMessage.serializeBinary())
+
+      ipfsHash = await revision.content.save()
+      await vue.$activeAccount.get().sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, ipfsHash], 0, 'Add video encoding to item')
+      vue.$db.del(key)
+      vue.$store.commit('transcodingsRemove', job.id)
+      resolve()
+    }
+    else {
+      reject()
+    }
   })
 }
 
