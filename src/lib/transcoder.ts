@@ -1,5 +1,6 @@
 import ipfs from './Ipfs'
 import { spawn } from 'child_process'
+import fs from 'fs'
 import path from 'path'
 import os from 'os'
 import { remote } from 'electron'
@@ -230,7 +231,8 @@ function transcode(key, job) {
       let revision = await item.latestRevision().load()
       let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
       let encodingMessage = new VideoMixinProto.Encoding()
-//      encodingMessage.setFilesize()
+      let stats = fs.statSync(outFilepath)
+      encodingMessage.setFilesize(stats.size)
       encodingMessage.setIpfsHash(bs58.decode(ipfsHash))
       encodingMessage.setWidth(job.width)
       encodingMessage.setHeight(job.height)
