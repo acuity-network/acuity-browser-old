@@ -214,24 +214,24 @@ function transcode(key, job) {
       case 'vp9':
         args = vp9Pass1Args(job)
         code = await ffmpeg(args, job.id, 1)
-        args = vp9Pass2Args(job)
-        args.push(outFilepath)
-        code = await ffmpeg(args, job.id, 2)
+        if (code == 0) {
+          args = vp9Pass2Args(job)
+          args.push(outFilepath)
+          code = await ffmpeg(args, job.id, 2)
+        }
         break
     }
 
-    vue.$db.del(key)
-    vue.$store.commit('transcodingsRemove', job.id)
-
     if (code == 0) {
+      let stats = fs.statSync(outFilepath)
       let ipfsHash = await ipfs.add(outFilepath)
+      fs.unlinkSync(outFilepath)
       console.log(ipfsHash)
 
       let item = await new MixItem(vue, job.itemId).init()
       let revision = await item.latestRevision().load()
       let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
       let encodingMessage = new VideoMixinProto.Encoding()
-      let stats = fs.statSync(outFilepath)
       encodingMessage.setFilesize(stats.size)
       encodingMessage.setIpfsHash(bs58.decode(ipfsHash))
       encodingMessage.setWidth(job.width)
