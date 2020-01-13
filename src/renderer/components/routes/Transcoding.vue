@@ -10,6 +10,9 @@
           <b-table-column :label="$t('Transcoding.Item')">
             <item-link :itemId="props.row.itemId"></item-link>
           </b-table-column>
+          <b-table-column :label="$t('Transcoding.Codec')">
+            {{ props.row.codec }}
+          </b-table-column>
           <b-table-column :label="$t('Transcoding.Width')">
             {{ props.row.width }}
           </b-table-column>

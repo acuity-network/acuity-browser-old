@@ -325,8 +325,10 @@ export default {
   Transcoding: {
 		Transcoding: 'транскодирование',
     Item: 'Страница',
+    Codec: 'Codec',
     Width: 'ширина',
     Height: 'Высота',
+    Progress: 'Progress',
     delete: 'удалять',
     vp9CrfMessage: '15 до 35. Чем ниже значение, тем выше качество и битрейт.',
     vp9EncodingSpeed: 'Скорость кодирования VP9',

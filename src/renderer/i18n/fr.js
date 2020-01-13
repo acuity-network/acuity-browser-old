@@ -324,9 +324,11 @@ export default {
 	},
   Transcoding: {
 		Transcoding: 'Transcoding',
+    Codec: 'Codec',
     Item: 'Item',
     Width: 'Width',
     Height: 'Height',
+    Progress: 'Progress',
     delete: 'delete',
     vp9CrfMessage: '15 to 35. Lower value increases quality and bitrate.',
     vp9EncodingSpeed: 'VP9 Encoding Speed',
