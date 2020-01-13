@@ -24,6 +24,10 @@ export default new Vuex.Store({
       let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
       state.transcodings.splice(i, 1)
     },
+    transcodingsFail(state, id) {
+      let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
+      state.transcodings[i].progress = 'failed'
+    },
   },
   actions: {
   },

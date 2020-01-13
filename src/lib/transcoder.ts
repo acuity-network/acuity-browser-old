@@ -241,10 +241,14 @@ function transcode(key, job) {
       revision.content.addMixinPayload(0x51108feb, videoMessage.serializeBinary())
 
       ipfsHash = await revision.content.save()
-      await vue.$activeAccount.get().sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, ipfsHash], 0, 'Add video encoding to item')
+      await await vue.$activeAccount.get().sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, ipfsHash], 0, 'Add video encoding to item')
+      vue.$db.del(key)
+      vue.$store.commit('transcodingsRemove', job.id)
       resolve()
     }
     else {
+      vue.$db.del(key)
+      vue.$store.commit('transcodingsFail', job.id)
       reject()
     }
   })
