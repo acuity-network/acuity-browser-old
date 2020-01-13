@@ -158,7 +158,7 @@ function add(filepath) {
   			'IPFS_PATH': path.join(remote.app.getPath('userData'), 'ipfs'),
   		}
   	}
-    let args = ['add', '-Q', filepath]
+    let args = ['add', '-Q', '-t', '--raw-leaves', filepath]
     let process = spawn(commandPath, args, options)
 
     process.stdout.on('data', (data) => {
