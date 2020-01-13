@@ -43,7 +43,7 @@
       <div class="columns">
         <div class="column">
           <div class="image">
-            <ipfs-image :ipfsHash="image" :key="image"></ipfs-image>
+            <ipfs-image v-if="!videoMessage" :ipfsHash="image" :key="image"></ipfs-image>
           </div>
           <div v-if="hasFile" class="file">
             <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
