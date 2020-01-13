@@ -22,13 +22,24 @@ function init(_vue) {
     vue.$store.commit('transcodingsAdd', JSON.parse(data.value))
   })
 
+  let transcoding: boolean = false
+
   vue.$on('transcode', async () => {
-    while(true) {
+    if (transcoding) {
+      console.log('Already transcoding.')
+      return
+    }
+    transcoding = true
+    while (true) {
       try {
         let result: any = await findJob()
-        await transcode(result.key, JSON.parse(result.value))
+        try {
+          await transcode(result.key, JSON.parse(result.value))
+        }
+        catch (e) {}
       }
       catch (e) {
+        transcoding = false
         return
       }
     }
@@ -41,7 +52,7 @@ function findJob() {
     vue.$db.createReadStream({
       gt: '/transcode/',
       lt: '/transcode/z',
-      limit: 1
+      limit: 1,
     })
     .on('data', data => {
       result = data
@@ -198,6 +209,7 @@ function transcode(key, job) {
         args.push(outFilepath)
         code = await ffmpeg(args, job.id, 0)
         break
+
       case 'vp9':
         args = vp9Pass1Args(job)
         code = await ffmpeg(args, job.id, 1)
@@ -206,6 +218,9 @@ function transcode(key, job) {
         code = await ffmpeg(args, job.id, 2)
         break
     }
+
+    vue.$db.del(key)
+    vue.$store.commit('transcodingsRemove', job.id)
 
     if (code == 0) {
       let ipfsHash = await ipfs.add(outFilepath)
@@ -225,8 +240,6 @@ function transcode(key, job) {
 
       ipfsHash = await revision.content.save()
       await vue.$activeAccount.get().sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, ipfsHash], 0, 'Add video encoding to item')
-      vue.$db.del(key)
-      vue.$store.commit('transcodingsRemove', job.id)
       resolve()
     }
     else {
