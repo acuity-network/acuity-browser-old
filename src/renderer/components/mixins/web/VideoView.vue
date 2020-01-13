@@ -37,6 +37,7 @@
           width: encoding.getWidth(),
           height: encoding.getHeight(),
         })
+        this.ipfsHash = this.resolutions[this.resolutions.length - 1].ipfsHash
       }
     },
     mounted() {
@@ -50,7 +51,7 @@
         let ipfsClient = this.$ipfsClient
 
         this.videostream = new VideoStream({
-          createReadStream (opts) {
+          createReadStream(opts) {
             let { start, end } = opts
             let options = {offset: start}
             if (end > 0) {

@@ -40,6 +40,7 @@
           width: encoding.getWidth(),
           height: encoding.getHeight(),
         })
+        this.src = this.resolutions[this.resolutions.length - 1].url
       }
     },
     destroyed() {
