@@ -27,33 +27,35 @@
           </b-table-column>
         </template>
       </b-table>
-      <b-field label="VP9 CRF" :message="$t('Transcoding.vp9CrfMessage')">
-        <b-input v-model="vp9Crf" type="number" min="0" max="63">
-        </b-input>
-      </b-field>
-      <b-field :label="$t('Transcoding.vp9EncodingSpeed')" :message="$t('Transcoding.vp9EncodingSpeedMessage')">
-        <b-select v-model="vp9Speed">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </b-select>
-      </b-field>
-      <b-field label="H.264 CRF" :message="$t('Transcoding.h264CrfMessage')">
-        <b-input v-model="h264Crf" type="number" min="18" max="28">
-        </b-input>
-      </b-field>
-      <b-field :label="$t('Transcoding.h264EncodingSpeed')" :message="$t('Transcoding.h264EncodingSpeedMessage')">
-        <b-select v-model="h264Preset">
-          <option value="veryslow">Very slow</option>
-          <option value="slower">Slower</option>
-          <option value="slow">Slow</option>
-          <option value="medium">Medium</option>
-          <option value="fast">Fast</option>
-          <option value="faster">Faster</option>
-          <option value="veryfast">Very fast</option>
-        </b-select>
-      </b-field>
+      <template v-if="isDevelopment">
+        <b-field label="VP9 CRF" :message="$t('Transcoding.vp9CrfMessage')">
+          <b-input v-model="vp9Crf" type="number" min="0" max="63">
+          </b-input>
+        </b-field>
+        <b-field :label="$t('Transcoding.vp9EncodingSpeed')" :message="$t('Transcoding.vp9EncodingSpeedMessage')">
+          <b-select v-model="vp9Speed">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </b-select>
+        </b-field>
+        <b-field label="H.264 CRF" :message="$t('Transcoding.h264CrfMessage')">
+          <b-input v-model="h264Crf" type="number" min="18" max="28">
+          </b-input>
+        </b-field>
+        <b-field :label="$t('Transcoding.h264EncodingSpeed')" :message="$t('Transcoding.h264EncodingSpeedMessage')">
+          <b-select v-model="h264Preset">
+            <option value="veryslow">Very slow</option>
+            <option value="slower">Slower</option>
+            <option value="slow">Slow</option>
+            <option value="medium">Medium</option>
+            <option value="fast">Fast</option>
+            <option value="faster">Faster</option>
+            <option value="veryfast">Very fast</option>
+          </b-select>
+        </b-field>
+      </template>
     </template>
   </page>
 </template>
@@ -71,6 +73,7 @@
     },
     data() {
       return {
+        isDevelopment: this.$settings.get('development'),
         vp9Crf: this.$settings.get('vp9.crf'),
         vp9Speed: this.$settings.get('vp9.speed'),
         h264Crf: this.$settings.get('h264.crf'),
