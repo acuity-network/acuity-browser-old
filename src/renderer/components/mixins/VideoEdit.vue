@@ -121,6 +121,7 @@
             // Use h264 for <= 720 for safari
             codec: (b <= 80) ? 'h264' : 'vp9',
             audioPassthrough: this.codecAudio == 'opus' || this.codecAudio == 'aac',
+            state: 'pending',
           }
 
           batch.put('/transcode/' + id++, JSON.stringify(transcoding))
