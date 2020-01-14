@@ -340,6 +340,8 @@ export default {
     Height: 'Height',
     Progress: 'Progress',
     delete: 'delete',
+    Start: 'Start',
+    Stop: 'Stop',
     vp9CrfMessage: '15 to 35. Lower value increases quality and bitrate.',
     vp9EncodingSpeed: 'VP9 Encoding Speed',
     vp9EncodingSpeedMessage: 'Higher number is faster. Affects bitrate, not quality.',

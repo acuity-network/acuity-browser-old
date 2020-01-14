@@ -5,9 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    transcoding: false,
     transcodings: [],
   },
   mutations: {
+    transcodingOn(state) {
+      state.transcoding = true
+    },
+    transcodingOff(state) {
+      state.transcoding = false
+    },
     transcodingsAdd(state, payload) {
       payload.progress = ''
       state.transcodings.push(payload)

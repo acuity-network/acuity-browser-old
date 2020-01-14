@@ -25,11 +25,12 @@ function init(_vue) {
 
   let transcoding: boolean = false
 
-  vue.$on('transcode', async () => {
+  vue.$on('transcodeStart', async () => {
     if (transcoding) {
       console.log('Already transcoding.')
       return
     }
+    vue.$store.commit('transcodingOn')
     transcoding = true
     while (true) {
       try {
@@ -40,10 +41,17 @@ function init(_vue) {
         catch (e) {}
       }
       catch (e) {
+        vue.$store.commit('transcodingOff')
         transcoding = false
         return
       }
     }
+  })
+
+  vue.$on('transcodeStop', async () => {
+  })
+
+  vue.$on('transcodeRemoveJob', async id => {
   })
 }
 

@@ -156,7 +156,6 @@
       })
       mentionNotifications.launch(this.$root)
       transcoder.init(this.$root)
-      this.$root.$emit('transcode')
     },
     destroyed() {
       mentionNotifications.kill()

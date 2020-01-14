@@ -27,6 +27,8 @@
           </b-table-column>
         </template>
       </b-table>
+      <button v-if="$store.state.transcoding" class="button" @click="stop">{{ $t('Transcoding.Stop') }}</button>
+      <button v-else class="button" @click="start">{{ $t('Transcoding.Start') }}</button>
       <template v-if="isDevelopment">
         <b-field label="VP9 CRF" :message="$t('Transcoding.vp9CrfMessage')">
           <b-input v-model="vp9Crf" type="number" min="0" max="63">
@@ -92,7 +94,13 @@
       async deleteJob(event) {
         await this.$db.del('/transcode/' + event.target.dataset.id)
         this.$store.commit('transcodingsRemove', event.target.dataset.id)
-      }
+      },
+      start(event) {
+        this.$root.$emit('transcodeStart')
+      },
+      stop(event) {
+        this.$root.$emit('transcodeStop')
+      },
     },
     watch: {
       vp9Crf() {

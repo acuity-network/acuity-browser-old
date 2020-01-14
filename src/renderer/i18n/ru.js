@@ -330,6 +330,8 @@ export default {
     Height: 'Высота',
     Progress: 'Progress',
     delete: 'удалять',
+    Start: 'Start',
+    Stop: 'Stop',
     vp9CrfMessage: '15 до 35. Чем ниже значение, тем выше качество и битрейт.',
     vp9EncodingSpeed: 'Скорость кодирования VP9',
     vp9EncodingSpeedMessage: 'Влияет на битрейт, а не на качество.',
