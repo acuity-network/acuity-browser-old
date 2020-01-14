@@ -20,6 +20,10 @@ export default new Vuex.Store({
       }
       state.transcodings[i].progress = progress
     },
+    transcodingsSetUnpublished(state, id) {
+      let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
+      state.transcodings[i].progress = 'unpublished'
+    },
     transcodingsRemove(state, id) {
       let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
       state.transcodings.splice(i, 1)
