@@ -25,7 +25,11 @@ function init(_vue) {
     'lt': '/transcode/z',
   })
   .on('data', data => {
-    vue.$store.commit('transcodingsAdd', JSON.parse(data.value))
+    let job = JSON.parse(data.value)
+    vue.$store.commit('transcodingsAdd', job)
+    if (job.state == 'unpublished') {
+      vue.$store.commit('transcodingsSetUnpublished', job.id)
+    }
   })
 
   vue.$on('transcodeStart', async () => {
@@ -68,6 +72,23 @@ function init(_vue) {
       ffmpegProcess.kill()
     }
   })
+
+  vue.$on('accountUnlock', async account => {
+    vue.$db.createValueStream({
+      gt: '/transcode/',
+      lt: '/transcode/z',
+    })
+    .on('data', value => {
+      let job = JSON.parse(value)
+      if (job.state == 'unpublished' && job.accountAddress == account) {
+        try {
+          publishEncoding(job)
+        }
+        catch (e) {}
+      }
+    })
+  })
+
 }
 
 function findJob() {
@@ -216,6 +237,25 @@ function ffmpeg(args, id, pass) {
   })
 }
 
+async function publishEncoding(job) {
+  let item = await new MixItem(vue, job.itemId).init()
+  let account = await item.account()
+  let revision = await item.latestRevision().load()
+  let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
+  let encodingMessage = new VideoMixinProto.Encoding()
+  encodingMessage.setFilesize(job.filesize)
+  encodingMessage.setIpfsHash(bs58.decode(job.videoIpfsHash))
+  encodingMessage.setWidth(job.width)
+  encodingMessage.setHeight(job.height)
+  videoMessage.addEncoding(encodingMessage)
+  revision.content.removeMixins(0x51108feb)
+  revision.content.addMixinPayload(0x51108feb, videoMessage.serializeBinary())
+  let revisionIpfsHash = await revision.content.save()
+  await account.sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, revisionIpfsHash], 0, 'Add video encoding to item')
+  vue.$db.del('/transcode/' + job.id)
+  vue.$store.commit('transcodingsRemove', job.id)
+}
+
 function transcode(job) {
   return new Promise(async (resolve, reject) => {
     console.log(job)
@@ -259,36 +299,24 @@ function transcode(job) {
 
     if (code == 0) {
       let stats = fs.statSync(outFilepath)
-      let videoIpfsHash = await ipfs.add(outFilepath)
+      job.filesize = stats.size
+      job.videoIpfsHash = await ipfs.add(outFilepath)
       fs.unlinkSync(outFilepath)
-      console.log(videoIpfsHash)
+      console.log(job.videoIpfsHash)
 
-      let item = await new MixItem(vue, job.itemId).init()
-      let account = await item.account()
-      let revision = await item.latestRevision().load()
-      let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
-      let encodingMessage = new VideoMixinProto.Encoding()
-      encodingMessage.setFilesize(stats.size)
-      encodingMessage.setIpfsHash(bs58.decode(videoIpfsHash))
-      encodingMessage.setWidth(job.width)
-      encodingMessage.setHeight(job.height)
-      videoMessage.addEncoding(encodingMessage)
-      revision.content.removeMixins(0x51108feb)
-      revision.content.addMixinPayload(0x51108feb, videoMessage.serializeBinary())
-      let revisionIpfsHash = await revision.content.save()
       try {
-        await account.sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, revisionIpfsHash], 0, 'Add video encoding to item')
+        await publishEncoding(job)
       }
       catch (e) {
         job.state = 'unpublished'
-        job.videoIpfsHash = videoIpfsHash
+        let item = await new MixItem(vue, job.itemId).init()
+        let account = await item.account()
+        job.accountAddress = account.contractAddress
         vue.$db.put('/transcode/' + job.id, JSON.stringify(job))
         vue.$store.commit('transcodingsSetUnpublished', job.id)
         reject()
         return
       }
-      vue.$db.del('/transcode/' + job.id)
-      vue.$store.commit('transcodingsRemove', job.id)
       resolve()
     }
     else {

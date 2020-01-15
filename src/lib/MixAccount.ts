@@ -178,6 +178,7 @@ export default class MixAccount {
     let keyObjectJson: string = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/keyObject')
     privateKeys[this.controllerAddress] = this.vue.$mixClient.web3.accounts.decrypt(keyObjectJson, password).privateKey
     this.consolidateMix()
+    this.vue.$root.$emit('accountUnlock', this.contractAddress)
   }
 
   lock() {
