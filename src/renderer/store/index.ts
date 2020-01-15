@@ -19,11 +19,15 @@ export default new Vuex.Store({
       payload.progress = ''
       state.transcodings.push(payload)
     },
+    transcodingsSetPending(state, id) {
+      let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
+      state.transcodings[i].progress = ''
+    },
     transcodingsSetProgress(state, payload) {
       let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(payload.id))
       let progress = Math.floor((payload.frame * 100) / state.transcodings[i].frames) + '%'
       if (payload.pass > 0) {
-        progress += ' (pass ' + payload.pass + ')'
+        progress += ' (pass ' + payload.pass + '/2)'
       }
       state.transcodings[i].progress = progress
     },

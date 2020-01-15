@@ -11,6 +11,8 @@ import VideoMixinProto from './protobuf/VideoMixin_pb.js'
 declare let __static: string
 
 let vue: any
+let transcoding: boolean = false
+let ffmpegProcess = null
 
 function init(_vue) {
   vue = _vue
@@ -22,8 +24,6 @@ function init(_vue) {
   .on('data', data => {
     vue.$store.commit('transcodingsAdd', JSON.parse(data.value))
   })
-
-  let transcoding: boolean = false
 
   vue.$on('transcodeStart', async () => {
     if (transcoding) {
@@ -39,6 +39,9 @@ function init(_vue) {
           await transcode(job)
         }
         catch (e) {}
+        if (!transcoding) {
+          return
+        }
       }
       catch (e) {
         vue.$store.commit('transcodingOff')
@@ -49,6 +52,9 @@ function init(_vue) {
   })
 
   vue.$on('transcodeStop', async () => {
+    transcoding = false
+    ffmpegProcess.kill()
+    vue.$store.commit('transcodingOff')
   })
 
   vue.$on('transcodeRemoveJob', async id => {
@@ -181,12 +187,12 @@ function ffmpeg(args, id, pass) {
     let isWindows = os.platform() == 'win32'
     let commandPath = path.join(__static, 'ffmpeg', 'bin', 'ffmpeg', isWindows ? '.exe' : '')
 
-    let process = spawn(commandPath, args)
-    process.stdout.on('data', (data) => {
+    ffmpegProcess = spawn(commandPath, args)
+    ffmpegProcess.stdout.on('data', (data) => {
       console.log(data.toString())
     })
 
-    process.stderr.on('data', (data) => {
+    ffmpegProcess.stderr.on('data', (data) => {
       let output = data.toString()
       try {
         let matches = output.match(/frame= *(\d*)/)
@@ -197,7 +203,7 @@ function ffmpeg(args, id, pass) {
       console.log(output)
     })
 
-    process.on('close', resolve)
+    ffmpegProcess.on('close', resolve)
   })
 }
 
@@ -219,12 +225,17 @@ function transcode(job) {
       case 'vp9':
         args = vp9Pass1Args(job)
         code = await ffmpeg(args, job.id, 1)
-        if (code == 0) {
+        if (transcoding && code == 0) {
           args = vp9Pass2Args(job)
           args.push(outFilepath)
           code = await ffmpeg(args, job.id, 2)
         }
         break
+    }
+
+    if (!transcoding) {
+      vue.$store.commit('transcodingsSetPending', job.id)
+      return
     }
 
     if (code == 0) {
