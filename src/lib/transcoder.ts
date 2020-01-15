@@ -12,7 +12,10 @@ declare let __static: string
 
 let vue: any
 let transcoding: boolean = false
+let stopping: boolean = false
 let ffmpegProcess = null
+let currentJobId
+let deleting = false
 
 function init(_vue) {
   vue = _vue
@@ -35,6 +38,7 @@ function init(_vue) {
     while (true) {
       try {
         let job: any = await findJob()
+        currentJobId = job.id
         try {
           await transcode(job)
         }
@@ -52,12 +56,17 @@ function init(_vue) {
   })
 
   vue.$on('transcodeStop', async () => {
-    transcoding = false
+    stopping = true
     ffmpegProcess.kill()
-    vue.$store.commit('transcodingOff')
   })
 
   vue.$on('transcodeRemoveJob', async id => {
+    await vue.$db.del('/transcode/' + id)
+    vue.$store.commit('transcodingsRemove', id)
+    if (id == currentJobId) {
+      deleting = true
+      ffmpegProcess.kill()
+    }
   })
 }
 
@@ -225,7 +234,7 @@ function transcode(job) {
       case 'vp9':
         args = vp9Pass1Args(job)
         code = await ffmpeg(args, job.id, 1)
-        if (transcoding && code == 0) {
+        if (!stopping && code == 0) {
           args = vp9Pass2Args(job)
           args.push(outFilepath)
           code = await ffmpeg(args, job.id, 2)
@@ -233,8 +242,18 @@ function transcode(job) {
         break
     }
 
-    if (!transcoding) {
+    if (deleting) {
+      deleting = false
+      resolve()
+      return
+    }
+
+    if (stopping) {
+      vue.$store.commit('transcodingOff')
       vue.$store.commit('transcodingsSetPending', job.id)
+      stopping = false
+      transcoding = false
+      resolve()
       return
     }
 

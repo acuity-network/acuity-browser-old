@@ -91,9 +91,8 @@
       }
     },
     methods: {
-      async deleteJob(event) {
-        await this.$db.del('/transcode/' + event.target.dataset.id)
-        this.$store.commit('transcodingsRemove', event.target.dataset.id)
+      deleteJob(event) {
+        this.$root.$emit('transcodeRemoveJob', event.target.dataset.id)
       },
       start(event) {
         this.$root.$emit('transcodeStart')
