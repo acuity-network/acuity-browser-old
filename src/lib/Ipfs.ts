@@ -130,23 +130,10 @@ async function launch(window) {
 }
 
 function kill() {
-	return new Promise(async (resolve, reject) => {
-		if (!ipfsProcess) {
-			resolve()
-			return
-		}
-		clearInterval(ipfsInterval)
-		ipfsProcess.on('exit', (code) => {
-			console.log('IPFS exited.')
-			resolve(code)
-		})
-		console.log('Exiting IPFS.')
-		setTimeout(() => {
-			console.log('Killing IPFS.')
-			ipfsProcess.kill('SIGKILL')
-		}, 10000)
-		ipfsProcess.kill()
-	})
+	if (ipfsProcess) {
+    clearInterval(ipfsInterval)
+    ipfsProcess.kill()
+	}
 }
 
 function add(filepath) {

@@ -2,4 +2,7 @@
 function init(_vue) {
 }
 
-export default { init }
+function kill() {
+}
+
+export default { init, kill }

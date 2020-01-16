@@ -104,7 +104,8 @@ if (!gotTheLock) {
     }
   })
 
-  app.on('quit', async () => {
-    await Promise.all([parity.kill(), ipfs.kill()])
+  app.on('quit', () => {
+    parity.kill()
+    ipfs.kill()
   })
 }

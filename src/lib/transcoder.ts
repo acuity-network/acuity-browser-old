@@ -331,4 +331,11 @@ function transcode(job) {
   })
 }
 
-export default { init }
+function kill() {
+  if (transcoding) {
+    stopping = true
+    ffmpegProcess.kill()
+  }
+}
+
+export default { init, kill }

@@ -156,9 +156,10 @@
       })
       mentionNotifications.launch(this.$root)
       transcoder.init(this.$root)
-    },
-    destroyed() {
-      mentionNotifications.kill()
+      window.onbeforeunload = (e) => {
+        mentionNotifications.kill()
+        transcoder.kill()
+      }
     },
   }
 </script>
