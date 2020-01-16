@@ -161,7 +161,7 @@ function vp9Args(job) {
   args.push('-g')
   args.push('240')
   args.push('-f')
-  args.push('matroska')
+  args.push('mp4')
 
   return args
 }
@@ -206,6 +206,10 @@ function vp9Pass2Args(job) {
   else {
     args.push('libopus')
   }
+  args.push('-movflags')
+  args.push('+faststart')
+  args.push('-strict')
+  args.push('-2')
   args.push('-y')
 
   return args
