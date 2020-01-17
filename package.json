@@ -67,7 +67,7 @@
     "iltorb": "^2.4.0",
     "ipfs": "^0.40.0",
     "just-throttle": "^1.1.0",
-    "level": "^5.0.1",
+    "level": "^6.0.0",
     "lexicographic-integer-encoding": "^1.0.1",
     "multihashes": "^0.4.13",
     "pica": "^5.1.0",
