@@ -111,6 +111,7 @@
     "webpack": "^4.41.2"
   },
   "resolutions": {
+    "keccak": "3.0.0",
     "websocket": "1.0.31"
   }
 }
