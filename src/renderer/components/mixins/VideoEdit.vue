@@ -29,6 +29,7 @@
   import path from 'path'
   import os from 'os'
   import ipfs from '../../../lib/Ipfs'
+  import transcoder from '../../../lib/transcoder'
 
   declare let __static: string
 
@@ -96,22 +97,11 @@
           }
         }
 
-        let id
-        try {
-          id = parseInt(await this.$db.get('/transcodeCount'))
-        }
-        catch (e) {
-          id = 0
-        }
-
-        let batch = this.$db.batch()
-
         for (let b of resolutions) {
           let height = b * 9
           let width = (height * this.width) / this.height
 
-          let transcoding = {
-            id: id,
+          let job = {
             itemId: itemId,
             filepath: this.file.path,
             ipfsHash: this.ipfsHash,
@@ -124,11 +114,8 @@
             state: 'pending',
           }
 
-          batch.put('/transcode/' + id++, JSON.stringify(transcoding))
-          this.$store.commit('transcodingsAdd', transcoding)
+          await transcoder.addJob(job)
         }
-
-        await batch.put('/transcodeCount', id).write()
       },
     }
   }

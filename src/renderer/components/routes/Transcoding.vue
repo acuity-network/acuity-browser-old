@@ -10,6 +10,9 @@
           <b-table-column :label="$t('Transcoding.Item')">
             <item-link :itemId="props.row.itemId"></item-link>
           </b-table-column>
+          <b-table-column label="Id">
+            {{ props.row.id }}
+          </b-table-column>
           <b-table-column :label="$t('Transcoding.Codec')">
             {{ props.row.codec }}
           </b-table-column>
@@ -92,7 +95,7 @@
     },
     methods: {
       deleteJob(event) {
-        this.$root.$emit('transcodeRemoveJob', event.target.dataset.id)
+        this.$root.$emit('transcodeRemoveJob', parseInt(event.target.dataset.id))
       },
       start(event) {
         this.$root.$emit('transcodeStart')

@@ -4,8 +4,10 @@ import fs from 'fs'
 import path from 'path'
 import os from 'os'
 import { remote } from 'electron'
-import MixItem from './MixItem'
+import sub from 'subleveldown'
+import lexint from 'lexicographic-integer-encoding'
 import bs58 from 'bs58'
+import MixItem from './MixItem'
 import VideoMixinProto from './protobuf/VideoMixin_pb.js'
 
 declare let __static: string
@@ -16,16 +18,16 @@ let stopping: boolean = false
 let ffmpegProcess = null
 let currentJobId
 let deleting = false
+let db
 
 function init(_vue) {
   vue = _vue
-
-  vue.$db.createReadStream({
-    'gt': '/transcode/',
-    'lt': '/transcode/z',
+  db = sub(vue.$db, 'transcoder', {
+    keyEncoding: lexint('buffer', {strict: true}),
+    valueEncoding: 'json',
   })
-  .on('data', data => {
-    let job = JSON.parse(data.value)
+
+  db.createValueStream().on('data', job => {
     vue.$store.commit('transcodingsAdd', job)
     if (job.state == 'unpublished') {
       vue.$store.commit('transcodingsSetUnpublished', job.id)
@@ -64,8 +66,8 @@ function init(_vue) {
     ffmpegProcess.kill()
   })
 
-  vue.$on('transcodeRemoveJob', async id => {
-    await vue.$db.del('/transcode/' + id)
+  vue.$on('transcodeRemoveJob', async (id: number) => {
+    await db.del(id)
     vue.$store.commit('transcodingsRemove', id)
     if (id == currentJobId) {
       deleting = true
@@ -74,12 +76,7 @@ function init(_vue) {
   })
 
   vue.$on('accountUnlock', async account => {
-    vue.$db.createValueStream({
-      gt: '/transcode/',
-      lt: '/transcode/z',
-    })
-    .on('data', value => {
-      let job = JSON.parse(value)
+    db.createValueStream().on('data', job => {
       if (job.state == 'unpublished' && job.accountAddress == account) {
         try {
           publishEncoding(job)
@@ -88,18 +85,31 @@ function init(_vue) {
       }
     })
   })
+}
 
+function addJob(job) {
+  return new Promise(async (resolve, reject) => {
+    let id: number = 0
+    db.createKeyStream({
+      reverse: true,
+      limit: 1,
+    })
+    .on('data', (key: number) => {
+      id = key + 1
+    })
+    .on('end', () => {
+      job.id = id
+      db.put(id, job)
+      vue.$store.commit('transcodingsAdd', job)
+      resolve()
+    })
+  })
 }
 
 function findJob() {
   return new Promise(async (resolve, reject) => {
     let result = null
-    vue.$db.createValueStream({
-      gt: '/transcode/',
-      lt: '/transcode/z',
-    })
-    .on('data', value => {
-      let job = JSON.parse(value)
+    db.createValueStream().on('data', job => {
       if (job.state == 'pending') {
         resolve(job)
       }
@@ -256,7 +266,7 @@ async function publishEncoding(job) {
   revision.content.addMixinPayload(0x51108feb, videoMessage.serializeBinary())
   let revisionIpfsHash = await revision.content.save()
   await account.sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, revisionIpfsHash], 0, 'Add video encoding to item')
-  vue.$db.del('/transcode/' + job.id)
+  db.del(job.id)
   vue.$store.commit('transcodingsRemove', job.id)
 }
 
@@ -316,7 +326,7 @@ function transcode(job) {
         let item = await new MixItem(vue, job.itemId).init()
         let account = await item.account()
         job.accountAddress = account.contractAddress
-        vue.$db.put('/transcode/' + job.id, JSON.stringify(job))
+        db.put(job.id, job)
         vue.$store.commit('transcodingsSetUnpublished', job.id)
         reject()
         return
@@ -324,7 +334,7 @@ function transcode(job) {
       resolve()
     }
     else {
-      vue.$db.del('/transcode/' + job.id)
+      db.del(job.id)
       vue.$store.commit('transcodingsFail', job.id)
       reject()
     }
@@ -338,4 +348,4 @@ function kill() {
   }
 }
 
-export default { init, kill }
+export default { init, kill, addJob }
