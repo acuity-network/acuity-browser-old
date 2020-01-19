@@ -27,7 +27,7 @@
       return {
         src: null,
         resolutions: [],
-        currentTime: null,
+        currentTime: 0,
       }
     },
     async created() {
@@ -40,7 +40,7 @@
           width: encoding.getWidth(),
           height: encoding.getHeight(),
         })
-        this.src = this.resolutions[this.resolutions.length - 1].url
+        this.src = this.resolutions[0].url
       }
     },
     destroyed() {

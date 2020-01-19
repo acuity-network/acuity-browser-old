@@ -24,7 +24,7 @@
       return {
         ipfsHash: null,
         resolutions: [],
-        currentTime: null,
+        currentTime: 0,
       }
     },
     created() {
@@ -37,15 +37,16 @@
           width: encoding.getWidth(),
           height: encoding.getHeight(),
         })
-        this.ipfsHash = this.resolutions[this.resolutions.length - 1].ipfsHash
+        this.ipfsHash = this.resolutions[0].ipfsHash
       }
     },
     mounted() {
       this.$refs.video.addEventListener('error', console.error)
+      this.loadVideo()
     },
     methods: {
-      startVideo() {
-        this.$refs.video.removeEventListener('abort', this.startVideo)
+      loadVideo() {
+        this.$refs.video.removeEventListener('abort', this.loadVideo)
 
         let ipfsHash = this.ipfsHash
         let ipfsClient = this.$ipfsClient
@@ -62,18 +63,12 @@
         }, this.$refs.video)
       },
       input() {
-        if (this.videostream) {
-          this.$refs.video.pause()
-          this.currentTime = this.$refs.video.currentTime
-          // Special hack for Chrome.
-          this.$refs.video.addEventListener('abort', this.startVideo)
-          this.videostream.destroy()
-          this.videostream = null
-        }
-        else {
-          this.currentTime = 0
-          this.startVideo()
-        }
+        this.$refs.video.pause()
+        this.currentTime = this.$refs.video.currentTime
+        // Special hack for Chrome.
+        this.$refs.video.addEventListener('abort', this.loadVideo)
+        this.videostream.destroy()
+        this.videostream = null
       },
       loadedmetadata() {
         this.$refs.video.currentTime = this.currentTime
