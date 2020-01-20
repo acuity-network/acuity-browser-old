@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video ref="video" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
+    <video :poster="poster" ref="video" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
     <b-field label="Resolution">
       <b-select v-model="ipfsHash" @input="input">
         <option v-for="resolution in resolutions" :value="resolution.ipfsHash">
@@ -18,16 +18,23 @@
   export default {
     name: 'video-view',
     props: [
-      'message'
+      'message',
+      'posterIpfsHash',
     ],
     data() {
       return {
+        poster: null,
         ipfsHash: null,
         resolutions: [],
         currentTime: 0,
       }
     },
     created() {
+      this.$ipfsClient.get(this.posterIpfsHash)
+      .then(reponse => {
+        this.poster = 'data:image/png;base64, ' + response.toString('base64')
+      })
+
       let encodingList = this.message.getEncodingList()
 
       for (let encoding of encodingList) {

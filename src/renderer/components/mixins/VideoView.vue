@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video v-if="src" :src="src" ref="video" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
+    <video v-if="src" :src="src" :poster="poster" ref="video" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
     <b-field label="Resolution">
       <b-select v-model="src" @input="input">
         <option
@@ -19,18 +19,21 @@
   export default {
     name: 'video-view',
     props: [
-      'message'
+      'message',
+      'posterIpfsHash',
     ],
     components: {
     },
     data() {
       return {
         src: null,
+        poster: null,
         resolutions: [],
         currentTime: 0,
       }
     },
     async created() {
+      this.poster = 'http://127.0.0.1:5102/ipfs/' + this.posterIpfsHash
       let encodingList = this.message.getEncodingList()
 
       for (let encoding of encodingList) {

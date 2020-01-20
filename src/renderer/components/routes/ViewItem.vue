@@ -52,7 +52,7 @@
               {{ $t('ViewItem.Size') }}: {{ fileSize }}
             </span>
           </div>
-          <video-view v-if="videoMessage" :message="videoMessage"></video-view>
+          <video-view v-if="videoMessage" :message="videoMessage" :posterIpfsHash="videoPosterIpfsHash"></video-view>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
           <account-info v-if="isProfile" :address="ownerAddress"></account-info>
         </div>
@@ -247,6 +247,7 @@
         data.fileName = ''
         data.fileSize = ''
         data.fileHash = ''
+        data.videoPosterIpfsHash = null
         data.videoMessage = null
         data.isProfile = ''
         data.isOwnProfile = false
@@ -363,6 +364,7 @@
 */
 
         if (revision.content.existMixin('0x51108feb')) {
+          this.videoPosterIpfsHash = revision.getImage(1024)
           this.videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
         }
 
