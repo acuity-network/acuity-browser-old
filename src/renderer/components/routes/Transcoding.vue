@@ -33,18 +33,6 @@
       <button v-if="$store.state.transcoding" class="button" @click="stop">{{ $t('Transcoding.Stop') }}</button>
       <button v-else class="button" @click="start">{{ $t('Transcoding.Start') }}</button>
       <template v-if="isDevelopment">
-        <b-field label="VP9 CRF" :message="$t('Transcoding.vp9CrfMessage')">
-          <b-input v-model="vp9Crf" type="number" min="0" max="63">
-          </b-input>
-        </b-field>
-        <b-field :label="$t('Transcoding.vp9EncodingSpeed')" :message="$t('Transcoding.vp9EncodingSpeedMessage')">
-          <b-select v-model="vp9Speed">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </b-select>
-        </b-field>
         <b-field label="H.264 CRF" :message="$t('Transcoding.h264CrfMessage')">
           <b-input v-model="h264Crf" type="number" min="18" max="28">
           </b-input>
@@ -58,6 +46,18 @@
             <option value="fast">Fast</option>
             <option value="faster">Faster</option>
             <option value="veryfast">Very fast</option>
+          </b-select>
+        </b-field>
+        <b-field label="VP9 CRF" :message="$t('Transcoding.vp9CrfMessage')">
+          <b-input v-model="vp9Crf" type="number" min="0" max="63">
+          </b-input>
+        </b-field>
+        <b-field :label="$t('Transcoding.vp9EncodingSpeed')" :message="$t('Transcoding.vp9EncodingSpeedMessage')">
+          <b-select v-model="vp9Speed">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
           </b-select>
         </b-field>
       </template>
@@ -79,10 +79,10 @@
     data() {
       return {
         isDevelopment: this.$settings.get('development'),
-        vp9Crf: this.$settings.get('vp9.crf'),
-        vp9Speed: this.$settings.get('vp9.speed'),
         h264Crf: this.$settings.get('h264.crf'),
         h264Preset: this.$settings.get('h264.preset'),
+        vp9Crf: this.$settings.get('vp9.crf'),
+        vp9Speed: this.$settings.get('vp9.speed'),
       }
     },
     async created() {
@@ -105,17 +105,17 @@
       },
     },
     watch: {
-      vp9Crf() {
-        this.$settings.set('vp9.crf', this.vp9Crf)
-      },
-      vp9Speed() {
-        this.$settings.set('vp9.speed', this.vp9Speed)
-      },
       h264Crf() {
         this.$settings.set('h264.crf', this.h264Crf)
       },
       h264Preset() {
         this.$settings.set('h264.preset', this.h264Preset)
+      },
+      vp9Crf() {
+        this.$settings.set('vp9.crf', this.vp9Crf)
+      },
+      vp9Speed() {
+        this.$settings.set('vp9.speed', this.vp9Speed)
       },
     },
   }
