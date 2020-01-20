@@ -108,8 +108,7 @@
             height: height,
             width: width,
             frames: Math.floor(this.duration * this.frameRate),
-            // Use h264 for <= 720 for safari
-            codec: (b <= 80) ? 'h264' : 'vp9',
+            codec: 'h264',
             audioPassthrough: this.codecAudio == 'opus' || this.codecAudio == 'aac',
             state: 'pending',
           }
