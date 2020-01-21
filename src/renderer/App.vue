@@ -248,108 +248,108 @@
   }
 
   .markdown p {
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .markdown blockquote {
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 40px;
-    -webkit-margin-end: 40px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 40px;
+    margin-right: 40px;
   }
 
   .markdown hr {
-    -webkit-margin-before: 0.5em;
-    -webkit-margin-after: 0.5em;
-    -webkit-margin-start: auto;
-    -webkit-margin-end: auto;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
     border-style: solid;
     border-width: 1px;
   }
 
   .markdown h1 {
     font-size: 2em;
-    -webkit-margin-before: 0.67em;
-    -webkit-margin-after: 0.67em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+    margin-left: 0px;
+    margin-right: 0px;
     font-weight: bold;
   }
 
   .markdown h2 {
     font-size: 1.5em;
-    -webkit-margin-before: 0.83em;
-    -webkit-margin-after: 0.83em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0px;
+    margin-right: 0px;
     font-weight: bold;
   }
 
   .markdown h3 {
     font-size: 1.17em;
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0px;
+    margin-right: 0px;
     font-weight: bold;
   }
 
   .markdown h4 {
-    -webkit-margin-before: 1.33em;
-    -webkit-margin-after: 1.33em;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
     font-weight: bold;
   }
 
   .markdown h5 {
     font-size: .83em;
-    -webkit-margin-before: 1.67em;
-    -webkit-margin-after: 1.67em;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
+    margin-top: 1.67em;
+    margin-bottom: 1.67em;
+    margin-left: 0;
+    margin-right: 0;
     font-weight: bold;
   }
 
   .markdown h6 {
     font-size: .67em;
-    -webkit-margin-before: 2.33em;
-    -webkit-margin-after: 2.33em;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
+    margin-top: 2.33em;
+    margin-bottom: 2.33em;
+    margin-left: 0;
+    margin-right: 0;
     font-weight: bold;
   }
 
   .markdown ul {
     list-style-type: disc;
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    -webkit-padding-start: 40px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 40px;
   }
 
   .markdown ol {
     list-style-type: decimal;
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    -webkit-padding-start: 40px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 40px;
   }
 
   .markdown dd {
-    -webkit-margin-start: 40px;
+    margin-left: 40px;
   }
 
   .markdown dl {
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
   }
 </style>
 
