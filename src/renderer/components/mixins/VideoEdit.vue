@@ -23,9 +23,8 @@
 <script lang="ts">
   import VideoMixinProto from '../../../lib/protobuf/VideoMixin_pb.js'
   import bs58 from 'bs58'
-  import child_process from 'child_process'
+  import { spawn } from 'child_process'
   import util from 'util'
-  let exec = util.promisify(child_process.exec)
   import path from 'path'
   import os from 'os'
   import ipfs from '../../../lib/Ipfs'
@@ -53,26 +52,36 @@
 		},
 		methods: {
       async input() {
+        function interrogate(filename: string): Promise<string> {
+          return new Promise((resolve, reject) => {
+            let isWindows = os.platform() == 'win32'
+            let commandPath = path.join(__static, 'ffmpeg', 'bin', 'ffmpeg', isWindows ? '.exe' : '')
+            let args = ['-i', filename]
+            let ffmpegProcess = spawn(commandPath, args)
+            let stderr: string = ''
+            ffmpegProcess.stderr.on('data', (data) => {
+              stderr += data.toString()
+            })
+            ffmpegProcess.stderr.on('close', () => {
+              resolve(stderr)
+            })
+          })
+        }
+
         if (this.file != null) {
-          let isWindows = os.platform() == 'win32'
-          let commandPath = path.join(__static, 'ffmpeg', 'bin', 'ffmpeg', isWindows ? '.exe' : '')
-          try {
-            await exec('"' + commandPath + '"' + ' -i "' + this.file.path + '"')
-          }
-          catch (e) {
-            let output = e.toString()
-            let matches = output.match(/Duration: (\d*):(\d*):(\d*)\./)
-            this.duration = (parseInt(matches[1]) * 60 + parseInt(matches[2])) * 60 + parseInt(matches[3])
-            this.durationFormatted = new Date(1000 * this.duration).toISOString().substr(11, 8)
-            matches = output.match(/Video: .*, (\d*)x(\d*).*, ([0-9.]*) fps, /)
-            this.width = parseInt(matches[1])
-            this.height = parseInt(matches[2])
-            this.frameRate = parseFloat(matches[3])
-            matches = output.match(/Video: (\w*)/)
-            this.codecVideo = matches[1]
-            matches = output.match(/Audio: (\w*)/)
-            this.codecAudio = matches[1]
-          }
+          let output: string = await interrogate(this.file.path)
+          console.log(output)
+          let matches = output.match(/Duration: (\d*):(\d*):(\d*)\./)
+          this.duration = (parseInt(matches[1]) * 60 + parseInt(matches[2])) * 60 + parseInt(matches[3])
+          this.durationFormatted = new Date(1000 * this.duration).toISOString().substr(11, 8)
+          matches = output.match(/Video: .*, (\d*)x(\d*).*, ([0-9.]*) fps, /)
+          this.width = parseInt(matches[1])
+          this.height = parseInt(matches[2])
+          this.frameRate = parseFloat(matches[3])
+          matches = output.match(/Video: (\w*)/)
+          this.codecVideo = matches[1]
+          matches = output.match(/Audio: (\w*)/)
+          this.codecAudio = matches[1]
         }
   		},
       async save() {
