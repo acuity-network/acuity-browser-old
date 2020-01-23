@@ -118,7 +118,7 @@
             width: width,
             frames: Math.floor(this.duration * this.frameRate),
             codec: 'h264',
-            audioPassthrough: this.codecAudio == 'opus' || this.codecAudio == 'aac',
+            audioPassthrough: this.codecAudio == 'aac',
             state: 'pending',
           }
 

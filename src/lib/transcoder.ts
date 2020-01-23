@@ -140,12 +140,10 @@ function h264Args(job) {
     args.push('copy')
   }
   else {
-    args.push('libopus')
+    args.push('aac')
   }
   args.push('-movflags')
   args.push('+faststart')
-  args.push('-strict')
-  args.push('-2')
   args.push('-y')
 
   return args
