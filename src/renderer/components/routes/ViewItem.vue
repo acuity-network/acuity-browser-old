@@ -43,7 +43,7 @@
       <div class="columns">
         <div class="column">
           <div class="image">
-            <ipfs-image v-if="!videoMessage" :ipfsHash="image" :key="image"></ipfs-image>
+            <ipfs-image v-if="!videoMessage || short" :ipfsHash="image" :key="image"></ipfs-image>
           </div>
           <div v-if="hasFile" class="file">
             <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
@@ -52,7 +52,7 @@
               {{ $t('ViewItem.Size') }}: {{ fileSize }}
             </span>
           </div>
-          <video-view v-if="videoMessage" :message="videoMessage" :posterIpfsHash="videoPosterIpfsHash"></video-view>
+          <video-view v-if="videoMessage && !short" :message="videoMessage" :posterIpfsHash="videoPosterIpfsHash"></video-view>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
           <account-info v-if="isProfile" :address="ownerAddress"></account-info>
         </div>
