@@ -4,7 +4,7 @@
       <splash v-if="splash"></splash>
     </transition>
     <div v-if="!splash">
-      <div id="sidebar">
+      <div v-show="$store.state.app.showSidebar" id="sidebar">
         <active-account></active-account>
         <navigation v-if="isDesktop"></navigation>
         <p class="menu-label">
@@ -41,7 +41,7 @@
           <li v-if="isDevelopment"><router-link to="/debug">{{ $t('App.DebugItem') }}</router-link></li>
         </ul>
       </div>
-      <div id="router-view" tabindex="0">
+      <div id="router-view" tabindex="0" :class="$store.state.app.showSidebar ? 'router-view-sidebar' : ''">
         <router-view></router-view>
       </div>
     </div>
@@ -160,6 +160,17 @@
         mentionNotifications.kill()
         transcoder.kill()
       }
+    },
+    mounted() {
+      window.addEventListener('keydown', event => {
+        if (event.ctrlKey && event.altKey) {
+          switch (event.key) {
+            case 's':
+              this.$store.commit('sidebarToggle')
+              break
+          }
+        }
+      })
     },
   }
 </script>
@@ -378,8 +389,11 @@
   }
 
   #router-view {
-    margin-left: 220px;
     padding: 2em;
+  }
+
+  #router-view.router-view-sidebar {
+    margin-left: 220px;
   }
 
   :focus {
