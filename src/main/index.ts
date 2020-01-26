@@ -47,6 +47,7 @@ async function createWindow () {
     },
     icon: path.join(__static, 'icon.png'),
     title: 'MIX Acuity Browser',
+    autoHideMenuBar: true,
   }
 
   /**

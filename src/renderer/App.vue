@@ -4,44 +4,8 @@
       <splash v-if="splash"></splash>
     </transition>
     <div v-if="!splash">
-      <div v-show="$store.state.app.showSidebar" id="sidebar">
-        <active-account></active-account>
-        <navigation v-if="isDesktop"></navigation>
-        <p class="menu-label">
-          {{ $t('App.General') }}
-        </p>
-        <ul class="menu-list">
-          <li><router-link to="/home">{{ $t('App.Home') }}</router-link>
-          <li><router-link to="/feeds">{{ $t('App.MyFeeds') }}</router-link>
-          <li><router-link to="/subscriptions">{{ $t('App.Subscriptions') }}</router-link>
-          <li><router-link to="/interactions">{{ $t('App.Interactions') }}</router-link>
-          <li><router-link to="/browsing-history">{{ $t('App.BrowsingHistory') }}</router-link></li>
-          <li v-if="false"><router-link to="/downloads">{{ $t('App.Downloads') }}</router-link></li>
-          <li><router-link to="/publish-item">{{ $t('App.PublishItem') }}</router-link></li>
-          <li><router-link to="/goto">{{ $t('App.GotoItem') }}</router-link></li>
-        </ul>
-        <p class="menu-label">
-          {{ $t('App.Account') }}
-        </p>
-        <ul class="menu-list">
-          <li><router-link to="/transaction-history">{{ $t('App.TransactionHistory') }}</router-link></li>
-          <li><router-link to="/trusted-accounts">{{ $t('App.TrustedAccounts') }}</router-link></li>
-          <li><router-link to="/wallet">{{ $t('App.Wallet') }}</router-link></li>
-          <li><router-link to="/tokens">{{ $t('App.Tokens') }}</router-link></li>
-        </ul>
-        <p class="menu-label">
-          {{ $t('App.Administration') }}
-        </p>
-        <ul class="menu-list">
-          <li><router-link to="/manage-accounts">{{ $t('App.Accounts') }}</router-link></li>
-          <li v-if="isDesktop"><router-link to="/transcoding">{{ $t('App.Transcoding') }}</router-link></li>
-          <li><router-link to="/node-status">{{ $t('App.NodeStatus') }}</router-link></li>
-          <li v-if="isDesktop"><router-link to="/mining">{{ $t('App.Mining') }}</router-link></li>
-          <li><router-link to="/settings">{{ $t('App.Settings') }}</router-link></li>
-          <li v-if="isDevelopment"><router-link to="/debug">{{ $t('App.DebugItem') }}</router-link></li>
-        </ul>
-      </div>
-      <div id="router-view" tabindex="0" :class="$store.state.app.showSidebar ? 'router-view-sidebar' : ''">
+      <nav-bar></nav-bar>
+      <div id="router-view" tabindex="0">
         <router-view></router-view>
       </div>
     </div>
@@ -51,8 +15,7 @@
 <script>
   import MixAccount from '../lib/MixAccount'
   import Splash from './components/Splash.vue'
-  import Navigation from './components/Navigation.vue'
-  import ActiveAccount from './components/ActiveAccount.vue'
+  import NavBar from './components/NavBar.vue'
   import mentionNotifications from '../lib/mentionNotifications'
   import transcoder from '../lib/transcoder'
 
@@ -60,8 +23,7 @@
     name: 'app',
     components: {
       Splash,
-      Navigation,
-      ActiveAccount,
+      NavBar,
     },
     data() {
       return {
@@ -161,17 +123,6 @@
         transcoder.kill()
       }
     },
-    mounted() {
-      window.addEventListener('keydown', event => {
-        if (event.ctrlKey && event.altKey) {
-          switch (event.key) {
-            case 's':
-              this.$store.commit('sidebarToggle')
-              break
-          }
-        }
-      })
-    },
   }
 </script>
 
@@ -200,6 +151,12 @@
   $menu-item-hover-color: $grey;
   $primary: $blue;
   $primary-invert: findColorInvert($primary);
+
+  $navbar-dropdown-background-color: $dark;
+  $navbar-dropdown-color: $grey-lighter;
+  $navbar-dropdown-item-active-color: $grey-lighter;
+  $navbar-dropdown-item-hover-background-color: $blue;
+  $navbar-dropdown-item-hover-color: $grey-lighter;
 
   .control .select select option {
       color: $grey-lighter;
@@ -374,26 +331,13 @@
     opacity: 0;
   }
 
-  #sidebar {
-    position: fixed;
-    overflow-y: auto;
-    overscroll-behavior: none;
-    width: 220px;
-    height: 100vh;
-    padding: 1rem;
-    background-color: rgb(32,32,32);
-  }
-
-  #sidebar::-webkit-scrollbar {
-    width: 0 !important
-  }
-
   #router-view {
     padding: 2em;
-  }
-
-  #router-view.router-view-sidebar {
-    margin-left: 220px;
+    top: 0;
+    margin-top: 52px;
+    position: absolute;
+    width: 100%;
+    overflow-x: auto;
   }
 
   :focus {

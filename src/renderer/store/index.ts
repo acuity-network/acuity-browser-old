@@ -3,25 +3,6 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-let moduleApp = {
-  state: {
-    showSidebar: true,
-  },
-  mutations: {
-    sidebarOn(state) {
-      state.showSidebar = true
-    },
-    sidebarOff(state) {
-      state.showSidebar = false
-    },
-    sidebarToggle(state) {
-      state.showSidebar = !state.showSidebar
-    },
-  },
-  actions: {},
-  getters: {},
-}
-
 export default new Vuex.Store({
   state: {
     transcoding: false,
@@ -64,8 +45,5 @@ export default new Vuex.Store({
     },
   },
   actions: {
-  },
-  modules: {
-    app: moduleApp,
   },
 })
