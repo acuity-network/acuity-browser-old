@@ -32,7 +32,7 @@
     created() {
       this.$ipfsClient.get(this.posterIpfsHash)
       .then(reponse => {
-        this.poster = 'data:image/png;base64, ' + response.toString('base64')
+        this.poster = 'data:image/jpeg;base64,' + response.toString('base64')
       })
 
       let encodingList = this.message.getEncodingList()

@@ -50,7 +50,7 @@ export default class MixRevision {
 
     let response = await this.vue.$ipfsClient.get(bs58.encode(Buffer.from(mipmapList[i].getIpfsHash())))
 
-    return 'data:image/png;base64, ' + response.toString('base64')
+    return 'data:image/jpeg;base64,' + response.toString('base64')
   }
 
   getImage(widthMin, heightMin) {
