@@ -1,5 +1,5 @@
 <template>
-  <img v-if="src" :src="src">
+  <img v-if="src" :src="src" crossorigin="anonymous">
 </template>
 
 <script lang="ts">
@@ -19,7 +19,7 @@
           }
           else {
             let response = await this.$ipfsClient.get(this.ipfsHash)
-            this.src = 'data:image/png;base64, ' + response.toString('base64')
+            this.src = 'data:image/jpeg;base64,' + response.toString('base64')
           }
         }
       },

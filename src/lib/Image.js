@@ -30,7 +30,7 @@ export default class Image {
     // Don't resize the top-level mipmap.
     mipmaps.push(source
       .clone()
-      .webp()
+      .jpeg()
       .toBuffer()
       .then(data => {
         let formData = new FormData()
@@ -48,7 +48,7 @@ export default class Image {
       mipmaps.push(source
         .clone()
         .resize(outWidth, outHeight, {fit: 'fill', fastShrinkOnLoad: false})
-        .webp()
+        .jpeg()
         .toBuffer()
         .then(data => {
           let formData = new FormData()
