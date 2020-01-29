@@ -22,61 +22,61 @@
       </b-navbar-item>
     </template>
     <template slot="start">
-      <b-navbar-dropdown label="General">
+      <b-navbar-dropdown :label="$t('NavBar.General')">
         <b-navbar-item tag="router-link" :to="{ path: '/home' }">
-          Home
+          {{ $t('NavBar.Home') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/feeds' }">
-          My Feeds
+          {{ $t('NavBar.MyFeeds') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/subscriptions' }">
-          Subscriptions
+          {{ $t('NavBar.Subscriptions') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/interactions' }">
-          Interactions
+          {{ $t('NavBar.Interactions') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/browsing-history' }">
-          Browsing History
+          {{ $t('NavBar.BrowsingHistory') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/publish-item' }">
-          Publish Item
+          {{ $t('NavBar.PublishItem') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/goto' }">
-          Goto Item
+          {{ $t('NavBar.GotoItem') }}
         </b-navbar-item>
       </b-navbar-dropdown>
-      <b-navbar-dropdown label="Account">
+      <b-navbar-dropdown :label="$t('NavBar.Account')">
         <b-navbar-item tag="router-link" :to="{ path: '/transaction-history' }">
-          Transaction History
+          {{ $t('NavBar.TransactionHistory') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/trusted-accounts' }">
-          Trusted Accounts
+          {{ $t('NavBar.TrustedAccounts') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/wallet' }">
-          Wallet
+          {{ $t('NavBar.Wallet') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/tokens' }">
-          Tokens
+          {{ $t('NavBar.Tokens') }}
         </b-navbar-item>
       </b-navbar-dropdown>
-      <b-navbar-dropdown label="Administration">
+      <b-navbar-dropdown :label="$t('NavBar.Administration')">
         <b-navbar-item tag="router-link" :to="{ path: '/manage-accounts' }">
-          Accounts
+          {{ $t('NavBar.Accounts') }}
         </b-navbar-item>
         <b-navbar-item v-if="$isDesktop" tag="router-link" :to="{ path: '/transcoding' }">
-          Transcoding
+          {{ $t('NavBar.Transcoding') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/node-status' }">
-          Node Status
+          {{ $t('NavBar.NodeStatus') }}
         </b-navbar-item>
         <b-navbar-item v-if="$isDesktop" tag="router-link" :to="{ path: '/mining' }">
-          Mining
+          {{ $t('NavBar.Mining') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/settings' }">
-          Settings
+          {{ $t('NavBar.Settings') }}
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/debug' }">
-          Debug Item
+          {{ $t('NavBar.DebugItem') }}
         </b-navbar-item>
       </b-navbar-dropdown>
     </template>
