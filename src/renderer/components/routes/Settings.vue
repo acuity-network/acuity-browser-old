@@ -9,6 +9,7 @@
         <b-select v-model="locale">
           <option value="en-US">English (United States)</option>
           <option value="ru">русский</option>
+          <option value="th">ไทย</option>
         </b-select>
       </b-field>
       <b-field  v-if="isWeb" label="MIX Blockchain endpoint">
