@@ -2,18 +2,22 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
+function loadView(view) {
+  return () => import(/* webpackChunkName: "view-[request]" */ `../components/routes/${view}.vue`)
+}
+
 export default new Router({
   routes: [
     {
       path: '/item/:encodedItemId',
       name: 'item',
-      component: require('../components/routes/ViewItem').default,
+      component: loadView('ViewItem'),
       props: true,
     },
     {
       path: '/topic/:topicHash',
       name: 'topic',
-      component: require('../components/routes/ViewTopic').default,
+      component: loadView('ViewTopic'),
       props: true,
     },
     {
@@ -23,149 +27,149 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: require('../components/routes/Home').default
+      component: loadView('Home'),
     },
     {
       path: '/feeds',
       name: 'feeds',
-      component: require('../components/routes/Feeds').default
+      component: loadView('Feeds'),
     },
     {
       path: '/subscriptions',
       name: 'subscriptions',
-      component: require('../components/routes/Subscriptions').default
+      component: loadView('Subscriptions'),
     },
     {
       path: '/interactions',
       name: 'interactions',
-      component: require('../components/routes/Interactions').default
+      component: loadView('Interactions'),
     },
     {
       path: '/goto',
       name: 'goto',
-      component: require('../components/routes/Goto').default
+      component: loadView('Goto'),
     },
     {
       path: '/transaction-history',
       name: 'transaction-history',
-      component: require('../components/routes/TransactionHistory').default
+      component: loadView('TransactionHistory'),
     },
     {
       path: '/browsing-history',
       name: 'browsing-history',
-      component: require('../components/routes/BrowsingHistory').default
+      component: loadView('BrowsingHistory'),
     },
     {
       path: '/publish-item',
       name: 'publish-item',
-      component: require('../components/routes/PublishItem').default
+      component: loadView('PublishItem'),
     },
     {
       path: '/publish-item/mixin-type',
       name: 'publish-mixin-type',
-      component: require('../components/routes/PublishMixinType').default
+      component: loadView('PublishMixinType'),
     },
     {
       path: '/publish-item/image',
       name: 'publish-image',
-      component: require('../components/routes/PublishImage').default
+      component: loadView('PublishImage'),
     },
     {
       path: '/publish-item/feed',
       name: 'publish-feed',
-      component: require('../components/routes/PublishFeed').default
+      component: loadView('PublishFeed'),
     },
     {
       path: '/publish-item/file',
       name: 'publish-file',
-      component: require('../components/routes/PublishFile').default
+      component: loadView('PublishFile'),
     },
     {
       path: '/publish-item/video',
       name: 'publish-video',
-      component: require('../components/routes/PublishVideo').default
+      component: loadView('PublishVideo'),
     },
     {
       path: '/profile/edit',
       name: 'profile-edit',
-      component: require('../components/routes/ProfileEdit').default
+      component: loadView('ProfileEdit'),
     },
     {
       path: '/trusted-accounts',
       name: 'trusted-accounts',
-      component: require('../components/routes/TrustedAccounts').default
+      component: loadView('TrustedAccounts'),
     },
     {
       path: '/wallet',
       name: 'wallet',
-      component: require('../components/routes/Wallet').default
+      component: loadView('Wallet'),
     },
     {
       path: '/tokens',
       name: 'tokens',
-      component: require('../components/routes/Tokens').default
+      component: loadView('Tokens'),
     },
     {
       path: '/tokens/create',
       name: 'tokens-create',
-      component: require('../components/routes/CreateToken').default
+      component: loadView('CreateToken'),
     },
     {
       path: '/manage-accounts',
       name: 'manage-accounts',
-      component: require('../components/routes/ManageAccounts').default
+      component: loadView('ManageAccounts'),
     },
     {
       path: '/manage-accounts/new',
       name: 'manage-accounts-new',
-      component: require('../components/routes/ManageAccountsNew').default
+      component: loadView('ManageAccountsNew'),
     },
     {
       path: '/manage-accounts/recover',
       name: 'manage-accounts-recover',
-      component: require('../components/routes/ManageAccountsRecover').default
+      component: loadView('ManageAccountsRecover'),
     },
     {
       path: '/manage-accounts/controller/:controllerAddress',
       name: 'manage-account-activate',
-      component: require('../components/routes/ManageAccountActivate').default,
+      component: loadView('ManageAccountActivate'),
       props: true,
     },
     {
       path: '/manage-accounts/delete/:controllerAddress',
       name: 'manage-account-delete',
-      component: require('../components/routes/ManageAccountDelete').default,
+      component: loadView('ManageAccountDelete'),
       props: true,
     },
     {
       path: '/transcoding',
       name: 'transcoding',
-      component: require('../components/routes/Transcoding').default
+      component: loadView('Transcoding'),
     },
     {
       path: '/node-status',
       name: 'node-status',
-      component: require('../components/routes/NodeStatus').default
+      component: loadView('NodeStatus'),
     },
     {
       path: '/mining',
       name: 'mining',
-      component: require('../components/routes/Mining').default
+      component: loadView('Mining'),
     },
     {
       path: '/settings',
       name: 'settings',
-      component: require('../components/routes/Settings').default
+      component: loadView('Settings'),
     },
     {
       path: '/debug',
       name: 'debug',
-      component: require('../components/routes/Debug').default
+      component: loadView('Debug'),
     },
     {
       path: '/downloads',
       name: 'downloads',
-      component: require('../components/routes/Downloads').default
+      component: loadView('Downloads'),
     }
 
   ]
