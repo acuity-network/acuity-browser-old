@@ -227,7 +227,7 @@ function ffmpeg(args, id, pass) {
   console.log(args)
   return new Promise((resolve, reject) => {
     let isWindows = os.platform() == 'win32'
-    let commandPath = path.join(__static, 'ffmpeg', 'bin', 'ffmpeg', isWindows ? '.exe' : '')
+    let commandPath = path.join(__static, 'ffmpeg', 'bin', isWindows ? 'ffmpeg.exe' : 'ffmpeg')
 
     ffmpegProcess = spawn(commandPath, args)
     ffmpegProcess.stdout.on('data', (data) => {

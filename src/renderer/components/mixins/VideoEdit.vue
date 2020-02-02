@@ -55,7 +55,7 @@
         function interrogate(filename: string): Promise<string> {
           return new Promise((resolve, reject) => {
             let isWindows = os.platform() == 'win32'
-            let commandPath = path.join(__static, 'ffmpeg', 'bin', 'ffmpeg', isWindows ? '.exe' : '')
+            let commandPath = path.join(__static, 'ffmpeg', 'bin', isWindows ? 'ffmpeg.exe' : 'ffmpeg')
             let args = ['-i', filename]
             let ffmpegProcess = spawn(commandPath, args)
             let stderr: string = ''
