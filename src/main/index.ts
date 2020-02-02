@@ -1,5 +1,3 @@
-'use strict'
-
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import parity from '../lib/Parity'
