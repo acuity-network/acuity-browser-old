@@ -268,6 +268,7 @@ export default {
 	PublishItem: {
 		PublishItem: 'Опубликовать item',
 		PublishImage: 'Опубликовать статью',
+    PublishVideo: 'Опубликовать видео',
 		PublishFeed: 'Создать канал',
 		PublishFile: 'Опубликовать файл',
 		PublishMixinType: 'Опубликовать Mixin Type',
@@ -278,6 +279,15 @@ export default {
 		Schema: 'Schema',
 		Description: 'Описание',
 		ParentItemId: 'Parent itemId',
+		Publish: 'Опубликовать',
+	},
+  PublishVideo: {
+		PublishVideo: 'Опубликовать видео',
+		Title: 'Название',
+		Description: 'Описание',
+		Feed: 'Канал',
+		SelectAFeed: 'Выберите канал',
+		Video: 'видео',
 		Publish: 'Опубликовать',
 	},
 	Settings: {
@@ -368,6 +378,9 @@ export default {
 		JustNow: 'только что',
 		ItemIdCopied: 'itemId скопирован',
 	},
+  VideoEdit: {
+    ChooseVideo: 'Выбрать видео',
+  },
 	ViewTopic: {
 		Topic: 'Тема (тег)',
 		Subscribe: 'Подписаться',
