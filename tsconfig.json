@@ -3,6 +3,7 @@
   "compilerOptions": {
     "target": "es2019",
     "noUnusedLocals": false,
-    "strict": false
+    "strict": false,
+    "alwaysStrict": true,
   }
 }
