@@ -54,6 +54,7 @@
     "@types/bs58": "^4.0.1",
     "@types/download": "^6.2.4",
     "@types/just-throttle": "^1.1.0",
+    "@types/node": "12",
     "@types/subleveldown": "^4.1.0",
     "@types/twemoji": "^12.1.0",
     "axios": "^0.18.1",
