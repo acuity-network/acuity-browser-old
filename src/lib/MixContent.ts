@@ -61,7 +61,7 @@ export default class MixContent {
     }
 
     let payload = await brotli.compress(itemMessage.serializeBinary())
-    let hash = await this.vue.$ipfsClient.add(Buffer.from(payload).toString('binary'))
+    let hash = await this.vue.$ipfsClient.add(Buffer.from(payload).toString('binary'), 'utf8')
     let decodedHash = multihashes.decode(multihashes.fromB58String(hash))
 
     if (decodedHash.name != 'sha2-256') {

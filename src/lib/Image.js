@@ -32,11 +32,11 @@ export default class Image {
       .clone()
       .jpeg()
       .toBuffer()
-      .then(data => {
-        let formData = new FormData()
-        // See https://github.com/electron/electron/issues/11700
-        formData.append('', new File([data.buffer.slice(0)], {type: 'application/octet-stream'}))
-        return this.vue.$http.post('http://127.0.0.1:5101/api/v0/add', formData)
+      .then(async data => {
+        return {
+          filesize: data.length,
+          ipfsHash: await this.vue.$ipfsClient.add(data)
+        }
       })
     )
 
@@ -50,11 +50,11 @@ export default class Image {
         .resize(outWidth, outHeight, {fit: 'fill', fastShrinkOnLoad: false})
         .jpeg()
         .toBuffer()
-        .then(data => {
-          let formData = new FormData()
-          // See https://github.com/electron/electron/issues/11700
-          formData.append('', new File([data.buffer.slice(0)], {type: 'application/octet-stream'}))
-          return this.vue.$http.post('http://127.0.0.1:5101/api/v0/add', formData)
+        .then(async data => {
+          return {
+            filesize: data.length,
+            ipfsHash: await this.vue.$ipfsClient.add(data)
+          }
         })
       )
       level++
@@ -65,12 +65,12 @@ export default class Image {
     let imageMessage = new ImageMixinProto.ImageMixin()
     imageMessage.setWidth(width)
     imageMessage.setHeight(height)
-    mipmaps.forEach(mipmap => {
+    for (let mipmap of mipmaps) {
       let mipmapLevelMessage = new ImageMixinProto.MipmapLevel()
-      mipmapLevelMessage.setFilesize(mipmap.data.Size)
-      mipmapLevelMessage.setIpfsHash(bs58.decode(mipmap.data.Hash))
+      mipmapLevelMessage.setFilesize(mipmap.filesize)
+      mipmapLevelMessage.setIpfsHash(bs58.decode(mipmap.ipfsHash))
       imageMessage.addMipmapLevel(mipmapLevelMessage)
-    })
+    }
 
     return imageMessage.serializeBinary()
   }

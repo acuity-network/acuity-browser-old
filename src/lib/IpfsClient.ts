@@ -8,9 +8,9 @@ export default class IpfsClient {
 	async init(vue) {
 		this.agent = new http.Agent({
 			keepAlive: true,
-		});
+		})
 
-		if (!vue) return;
+		if (!vue) return
 
     // Log IPFS output.
     ipcRenderer.on('ipfs-stdout', (event, msg) => {
@@ -53,7 +53,7 @@ export default class IpfsClient {
 		})
 	}
 
-	_get(command, json = true) {
+	_get(command: string, json: boolean = true) {
 		return new Promise((resolve, reject) => {
 			let options = {
 				agent: this.agent,
@@ -68,12 +68,7 @@ export default class IpfsClient {
 					body += data
 				})
 				res.on('end', () => {
-					if (json) {
-						resolve(JSON.parse(body))
-					}
-					else {
-						resolve(body)
-					}
+					resolve(json ? JSON.parse(body) : body)
 				})
 			})
 			.on('error', (error) => {
@@ -82,7 +77,7 @@ export default class IpfsClient {
 		})
 	}
 
-	_post(command, data) {
+	_post(command: string, data: Buffer, encoding: string) {
 		return new Promise((resolve, reject) => {
 			let boundary = randomHex(32)
 
@@ -116,8 +111,8 @@ export default class IpfsClient {
 			  reject(error)
 			})
 
-			req.write(postData);
-			req.end();
+			req.write(postData, encoding)
+			req.end()
 		})
 	}
 
@@ -146,12 +141,13 @@ export default class IpfsClient {
     })
   }
 
-  get(ipfsHash) {
+  get(ipfsHash: string) {
     return this._get('cat?arg=/ipfs/' + ipfsHash, false)
   }
 
-  add(data) {
-    return this._post('add', data).then((result: any) => {
+  add(data, encoding: string = 'binary') {
+    return this._post('add', data, encoding).then((result: any) => {
+      console.log(result)
       return result.Hash
     })
   }
