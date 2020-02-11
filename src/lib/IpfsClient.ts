@@ -147,7 +147,6 @@ export default class IpfsClient {
 
   add(data, encoding: string = 'binary') {
     return this._post('add', data, encoding).then((result: any) => {
-      console.log(result)
       return result.Hash
     })
   }
