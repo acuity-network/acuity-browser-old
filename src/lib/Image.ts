@@ -3,6 +3,8 @@ import ImageMixinProto from './protobuf/ImageMixin_pb.js'
 import bs58 from 'bs58'
 
 export default class Image {
+  vue: any
+  filepath: string
 
   constructor(vue, file) {
     this.vue = vue

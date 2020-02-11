@@ -7,8 +7,8 @@ module.exports = {
     entry: path.join(__dirname, 'src', 'renderer', 'main.ts'),
     plugins: [
       new webpack.NormalModuleReplacementPlugin(
-        /\/src\/lib\/Image\.js/,
-        'web/Image.js'
+        /\/src\/lib\/Image\.ts/,
+        'web/Image.ts'
       ),
       new webpack.NormalModuleReplacementPlugin(
         /\/src\/lib\/brotli\.ts/,

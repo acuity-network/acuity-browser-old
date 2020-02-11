@@ -4,6 +4,8 @@ import Pica from 'pica'
 let pica = Pica()
 
 export default class MixImage {
+  vue: any
+  file: any
 
   constructor(vue, file) {
     this.vue = vue
