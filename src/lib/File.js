@@ -1,5 +1,4 @@
 let itemStoreAbi = require('./contracts/MixItemStoreInterface.abi.json')
-import request from 'request'
 import { remote, shell } from 'electron'
 import path from 'path'
 import unusedFilename from 'unused-filename'
@@ -30,6 +29,7 @@ export default class File extends EventEmitter {
 
     this.filePath = await unusedFilename(uncheckedFilePath)
     this.status = 'Downloading'
+/*
     this.req = request({
       method: 'GET',
       uri: fileUrl
@@ -50,6 +50,7 @@ export default class File extends EventEmitter {
       this.emit('error', err)
     })
     .pipe(fs.createWriteStream(this.filePath))
+*/
   }
 
   async openFile() {
