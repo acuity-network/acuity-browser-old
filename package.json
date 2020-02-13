@@ -100,7 +100,7 @@
     "@vue/cli-plugin-typescript": "^4.2.2",
     "@vue/cli-service": "^4.2.2",
     "css-loader": "^3.2.0",
-    "electron": "^7.1.4",
+    "electron": "^8.0.0",
     "electron-builder": "^22.1.0",
     "electron-webpack": "^2.7.2",
     "electron-webpack-ts": "^3.2.0",
