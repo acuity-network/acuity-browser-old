@@ -1,4 +1,5 @@
 import Ipfs from 'ipfs'
+import toStream from 'it-to-stream'
 
 let bootnodes = [
   '/dns4/singapore.mix-blockchain.org/tcp/4003/wss/ipfs/QmQ38hetbvfJwhDXvXxyxT8reydNwPq6n9eXzEB11cwsji',
@@ -69,18 +70,20 @@ export default class IpfsClient {
     return this.node.repo.stat()
   }
 
-  get(ipfsHash) {
-    return this.node.cat('/ipfs/' + ipfsHash)
+  async get(ipfsHash) {
+    for await (let content of this.node.cat('/ipfs/' + ipfsHash)) {
+      return content
+    }
   }
 
   getReadableStream(ipfsHash, options) {
-    return this.node.catReadableStream('/ipfs/' + ipfsHash, options)
+    return toStream.readable(this.node.cat('/ipfs/' + ipfsHash, options))
   }
 
-  add(data) {
-    return this.node.add(data).then((result: any) => {
-      return result[0].hash
-    })
+  async add(data) {
+    for await (let result of this.node.add(data)) {
+      return result.path
+    }
   }
 
 }
