@@ -57,6 +57,7 @@
     "@types/node": "12",
     "@types/subleveldown": "^4.1.0",
     "@types/twemoji": "^12.1.0",
+    "async-mutex": "^0.1.4",
     "axios": "^0.19.2",
     "bip32": "^2.0.3",
     "bip39": "^3.0.2",

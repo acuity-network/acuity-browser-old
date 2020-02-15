@@ -9,6 +9,7 @@ import lexint from 'lexicographic-integer-encoding'
 import bs58 from 'bs58'
 import MixItem from './MixItem'
 import VideoMixinProto from './protobuf/VideoMixin_pb.js'
+import { Mutex, MutexInterface } from 'async-mutex'
 
 declare let __static: string
 
@@ -19,9 +20,11 @@ let ffmpegProcess = null
 let currentJobId
 let deleting = false
 let db
+let jobIdMutex: MutexInterface
 
 function init(_vue) {
   vue = _vue
+  jobIdMutex = new Mutex()
   db = sub(vue.$db, 'transcoder', {
     keyEncoding: lexint('buffer', {strict: true}),
     valueEncoding: 'json',
@@ -89,6 +92,7 @@ function init(_vue) {
 
 function addJob(job) {
   return new Promise(async (resolve, reject) => {
+    let release = await jobIdMutex.acquire()
     let id: number = 0
     db.createKeyStream({
       reverse: true,
@@ -97,9 +101,10 @@ function addJob(job) {
     .on('data', (key: number) => {
       id = key + 1
     })
-    .on('end', () => {
+    .on('end', async () => {
       job.id = id
-      db.put(id, job)
+      await db.put(id, job)
+      release()
       vue.$store.commit('transcodingsAdd', job)
       resolve()
     })
