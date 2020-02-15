@@ -42,6 +42,7 @@ async function createWindow () {
     backgroundColor: '#191919',
     webPreferences: {
       nodeIntegration: true,
+      spellchecker: true,
     },
     icon: path.join(__static, 'icon.png'),
     title: 'MIX Acuity Browser',
@@ -53,6 +54,9 @@ async function createWindow () {
    */
   mainWindow = new BrowserWindow(windowOptions)
   mainWindowState.manage(mainWindow);
+
+  let session = mainWindow.webContents.session
+  session.setSpellCheckerLanguages(['en-US'])
 
   if (isDevelopment) {
     mainWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
