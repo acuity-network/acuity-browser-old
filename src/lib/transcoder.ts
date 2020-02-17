@@ -26,7 +26,7 @@ function init(_vue) {
   vue = _vue
   jobIdMutex = new Mutex()
   db = sub(vue.$db, 'transcoder', {
-    keyEncoding: lexint('buffer', {strict: true}),
+    keyEncoding: lexint('hex', {strict: true}),
     valueEncoding: 'json',
   })
 
