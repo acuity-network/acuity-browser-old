@@ -6,10 +6,6 @@ let bootnodes = [
   '/dns6/singapore.mix-blockchain.org/tcp/4003/wss/ipfs/QmQ38hetbvfJwhDXvXxyxT8reydNwPq6n9eXzEB11cwsji',
   '/dns4/freemont.mix-blockchain.org/tcp/4003/wss/ipfs/QmTdLvqQxAexuJAbSv8MnD3gK5DcscL15WWA8sYUH4vMvi',
   '/dns6/freemont.mix-blockchain.org/tcp/4003/wss/ipfs/QmTdLvqQxAexuJAbSv8MnD3gK5DcscL15WWA8sYUH4vMvi',
-  '/dns4/dallas.mix-blockchain.org/tcp/4003/wss/ipfs/QmZDy4rjTwvkkv4CRre87Z4ohr5JfMMSNwhbdcX21szCnn',
-  '/dns6/dallas.mix-blockchain.org/tcp/4003/wss/ipfs/QmZDy4rjTwvkkv4CRre87Z4ohr5JfMMSNwhbdcX21szCnn',
-  '/dns4/atlanta.mix-blockchain.org/tcp/4003/wss/ipfs/QmcR25jursru6CEBWonPaqdLHAj5Ct9LLPu7Dk41dLPaxu',
-  '/dns6/atlanta.mix-blockchain.org/tcp/4003/wss/ipfs/QmcR25jursru6CEBWonPaqdLHAj5Ct9LLPu7Dk41dLPaxu',
   '/dns4/newark.mix-blockchain.org/tcp/4003/wss/ipfs/QmXZBgSuTxKGsYmx6N1G8EEUWAm1tRXGuYadfxhgWetJf2',
   '/dns6/newark.mix-blockchain.org/tcp/4003/wss/ipfs/QmXZBgSuTxKGsYmx6N1G8EEUWAm1tRXGuYadfxhgWetJf2',
   '/dns4/london.mix-blockchain.org/tcp/4003/wss/ipfs/QmS6XPQKZSinqwFCsth7LxJeeH66ZiAgYxPphPCoWTiefq',
@@ -18,8 +14,6 @@ let bootnodes = [
   '/dns6/frankfurt.mix-blockchain.org/tcp/4003/wss/ipfs/Qmar9pZaQPaMisc1x1LstphJV1jJiPrv21Edig93bz6oh8',
   '/dns4/tokyo.mix-blockchain.org/tcp/4003/wss/ipfs/QmPe3zVKqnwPyBDf51zg6XkKTLz2tx4iW3DtCtK6ojm6er',
   '/dns6/tokyo.mix-blockchain.org/tcp/4003/wss/ipfs/QmPe3zVKqnwPyBDf51zg6XkKTLz2tx4iW3DtCtK6ojm6er',
-  '/dns4/toronto.mix-blockchain.org/tcp/4003/wss/ipfs/Qmex27aG4LYeArEHBViQ52KN9coEwmwwsaRNKzTSbdBMSy',
-  '/dns6/toronto.mix-blockchain.org/tcp/4003/wss/ipfs/Qmex27aG4LYeArEHBViQ52KN9coEwmwwsaRNKzTSbdBMSy',
 ]
 
 
