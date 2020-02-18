@@ -3,7 +3,18 @@ let creatorTokenBytecode = require('./contracts/MixCreatorToken.bin').default
 let erc165Abi = require('./contracts/ERC165.abi.json')
 let accountAbi = require('./contracts/MixAccount.abi.json')
 let accountAbi2 = require('./contracts/MixAccount2.abi.json')
-import ethTx from 'ethereumjs-tx'
+import EthCommon from 'ethereumjs-common'
+import { Transaction as EthTx } from 'ethereumjs-tx'
+
+let mixCommon = EthCommon.forCustomChain(
+  'mainnet',
+  {
+    name: 'mix',
+    networkId: 76,
+    chainId: 76,
+  },
+  'byzantium',
+)
 
 /*
 import path from 'path'
@@ -79,7 +90,7 @@ export default class MixAccount {
       gas: 50000,
     }
     //rawTx.gas = await this.vue.$mixClient.web3.eth.estimateGas(rawTx)
-    let tx = new ethTx(rawTx)
+    let tx = new EthTx(rawTx, { common: mixCommon })
     let privateKey = privateKeys[this.controllerAddress]
     tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
     let serializedTx = tx.serialize()
@@ -103,7 +114,7 @@ export default class MixAccount {
         gas: 0,
       }
       rawTx.gas = this.vue.$mixClient.web3.utils.toHex(await this.vue.$mixClient.web3.eth.estimateGas(rawTx))
-      let tx = new ethTx(rawTx)
+      let tx = new EthTx(rawTx, { common: mixCommon })
       let privateKey = privateKeys[this.controllerAddress]
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
@@ -146,7 +157,7 @@ export default class MixAccount {
         data: '0x' + creatorTokenBytecode.trim() + paramsBytecode,
       }
 
-      let tx = new ethTx(rawTx)
+      let tx = new EthTx(rawTx, { common: mixCommon })
       let privateKey = privateKeys[this.controllerAddress]
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
@@ -217,7 +228,7 @@ export default class MixAccount {
         reject()
         return
       }
-      let tx = new ethTx(rawTx)
+      let tx = new EthTx(rawTx, { common: mixCommon })
       let privateKey = privateKeys[this.controllerAddress]
       tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
       let serializedTx = tx.serialize()
@@ -293,7 +304,7 @@ export default class MixAccount {
           gasPrice: '0x3b9aca00',
           value: this.vue.$mixClient.web3.utils.toHex(value),
         }
-        let tx = new ethTx(rawTx)
+        let tx = new EthTx(rawTx, { common: mixCommon })
         let privateKey = privateKeys[this.controllerAddress]
         tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
         let serializedTx = tx.serialize()
