@@ -7,26 +7,26 @@ import child_process from 'child_process'
 import util from 'util'
 let exec = util.promisify(child_process.exec)
 
-let rev = 15
+let rev = 16
 
 let urls = {
 	linux: {
 		parity: 'https://releases.parity.io/ethereum/v2.7.2/x86_64-unknown-linux-gnu/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.23/go-ipfs_v0.4.23_linux-amd64.tar.gz',
     ffmpeg: 'https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz',
-    youtubeDl: 'https://yt-dl.org/downloads/2020.01.24/youtube-dl',
+    youtubeDl: 'https://yt-dl.org/downloads/2020.02.16/youtube-dl',
 	},
 	darwin: {
 		parity: 'https://releases.parity.io/ethereum/v2.7.2/x86_64-apple-darwin/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.23/go-ipfs_v0.4.23_darwin-amd64.tar.gz',
     ffmpeg: 'https://ffmpeg.zeranoe.com/builds/macos64/shared/ffmpeg-4.2.2-macos64-shared.zip',
-    youtubeDl: 'https://yt-dl.org/downloads/2020.01.24/youtube-dl',
+    youtubeDl: 'https://yt-dl.org/downloads/2020.02.16/youtube-dl',
 	},
 	win32: {
 		parity: 'https://releases.parity.io/ethereum/v2.7.2/x86_64-pc-windows-msvc/parity.exe',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.23/go-ipfs_v0.4.23_windows-amd64.zip',
     ffmpeg: 'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.2.2-win64-shared.zip',
-    youtubeDl: 'https://yt-dl.org/downloads/2020.01.24/youtube-dl.exe',
+    youtubeDl: 'https://yt-dl.org/downloads/2020.02.16/youtube-dl.exe',
 	},
 }
 
