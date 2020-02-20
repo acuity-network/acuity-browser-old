@@ -14,15 +14,12 @@
       </b-field>
       <b-field  v-if="isWeb" label="MIX Blockchain endpoint">
         <b-select v-model="mixEndpoint">
-          <option value="atlanta">Atlanta, GA</option>
-          <option value="dallas">Dallas, TX</option>
           <option value="frankfurt">Frankfurt</option>
           <option value="freemont">Freemont, CA</option>
           <option value="london">London</option>
           <option value="newark">Newark, NJ</option>
           <option value="singapore">Singapore</option>
           <option value="tokyo">Tokyo</option>
-          <option value="toronto">Toronto</option>
         </b-select>
       </b-field>
       <b-field :label="$t('Settings.Advanced')">
