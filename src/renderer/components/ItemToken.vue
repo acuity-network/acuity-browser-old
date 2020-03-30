@@ -130,7 +130,7 @@
       async start() {
         try {
     			this.tokenItemId = await this.$mixClient.itemDagTokenItems.methods.getParentId(this.itemId).call()
-          let item = await new MixItem(this.$root, this.tokenItemId).init()
+          let item: MixItem = await new MixItem(this.$root, this.tokenItemId).init()
           let revision = await item.latestRevision().load()
           this.image = revision.getImage(64, 64)
           this.address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.tokenItemId).call()

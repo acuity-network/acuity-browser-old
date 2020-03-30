@@ -50,7 +50,7 @@
     methods: {
       async loadData() {
         let nonce = await this.$mixClient.web3.eth.getTransactionCount(this.$activeAccount.get().controllerAddress)
-        let data = []
+        let data: any[] = []
         for (let i = nonce; i >= 0; i--) {
           try {
             let info = await this.$activeAccount.get().getTransactionInfo(i)

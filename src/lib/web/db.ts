@@ -1,4 +1,4 @@
-import level from 'level'
+let level: any = require('level')
 
 function init() {
   let dbPath: string = 'mix-acuity'

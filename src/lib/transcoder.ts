@@ -5,10 +5,10 @@ import path from 'path'
 import os from 'os'
 import { remote } from 'electron'
 import sub from 'subleveldown'
-import lexint from 'lexicographic-integer-encoding'
+let lexint: any = require('lexicographic-integer-encoding')
 import bs58 from 'bs58'
 import MixItem from './MixItem'
-import VideoMixinProto from './protobuf/VideoMixin_pb.js'
+let VideoMixinProto: any = require('./protobuf/VideoMixin_pb.js')
 import { Mutex, MutexInterface } from 'async-mutex'
 
 declare let __static: string
@@ -16,13 +16,13 @@ declare let __static: string
 let vue: any
 let transcoding: boolean = false
 let stopping: boolean = false
-let ffmpegProcess = null
-let currentJobId
-let deleting = false
-let db
+let ffmpegProcess: any = null
+let currentJobId: number
+let deleting: boolean = false
+let db: any
 let jobIdMutex: MutexInterface
 
-function init(_vue) {
+function init(_vue: any) {
   vue = _vue
   jobIdMutex = new Mutex()
   db = sub(vue.$db, 'transcoder', {
@@ -30,7 +30,7 @@ function init(_vue) {
     valueEncoding: 'json',
   })
 
-  db.createValueStream().on('data', job => {
+  db.createValueStream().on('data', (job: any) => {
     vue.$store.commit('transcodingsAdd', job)
     if (job.state == 'unpublished') {
       vue.$store.commit('transcodingsSetUnpublished', job.id)
@@ -78,8 +78,8 @@ function init(_vue) {
     }
   })
 
-  vue.$on('accountUnlock', async account => {
-    db.createValueStream().on('data', job => {
+  vue.$on('accountUnlock', async (account: string) => {
+    db.createValueStream().on('data', (job: any) => {
       if (job.state == 'unpublished' && job.accountAddress == account) {
         try {
           publishEncoding(job)
@@ -90,7 +90,7 @@ function init(_vue) {
   })
 }
 
-function addJob(job) {
+function addJob(job: any) {
   return new Promise(async (resolve, reject) => {
     let release = await jobIdMutex.acquire()
     let id: number = 0
@@ -114,7 +114,7 @@ function addJob(job) {
 function findJob() {
   return new Promise(async (resolve, reject) => {
     let result = null
-    db.createValueStream().on('data', job => {
+    db.createValueStream().on('data', (job: any) => {
       if (job.state == 'pending') {
         resolve(job)
       }
@@ -125,8 +125,8 @@ function findJob() {
   })
 }
 
-function h264Args(job) {
-  let args = []
+function h264Args(job: any) {
+  let args: string[] = []
 
   args.push('-i')
   args.push(job.filepath)
@@ -154,8 +154,8 @@ function h264Args(job) {
   return args
 }
 
-function vp9Args(job) {
-  let args = []
+function vp9Args(job: any) {
+  let args: string[] = []
 
   args.push('-i')
   args.push(job.filepath)
@@ -179,8 +179,8 @@ function vp9Args(job) {
   return args
 }
 
-function vp9Pass1Args(job) {
-  let args = vp9Args(job)
+function vp9Pass1Args(job: any) {
+  let args: string[] = vp9Args(job)
 
   args.push('-cpu-used')
   args.push('4')
@@ -199,8 +199,8 @@ function vp9Pass1Args(job) {
   return args
 }
 
-function vp9Pass2Args(job) {
-  let args = vp9Args(job)
+function vp9Pass2Args(job: any) {
+  let args: string[] = vp9Args(job)
 
   args.push('-cpu-used')
   args.push(vue.$settings.get('vp9.speed'))
@@ -228,18 +228,18 @@ function vp9Pass2Args(job) {
   return args
 }
 
-function ffmpeg(args, id, pass) {
+function ffmpeg(args: string[], id: number, pass: number) {
   console.log(args)
   return new Promise((resolve, reject) => {
     let isWindows = os.platform() == 'win32'
     let commandPath = path.join(__static, 'ffmpeg', 'bin', isWindows ? 'ffmpeg.exe' : 'ffmpeg')
 
     ffmpegProcess = spawn(commandPath, args)
-    ffmpegProcess.stdout.on('data', (data) => {
+    ffmpegProcess.stdout.on('data', (data: any) => {
       console.log(data.toString())
     })
 
-    ffmpegProcess.stderr.on('data', (data) => {
+    ffmpegProcess.stderr.on('data', (data: any) => {
       let output = data.toString()
       try {
         let matches = output.match(/frame= *(\d*)/)
@@ -254,8 +254,8 @@ function ffmpeg(args, id, pass) {
   })
 }
 
-async function publishEncoding(job) {
-  let item = await new MixItem(vue, job.itemId).init()
+async function publishEncoding(job: any) {
+  let item: any = await new MixItem(vue, job.itemId).init()
   let account = await item.account()
   let revision = await item.latestRevision().load()
   let videoMessage = VideoMixinProto.VideoMixin.deserializeBinary(revision.content.getPayloads('0x51108feb')[0])
@@ -265,15 +265,15 @@ async function publishEncoding(job) {
   encodingMessage.setWidth(job.width)
   encodingMessage.setHeight(job.height)
   videoMessage.addEncoding(encodingMessage)
-  revision.content.removeMixins(0x51108feb)
-  revision.content.addMixinPayload(0x51108feb, videoMessage.serializeBinary())
+  revision.content.removeMixins('0x51108feb')
+  revision.content.addMixinPayload('0x51108feb', videoMessage.serializeBinary())
   let revisionIpfsHash = await revision.content.save()
   await account.sendData(vue.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [job.itemId, revisionIpfsHash], 0, 'Add video encoding to item')
   db.del(job.id)
   vue.$store.commit('transcodingsRemove', job.id)
 }
 
-function transcode(job) {
+function transcode(job: any) {
   return new Promise(async (resolve, reject) => {
     console.log(job)
 
@@ -326,7 +326,7 @@ function transcode(job) {
       }
       catch (e) {
         job.state = 'unpublished'
-        let item = await new MixItem(vue, job.itemId).init()
+        let item: any = await new MixItem(vue, job.itemId).init()
         let account = await item.account()
         job.accountAddress = account.contractAddress
         db.put(job.id, job)

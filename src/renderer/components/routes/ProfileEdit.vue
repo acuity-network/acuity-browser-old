@@ -104,22 +104,22 @@
           let profileMessage = new ProfileMixinProto.ProfileMixin()
           profileMessage.setType(this.type)
           profileMessage.setLocation(this.location)
-          content.addMixinPayload(0xbeef2144, profileMessage.serializeBinary())
+          content.addMixinPayload('0xbeef2144', profileMessage.serializeBinary())
 
           // Language
           let languageMessage = new LanguageMixinProto.LanguageMixin()
           languageMessage.setLanguageTag(this.$settings.get('locale'))
-          content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
+          content.addMixinPayload('0x9bc7a0e6', languageMessage.serializeBinary())
 
           // Title
           let titleMessage = new TitleMixinProto.TitleMixin()
           titleMessage.setTitle(this.name)
-          content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
+          content.addMixinPayload('0x344f4812', titleMessage.serializeBinary())
 
           // BodyText
           let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
           bodyTextMessage.setBodyText(this.bio)
-          content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
+          content.addMixinPayload('0x2d382044', bodyTextMessage.serializeBinary())
 
           // Image
           if (this.file == null) {
@@ -127,13 +127,13 @@
               let itemId = await this.$activeAccount.get().getProfile()
               let item = await new MixItem(this.$root, itemId).init()
               let revision = await item.latestRevision().load()
-              content.addMixinPayload(0x045eee8c, revision.content.getPayloads('0x045eee8c')[0])
+              content.addMixinPayload('0x045eee8c', revision.content.getPayloads('0x045eee8c')[0])
             }
             catch (e) {}
           }
           else {
             let image = new Image(this.$root, this.file)
-            content.addMixinPayload(0x045eee8c, await image.createMixin())
+            content.addMixinPayload('0x045eee8c', await image.createMixin())
           }
 
           let ipfsHash = await content.save()

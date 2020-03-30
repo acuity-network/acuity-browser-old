@@ -68,12 +68,12 @@
     },
     methods: {
       async loadData() {
-        let item = await new MixItem(this.$root, this.itemId).init()
+        let item: MixItem = await new MixItem(this.$root, this.itemId).init()
         this.trusted = await item.isTrusted()
         let account = await item.account()
         this.ownerAddress = account.contractAddress
         let itemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
-        let profile = await new MixItem(this.$root, itemId).init()
+        let profile: MixItem = await new MixItem(this.$root, itemId).init()
         let revision = await profile.latestRevision().load()
         this.avatar = revision.getImage(32, 32)
 
@@ -84,20 +84,20 @@
         this.collapseIcon = this.visible ? minusIcon : plusIcon
       },
       async publishReply(event) {
-        let content = new MixContent(this.$root)
+        let content: MixContent = new MixContent(this.$root)
 
         // Comment
-        content.addMixinPayload(0x874aba65)
+        content.addMixinPayload('0x874aba65')
 
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag(this.$settings.get('locale'))
-        content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
+        content.addMixinPayload('0x9bc7a0e6', languageMessage.serializeBinary())
 
         // BodyText
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.reply)
-        content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
+        content.addMixinPayload('0x2d382044', bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)

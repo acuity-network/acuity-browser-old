@@ -59,7 +59,5 @@ module.exports = {
       .use('raw-loader')
       .loader('raw-loader')
       .end()
-    config.resolve.alias
-      .set('pica', 'pica/dist/pica.js')
   }
 }

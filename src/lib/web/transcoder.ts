@@ -1,5 +1,5 @@
 
-function init(_vue) {
+function init(_vue: any) {
 }
 
 function kill() {

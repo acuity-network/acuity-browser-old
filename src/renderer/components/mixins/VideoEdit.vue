@@ -71,16 +71,16 @@
         if (this.file != null) {
           let output: string = await interrogate(this.file.path)
           console.log(output)
-          let matches = output.match(/Duration: (\d*):(\d*):(\d*)\./)
+          let matches: RegExpMatchArray = output.match(/Duration: (\d*):(\d*):(\d*)\./)!
           this.duration = (parseInt(matches[1]) * 60 + parseInt(matches[2])) * 60 + parseInt(matches[3])
           this.durationFormatted = new Date(1000 * this.duration).toISOString().substr(11, 8)
-          matches = output.match(/Video: .*, (\d*)x(\d*).*, ([0-9.]*) fps, /)
+          matches = output.match(/Video: .*, (\d*)x(\d*).*, ([0-9.]*) fps, /)!
           this.width = parseInt(matches[1])
           this.height = parseInt(matches[2])
           this.frameRate = parseFloat(matches[3])
-          matches = output.match(/Video: (\w*)/)
+          matches = output.match(/Video: (\w*)/)!
           this.codecVideo = matches[1]
-          matches = output.match(/Audio: (\w*)/)
+          matches = output.match(/Audio: (\w*)/)!
           this.codecAudio = matches[1]
         }
   		},
@@ -94,8 +94,8 @@
         return videoMessage.serializeBinary()
       },
       async postSave(itemId) {
-        let supported_resolutions = [20, 40, 80, 120, 160, 240, 320, 480]
-        let resolutions = []
+        let supported_resolutions: number[] = [20, 40, 80, 120, 160, 240, 320, 480]
+        let resolutions: number[] = []
 
         for (let b of supported_resolutions) {
           if (b * 9 <= this.height) {

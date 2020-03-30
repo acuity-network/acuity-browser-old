@@ -26,7 +26,7 @@ let i18n = new VueI18n({
 import Buefy from 'buefy'
 Vue.use(Buefy)
 
-import VueTimeago from 'vue-timeago'
+let VueTimeago: any = require('vue-timeago')
 Vue.use(VueTimeago, {
   locale: 'en',
   locales: {

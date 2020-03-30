@@ -81,7 +81,7 @@
       if (await this.$activeAccount.get().getProfile() == itemId) {
         this.isOwnProfile = true
       }
-      let item = await new MixItem(this, itemId).init()
+      let item: any = await new MixItem(this, itemId).init()
       let revision = await item.latestRevision().load()
       let profile = revision.getProfile()
       this.location = profile.location

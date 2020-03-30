@@ -41,7 +41,7 @@
     },
     async created() {
       setTitle(this.$t('BrowsingHistory.BrowsingHistory'))
-      let data = []
+      let data: any[] = []
       let count = await this.$db.get('/historyCount')
       for (let i = count - 1; i >= 0; i--) {
         try {

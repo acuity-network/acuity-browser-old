@@ -23,8 +23,8 @@
     },
     async created() {
       setTitle(this.$t('Home.Home'))
-      let feedIds = []
-      let topicHashes = []
+      let feedIds: string[] = []
+      let topicHashes: string[] = []
 
       let feedsPromise = new Promise((resolve, reject) => {
         this.$db.createValueStream({
@@ -79,7 +79,7 @@
 
       await Promise.all([feedsPromise, topicsPromise])
 
-      let subscriptions = []
+      let subscriptions: any[] = []
       for (let feedId of feedIds) {
         let count = await this.$mixClient.itemDagFeedItems.methods.getChildCount(feedId).call()
         if (count > 0) {

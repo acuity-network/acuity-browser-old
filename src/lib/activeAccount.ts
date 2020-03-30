@@ -1,12 +1,12 @@
 
-let activeAccount
+let activeAccount: any
 
 
 function get() {
   return activeAccount;
 }
 
-function set(account) {
+function set(account: any) {
   activeAccount = account;
 }
 

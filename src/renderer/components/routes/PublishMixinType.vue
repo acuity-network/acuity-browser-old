@@ -60,22 +60,22 @@
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag(this.$settings.get('locale'))
-        content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
+        content.addMixinPayload('0x9bc7a0e6', languageMessage.serializeBinary())
 
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
+        content.addMixinPayload('0x344f4812', titleMessage.serializeBinary())
 
         // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
-        content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
+        content.addMixinPayload('0x2d382044', bodyTextMessage.serializeBinary())
 
         // Schema
         let mixinSchemaMessage = new MixinSchemaMixinProto.MixinSchemaMixin()
         mixinSchemaMessage.setMixinSchema(this.schema)
-        content.addMixinPayload(0xcdce4e5d, mixinSchemaMessage.serializeBinary())
+        content.addMixinPayload('0xcdce4e5d', mixinSchemaMessage.serializeBinary())
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x10' + this.$mixClient.web3.utils.randomHex(31).substr(2)

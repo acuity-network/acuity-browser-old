@@ -1,8 +1,8 @@
 import MixAccount from './MixAccount'
 import MixContent from './MixContent'
-import ImageMixinProto from './protobuf/ImageMixin_pb.js'
-import FileMixinProto from './protobuf/FileMixin_pb.js'
-import multihashes from 'multihashes'
+let ImageMixinProto: any = require('./protobuf/ImageMixin_pb.js')
+let FileMixinProto: any = require('./protobuf/FileMixin_pb.js')
+let multihashes: any = require('multihashes')
 import bs58 from 'bs58'
 
 export default class MixPinner {
@@ -10,11 +10,11 @@ export default class MixPinner {
   accountsToWatch: any
   itemStoreIpfsSha256Emitter: any
 
-  constructor(vue) {
+  constructor(vue: any) {
     this.vue = vue
   }
 
-  async pinIpfsHash(ipfsHash) {
+  async pinIpfsHash(ipfsHash: string) {
     let encodedIpfsHash = multihashes.toB58String(multihashes.encode(Buffer.from(ipfsHash.substr(2), 'hex'), 'sha2-256'))
     // Wait for response before continuing to try to avoid DOSing IPFS daemon.
     await this.vue.$ipfsClient.get('pin/add?arg=' + encodedIpfsHash, false)
@@ -88,12 +88,12 @@ export default class MixPinner {
       toBlock: 'pending',
       topics: ['0x0dbe5761780bd3332f4349220012aa42519557f909b3bfa059ada108fd6b6561',, Array.from(this.accountsToWatch)], // PublishRevision
     })
-    .on('data', async event => {
+    .on('data', async (event: any) => {
       await this.pinIpfsHash(event.returnValues.ipfsHash)
       // Store where we got to.
       this.vue.$db.put('/pinBlock', event.blockNumber)
     })
-    .on('changed', log => {
+    .on('changed', (log: any) => {
     })
   }
 

@@ -5,7 +5,7 @@ import { ipcRenderer } from 'electron'
 export default class IpfsClient {
   agent: any
 
-	async init(vue) {
+	async init(vue: any) {
 		this.agent = new http.Agent({
 			keepAlive: true,
 		})
@@ -145,7 +145,7 @@ export default class IpfsClient {
     return this._get('cat?arg=/ipfs/' + ipfsHash, false)
   }
 
-  add(data, encoding: string = 'binary') {
+  add(data: Buffer, encoding: string = 'binary') {
     return this._post('add', data, encoding).then((result: any) => {
       return result.Hash
     })

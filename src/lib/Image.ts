@@ -1,12 +1,12 @@
 import sharp from 'sharp'
-import ImageMixinProto from './protobuf/ImageMixin_pb.js'
 import bs58 from 'bs58'
+let ImageMixinProto  = require('./protobuf/ImageMixin_pb.js')
 
 export default class Image {
   vue: any
   filepath: string
 
-  constructor(vue, file) {
+  constructor(vue: any, file: any) {
     this.vue = vue
     this.filepath = file.path
   }
@@ -14,12 +14,12 @@ export default class Image {
   async createMixin() {
     // Use SIMD instructions if available.
     sharp.simd(true)
-    let source = sharp(this.filepath)
+    let source: any = sharp(this.filepath)
       .rotate()             // Rotate/flip the image if specified in EXIF.
 
-    let metadata = await source.metadata()
+    let metadata: any = await source.metadata()
     // Work out correct dimensions if rotation occured.
-    let width, height
+    let width: number, height: number
     if (metadata.orientation > 4) {
       width = metadata.height
       height = metadata.width
@@ -28,7 +28,7 @@ export default class Image {
       width = metadata.width
       height = metadata.height
     }
-    let mipmaps = []
+    let mipmaps: Promise<any>[] = []
     // Don't resize the top-level mipmap.
     mipmaps.push(source
       .clone()
@@ -44,7 +44,7 @@ export default class Image {
 
     let level = 1, outWidth, outHeight
     do {
-      let scale = 2 ** level
+      let scale: number = 2 ** level
       outWidth = Math.round(width / scale)
       outHeight = Math.round(height / scale)
       mipmaps.push(source
@@ -63,11 +63,10 @@ export default class Image {
     }
     while (outWidth > 64 && outHeight > 64)
 
-    mipmaps = await Promise.all(mipmaps)
     let imageMessage = new ImageMixinProto.ImageMixin()
     imageMessage.setWidth(width)
     imageMessage.setHeight(height)
-    for (let mipmap of mipmaps) {
+    for (let mipmap of await Promise.all(mipmaps)) {
       let mipmapLevelMessage = new ImageMixinProto.MipmapLevel()
       mipmapLevelMessage.setFilesize(mipmap.filesize)
       mipmapLevelMessage.setIpfsHash(bs58.decode(mipmap.ipfsHash))

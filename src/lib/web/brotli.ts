@@ -1,13 +1,12 @@
-import BrotliDecode from './decode.js'
-import brotliHaxe from './brotliHaxe.js'
+let BrotliDecode: any = require('./decode.js')
+let brotliHaxe: any = require('./brotliHaxe.js')
+let brotli: any = new brotliHaxe.Brotli()
 
-var brotli = new brotliHaxe.Brotli();
-
-function compress(input) {
+function compress(input: any) {
   return brotli.compressArray(input, 11)
 }
 
-function decompress(input) {
+function decompress(input: any) {
   return BrotliDecode(input)
 }
 

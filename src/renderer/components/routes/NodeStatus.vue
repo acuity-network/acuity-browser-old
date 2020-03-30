@@ -101,7 +101,7 @@
           this.peerCount = await this.$mixClient.web3.eth.net.getPeerCount()
 
           let ipfsId = await this.$ipfsClient.id()
-          let addresses = []
+          let addresses: string[] = []
           for (let address of ipfsId.addresses) {
             addresses.push(address.split('/ipfs/')[0])
           }

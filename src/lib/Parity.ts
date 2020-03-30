@@ -7,9 +7,9 @@ import { spawn } from 'child_process'
 
 declare let __static: string
 
-let parityProcess
+let parityProcess: any
 
-async function launch(window) {
+async function launch(window: any) {
   let isWindows: boolean = os.platform() === 'win32'
   let ipcPath: string
   // Check if Parity is already running.
@@ -23,7 +23,7 @@ async function launch(window) {
     let web3: Web3 = new Web3(new Web3.providers.IpcProvider(ipcPath, net))
     await web3.eth.getProtocolVersion()
     console.log('Parity IPC path: ' + ipcPath)
-    window.webContents.on('ipc-message', (e, msg) => {
+    window.webContents.on('ipc-message', (e: any, msg: string) => {
       if (msg == 'get-parity-ipc-path') {
         window.webContents.send('parity-ipc-path', ipcPath)
       }
@@ -72,25 +72,25 @@ async function launch(window) {
 
 	parityProcess = spawn(parityPath, args)
 
-	parityProcess.on('error', (err) => {
+	parityProcess.on('error', (err: string) => {
 		try {
 			window.webContents.send('parity-error', 'Failed to start (' + err + ')')
 		} catch (e) {}
 	});
 
-	parityProcess.stdout.on('data', (data) => {
+	parityProcess.stdout.on('data', (data: any) => {
 		try {
 			window.webContents.send('parity-stdout', data.toString())
 		} catch (e) {}
 	})
 
-	parityProcess.stderr.on('data', (data) => {
+	parityProcess.stderr.on('data', (data: any) => {
 		try {
 			window.webContents.send('parity-stderr', data.toString())
 		} catch (e) {}
 	})
 
-  window.webContents.on('ipc-message', (e, msg) => {
+  window.webContents.on('ipc-message', (e: any, msg: string) => {
     if (msg == 'get-parity-ipc-path') {
       window.webContents.send('parity-ipc-path', ipcPath)
     }

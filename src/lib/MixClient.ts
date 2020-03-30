@@ -1,8 +1,8 @@
 import Web3 from 'web3'
 import net from 'net'
-import Api from '@parity/api'
 import throttle from 'just-throttle'
 import { ipcRenderer } from 'electron'
+let Api: any = require ('@parity/api')
 
 export default class MixClient {
 	web3: any
@@ -30,7 +30,7 @@ export default class MixClient {
 	tokenBurn: any
 	uniswapFactory: any
 
-	async init(vue) {
+	async init(vue: any) {
     // Log Parity output.
     ipcRenderer.on('parity-stdout', (event, msg) => {
       console.log('Parity: ' + msg)
@@ -91,7 +91,7 @@ export default class MixClient {
 		this.uniswapFactory = new this.web3.eth.Contract(require('./contracts/UniswapFactory.abi.json'), '0x1381a70fc605b7d7e54b7e1159afba1429a4bbb1')
 
 		// Emit sync info.
-		let startingBlock, currentBlock
+		let startingBlock: number, currentBlock: number
 		let newBlockHeaders = throttle(async () => {
 			let isSyncing = await this.web3.eth.isSyncing()
 

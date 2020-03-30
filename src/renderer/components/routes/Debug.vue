@@ -24,7 +24,7 @@
   import ImageMixinProto from '../../../lib/protobuf/ImageMixin_pb.js'
   import brotli from '../../../lib/brotli'
   import bs58 from 'bs58'
-  import multihashes from 'multihashes'
+  let multihashes: any = require('multihashes')
   import formatByteCount from '../../../lib/formatByteCount'
   import setTitle from '../../../lib/setTitle'
   import clipboard from '../../../lib/clipboard'

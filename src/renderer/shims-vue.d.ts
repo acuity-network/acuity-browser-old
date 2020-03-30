@@ -4,5 +4,5 @@ declare module '*.vue' {
 }
 
 interface Blob {
-  arrayBuffer(): Promise<ArrayBuffer>;
+  arrayBuffer(): Promise<ArrayBuffer>
 }

@@ -2,7 +2,7 @@ export default class Settings {
 	db: any
 	settings: any
 
-	async init(db) {
+	async init(db: any) {
 		this.db = db
 	  try {
 			this.settings = JSON.parse(await this.db.get('/settings'))
@@ -13,17 +13,17 @@ export default class Settings {
 		return this
 	}
 
-	set(key, value) {
+	set(key: string, value: any) {
 		this.settings[key] = value
 		this.db.put('/settings', JSON.stringify(this.settings))
 	}
 
-	get(key) {
+	get(key: string) {
 		if (key in this.settings) {
 			return this.settings[key]
 		}
 
-		let defaults = {
+		let defaults: any = {
 			locale: 'en-US',
       mixEndpoint: 'freemont',
 			development: false,

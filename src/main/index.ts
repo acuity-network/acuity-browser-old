@@ -15,7 +15,7 @@ if (isDevelopment) {
   app.setPath('userData', path.join(app.getPath('appData'), app.name))
 }
 
-let mainWindow
+let mainWindow: any
 
 process.env.ELECTRON_WEBPACK_APP_DESKTOP = 'true'
 
@@ -75,7 +75,7 @@ async function createWindow () {
   })
 
   // Force links to open in web browser.
-  mainWindow.webContents.on('new-window', (event, url) => {
+  mainWindow.webContents.on('new-window', (event: any, url: string) => {
     event.preventDefault()
     shell.openExternal(url)
   });

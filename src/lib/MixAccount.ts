@@ -23,16 +23,16 @@ import fs from 'fs'
 declare let __static: string
 */
 
-let privateKeys = {}
+let privateKeys: any = {}
 
 export default class MixAccount {
   vue: any
-  controllerAddress: string
-  contractAddress: string
-  abiVersion: number
+  controllerAddress: string = ''
+  contractAddress: string = ''
+  abiVersion: number = 0
   contract: any
 
-  constructor(vue, address, isContract = false) {
+  constructor(vue: any, address: string, isContract: boolean = false) {
     this.vue = vue
     if (isContract) {
       this.contractAddress = address
@@ -68,7 +68,7 @@ export default class MixAccount {
     return this
   }
 
-  _logTransaction(transaction, to, description) {
+  _logTransaction(transaction: any, to: string, description: string) {
     let info = {
       hash: transaction.hash,
       to: to,
@@ -120,7 +120,7 @@ export default class MixAccount {
       let serializedTx = tx.serialize()
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
       .on('error', reject)
-      .on('receipt', async receipt => {
+      .on('receipt', async (receipt: any) => {
         this.contractAddress = receipt.contractAddress
         this.storeMapping()
         await this.vue.$db.batch()
@@ -134,7 +134,7 @@ export default class MixAccount {
     })
   }
 
-  deployToken(symbol, name, initialBalance, dailyPayout) {
+  deployToken(symbol: string, name: string, initialBalance: number, dailyPayout: number) {
     return new Promise(async (resolve, reject) => {
       if (!this.isUnlocked()) {
         this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
@@ -164,7 +164,7 @@ export default class MixAccount {
 
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
       .on('error', reject)
-      .on('receipt', async receipt => {
+      .on('receipt', async (receipt: any) => {
         let transaction = await this.vue.$mixClient.web3.eth.getTransaction(receipt.transactionHash)
         this._logTransaction(transaction, '', 'Deploy token')
         resolve(receipt.contractAddress)
@@ -178,14 +178,14 @@ export default class MixAccount {
     this.vue.$root.$emit('change-active-account', this)
   }
 
-  async call(contract, method, params = [], value = 0) {
+  async call(contract: any, method: string, params: any[] = [], value: number = 0) {
     return await contract.methods[method](...params).call({
       from: this.contractAddress,
       value: value,
     })
   }
 
-  async unlock(password) {
+  async unlock(password: string) {
     let keyObjectJson: string = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/keyObject')
     privateKeys[this.controllerAddress] = this.vue.$mixClient.web3.accounts.decrypt(keyObjectJson, password).privateKey
     this.consolidateMix()
@@ -200,7 +200,7 @@ export default class MixAccount {
     return this.controllerAddress in privateKeys
   }
 
-  _send(transaction, value = 0, checkBalance = true, gas = 200000) {
+  _send(transaction: any, value: number = 0, checkBalance: boolean = true, gas: number = 200000) {
     return new Promise(async (resolve, reject) => {
       if (!this.isUnlocked()) {
         this.vue.$buefy.toast.open({message: 'Account is locked', type: 'is-danger'})
@@ -234,14 +234,14 @@ export default class MixAccount {
       let serializedTx = tx.serialize()
       this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
       .on('error', reject)
-      .on('transactionHash', transactionHash => {
+      .on('transactionHash', (transactionHash: string) => {
         this.vue.$mixClient.web3.eth.getTransaction(transactionHash)
         .then(resolve)
       })
     })
   }
 
-  setController(newController) {
+  setController(newController: string) {
     return this._send(this.contract.methods.setController(newController))
   }
 
@@ -263,7 +263,7 @@ export default class MixAccount {
     })
   }
 
-  async getSendMixGas(to, value) {
+  async getSendMixGas(to: string, value: number) {
     // Check if the destination is a contract.
     if (await this.vue.$mixClient.web3.eth.getCode(to) == '0x') {
       return 21000
@@ -284,7 +284,7 @@ export default class MixAccount {
 */
   }
 
-  async sendMix(to, value) {
+  async sendMix(to: string, value: number) {
     // Check if the destination is a contract.
     let data = await this.vue.$mixClient.web3.eth.getCode(to)
     if (data == '0x') {
@@ -309,7 +309,7 @@ export default class MixAccount {
         tx.sign(Buffer.from(privateKey.substr(2), 'hex'))
         let serializedTx = tx.serialize()
         this.vue.$mixClient.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-        .on('transactionHash', async transactionHash => {
+        .on('transactionHash', async (transactionHash: string) => {
           let transaction = await this.vue.$mixClient.web3.eth.getTransaction(transactionHash)
           this._logTransaction(transaction, to, 'Send MIX')
           resolve(transaction)
@@ -341,12 +341,12 @@ export default class MixAccount {
     return error
   }
 
-  async sendData(contract, method, params, value, description, gas) {
+  async sendData(contract: any, method: string, params: any[], value: number, description: string, gas: number) {
     let to = contract.options.address
     let data = contract.methods[method](...params).encodeABI()
     // Test this transaction.
-    let success: boolean
-    let error: string
+    let success: boolean = false
+    let error: string = ''
     switch (this.abiVersion) {
       case 0:
         success = await this.contract.methods.sendData(to, data).call({
@@ -409,7 +409,7 @@ export default class MixAccount {
     return balance
   }
 
-  async getTransactionInfo(nonce) {
+  async getTransactionInfo(nonce: number) {
     let infoJson = await this.vue.$db.get('/account/controller/' + this.controllerAddress + '/transaction/' + nonce)
     let info = JSON.parse(infoJson)
 
@@ -436,7 +436,7 @@ export default class MixAccount {
     return info
   }
 
-  getTrustedThatTrust(address) {
+  getTrustedThatTrust(address: string) {
     return this.call(this.vue.$mixClient.trustedAccounts, 'getTrustedThatTrustAccount', [address])
   }
 

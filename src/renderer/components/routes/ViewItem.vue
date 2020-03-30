@@ -293,7 +293,7 @@
         }
 
         let topicHashes = await this.$mixClient.itemTopics.methods.getItemTopicHashes(this.itemId).call()
-        let topics = []
+        let topics: any[] = []
         for (let topicHash of topicHashes) {
           topics.push({
             hash: topicHash,
@@ -430,14 +430,14 @@
         // Title
         let titleMessage = new TitleMixinProto.TitleMixin()
         titleMessage.setTitle(this.title)
-        revision.content.removeMixins(0x344f4812)
-        revision.content.addMixinPayload(0x344f4812, titleMessage.serializeBinary())
+        revision.content.removeMixins('0x344f4812')
+        revision.content.addMixinPayload('0x344f4812', titleMessage.serializeBinary())
 
         // Body text
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.description)
-        revision.content.removeMixins(0x2d382044)
-        revision.content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
+        revision.content.removeMixins('0x2d382044')
+        revision.content.addMixinPayload('0x2d382044', bodyTextMessage.serializeBinary())
 
         let ipfsHash = await revision.content.save()
         this.editing = false
@@ -449,12 +449,12 @@
         // Language
         let languageMessage = new LanguageMixinProto.LanguageMixin()
         languageMessage.setLanguageTag(this.$settings.get('locale'))
-        content.addMixinPayload(0x9bc7a0e6, languageMessage.serializeBinary())
+        content.addMixinPayload('0x9bc7a0e6', languageMessage.serializeBinary())
 
         // BodyText
         let bodyTextMessage = new BodyTextMixinProto.BodyTextMixin()
         bodyTextMessage.setBodyText(this.reply)
-        content.addMixinPayload(0x2d382044, bodyTextMessage.serializeBinary())
+        content.addMixinPayload('0x2d382044', bodyTextMessage.serializeBinary())
 
         let ipfsHash = await content.save()
         let flagsNonce = '0x00' + this.$mixClient.web3.utils.randomHex(31).substr(2)

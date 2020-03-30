@@ -9,38 +9,38 @@ export default new Vuex.Store({
     transcodings: [],
   },
   mutations: {
-    transcodingOn(state) {
+    transcodingOn(state: any) {
       state.transcoding = true
     },
-    transcodingOff(state) {
+    transcodingOff(state: any) {
       state.transcoding = false
     },
-    transcodingsAdd(state, payload) {
+    transcodingsAdd(state: any, payload: any) {
       payload.progress = ''
       state.transcodings.push(payload)
     },
-    transcodingsSetPending(state, id) {
-      let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
+    transcodingsSetPending(state: any, id: number) {
+      let i = state.transcodings.map((item: any) => parseInt(item.id)).indexOf(id)
       state.transcodings[i].progress = ''
     },
-    transcodingsSetProgress(state, payload) {
-      let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(payload.id))
+    transcodingsSetProgress(state: any, payload: any) {
+      let i = state.transcodings.map((item: any) => parseInt(item.id)).indexOf(parseInt(payload.id))
       let progress = Math.floor((payload.frame * 100) / state.transcodings[i].frames) + '%'
       if (payload.pass > 0) {
         progress += ' (pass ' + payload.pass + '/2)'
       }
       state.transcodings[i].progress = progress
     },
-    transcodingsSetUnpublished(state, id) {
-      let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
+    transcodingsSetUnpublished(state: any, id: number) {
+      let i = state.transcodings.map((item: any) => parseInt(item.id)).indexOf(id)
       state.transcodings[i].progress = 'unpublished'
     },
-    transcodingsRemove(state, id) {
-      let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
+    transcodingsRemove(state: any, id: number) {
+      let i = state.transcodings.map((item: any) => parseInt(item.id)).indexOf(id)
       state.transcodings.splice(i, 1)
     },
-    transcodingsFail(state, id) {
-      let i = state.transcodings.map(item => parseInt(item.id)).indexOf(parseInt(id))
+    transcodingsFail(state: any, id: number) {
+      let i = state.transcodings.map((item: any) => parseInt(item.id)).indexOf(id)
       state.transcodings[i].progress = 'failed'
     },
   },

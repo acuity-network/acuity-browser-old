@@ -107,7 +107,7 @@
         }
         // Calculate private key and controller address.
         let node: BIP32Interface = bip32.fromSeed(await bip39.mnemonicToSeed(this.recoveryPhrase))
-        let privateKey: string = '0x' + node.derivePath("m/44'/76'/0'/0/0").privateKey.toString('hex')
+        let privateKey: string = '0x' + node.derivePath("m/44'/76'/0'/0/0").privateKey!.toString('hex')
         let controllerAddress: string = this.$mixClient.web3.eth.accounts.privateKeyToAccount(privateKey).address
         // Encrypt private key.
         let keyObject: object = this.$mixClient.web3.eth.accounts.encrypt(privateKey, this.password);

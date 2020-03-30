@@ -25,7 +25,7 @@ export default class MixClient {
 	tokenBurn: any
 	uniswapFactory: any
 
-	async init(vue, endpoint) {
+	async init(vue: any, endpoint: string) {
 
     let uri: string = 'wss://' + endpoint + '.mix-blockchain.org:8547'
 

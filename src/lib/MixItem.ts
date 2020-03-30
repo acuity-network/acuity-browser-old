@@ -1,16 +1,22 @@
 let itemStoreAbi = require('./contracts/MixItemStoreInterface.abi.json')
-import ItemProto from './protobuf/Item_pb.js'
+let ItemProto: any = require('./protobuf/Item_pb.js')
 import MixRevision from './MixRevision'
 import MixAccount from './MixAccount'
 
 export default class MixItem {
+  vue: any
+  itemId: string
+  itemStoreAddress!: string
+  itemStore: any
+  item: any
+  revisions!: any[]
 
-  constructor(vue, itemId) {
+  constructor(vue: any, itemId: string) {
     this.vue = vue
     this.itemId = itemId
   }
 
-  init() {
+  init(): Promise<MixItem> {
     return new Promise(async (resolve, reject) => {
       try {
         this.itemStoreAddress = await this.vue.$mixClient.itemStoreRegistry.methods.getItemStore(this.itemId).call()
@@ -46,16 +52,8 @@ export default class MixItem {
     return new MixAccount(this.vue, this.item.owner, true).init()
   }
 
-  itemId() {
-    return this.itemId
-  }
-
   isUpdatable() {
     return this.item.flags & 1
-  }
-
-  revisions() {
-    return this.revisions
   }
 
   firstRevision() {
@@ -67,9 +65,11 @@ export default class MixItem {
   }
 
   get exists() {
+    return true
   }
 
   get shortId() {
+    return ''
   }
 
   async isTrusted() {
@@ -121,7 +121,7 @@ export default class MixItem {
         }
         return 0
 
-      case 3:
+      default:
         return 2
     }
   }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
-function loadView(view) {
+function loadView(view: string) {
   return () => import(/* webpackChunkName: "view-[request]" */ `../components/routes/${view}.vue`)
 }
 

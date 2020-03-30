@@ -1,18 +1,19 @@
-import multihashes from 'multihashes'
 import brotli from './brotli'
-import ItemProto from './protobuf/Item_pb.js'
-let contentCache = []
+let ItemProto: any = require('./protobuf/Item_pb.js')
+let multihashes: any = require('multihashes')
+
+let contentCache: any = {}
 
 export default class MixContent {
   vue: any
   mixins: any[]
 
-  constructor(vue) {
+  constructor(vue: any) {
     this.vue = vue
     this.mixins = []
   }
 
-  async load(ipfsHash) {
+  async load(ipfsHash: string) {
     if (contentCache[ipfsHash]) {
       this.mixins = contentCache[ipfsHash]
       return this
@@ -75,8 +76,8 @@ export default class MixContent {
     return this.mixins
   }
 
-  getPayloads(mixinId) {
-    let payloads = []
+  getPayloads(mixinId: string) {
+    let payloads: any[] = []
     for (let i = 0; i < this.mixins.length; i++) {
       if (this.mixins[i].mixinId == mixinId) {
         payloads.push(this.mixins[i].payload)
@@ -85,7 +86,7 @@ export default class MixContent {
     return payloads
   }
 
-  existMixin(mixinId) {
+  existMixin(mixinId: string) {
     for (let i = 0; i < this.mixins.length; i++) {
       if (this.mixins[i].mixinId == mixinId) {
         return true
@@ -94,15 +95,15 @@ export default class MixContent {
     return false
   }
 
-  addMixinPayload(mixinId, payload?) {
+  addMixinPayload(mixinId: string, payload?: Buffer) {
     this.mixins.push({
       mixinId: mixinId,
       payload: payload,
     })
   }
 
-  removeMixins(mixinId) {
-    let newMixins = []
+  removeMixins(mixinId: string) {
+    let newMixins: any[] = []
     for (let i = 0; i < this.mixins.length; i++) {
       if (this.mixins[i].mixinId != mixinId) {
         newMixins.push(this.mixins[i])

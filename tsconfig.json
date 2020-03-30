@@ -3,7 +3,9 @@
   "compilerOptions": {
     "target": "es2019",
     "noUnusedLocals": false,
-    "strict": false,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
     "alwaysStrict": true,
     "esModuleInterop": true
   }

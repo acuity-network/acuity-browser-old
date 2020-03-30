@@ -8,9 +8,9 @@ import IpfsClient from './IpfsClient'
 
 declare let __static: string
 
-let ipfsProcess
-let ipfsClient
-let ipfsInterval
+let ipfsProcess: any
+let ipfsClient: any
+let ipfsInterval: any
 
 function connect() {
 	let bootnodes = [
@@ -36,7 +36,7 @@ function connect() {
 	})
 }
 
-async function launch(window) {
+async function launch(window: any) {
 	// Delete the API file that might have been left behind.
 	try {
 		fs.unlinkSync(path.join(app.getPath('userData'), 'ipfs', 'api'))
@@ -82,7 +82,7 @@ async function launch(window) {
 		['config', '--json', 'API.HTTPHeaders.Access-Control-Allow-Methods', '["GET", "PUT", "POST", "DELETE"]'],
 	]
 
-	async function spawnIpfs(args) {
+	async function spawnIpfs(args: string[]) {
     return new Promise(async (resolve, reject) => {
 			let process = spawn(commandPath, args, options)
 
@@ -106,13 +106,13 @@ async function launch(window) {
 
 	ipfsProcess = spawn(commandPath, ['daemon'], options)
 
-	ipfsProcess.stdout.on('data', (data) => {
+	ipfsProcess.stdout.on('data', (data: any) => {
 		try {
 			window.webContents.send('ipfs-stdout', data.toString())
 		} catch (e) {}
 	})
 
-	ipfsProcess.stderr.on('data', (data) => {
+	ipfsProcess.stderr.on('data', (data: any) => {
 		try {
 			window.webContents.send('ipfs-stderr', data.toString())
 		} catch (e) {}
@@ -130,7 +130,7 @@ function kill() {
 	}
 }
 
-function add(filepath) {
+function add(filepath: string) {
   return new Promise(async (resolve, reject) => {
     let isWindows = os.platform() === 'win32'
   	let commandPath = path.join(__static, 'go-ipfs', isWindows ? 'ipfs.exe' : 'ipfs')

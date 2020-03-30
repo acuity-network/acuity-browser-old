@@ -1,5 +1,5 @@
-import Ipfs from 'ipfs'
-import toStream from 'it-to-stream'
+let Ipfs: any = require('ipfs')
+let toStream: any = require('it-to-stream')
 
 let bootnodes = [
   '/dns4/singapore.mix-blockchain.org/tcp/4003/wss/ipfs/QmQ38hetbvfJwhDXvXxyxT8reydNwPq6n9eXzEB11cwsji',
@@ -20,7 +20,7 @@ let bootnodes = [
 export default class IpfsClient {
   node: any
 
-  async init(vue) {
+  async init(vue: any) {
     let options = {
       relay: {
         enabled: true,
@@ -64,17 +64,17 @@ export default class IpfsClient {
     return this.node.repo.stat()
   }
 
-  async get(ipfsHash) {
+  async get(ipfsHash: string) {
     for await (let content of this.node.cat('/ipfs/' + ipfsHash)) {
       return content
     }
   }
 
-  getReadableStream(ipfsHash, options) {
+  getReadableStream(ipfsHash: string, options: any) {
     return toStream.readable(this.node.cat('/ipfs/' + ipfsHash, options))
   }
 
-  async add(data) {
+  async add(data: any) {
     for await (let result of this.node.add(data)) {
       return result.path
     }

@@ -103,14 +103,14 @@
       async loadData() {
         this.balance = this.$mixClient.formatWei(await this.$activeAccount.get().getBalance())
         this.unconfirmedBalance = this.$mixClient.formatWei(await this.$activeAccount.get().getUnconfirmedBalance())
-        let data = []
+        let data: any[] = []
 
         let count = 0
         try {
           count = await this.$db.get('/account/contract/' + this.$activeAccount.get().contractAddress + '/receivedCount')
         }
         catch (e) {}
-        let payments = []
+        let payments: any[] = []
 
         for (let i = 0; i < count; i++) {
           payments.push(this.$db.get('/account/contract/' + this.$activeAccount.get().contractAddress + '/received/' + i)
@@ -125,7 +125,7 @@
           )
         }
 
-        let results = await Promise.all(payments)
+        let results: any[] = await Promise.all(payments)
         for (let i = 0; i < results.length; i++) {
           if (results[i]) {
             try {

@@ -71,9 +71,9 @@
     },
     methods: {
       async loadData() {
-        let trusted = []
-        let whitelist = []
-        let blacklist = []
+        let trusted: any[] = []
+        let whitelist: any[] = []
+        let blacklist: any[] = []
         let trustedAccounts = await this.$activeAccount.get().call(this.$mixClient.trustedAccounts, 'getAllTrusted')
         await trustedAccounts.forEach(async contractAddress => {
           let account = await new MixAccount(this.$root, contractAddress, true).init()
