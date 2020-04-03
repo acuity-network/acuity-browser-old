@@ -86,11 +86,11 @@ async function launch(window: any) {
     return new Promise(async (resolve, reject) => {
 			let process = spawn(commandPath, args, options)
 
-			process.stdout.on('data', (data) => {
+			process.stdout.on('data', (data: any) => {
 				console.log(data.toString())
 			})
 
-			process.stderr.on('data', (data) => {
+			process.stderr.on('data', (data: any) => {
 				console.error(data.toString())
 			})
 
@@ -142,11 +142,11 @@ function add(filepath: string) {
     let args = ['add', '-Q', '--raw-leaves', filepath]
     let process = spawn(commandPath, args, options)
 
-    process.stdout.on('data', (data) => {
+    process.stdout.on('data', (data: any) => {
       resolve(data.toString().trim())
   	})
 
-    process.stderr.on('data', (data) => {
+    process.stderr.on('data', (data: any) => {
       reject(data.toString())
   	})
   })

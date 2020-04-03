@@ -57,7 +57,7 @@
           'gt': '/account/controllerAddress/',
           'lt': '/account/controllerAddress/z',
         })
-        .on('data', async address => {
+        .on('data', async (address: string) => {
           let account = await new MixAccount(this.$root, address).init()
           let name = 'Unnamed'
           try {
@@ -81,7 +81,7 @@
           }
         })
       },
-      async select(event) {
+      async select(event: any) {
         let account = await new MixAccount(this.$root, event.account).init()
         account.select()
       },

@@ -58,7 +58,7 @@
       }
     },
     methods: {
-      async recover(event) {
+      async recover(event: any) {
         // Check a recovery phrase is entered.
         if (this.recoveryPhrase == '') {
           this.recoveryPhraseType = 'is-danger'

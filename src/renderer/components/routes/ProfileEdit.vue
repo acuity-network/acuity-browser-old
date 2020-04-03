@@ -55,10 +55,10 @@
 
 <script lang="ts">
   import Page from '../Page.vue'
-  import ProfileMixinProto from '../../../lib/protobuf/ProfileMixin_pb.js'
-  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
-  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
+  let ProfileMixinProto: any = require('../../../lib/protobuf/ProfileMixin_pb.js')
+  let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
+  let BodyTextMixinProto: any = require('../../../lib/protobuf/BodyTextMixin_pb.js')
+  let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
   import MixItem from '../../../lib/MixItem'
   import Image from '../../../lib/Image'
   import MixContent from '../../../lib/MixContent'
@@ -95,7 +95,7 @@
       this.location = profile.location
     },
     methods: {
-      async publish(event) {
+      async publish(event: any) {
         this.publishing = true
         try {
           let content = new MixContent(this.$root)

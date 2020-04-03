@@ -94,13 +94,13 @@
       }
     },
     methods: {
-      deleteJob(event) {
+      deleteJob(event: any) {
         this.$root.$emit('transcodeRemoveJob', parseInt(event.target.dataset.id))
       },
-      start(event) {
+      start(event: any) {
         this.$root.$emit('transcodeStart')
       },
-      stop(event) {
+      stop(event: any) {
         this.$root.$emit('transcodeStop')
       },
     },

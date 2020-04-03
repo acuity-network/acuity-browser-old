@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import MixAccount from '../lib/MixAccount'
   import Splash from './components/Splash.vue'
   import NavBar from './components/NavBar.vue'
@@ -33,7 +33,7 @@
       }
     },
     async created() {
-      this.$root.$on('development', isDevelopment => {
+      this.$root.$on('development', (isDevelopment: boolean) => {
 				this.isDevelopment = isDevelopment
       })
       await this.$settings.init(this.$db)
@@ -44,7 +44,7 @@
         this.$activeAccount.set(await new MixAccount(this.$root, controller).init())
       }
       catch (e) {
-        this.$activeAccount.set(await new MixAccount(this.$root))
+        this.$activeAccount.set(await new MixAccount(this.$root, ''))
       }
       this.splash = false
       // Load previous selected language.
@@ -54,7 +54,7 @@
         'gt': '/account/controllerAddress/',
         'lt': '/account/controllerAddress/z',
       })
-      .on('data', async controller => {
+      .on('data', async (controller: string) => {
         let account = await new MixAccount(this, controller).init()
         if (!account.contract) {
           return
@@ -64,7 +64,7 @@
           fromBlock: 0,
           toBlock: 'pending',
         })
-        .on('data', log => {
+        .on('data', (log: any) => {
           let payment = {
             transaction: log.transactionHash,
             sender: log.returnValues.from,
@@ -76,16 +76,16 @@
             new Notification(notification.title, notification)
           }
           this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-          .then(id => {
+          .then((id: string) => {
             return this.$db.put('/account/contract/' + account.contractAddress + '/received/' + id, JSON.stringify(payment))
           })
-          .catch(error => {
-            let id
+          .catch((error: any) => {
+            let id: number
             return this.$db.get('/account/contract/' + account.contractAddress + '/receivedCount')
-            .then(count => {
-              id = parseInt(count)
+            .then((count: number) => {
+              id = count
             })
-            .catch(err => {
+            .catch((err: any) => {
               id = 0
             })
             .then(() => {
@@ -103,9 +103,9 @@
             }
           })
         })
-        .on('changed', log => {
+        .on('changed', (log: any) => {
           this.$db.get('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
-          .then(id => {
+          .then((id: string) => {
             return this.$db.batch()
             .del('/account/contract/' + account.contractAddress + '/receivedIndex/' + log.transactionHash + '/' + log.logIndex)
             .del('/account/contract/' + account.contractAddress + '/received/' + id)
@@ -118,7 +118,7 @@
       })
       mentionNotifications.launch(this.$root)
       transcoder.init(this.$root)
-      window.onbeforeunload = (e) => {
+      window.onbeforeunload = (e: any) => {
         mentionNotifications.kill()
         transcoder.kill()
       }

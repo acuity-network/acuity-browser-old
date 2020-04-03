@@ -75,7 +75,7 @@
       }
 
       this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
-      .on('data', block => {
+      .on('data', (block: any) => {
         this.loadData()
       })
 

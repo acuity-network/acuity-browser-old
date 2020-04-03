@@ -31,7 +31,7 @@
           'gte': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/',
           'lt': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
-        .on('data', feedId => {
+        .on('data', (feedId: string) => {
           feedIds.push(feedId)
         })
         .on('end', async () => {
@@ -69,7 +69,7 @@
           'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
           'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
-        .on('data', topicHash => {
+        .on('data', (topicHash: string) => {
           topicHashes.push(topicHash)
         })
         .on('end', async () => {
@@ -114,10 +114,10 @@
 
       while (Object.keys(subscriptions).length > 0) {
         // Find the most recent item.
-        let topI, topTimestamp = 0
+        let topI: number = 0, topTimestamp: number = 0
         for (let i in subscriptions) {
           if (subscriptions[i].timestamp > topTimestamp) {
-            topI = i
+            topI = parseInt(i)
             topTimestamp = subscriptions[i].timestamp
           }
         }

@@ -62,7 +62,7 @@
       }
     },
     methods: {
-      async create(event) {
+      async create(event: any) {
         // Repeat recovery phrase is required.
         if (this.recoveryPhraseRepeat == '') {
           this.recoveryPhraseRepeatType = 'is-danger'

@@ -21,7 +21,7 @@
     },
 		async created() {
 			let trustedAccounts = await this.$activeAccount.get().call(this.$mixClient.trustedAccounts, 'getAllTrusted')
-			await trustedAccounts.forEach(async contractAddress => {
+			await trustedAccounts.forEach(async (contractAddress: string) => {
 				let account: MixAccount = await new MixAccount(this.$root, contractAddress, true).init()
 				let profileItemId = await account.call(this.$mixClient.accountProfile, 'getProfile')
 				let profileItem: MixItem = await new MixItem(this.$root, profileItemId).init()
@@ -33,8 +33,8 @@
 			})
 		},
 		methods: {
-			getFilteredTrustedAccounts(text) {
-				this.filteredTrustedAccounts = this.trustedAccounts.filter((account) => {
+			getFilteredTrustedAccounts(text: string) {
+				this.filteredTrustedAccounts = this.trustedAccounts.filter((account: any) => {
 					return (this.value.indexOf(account) == -1) && (account.name.toLowerCase().indexOf(text.toLowerCase()) >= 0)
 				})
 			}

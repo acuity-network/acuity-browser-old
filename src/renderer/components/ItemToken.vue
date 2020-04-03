@@ -148,7 +148,7 @@
     				fromBlock: 0,
     				toBlock: 'pending',
     			})
-    			.on('data', async log => {
+    			.on('data', async (log: any) => {
     				let block = await this.$mixClient.web3.eth.getBlock(log.blockNumber)
     				this.burnHistory.push({
     					'timestamp': block ? block.timestamp : 4000000000,
@@ -189,7 +189,7 @@
 				}
         this.data = data
 			},
-      async tryMixToTokens(event) {
+      async tryMixToTokens(event: any) {
         try {
           let mix = this.$mixClient.web3.utils.toWei(this.mixToTokensMix)
           this.mixToTokensTokens = this.$mixClient.formatWei(await this.$activeAccount.get().call(this.exchange, 'ethToTokenSwapInput', [1, '4000000000'], mix))
@@ -198,12 +198,12 @@
           this.mixToTokensTokens = ''
         }
       },
-			async mixToTokens(event) {
+			async mixToTokens(event: any) {
 				let mix = this.$mixClient.web3.utils.toWei(this.mixToTokensMix)
 				await this.$activeAccount.get().sendData(this.exchange, 'ethToTokenSwapInput', [1, '4000000000'], mix, 'Swap MIX for tokens')
 				this.loadData()
 			},
-			async burnTokens(event) {
+			async burnTokens(event: any) {
 				let tokens: number = this.$mixClient.web3.utils.toWei(this.tokensToBurn)
 				let result = await this.$activeAccount.get().call(this.$mixClient.tokenBurn, 'getBurnItemPrev', [this.itemId, tokens])
 				await this.$activeAccount.get().sendData(this.token, 'authorize', [this.$mixClient.tokenBurnAddress], 0, 'Authorize token burn contract')

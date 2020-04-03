@@ -109,11 +109,11 @@
   import ItemToken from '../ItemToken.vue'
   import TokenView from '../mixins/TokenView.vue'
   import VideoView from '../mixins/VideoView.vue'
-  import VueMarkdown from 'vue-markdown-v2'
-  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
-  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
-  import VideoMixinProto from '../../../lib/protobuf/VideoMixin_pb.js'
+  let VueMarkdown: any = require('vue-markdown-v2')
+  let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
+  let BodyTextMixinProto: any = require('../../../lib/protobuf/BodyTextMixin_pb.js')
+  let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
+  let VideoMixinProto: any = require ('../../../lib/protobuf/VideoMixin_pb.js')
 //  import formatByteCount from '../../../lib/formatByteCount'
 //  import File from '../../../lib/File.js'
   import twemoji from 'twemoji'
@@ -176,12 +176,12 @@
         toBlock: 'pending',
         topics: [, this.itemId],
       })
-      .on('data', log => {
+      .on('data', (log: any) => {
         if (!this.editing) {
           this.loadData()
         }
       })
-      .on('changed', log => {
+      .on('changed', (log: any) => {
         if (!this.editing) {
           this.loadData()
         }
@@ -191,12 +191,12 @@
         toBlock: 'pending',
         topics: [, this.itemId],
       })
-      .on('data', log => {
+      .on('data', (log: any) => {
         if (!this.editing) {
           this.loadData()
         }
       })
-      .on('changed', log => {
+      .on('changed', (log: any) => {
         if (!this.editing) {
           this.loadData()
         }
@@ -219,7 +219,7 @@
       },
     },
     methods: {
-      resetData(data) {
+      resetData(data: any) {
         data.isDesktop = this.$isDesktop
         data.avatar = ''
         data.title = ''
@@ -397,33 +397,33 @@
           .write()
         }
       },
-      copyItemId(event) {
+      copyItemId(event: any) {
         clipboard.writeText(bs58.encode(Buffer.from(this.$mixClient.web3.utils.hexToBytes(this.itemId.substr(0, 50)))))
         this.$buefy.toast.open(this.$t('ViewItem.ItemIdCopied'))
       },
-      async toggleEdit(event) {
+      async toggleEdit(event: any) {
         this.editing = !this.editing
         if (!this.editing) {
           this.loadData()
         }
       },
-      async subscribe(event) {
+      async subscribe(event: any) {
         await this.$db.put('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.itemId, this.itemId)
         this.isSubscribed = true
       },
-      async unsubscribe(event) {
+      async unsubscribe(event: any) {
         await this.$db.del('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.itemId)
         this.isSubscribed = false
       },
-      async portfolio(event) {
+      async portfolio(event: any) {
         await this.$db.put('/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/' + this.itemId, this.itemId)
         this.isPortfolio = true
       },
-      async unportfolio(event) {
+      async unportfolio(event: any) {
         await this.$db.del('/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/' + this.itemId)
         this.isPortfolio = false
       },
-      async publish(event) {
+      async publish(event: any) {
         let item = await new MixItem(this.$root, this.itemId).init()
         let revision = await item.latestRevision().load()
 
@@ -443,7 +443,7 @@
         this.editing = false
         await this.$activeAccount.get().sendData(this.$mixClient.itemStoreIpfsSha256, 'createNewRevision', [this.itemId, ipfsHash], 0, 'Update item')
       },
-      async publishReply(event) {
+      async publishReply(event: any) {
         let content = new MixContent(this.$root)
 
         // Language
@@ -468,14 +468,14 @@
 //        this.file.download()
         this.hasDownloaded = true
       },
-      toggleTrust(event) {
+      toggleTrust(event: any) {
         new MixItem(this.$root, this.itemId).init()
         .then(item => {
           return item.account()
         })
         .then(account => {
           this.$activeAccount.get().call(this.$mixClient.trustedAccounts, 'getIsTrusted', [account.contractAddress])
-          .then(trusted => {
+          .then((trusted: boolean) => {
             if (trusted) {
               return this.$activeAccount.get().sendData(this.$mixClient.trustedAccounts, 'untrustAccount', [account.contractAddress], 0, 'Untrust account')
             }

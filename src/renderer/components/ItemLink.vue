@@ -29,7 +29,7 @@
       this.loadData()
     },
     watch: {
-      address(val, oldVal) {
+      address(val: string, oldVal: string) {
         this.route = ''
         this.loadData()
       },

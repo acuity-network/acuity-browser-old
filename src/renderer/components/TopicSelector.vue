@@ -23,7 +23,7 @@
           'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
           'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
-        .on('data', async topicHash => {
+        .on('data', async (topicHash: string) => {
           this.topics.push(await this.$mixClient.itemTopics.methods.getTopic(topicHash).call())
         })
         .on('end', () => {
@@ -32,8 +32,8 @@
       })
 		},
 		methods: {
-			getFilteredTopics(text) {
-				this.filteredTopics = this.topics.filter((topic) => {
+			getFilteredTopics(text: string) {
+				this.filteredTopics = this.topics.filter((topic: string) => {
 					return (this.value.indexOf(topic) == -1) && (topic.toLowerCase().indexOf(text.toLowerCase()) >= 0)
 				})
 			}

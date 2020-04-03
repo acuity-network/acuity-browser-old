@@ -34,7 +34,7 @@ export default class Image {
       .clone()
       .jpeg()
       .toBuffer()
-      .then(async data => {
+      .then(async (data: any) => {
         return {
           filesize: data.length,
           ipfsHash: await this.vue.$ipfsClient.add(data)
@@ -52,7 +52,7 @@ export default class Image {
         .resize(outWidth, outHeight, {fit: 'fill', fastShrinkOnLoad: false})
         .jpeg()
         .toBuffer()
-        .then(async data => {
+        .then(async (data: any) => {
           return {
             filesize: data.length,
             ipfsHash: await this.vue.$ipfsClient.add(data)

@@ -40,7 +40,7 @@
       this.loadData()
     },
     watch: {
-      address(val, oldVal) {
+      address(val: string, oldVal: string) {
         this.title = ''
         this.loadData()
       },

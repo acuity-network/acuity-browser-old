@@ -11,9 +11,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import bs58 from 'bs58'
-  import VideoStream from 'videostream'
+  let VideoStream: any = require('videostream')
 
   export default {
     name: 'video-view',
@@ -31,7 +31,7 @@
     },
     created() {
       this.$ipfsClient.get(this.posterIpfsHash)
-      .then(reponse => {
+      .then((response: any) => {
         this.poster = 'data:image/jpeg;base64,' + response.toString('base64')
       })
 
@@ -59,9 +59,9 @@
         let ipfsClient = this.$ipfsClient
 
         this.videostream = new VideoStream({
-          createReadStream(opts) {
+          createReadStream(opts: any) {
             let { start, end } = opts
-            let options = {offset: start}
+            let options: any = {offset: start}
             if (end > 0) {
               options.length = end - start + 1
             }

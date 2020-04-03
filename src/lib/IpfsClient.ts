@@ -64,7 +64,7 @@ export default class IpfsClient {
 			http.get(options)
 			.on('response', res => {
 				let body = ''
-				res.on('data', data => {
+				res.on('data', (data: any) => {
 					body += data
 				})
 				res.on('end', () => {
@@ -100,7 +100,7 @@ export default class IpfsClient {
 			let req = http.request(options)
 			.on('response', res => {
 				let body = ''
-				res.on('data', data => {
+				res.on('data', (data: any) => {
 					body += data
 				})
 				res.on('end', () => {

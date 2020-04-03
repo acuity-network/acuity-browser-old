@@ -47,10 +47,10 @@
           toBlock: 'pending',
           topics: [, this.itemId],
         })
-        .on('data', log => {
+        .on('data', (log: any) => {
           this.loadData()
         })
-        .on('changed', log => {
+        .on('changed', (log: any) => {
           this.loadData()
         })
       },
@@ -59,7 +59,7 @@
         let accountReactions = await this.$activeAccount.get().call(this.$mixClient.reactions, 'getReactions', [this.itemId])
         this.reactions = []
 
-        let processedReactions = {}
+        let processedReactions: any = {}
 
         for (let i = 0; i < trustedReactions.itemReactions.length; i++) {
           let buf = Buffer.from(trustedReactions.itemReactions[i].substr(2), 'hex')
@@ -117,11 +117,11 @@
           })
         }
       },
-      async addReaction(emoji) {
+      async addReaction(emoji: any) {
         await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'addReaction', [this.itemId, Buffer.from(emoji, 'utf8')], 0, 'Add reaction')
         this.loadData()
       },
-      async toggle(reaction) {
+      async toggle(reaction: any) {
         if (reaction.current) {
           await this.$activeAccount.get().sendData(this.$mixClient.reactions, 'removeReaction', [this.itemId, Buffer.from(reaction.emoji, 'utf8')], 0, 'Remove reaction')
           this.loadData()
@@ -131,12 +131,12 @@
           this.loadData()
         }
       },
-      async setWho(reaction) {
+      async setWho(reaction: any) {
         this.addresses = reaction.addresses
       },
     },
     watch: {
-      itemId(val, oldVal) {
+      itemId(val: string, oldVal: string) {
         this.reactionsEmitter.unsubscribe()
         this.subscribe()
         this.loadData()

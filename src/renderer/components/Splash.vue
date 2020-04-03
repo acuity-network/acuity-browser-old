@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-	import ProgressBar from 'vue-simple-progress'
+	let ProgressBar: any = require('vue-simple-progress')
 
   export default {
     name: 'splash',
@@ -34,7 +34,7 @@
       }
     },
 		async created() {
-      this.$root.$on('mix-client-syncing', isSyncing => {
+      this.$root.$on('mix-client-syncing', (isSyncing: any) => {
 				this.status = this.$t('Splash.Block') + ' ' + isSyncing.currentBlock.toLocaleString()
 				this.syncTotal = isSyncing.highestBlock - isSyncing.startingBlock
 				this.syncProgress = isSyncing.currentBlock - isSyncing.startingBlock

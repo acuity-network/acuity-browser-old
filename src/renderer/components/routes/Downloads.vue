@@ -33,7 +33,7 @@
   </page>
 </template>
 
-<script>
+<script lang="ts">
   import Page from '../Page.vue'
   import setTitle from '../../../lib/setTitle'
 
@@ -58,7 +58,7 @@
             status: window.downloads[i].getStatus(),
             progress: window.downloads[i].getProgress(),
           })
-          window.downloads[i].on('progress', (progress) =>{
+          window.downloads[i].on('progress', (progress: any) =>{
             if(progress > this.data[i].progress + 1) {
               this.data[i].progress = window.downloads[i].getProgress()
               this.data[i].status = window.downloads[i].getStatus()
@@ -73,14 +73,14 @@
           })
         }
       },
-      async deleteFile(event) {
+      async deleteFile(event: any) {
         let i = event.target.dataset.index
         await window.downloads[i].stopdeleteFile()
         this.data[i].status = window.downloads[i].getStatus()
         window.downloads[i].removeAllListeners()
         this.refreshKey++
       },
-      openFile(event) {
+      openFile(event: any) {
         window.downloads[event.target.dataset.index].openFile()
       }
     },

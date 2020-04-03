@@ -57,7 +57,7 @@
           'gte': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/',
           'lt': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
-        .on('data', async itemId => {
+        .on('data', async (itemId: string) => {
           try {
             let item = await new MixItem(this.$root, itemId).init()
             let revision = await item.latestRevision().load()
@@ -75,7 +75,7 @@
           'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
           'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
         })
-        .on('data', async topicHash => {
+        .on('data', async (topicHash: string) => {
           try {
             this.topics.push({
               title: await this.$mixClient.itemTopics.methods.getTopic(topicHash).call(),
@@ -86,11 +86,11 @@
           catch (e) {}
         })
       },
-      async removeFeed(event) {
+      async removeFeed(event: any) {
         await this.$db.del('/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/' + event.target.dataset.itemid)
         this.loadData()
       },
-      async removeTopic(event) {
+      async removeTopic(event: any) {
         await this.$db.del('/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/' + event.target.dataset.topichash)
         this.loadData()
       },

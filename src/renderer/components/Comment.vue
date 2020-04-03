@@ -33,9 +33,9 @@
 <script lang="ts">
   import MixItem from '../../lib/MixItem'
   import MixContent from '../../lib/MixContent'
-  import VueMarkdown from 'vue-markdown-v2'
-  import BodyTextMixinProto from '../../lib/protobuf/BodyTextMixin_pb.js'
-  import LanguageMixinProto from '../../lib/protobuf/LanguageMixin_pb.js'
+  let VueMarkdown: any = require('vue-markdown-v2')
+  let BodyTextMixinProto: any = require('../../lib/protobuf/BodyTextMixin_pb.js')
+  let LanguageMixinProto: any = require('../../lib/protobuf/LanguageMixin_pb.js')
   import Reactions from './Reactions.vue'
   import ProfileLink from './ProfileLink.vue'
   import IpfsImage from './IpfsImage.vue'
@@ -83,7 +83,7 @@
         this.childIds = await this.$mixClient.itemDagComments.methods.getAllChildIds(this.itemId).call()
         this.collapseIcon = this.visible ? minusIcon : plusIcon
       },
-      async publishReply(event) {
+      async publishReply(event: any) {
         let content: MixContent = new MixContent(this.$root)
 
         // Comment
@@ -117,10 +117,10 @@
         toBlock: 'pending',
         topics: [, this.itemId],
       })
-      .on('data', log => {
+      .on('data', (log: any) => {
         this.loadData()
       })
-      .on('changed', log => {
+      .on('changed', (log: any) => {
         this.loadData()
       })
 
@@ -128,10 +128,10 @@
         toBlock: 'pending',
         topics: [, this.itemId],
       })
-      .on('data', log => {
+      .on('data', (log: any) => {
         this.loadData()
       })
-      .on('changed', log => {
+      .on('changed', (log: any) => {
         this.loadData()
       })
 

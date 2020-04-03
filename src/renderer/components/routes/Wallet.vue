@@ -114,14 +114,14 @@
 
         for (let i = 0; i < count; i++) {
           payments.push(this.$db.get('/account/contract/' + this.$activeAccount.get().contractAddress + '/received/' + i)
-            .then(async json => {
+            .then(async (json: string) => {
               let payment = JSON.parse(json)
               let tx = await this.$mixClient.web3.eth.getTransaction(payment.transaction)
               let block = await this.$mixClient.web3.eth.getBlock(tx.blockNumber)
               payment.timestamp = block.timestamp
               return payment
             })
-            .catch(error => {})
+            .catch((error: any) => {})
           )
         }
 
@@ -143,7 +143,7 @@
         results = []
         for (let i = 0; i < nonce; i++) {
           results.push(await this.$activeAccount.get().getTransactionInfo(i)
-            .catch(err => {
+            .catch((err: any) => {
               return false
             })
           )
@@ -161,12 +161,12 @@
         }
         this.data = data
       },
-      checkTo(event) {
+      checkTo(event: any) {
         if (this.$mixClient.web3.utils.isAddress(this.to)) {
           this.toError = ''
         }
       },
-      checkAmount(event) {
+      checkAmount(event: any) {
         let toBN = this.$mixClient.web3.utils.toBN
         try {
           if (toBN(this.$mixClient.web3.utils.toWei(this.amount)).lte(toBN(0))) {
@@ -178,7 +178,7 @@
         }
         this.amountError = ''
       },
-      async send(event) {
+      async send(event: any) {
         let toBN = this.$mixClient.web3.utils.toBN
 
         let error = false
@@ -208,13 +208,13 @@
           this.isConfirm = true
         }
       },
-      async cancel(event) {
+      async cancel(event: any) {
         if (this.isSendAll) {
           this.amount = ''
         }
         this.isConfirm = false
       },
-      async confirm(event) {
+      async confirm(event: any) {
         await this.$activeAccount.get().sendMix(this.to, this.$mixClient.web3.utils.toWei(this.amount))
         this.loadData()
         this.to = ''
@@ -222,7 +222,7 @@
         this.isSendAll = false
         this.isConfirm = false
       },
-      accountReceive(accountAddress) {
+      accountReceive(accountAddress: string) {
         if (accountAddress == this.$activeAccount.get().contractAddress) {
           this.loadData()
         }
@@ -234,16 +234,16 @@
         return
       }
       this.address = this.$activeAccount.get().contractAddress
-      this.qrcode = await QRCode.toDataURL(this.$activeAccount.get().contractAddress, {
-        mode: 'alphanumeric',
+      let options: QRCode.QRCodeToDataURLOptions = {
         errorCorrectionLevel: 'H',
         scale: 1,
-      })
+      }
+      this.qrcode = await QRCode.toDataURL(this.$activeAccount.get().contractAddress, options)
 
       this.$root.$on('account-receive', this.accountReceive)
 
       this.newBlockHeadersEmitter = this.$mixClient.web3.eth.subscribe('newBlockHeaders')
-      .on('data', block => {
+      .on('data', (block: any) => {
         this.loadData()
       })
 

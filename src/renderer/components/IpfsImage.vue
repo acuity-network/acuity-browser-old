@@ -28,7 +28,7 @@
       this.loadData()
     },
     watch: {
-      ipfsHash(val, oldVal) {
+      ipfsHash(val: string, oldVal: string) {
         this.src = ''
         this.loadData()
       },

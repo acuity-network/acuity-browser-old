@@ -32,13 +32,13 @@
   import path from 'path'
   import { spawn } from 'child_process'
   import download from 'download'
-  import ProgressBar from 'vue-simple-progress'
+  let ProgressBar: any = require('vue-simple-progress')
   import { remote } from 'electron'
 
   let ethminerPath = path.join(remote.app.getPath('userData'), 'ethminer', 'bin', (os.platform() === 'win32') ? 'ethminer.exe' : 'ethminer')
-  let ethminerProcess
+  let ethminerProcess: any
 
-  let urls = {
+  let urls: any = {
     linux: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-linux-x86_64.tar.gz',
     darwin: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-darwin-x86_64.tar.gz',
     win32: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-cuda10.0-windows-amd64.zip',
@@ -92,7 +92,7 @@
 
       	let process = spawn(ethminerPath, args)
 
-      	process.on('error', err => {
+      	process.on('error', (err: any) => {
           this.output += '<span style="color: red;">' + err + '</span>'
         })
         process.on('exit', (code, signal) => {
@@ -100,10 +100,10 @@
             this.output += '<span style="color: red;">' + signal + '</span>'
           }
         })
-      	process.stdout.on('data', data => {
+      	process.stdout.on('data', (data: any) => {
           this.output += data.toString()
         })
-      	process.stderr.on('data', data => {
+      	process.stderr.on('data', (data: any) => {
           this.output += data.toString()
         })
       }
@@ -117,7 +117,7 @@
       }
     },
     methods: {
-      async start(event) {
+      async start(event: any) {
         this.output = ''
 
         let args = [
@@ -138,24 +138,24 @@
         ethminerProcess = spawn(ethminerPath, args)
         this.attach()
       },
-      stop(event) {
+      stop(event: any) {
         ethminerProcess.kill()
       },
       attach() {
-        ethminerProcess.on('error', err => {
+        ethminerProcess.on('error', (err: any) => {
           this.output += '<span style="color: red;">' + err + '</span>'
           this.detach()
         })
-        ethminerProcess.on('exit', (code, signal) => {
+        ethminerProcess.on('exit', (code: any, signal: any) => {
           if (signal) {
             this.output += '<span style="color: red;">' + signal + '</span>'
           }
           this.detach()
         })
-        ethminerProcess.stdout.on('data', data => {
+        ethminerProcess.stdout.on('data', (data: any) => {
           this.output += data.toString()
         })
-        ethminerProcess.stderr.on('data', data => {
+        ethminerProcess.stderr.on('data', (data: any) => {
           this.output += data.toString()
         })
       },

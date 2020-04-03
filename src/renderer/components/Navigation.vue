@@ -9,10 +9,10 @@
   export default {
     name: 'navigation',
     methods: {
-      back(event) {
+      back(event: any) {
         this.$router.go(-1)
       },
-      forward(event) {
+      forward(event: any) {
         this.$router.go(1)
       }
     },

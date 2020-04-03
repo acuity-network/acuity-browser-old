@@ -45,9 +45,9 @@
 
 <script lang="ts">
   import Page from '../Page.vue'
-  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
-  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
+  let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
+  let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
+  let BodyTextMixinProto: any = require('../../../lib/protobuf/BodyTextMixin_pb.js')
   import MixContent from '../../../lib/MixContent'
   import Image from '../../../lib/Image'
   import setTitle from '../../../lib/setTitle'
@@ -73,7 +73,7 @@
       setTitle(this.$t('CreateToken.CreateToken'))
     },
     methods: {
-      async create(event) {
+      async create(event: any) {
         this.publishing = true
         try {
           let flagsNonce = '0x03' + this.$mixClient.web3.utils.randomHex(31).substr(2)

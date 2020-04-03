@@ -6,3 +6,7 @@ declare module '*.vue' {
 interface Blob {
   arrayBuffer(): Promise<ArrayBuffer>
 }
+
+interface Window {
+  downloads: any
+}

@@ -137,7 +137,7 @@
         'gte': '/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/',
         'lt': '/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/z',
       })
-      .on('data', async itemId => {
+      .on('data', async (itemId: string) => {
         try {
           let address = await this.$mixClient.tokenItemRegistry.methods.getToken(itemId).call()
           let token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), address)

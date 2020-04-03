@@ -49,7 +49,7 @@
           'gte': '/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/',
           'lt': '/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/z',
         })
-        .on('data', async itemId => {
+        .on('data', async (itemId: string) => {
           try {
             let address = await this.$mixClient.tokenItemRegistry.methods.getToken(itemId).call()
             let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), address)
@@ -63,7 +63,7 @@
           catch (e) {}
         })
       },
-      async remove(event) {
+      async remove(event: any) {
         await this.$db.del('/accountPortfolio/' + this.$activeAccount.get().contractAddress + '/' + event.target.dataset.itemid)
         this.loadData()
       }

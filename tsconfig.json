@@ -4,7 +4,6 @@
     "target": "es2019",
     "noUnusedLocals": false,
     "strict": true,
-    "noImplicitAny": false,
     "noImplicitThis": false,
     "alwaysStrict": true,
     "esModuleInterop": true

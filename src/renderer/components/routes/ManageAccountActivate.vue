@@ -92,11 +92,11 @@
         this.$router.push({ name: 'profile-edit' })
       }
       else {
-        this.qrcode = await QRCode.toDataURL(this.controllerAddress, {
-          mode: 'alphanumeric',
+        let options: QRCode.QRCodeToDataURLOptions = {
           errorCorrectionLevel: 'H',
           scale: 1,
-        })
+        }
+        this.qrcode = await QRCode.toDataURL(this.controllerAddress, options)
         this.update()
         this.intervalId = window.setInterval(this.update, 500)
       }

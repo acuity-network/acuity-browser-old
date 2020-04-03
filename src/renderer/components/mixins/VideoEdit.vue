@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-  import VideoMixinProto from '../../../lib/protobuf/VideoMixin_pb.js'
+  let VideoMixinProto: any = require ('../../../lib/protobuf/VideoMixin_pb.js')
   import bs58 from 'bs58'
   import { spawn } from 'child_process'
   import util from 'util'
@@ -59,7 +59,7 @@
             let args = ['-i', filename]
             let ffmpegProcess = spawn(commandPath, args)
             let stderr: string = ''
-            ffmpegProcess.stderr.on('data', (data) => {
+            ffmpegProcess.stderr.on('data', (data: any) => {
               stderr += data.toString()
             })
             ffmpegProcess.stderr.on('close', () => {
@@ -93,7 +93,7 @@
         videoMessage.setDuration(this.duration)
         return videoMessage.serializeBinary()
       },
-      async postSave(itemId) {
+      async postSave(itemId: string) {
         let supported_resolutions: number[] = [20, 40, 80, 120, 160, 240, 320, 480]
         let resolutions: number[] = []
 

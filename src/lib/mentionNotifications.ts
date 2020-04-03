@@ -2,17 +2,17 @@ import MixAccount from './MixAccount'
 import MixItem from './MixItem'
 
 
-let emitter
+let emitter: any
 
-async function launch(vue) {
+async function launch(vue: any) {
 
-	let accounts = []
+	let accounts: string[] = []
 	// Get accounts.
 	await vue.$db.createValueStream({
 		'gt': '/account/controllerAddress/',
 		'lt': '/account/controllerAddress/z',
 	})
-	.on('data', async controller => {
+	.on('data', async (controller: string) => {
 		let account = await new MixAccount(vue, controller).init()
 		if (!account.contract) {
 			return
@@ -24,7 +24,7 @@ async function launch(vue) {
 		toBlock: 'pending',
 		filter: {account: accounts},
 	})
-	.on('data', async log => {
+	.on('data', async (log: any) => {
 		let item = await new MixItem(vue, log.returnValues.itemId).init()
 		let revision = await item.latestRevision().load()
 
@@ -34,7 +34,7 @@ async function launch(vue) {
 		let profileRevision = await profileItem.latestRevision().load()
 		let avatarUrl = await profileRevision.getImageUrl(200, 200)
 
-		let notification = {
+		let notification: any = {
 			tag: log.returnValues.itemId,
 //			lang:
 			badge: avatarUrl,

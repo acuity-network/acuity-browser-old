@@ -29,10 +29,10 @@
 <script lang="ts">
   import Page from '../Page.vue'
   import MixContent from '../../../lib/MixContent'
-  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
-  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
-  import MixinSchemaMixinProto from '../../../lib/protobuf/MixinSchemaMixin_pb.js'
+  let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
+  let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
+  let BodyTextMixinProto: any = require('../../../lib/protobuf/BodyTextMixin_pb.js')
+  let MixinSchemaMixinProto: any = require('../../../lib/protobuf/MixinSchemaMixin_pb.js')
   import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
@@ -53,7 +53,7 @@
       setTitle(this.$t('PublishMixinType.PublishMixinType'))
     },
     methods: {
-      async publish(event) {
+      async publish(event: any) {
 
         let content = new MixContent(this.$root)
 

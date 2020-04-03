@@ -56,11 +56,11 @@
 
         this.itemIds = (await this.$mixClient.itemTopics.methods.getAllTopicItems(this.topicHash).call()).reverse()
       },
-      async subscribe(event) {
+      async subscribe(event: any) {
         await this.$db.put('/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.topicHash, this.topicHash)
         this.isSubscribed = true
       },
-      async unsubscribe(event) {
+      async unsubscribe(event: any) {
         await this.$db.del('/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/' + this.topicHash)
         this.isSubscribed = false
       },

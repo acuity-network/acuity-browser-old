@@ -47,9 +47,9 @@
   import TokenSelector from '../TokenSelector.vue'
   import TopicSelector from '../TopicSelector.vue'
   import MentionSelector from '../MentionSelector.vue'
-  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
-  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
+  let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
+  let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
+  let BodyTextMixinProto: any = require('../../../lib/protobuf/BodyTextMixin_pb.js')
   import MixItem from '../../../lib/MixItem'
   import MixContent from '../../../lib/MixContent'
   import setTitle from '../../../lib/setTitle'
@@ -97,7 +97,7 @@
       }
     },
     methods: {
-      async publish(event) {
+      async publish(event: any) {
         this.publishing = true
         try {
           let flagsNonce = '0x0f' + this.$mixClient.web3.utils.randomHex(31).substr(2)

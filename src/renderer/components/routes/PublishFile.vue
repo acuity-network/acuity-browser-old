@@ -51,10 +51,10 @@
   import TokenSelector from '../TokenSelector.vue'
   import TopicSelector from '../TopicSelector.vue'
   import MentionSelector from '../MentionSelector.vue'
-  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
-  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
-  import FileMixinProto from '../../../lib/protobuf/FileMixin_pb.js'
+  let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
+  let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
+  let BodyTextMixinProto: any = require('../../../lib/protobuf/BodyTextMixin_pb.js')
+  let FileMixinProto: any = require('../../../lib/protobuf/FileMixin_pb.js')
   import MixItem from '../../../lib/MixItem'
   import MixContent from '../../../lib/MixContent'
   import formatByteCount from '../../../lib/formatByteCount'
@@ -101,7 +101,7 @@
       }
     },
     methods: {
-      async fileUploaded(file) {
+      async fileUploaded(file: any) {
         this.output = this.$t('PublishFile.UploadingFile')
         this.fileHash = await this.$ipfsClient.add(file)
         this.fileName = file.name
@@ -111,7 +111,7 @@
           this.$t('PublishFile.Hash') + ': ' + this.fileHash + '<br/>' +
           this.$t('PublishFile.Size') + ': ' +  formatByteCount(this.fileSize)
       },
-      async publish(event) {
+      async publish(event: any) {
         let flagsNonce = '0x0f' + this.$mixClient.web3.utils.randomHex(31).substr(2)
         let itemId = await this.$activeAccount.get().call(this.$mixClient.itemStoreIpfsSha256, 'getNewItemId', [this.$activeAccount.get().contractAddress, flagsNonce])
 

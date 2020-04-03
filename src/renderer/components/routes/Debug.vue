@@ -16,12 +16,12 @@
 
 <script lang="ts">
   import Page from '../Page.vue'
-  import ItemProto from '../../../lib/protobuf/Item_pb.js'
-  import LanguageMixinProto from '../../../lib/protobuf/LanguageMixin_pb.js'
-  import TitleMixinProto from '../../../lib/protobuf/TitleMixin_pb.js'
-  import BodyTextMixinProto from '../../../lib/protobuf/BodyTextMixin_pb.js'
-  import MixinSchemaMixinProto from '../../../lib/protobuf/MixinSchemaMixin_pb.js'
-  import ImageMixinProto from '../../../lib/protobuf/ImageMixin_pb.js'
+  let ItemProto: any = require('../../../lib/protobuf/Item_pb.js')
+  let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
+  let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
+  let BodyTextMixinProto: any = require('../../../lib/protobuf/BodyTextMixin_pb.js')
+  let MixinSchemaMixinProto: any = require('../../../lib/protobuf/MixinSchemaMixin_pb.js')
+  let ImageMixinProto: any = require('../../../lib/protobuf/ImageMixin_pb.js')
   import brotli from '../../../lib/brotli'
   import bs58 from 'bs58'
   let multihashes: any = require('multihashes')
@@ -30,7 +30,7 @@
   import clipboard from '../../../lib/clipboard'
 
   // https://github.com/jasonmoo/t.js/blob/master/t.js
-  function scrub(val) {
+  function scrub(val: any) {
 		return new Option(val).innerHTML
 	}
 
@@ -64,7 +64,7 @@
       }
     },
     methods: {
-      async read(event) {
+      async read(event: any) {
         this.output = ''
         let itemId: string
         if (this.$mixClient.web3.utils.isHexStrict(this.itemId) && this.itemId.length == 66) {

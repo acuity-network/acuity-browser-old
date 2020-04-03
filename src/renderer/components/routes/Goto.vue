@@ -51,7 +51,7 @@
       }
     },
     methods: {
-      async goto(event) {
+      async goto(event: any) {
         let encodedItemId: string
         try {
           let itemId: string
