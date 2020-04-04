@@ -15,11 +15,12 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import ViewItem from './ViewItem.vue'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'view-topic',
     props: {
       topicHash: {
@@ -70,5 +71,5 @@
         this.loadData()
       }
     },
-  }
+  })
 </script>

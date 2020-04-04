@@ -12,10 +12,11 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import bs58 from 'bs58'
   let VideoStream: any = require('videostream')
 
-  export default {
+  export default Vue.extend({
     name: 'video-view',
     props: [
       'message',
@@ -82,7 +83,7 @@
         this.$refs.video.play()
       },
     },
-  }
+  })
 </script>
 
 <style scoped>

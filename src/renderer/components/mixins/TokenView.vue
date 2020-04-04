@@ -139,9 +139,10 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import ProfileLink from '../ProfileLink.vue'
 
-  export default {
+  export default Vue.extend({
     name: 'token-view',
     props: ['itemId'],
     components: {
@@ -176,23 +177,6 @@
         tokensToMixTokens: '',
       }
     },
-		checkTo(event: any) {
-			if (this.$mixClient.web3.utils.isAddress(this.to)) {
-				this.toError = ''
-			}
-		},
-		checkAmount(event: any) {
-			let toBN = this.$mixClient.web3.utils.toBN
-			try {
-				if (toBN(this.$mixClient.web3.utils.toWei(this.amount)).lte(toBN(0))) {
-					throw null
-				}
-			}
-			catch (e) {
-				return
-			}
-			this.amountError = ''
-		},
     async created() {
 			await this.loadData()
 			let token = new this.$mixClient.web3.eth.Contract(require('../../../lib/contracts/MixCreatorToken.abi.json'), this.address)
@@ -354,7 +338,7 @@
         this.loadData()
       },
 		},
-  }
+  })
 </script>
 
 <style scoped>

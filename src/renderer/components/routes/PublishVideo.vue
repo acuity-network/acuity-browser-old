@@ -41,6 +41,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import VideoEdit from '../mixins/VideoEdit.vue'
   import ImageEdit from '../mixins/ImageEdit.vue'
@@ -55,7 +56,7 @@
   import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'publish-video',
     components: {
       Page,
@@ -162,5 +163,5 @@
         }
       }
     },
-  }
+  })
 </script>

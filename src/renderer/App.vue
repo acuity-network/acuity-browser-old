@@ -13,13 +13,14 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import MixAccount from '../lib/MixAccount'
   import Splash from './components/Splash.vue'
   import NavBar from './components/NavBar.vue'
   import mentionNotifications from '../lib/mentionNotifications'
   import transcoder from '../lib/transcoder'
 
-  export default {
+  export default Vue.extend({
     name: 'app',
     components: {
       Splash,
@@ -123,7 +124,7 @@
         transcoder.kill()
       }
     },
-  }
+  })
 </script>
 
 <style lang="scss">

@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import setTitle from '../../../lib/setTitle'
   import os from 'os'
@@ -44,7 +45,7 @@
     win32: 'https://github.com/ethereum-mining/ethminer/releases/download/v0.17.1/ethminer-0.17.1-cuda10.0-windows-amd64.zip',
   }
 
-  export default {
+  export default Vue.extend({
     name: 'mining',
     components: {
       Page,
@@ -172,5 +173,5 @@
         this.mining = false
       },
     },
-  }
+  })
 </script>

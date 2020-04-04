@@ -54,6 +54,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   let ProfileMixinProto: any = require('../../../lib/protobuf/ProfileMixin_pb.js')
   let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
@@ -65,7 +66,7 @@
   import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'profile-edit',
     components: {
       Page,
@@ -158,5 +159,5 @@
         }
       }
     }
-  }
+  })
 </script>

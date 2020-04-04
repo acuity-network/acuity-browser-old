@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import MixContent from '../../../lib/MixContent'
   let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
@@ -36,7 +37,7 @@
   import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'publish-mixin-type',
     components: {
       Page,
@@ -87,5 +88,5 @@
         this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       }
     },
-  }
+  })
 </script>

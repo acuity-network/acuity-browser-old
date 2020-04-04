@@ -15,13 +15,14 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import MixItem from '../../../lib/MixItem'
   import setTitle from '../../../lib/setTitle'
   import clipboard from '../../../lib/clipboard'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'goto',
     components: {
       Page,
@@ -72,7 +73,7 @@
         this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       }
     }
-  }
+  })
 </script>
 
 <style scoped>

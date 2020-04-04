@@ -3,10 +3,11 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import MixItem from '../../lib/MixItem'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'item-link',
     props: ['itemId'],
     data() {
@@ -34,6 +35,6 @@
         this.loadData()
       },
     }
-  }
+  })
 
 </script>

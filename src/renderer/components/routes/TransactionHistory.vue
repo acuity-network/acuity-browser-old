@@ -34,10 +34,11 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'transaction-history',
     components: {
       Page,
@@ -84,7 +85,7 @@
     destroyed() {
       this.newBlockHeadersEmitter.unsubscribe()
     },
-  }
+  })
 </script>
 
 <style scoped>

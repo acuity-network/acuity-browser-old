@@ -47,6 +47,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import TokenSelector from '../TokenSelector.vue'
   import TopicSelector from '../TopicSelector.vue'
@@ -61,7 +62,7 @@
   import bs58 from 'bs58'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'publish-file',
     components: {
       Page,
@@ -165,5 +166,5 @@
         this.$router.push({ name: 'item', params: { encodedItemId: encodedItemId }})
       }
     },
-  }
+  })
 </script>

@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   let ItemProto: any = require('../../../lib/protobuf/Item_pb.js')
   let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
@@ -34,7 +35,7 @@
 		return new Option(val).innerHTML
 	}
 
-  export default {
+  export default Vue.extend({
     name: 'debug',
     components: {
       Page,
@@ -193,7 +194,7 @@
         }
       }
     }
-  }
+  })
 </script>
 
 <style scoped>

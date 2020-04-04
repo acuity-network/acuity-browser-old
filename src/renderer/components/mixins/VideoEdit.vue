@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   let VideoMixinProto: any = require ('../../../lib/protobuf/VideoMixin_pb.js')
   import bs58 from 'bs58'
   import { spawn } from 'child_process'
@@ -32,10 +33,10 @@
 
   declare let __static: string
 
-  export default {
+  export default Vue.extend({
     name: 'video-edit',
     props: {
-      value: '',
+      value: String,
 		},
 		data() {
       return {
@@ -51,7 +52,7 @@
 		async created() {
 		},
 		methods: {
-      async input() {
+      async input(event: any) {
         function interrogate(filename: string): Promise<string> {
           return new Promise((resolve, reject) => {
             let isWindows = os.platform() == 'win32'
@@ -126,6 +127,6 @@
         }
       },
     }
-  }
+  })
 
 </script>

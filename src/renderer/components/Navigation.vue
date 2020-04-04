@@ -6,7 +6,8 @@
 </template>
 
 <script lang="ts">
-  export default {
+  import Vue from 'vue'
+  export default Vue.extend({
     name: 'navigation',
     methods: {
       back(event: any) {
@@ -16,7 +17,7 @@
         this.$router.go(1)
       }
     },
-  }
+  })
 </script>
 
 <style scoped>

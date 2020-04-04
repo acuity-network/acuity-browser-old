@@ -35,6 +35,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import * as bip32 from 'bip32'
   import { BIP32Interface } from 'bip32'
   import * as bip39  from 'bip39'
@@ -42,7 +43,7 @@
   import MixAccount from '../../../lib/MixAccount'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'manage-accounts-new',
     components: {
       Page,
@@ -126,5 +127,5 @@
       setTitle(this.$t('ManageAccountsNew.CreateAccount'))
       this.recoveryPhrase = bip39.generateMnemonic()
     },
-  }
+  })
 </script>

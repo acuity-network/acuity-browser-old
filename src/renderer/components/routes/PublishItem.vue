@@ -17,10 +17,11 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'create-item',
     components: {
       Page,
@@ -33,5 +34,5 @@
     created() {
       setTitle(this.$t('PublishItem.PublishItem'))
     },
-  }
+  })
 </script>

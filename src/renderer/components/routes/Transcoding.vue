@@ -66,11 +66,12 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import ItemLink from '../ItemLink.vue'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'transcoding',
     components: {
       Page,
@@ -118,5 +119,5 @@
         this.$settings.set('vp9.speed', this.vp9Speed)
       },
     },
-  }
+  })
 </script>

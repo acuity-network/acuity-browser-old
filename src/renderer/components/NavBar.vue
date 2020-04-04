@@ -84,12 +84,13 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Navigation from './Navigation.vue'
   import MixItem from '../../lib/MixItem'
   import ProfileLink from './ProfileLink.vue'
   import IpfsImage from './IpfsImage.vue'
 
-  export default {
+  export default Vue.extend({
     name: 'nav-bar',
     components: {
       Navigation,
@@ -156,7 +157,7 @@
       this.$root.$off('change-active-account', this.changeActiveAccount)
       this.newBlockHeadersEmitter.unsubscribe()
     },
-  }
+  })
 </script>
 
 <style scoped>

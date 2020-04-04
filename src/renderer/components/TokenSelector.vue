@@ -12,9 +12,10 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
 	import MixItem from '../../lib/MixItem'
 
-  export default {
+  export default Vue.extend({
     name: 'token-selector',
     props: {
 			value: String,
@@ -39,5 +40,5 @@
 				catch (e) {}
 			}
 		},
- }
+ })
 </script>

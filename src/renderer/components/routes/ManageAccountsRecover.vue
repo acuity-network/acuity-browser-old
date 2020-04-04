@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import * as bip32 from 'bip32'
   import { BIP32Interface } from 'bip32'
   import * as bip39  from 'bip39'
@@ -37,7 +38,7 @@
   import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'manage-accounts-recover',
     components: {
       Page,
@@ -130,5 +131,5 @@
     async created() {
       setTitle(this.$t('ManageAccountsRecover.RecoverAccount'))
     },
-  }
+  })
 </script>

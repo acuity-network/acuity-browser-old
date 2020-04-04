@@ -14,9 +14,10 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
 	let ProgressBar: any = require('vue-simple-progress')
 
-  export default {
+  export default Vue.extend({
     name: 'splash',
 		components: {
       ProgressBar,
@@ -61,7 +62,7 @@
       })
 
     }
-	}
+	})
 </script>
 
 <style>

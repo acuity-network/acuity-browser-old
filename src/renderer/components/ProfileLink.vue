@@ -5,11 +5,12 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import MixAccount from '../../lib/MixAccount'
   import MixItem from '../../lib/MixItem'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'profile-link',
     props: ['address'],
     data() {
@@ -45,6 +46,6 @@
         this.loadData()
       },
     }
-  }
+  })
 
 </script>

@@ -3,7 +3,8 @@
 </template>
 
 <script lang="ts">
-  export default {
+  import Vue from 'vue'
+  export default Vue.extend({
     name: 'ipfs-image',
     props: ['ipfsHash'],
     data() {
@@ -33,5 +34,5 @@
         this.loadData()
       },
     }
-  }
+  })
 </script>

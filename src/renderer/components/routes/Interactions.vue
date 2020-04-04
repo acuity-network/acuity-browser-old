@@ -11,11 +11,12 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import setTitle from '../../../lib/setTitle'
   import ViewItem from './ViewItem.vue'
 
-  export default {
+  export default Vue.extend({
     name: 'interactions',
     components: {
       Page,
@@ -35,5 +36,5 @@
         this.itemIds = (await this.$mixClient.itemMentions.methods.getAllMentionItems(this.$activeAccount.get().contractAddress).call()).reverse()
       },
     },
-  }
+  })
 </script>

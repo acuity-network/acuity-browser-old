@@ -15,10 +15,11 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import twemoji from 'twemoji'
   import ProfileLink from './ProfileLink.vue'
 
-  export default {
+  export default Vue.extend({
     name: 'reactions',
     props: ['itemId'],
     components: {
@@ -142,7 +143,7 @@
         this.loadData()
       },
     }
-  }
+  })
 
 </script>
 

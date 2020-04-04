@@ -61,13 +61,14 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
 //  import { remote } from 'electron'
   import Page from '../Page.vue'
   import throttle from 'just-throttle'
   import formatByteCount from '../../../lib/formatByteCount'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'node-status',
     components: {
       Page,
@@ -149,7 +150,7 @@
       this.newBlockHeadersEmitter.unsubscribe()
       clearInterval(this.ipfsInterval)
     },
-  }
+  })
 </script>
 
 

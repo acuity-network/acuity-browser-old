@@ -51,14 +51,17 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import ItemLink from './ItemLink.vue'
   import ProfileLink from './ProfileLink.vue'
   import MixAccount from '../../lib/MixAccount'
   import MixItem from '../../lib/MixItem'
 
-  export default {
+  export default Vue.extend({
     name: 'account-info',
-    props: ['address'],
+    props: {
+      address: String,
+    },
     components: {
       ItemLink,
       ProfileLink,
@@ -159,5 +162,5 @@
         this.$db.put('/accountVisibility/' + this.$activeAccount.get().contractAddress + '/' + this.address, this.visibility)
       },
     }
-  }
+  })
 </script>

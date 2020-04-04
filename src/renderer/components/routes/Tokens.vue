@@ -23,11 +23,12 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import ItemLink from '../ItemLink.vue'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'tokens',
     components: {
       Page,
@@ -68,7 +69,7 @@
         this.loadData()
       }
     }
-  }
+  })
 </script>
 
 <style scoped>

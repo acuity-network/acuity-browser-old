@@ -5,10 +5,11 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
 	import MixAccount from '../../lib/MixAccount'
 	import MixItem from '../../lib/MixItem'
 
-  export default {
+  export default Vue.extend({
     name: 'mention-selector',
     props: {
 			value: Array,
@@ -39,7 +40,7 @@
 				})
 			}
 		}
- }
+ })
 
 </script>
 

@@ -16,13 +16,12 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Image from '../../../lib/Image'
 
-  export default {
+  export default Vue.extend({
     name: 'image-edit',
-    props: {
-      value: '',
-    },
+    props: ['value'],
     data() {
       return {
         file: null,
@@ -34,6 +33,6 @@
         return image.createMixin()
       },
     }
-  }
+  })
 
 </script>

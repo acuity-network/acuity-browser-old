@@ -38,6 +38,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import TopicSelector from '../TopicSelector.vue'
   let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
@@ -48,7 +49,7 @@
   import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'publish-feed',
     components: {
       Page,
@@ -122,5 +123,5 @@
         }
       }
     },
-  }
+  })
 </script>

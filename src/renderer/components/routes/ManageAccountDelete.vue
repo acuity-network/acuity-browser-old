@@ -23,12 +23,13 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import ProfileLink from '../ProfileLink.vue'
   import MixAccount from '../../../lib/MixAccount'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'manage-account-delete',
     props: ['controllerAddress'],
     components: {
@@ -61,5 +62,5 @@
       }
       catch(e) {}
     },
-  }
+  })
 </script>

@@ -34,12 +34,13 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import QRCode from 'qrcode'
   import MixAccount from '../../../lib/MixAccount'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'manage-account-activate',
     props: ['controllerAddress'],
     components: {
@@ -104,7 +105,7 @@
     destroyed() {
       window.clearInterval(this.intervalId)
     },
-  }
+  })
 </script>
 
 <style scoped>

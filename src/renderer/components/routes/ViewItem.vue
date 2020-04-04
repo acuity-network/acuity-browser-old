@@ -97,6 +97,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import MixItem from '../../../lib/MixItem'
   import MixContent from '../../../lib/MixContent'
   import Comment from '../Comment.vue'
@@ -121,7 +122,7 @@
   import clipboard from '../../../lib/clipboard'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'view-item',
     props: {
       encodedItemId: {
@@ -157,8 +158,47 @@
       IpfsImage,
     },
     data() {
-      let data = {}
-      this.resetData(data)
+      let data: any = {}
+      data.isDesktop = this.$isDesktop
+      data.avatar = ''
+      data.title = ''
+      data.editable = false
+      data.editing = false
+      data.editForm = ''
+      data.isSubscribed = false
+      data.isPortfolio = false
+      data.ownerAddress = null
+      data.owner = ''
+      data.ownerRoute = ''
+      data.ownerTrustedClass = ''
+      data.ownerTrustedClassHover = ''
+      data.ownerTrustedClassCurrent = ''
+      data.inFeed = false
+      data.feed = ''
+      data.feedRoute = ''
+      data.topics = []
+      data.mentions = []
+      data.published = ''
+      data.image = ''
+      data.description = ''
+      data.hasFile = false
+      data.file = null
+      data.fileName = ''
+      data.fileSize = ''
+      data.fileHash = ''
+      data.videoPosterIpfsHash = null
+      data.videoMessage = null
+      data.isProfile = ''
+      data.isOwnProfile = false
+      data.isFeed = false
+      data.isToken = false
+      data.commentIds = []
+      data.feedItemIds = []
+      data.reply = ''
+      data.startReply = false
+      data.hasDownloaded = false
+      data.downloadIcon = twemoji.parse(twemoji.convert.fromCodePoint('2B07'), {folder: 'svg', ext: '.svg'})
+      data.checkIcon = twemoji.parse(twemoji.convert.fromCodePoint('2714'), {folder: 'svg', ext: '.svg'})
       return data
     },
     computed: {
@@ -489,7 +529,7 @@
         })
       },
     },
-  }
+  })
 </script>
 
 <style scoped>

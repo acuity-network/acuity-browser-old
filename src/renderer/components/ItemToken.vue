@@ -83,12 +83,13 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
 	import ItemLink from './ItemLink.vue'
 	import ProfileLink from './ProfileLink.vue'
 	import MixItem from '../../lib/MixItem'
   import IpfsImage from './IpfsImage.vue'
 
-  export default {
+  export default Vue.extend({
     name: 'item-token',
     props: {
 			itemId: String,
@@ -133,9 +134,9 @@
           let item: MixItem = await new MixItem(this.$root, this.tokenItemId).init()
           let revision = await item.latestRevision().load()
           this.image = revision.getImage(64, 64)
-          this.address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.tokenItemId).call()
-    			this.token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), this.address)
-    			this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(this.address).call()
+          let address = await this.$mixClient.tokenItemRegistry.methods.getToken(this.tokenItemId).call()
+    			this.token = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/MixCreatorToken.abi.json'), address)
+    			this.exchangeAddress = await this.$mixClient.uniswapFactory.methods.getExchange(address).call()
     			this.exchange = new this.$mixClient.web3.eth.Contract(require('../../lib/contracts/UniswapExchange.abi.json'), this.exchangeAddress)
     			this.loadData()
           this.show = true
@@ -211,7 +212,7 @@
 				this.loadData()
 			}
 		},
-}
+  })
 </script>
 
 <style scoped>

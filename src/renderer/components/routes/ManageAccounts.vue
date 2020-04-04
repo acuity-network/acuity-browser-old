@@ -35,12 +35,13 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import MixAccount from '../../../lib/MixAccount'
   import MixItem from '../../../lib/MixItem'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'manage-accounts',
     components: {
       Page,
@@ -90,7 +91,7 @@
       setTitle(this.$t('ManageAccounts.Accounts'))
       this.loadAccounts()
     },
-  }
+  })
 </script>
 
 <style scoped>

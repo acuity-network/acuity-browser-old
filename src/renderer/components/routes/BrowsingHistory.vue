@@ -25,11 +25,12 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'browsing-history',
     components: {
       Page,
@@ -60,5 +61,5 @@
       }
       this.data = data
     },
-  }
+  })
 </script>

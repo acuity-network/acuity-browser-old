@@ -75,11 +75,12 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import QRCode from 'qrcode'
   import setTitle from '../../../lib/setTitle'
 
-  export default {
+  export default Vue.extend({
     name: 'wallet',
     components: {
       Page,
@@ -253,7 +254,7 @@
       this.newBlockHeadersEmitter.unsubscribe()
       this.$root.$off('account-receive', this.accountReceive)
     },
-  }
+  })
 </script>
 
 <style scoped>

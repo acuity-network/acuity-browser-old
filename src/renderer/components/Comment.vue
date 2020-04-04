@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import MixItem from '../../lib/MixItem'
   import MixContent from '../../lib/MixContent'
   let VueMarkdown: any = require('vue-markdown-v2')
@@ -43,7 +44,7 @@
   let plusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2795'), {folder: 'svg', ext: '.svg'})
   let minusIcon = twemoji.parse(twemoji.convert.fromCodePoint('2796'), {folder: 'svg', ext: '.svg'})
 
-  export default {
+  export default Vue.extend({
     name: 'comment',
     props: ['itemId'],
     components: {
@@ -141,7 +142,7 @@
       this.itemStoreIpfsSha256EventsEmitter.unsubscribe()
       this.itemDagCommentsEmitter.unsubscribe()
     },
-  }
+  })
 
 </script>
 

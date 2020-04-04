@@ -48,6 +48,7 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import MixAccount from '../../../lib/MixAccount'
   import MixItem from '../../../lib/MixItem'
@@ -55,7 +56,7 @@
   import bs58 from 'bs58'
   import ProfileLink from '../ProfileLink.vue'
 
-  export default {
+  export default Vue.extend({
     name: 'trusted-accounts',
     components: {
       Page,
@@ -154,7 +155,7 @@
       setTitle(this.$t('TrustedAccounts.TrustedAccounts'))
       this.loadData()
     },
-  }
+  })
 </script>
 
 <style scoped>

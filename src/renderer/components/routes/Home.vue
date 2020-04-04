@@ -5,12 +5,13 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import Page from '../Page.vue'
   import ViewItem from './ViewItem.vue'
   import setTitle from '../../../lib/setTitle'
   import bs58 from 'bs58'
 
-  export default {
+  export default Vue.extend({
     name: 'home',
     components: {
       Page,
@@ -148,5 +149,5 @@
         }
       }
     },
-  }
+  })
 </script>
