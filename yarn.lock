@@ -1924,11 +1924,22 @@ abstract-leveldown@^5.0.0, abstract-leveldown@~5.0.0:
   dependencies:
     xtend "~4.0.0"
 
-abstract-leveldown@^6.1.1, abstract-leveldown@^6.2.1, abstract-leveldown@~6.2.1:
+abstract-leveldown@^6.2.1, abstract-leveldown@~6.2.1:
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/abstract-leveldown/-/abstract-leveldown-6.2.2.tgz#677425beeb28204367c7639e264e93ea4b49971a"
   integrity sha512-/a+Iwj0rn//CX0EJOasNyZJd2o8xur8Ce9C57Sznti/Ilt/cb6Qd8/k98A4ZOklXgTG+iAYYUs1OTG0s1eH+zQ==
   dependencies:
+    level-concat-iterator "~2.0.0"
+    level-supports "~1.0.0"
+    xtend "~4.0.0"
+
+abstract-leveldown@^6.2.3:
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/abstract-leveldown/-/abstract-leveldown-6.2.3.tgz#036543d87e3710f2528e47040bc3261b77a9a8eb"
+  integrity sha512-BsLm5vFMRUrrLeCcRc+G0t2qOaTzpoJQLOubq2XM72eNpjF5UdU5o/5NvlNhx95XHcAvcl8OMXr4mlg/fRgUXQ==
+  dependencies:
+    buffer "^5.5.0"
+    immediate "^3.2.3"
     level-concat-iterator "~2.0.0"
     level-supports "~1.0.0"
     xtend "~4.0.0"
@@ -12687,10 +12698,10 @@ rc@^1.2.7, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-reachdown@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/reachdown/-/reachdown-1.0.0.tgz#c63715190c9a0dd108bea3610bf9690ad0983edb"
-  integrity sha512-Ty7X/t52GwgRam3SMpZC2grmutuUarkiD4sVhjM8g8/5NlX8PAEsYO/pyx6nTTqS9udee1j1BxaAS/f6Rm8SMw==
+reachdown@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/reachdown/-/reachdown-1.1.0.tgz#c3b85b459dbd0fe2c79782233a0a38e66a9b5454"
+  integrity sha512-6LsdRe4cZyOjw4NnvbhUd/rGG7WQ9HMopPr+kyL018Uci4kijtxcGR5kVb5Ln13k4PEE+fEFQbjfOvNw7cnXmA==
 
 read-config-file@5.0.2:
   version "5.0.2"
@@ -14196,17 +14207,17 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
-subleveldown@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/subleveldown/-/subleveldown-4.1.4.tgz#3579563e4de4b811008046ad33280679bc39dba4"
-  integrity sha512-njpSBP/Bxh7EahraG6IhR6goOH2ffMTMVt7Ud+k/OhNFHrrmuvK+XYfauI8KnjCm0w381cUF43pejlWeJMZChA==
+subleveldown@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/subleveldown/-/subleveldown-5.0.0.tgz#40449c28b418d83569efdb48acebe29d7b55b557"
+  integrity sha512-DotbiAIyOWSsidM06/m+EsBHXRyP7EgPlDDD5GVn6JcoDFcVZbp+VN9bOdErNtDWwgR+lJDuKwcJ8nKqSq9Ixg==
   dependencies:
-    abstract-leveldown "^6.1.1"
+    abstract-leveldown "^6.2.3"
     encoding-down "^6.2.0"
     inherits "^2.0.3"
     level-option-wrap "^1.1.0"
     levelup "^4.3.1"
-    reachdown "^1.0.0"
+    reachdown "^1.1.0"
 
 sumchecker@^3.0.1:
   version "3.0.1"

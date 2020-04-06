@@ -86,7 +86,7 @@
     "setimmediate": "^1.0.5",
     "sharp": "^0.24.0",
     "source-map-support": "^0.5.12",
-    "subleveldown": "^4.1.4",
+    "subleveldown": "^5.0.0",
     "twemoji": "12.0.4",
     "unused-filename": "^2.1.0",
     "videostream": "^3.2.1",
