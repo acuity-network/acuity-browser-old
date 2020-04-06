@@ -108,7 +108,7 @@
     "css-loader": "^3.2.0",
     "electron": "^8.2.0",
     "electron-builder": "^22.4.0",
-    "electron-webpack": "^2.7.2",
+    "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^3.2.0",
     "electron-webpack-vue": "^2.3.0",
     "node-sass": "^4.12.0",
