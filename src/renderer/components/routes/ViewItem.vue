@@ -48,9 +48,8 @@
           <div v-if="hasFile" class="file">
             <span v-if="!hasDownloaded" class="download" v-html="downloadIcon" v-on:click="downloadFile" ></span>
             <span v-if="hasDownloaded" class="check" v-html="checkIcon" ></span>
-              {{ fileName }} <br/>
-              {{ $t('ViewItem.Size') }}: {{ fileSize }}
-            </span>
+            {{ fileName }} <br/>
+            {{ $t('ViewItem.Size') }}: {{ fileSize }}
           </div>
           <video-view v-if="videoMessage && !short" :message="videoMessage" :posterIpfsHash="videoPosterIpfsHash"></video-view>
           <div class="bodyText"><vue-markdown class="markdown" :anchorAttributes="{target:'_blank'}" :source="description"></vue-markdown></div>
