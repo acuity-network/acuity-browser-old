@@ -6,6 +6,7 @@
     "strict": true,
     "noImplicitThis": false,
     "alwaysStrict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "allowJs": true,
   }
 }

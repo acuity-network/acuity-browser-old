@@ -34,7 +34,7 @@
   import Vue from 'vue'
   import MixItem from '../../lib/MixItem'
   import MixContent from '../../lib/MixContent'
-  let VueMarkdown: any = require('vue-markdown-v2')
+  import VueMarkdown from 'vue-markdown-v2'
   let BodyTextMixinProto: any = require('../../lib/protobuf/BodyTextMixin_pb.js')
   let LanguageMixinProto: any = require('../../lib/protobuf/LanguageMixin_pb.js')
   import Reactions from './Reactions.vue'
