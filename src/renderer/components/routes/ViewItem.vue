@@ -109,7 +109,7 @@
   import ItemToken from '../ItemToken.vue'
   import TokenView from '../mixins/TokenView.vue'
   import VideoView from '../mixins/VideoView.vue'
-  import VueMarkdown from 'vue-markdown-v2'
+  let VueMarkdown: any = require('vue-markdown-v2').default
   let TitleMixinProto: any = require('../../../lib/protobuf/TitleMixin_pb.js')
   let BodyTextMixinProto: any = require('../../../lib/protobuf/BodyTextMixin_pb.js')
   let LanguageMixinProto: any = require('../../../lib/protobuf/LanguageMixin_pb.js')
