@@ -105,7 +105,7 @@
     "@vue/cli-plugin-router": "^4.3.0",
     "@vue/cli-plugin-typescript": "^4.3.0",
     "@vue/cli-service": "^4.3.0",
-    "css-loader": "^3.2.0",
+    "css-loader": "^3.5.0",
     "electron": "^8.2.0",
     "electron-builder": "^22.4.0",
     "electron-webpack": "^2.8.2",
