@@ -40,6 +40,21 @@
         })
       })
 
+      let topicsPromise = new Promise((resolve, reject) => {
+        this.$db.createValueStream({
+          'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
+          'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
+        })
+        .on('data', (topicHash: string) => {
+          topicHashes.push(topicHash)
+        })
+        .on('end', async () => {
+          resolve()
+        })
+      })
+
+      await Promise.all([feedsPromise, topicsPromise])
+
       if (feedIds.length == 0) {
         feedIds = [
           '0x86e5019a26041a2805d500f5aa135795bd907eed0126c41bf1b5847865d2094d',
@@ -65,34 +80,21 @@
         ]
       }
 
-      let topicsPromise = new Promise((resolve, reject) => {
-        this.$db.createValueStream({
-          'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
-          'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
-        })
-        .on('data', (topicHash: string) => {
-          topicHashes.push(topicHash)
-        })
-        .on('end', async () => {
-          resolve()
-        })
-      })
-
-      await Promise.all([feedsPromise, topicsPromise])
-
       let subscriptions: any[] = []
       for (let feedId of feedIds) {
         let count = await this.$mixClient.itemDagFeedItems.methods.getChildCount(feedId).call()
         if (count > 0) {
           let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(feedId, count - 1).call()
-          let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
-          subscriptions.push({
-            type: 'feed',
-            feedId: feedId,
-            offset: count - 1,
-            itemId: itemId,
-            timestamp: (timestamp != 0) ? timestamp : 2000000000,
-          })
+          try {
+            let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+            subscriptions.push({
+              type: 'feed',
+              feedId: feedId,
+              offset: count - 1,
+              itemId: itemId,
+              timestamp: (timestamp != 0) ? timestamp : 2000000000,
+            })
+          } catch (e) {}
         }
       }
       for (let topicHash of topicHashes) {
@@ -100,14 +102,16 @@
           let count = await this.$mixClient.itemTopics.methods.getTopicItemCount(topicHash).call()
           if (count > 0) {
             let itemId = await this.$mixClient.itemTopics.methods.getTopicItem(topicHash, count - 1).call()
-            let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
-            subscriptions.push({
-              type: 'topic',
-              topicHash: topicHash,
-              offset: count - 1,
-              itemId: itemId,
-              timestamp: (timestamp != 0) ? timestamp : 2000000000,
-            })
+            try {
+              let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+              subscriptions.push({
+                type: 'topic',
+                topicHash: topicHash,
+                offset: count - 1,
+                itemId: itemId,
+                timestamp: (timestamp != 0) ? timestamp : 2000000000,
+              })
+            } catch (e) {}
           }
         }
         catch (e) {}
@@ -139,10 +143,7 @@
               itemId = await this.$mixClient.itemTopics.methods.getTopicItem(subscriptions[topI].topicHash, offset).call()
               break;
           }
-          let timestamp
-          try {
-            timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
-          } catch (e) {}
+          let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
           subscriptions[topI].offset = offset
           subscriptions[topI].itemId = itemId
           subscriptions[topI].timestamp = (timestamp != 0) ? timestamp : 2000000000
