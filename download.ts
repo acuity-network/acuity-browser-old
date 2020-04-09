@@ -9,7 +9,7 @@ let exec = util.promisify(child_process.exec)
 
 let rev = 16
 
-let urls = {
+let urls: any = {
 	linux: {
 		parity: 'https://releases.parity.io/ethereum/v2.7.2/x86_64-unknown-linux-gnu/parity',
 		ipfs: 'https://github.com/ipfs/go-ipfs/releases/download/v0.4.23/go-ipfs_v0.4.23_linux-amd64.tar.gz',
@@ -31,14 +31,14 @@ let urls = {
 }
 
 try {
-	if (parseInt(fs.readFileSync('download_rev')) >= rev) {
+	if (parseInt(fs.readFileSync('download_rev').toString()) >= rev) {
 		process.exit(0)
 	}
 } catch (e) {}
 
 let platform = os.platform()
 
-let archUrls = urls[platform]
+let archUrls: any = urls[platform]
 
 console.log('Downloading ' + archUrls['parity'])
 let parity = download(archUrls['parity'], 'public')

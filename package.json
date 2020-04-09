@@ -9,7 +9,7 @@
     "postinstall": "patch-package",
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "electron": "node --experimental-modules download.mjs && electron-builder install-app-deps",
+    "electron": "ts-node download.ts && electron-builder install-app-deps",
     "electron:dev": "electron-webpack dev",
     "electron:build": "electron-webpack && electron-builder"
   },
