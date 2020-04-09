@@ -122,7 +122,6 @@
     "webpack": "^4.41.2"
   },
   "resolutions": {
-    "html-loader": "1.0.0-alpha.0",
     "keccak": "3.0.0",
     "websocket": "1.0.31"
   }
