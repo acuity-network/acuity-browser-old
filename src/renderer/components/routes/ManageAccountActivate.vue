@@ -89,7 +89,7 @@
     async created() {
       setTitle(this.$t('ManageAccountActivate.DeployAccount'))
       this.account = await new MixAccount(this, this.controllerAddress).init()
-      if ('contractAddress' in this.account) {
+      if (this.account.contractAddress != '') {
         this.$router.push({ name: 'profile-edit' })
       }
       else {
