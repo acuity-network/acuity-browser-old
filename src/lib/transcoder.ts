@@ -234,7 +234,12 @@ function ffmpeg(args: string[], id: number, pass: number) {
     let isWindows = os.platform() == 'win32'
     let commandPath = path.join(__static, 'ffmpeg', 'bin', isWindows ? 'ffmpeg.exe' : 'ffmpeg')
 
-    ffmpegProcess = spawn(commandPath, args)
+    if (isWindows) {
+      ffmpegProcess = spawn(commandPath, args)
+    }
+    else {
+      ffmpegProcess = spawn('nice', ['-n 19', commandPath, ...args])
+    }
     ffmpegProcess.stdout.on('data', (data: any) => {
       console.log(data.toString())
     })
