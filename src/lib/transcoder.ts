@@ -139,7 +139,7 @@ function h264Args(job: any) {
   args.push('-vf')
   args.push('scale=' + job.width + ':' + job.height)
   args.push('-g')
-  args.push('240')
+  args.push(job.gopSize)
   args.push('-c:a')
   if (job.audioPassthrough) {
     args.push('copy')
@@ -172,7 +172,7 @@ function vp9Args(job: any) {
   args.push('-vf')
   args.push('scale=' + job.width + ':' + job.height)
   args.push('-g')
-  args.push('240')
+  args.push(job.gopSize)
   args.push('-f')
   args.push('mp4')
 

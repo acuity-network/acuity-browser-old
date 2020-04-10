@@ -118,6 +118,7 @@
             height: height,
             width: width,
             frames: Math.floor(this.duration * this.frameRate),
+            gopSize: Math.round(this.frameRate * 2),  // keyframe every 2 secs max
             codec: 'h264',
             audioPassthrough: false, //this.codecAudio == 'aac',
             // TODO: aac must not be 32 bit
