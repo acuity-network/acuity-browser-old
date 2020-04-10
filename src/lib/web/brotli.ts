@@ -1,5 +1,5 @@
-let BrotliDecode: any = require('./decode.js')
-let brotliHaxe: any = require('./brotliHaxe.js')
+let BrotliDecode: any = require('./decode.js').default
+let brotliHaxe: any = require('./brotliHaxe.js').default
 let brotli: any = new brotliHaxe.Brotli()
 
 function compress(input: any) {
