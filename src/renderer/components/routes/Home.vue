@@ -144,7 +144,11 @@
               itemId = await this.$mixClient.itemTopics.methods.getTopicItem(subscriptions[topI].topicHash, offset).call()
               break;
           }
-          let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+          let timestamp = 0
+          try {
+            timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+          }
+          catch (e) {}
           subscriptions[topI].offset = offset
           subscriptions[topI].itemId = itemId
           subscriptions[topI].timestamp = (timestamp != 0) ? timestamp : 2000000000
