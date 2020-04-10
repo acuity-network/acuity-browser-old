@@ -77,6 +77,7 @@
           '0x' + bs58.decode('AfpJmbkbgBi6hE1h33k3ZaLMoio2e6qB2').toString('hex') + 'f1b5847865d2094d',
           '0x' + bs58.decode('95oxHN6btfcvgifVmTiz7U7ssczuu9Bqt').toString('hex') + 'f1b5847865d2094d',
           '0x' + bs58.decode('3HY58gcHv9dEJk4cEQTm3obQUeZPnzMsT').toString('hex') + 'f1b5847865d2094d',
+          '0x' + bs58.decode('7FZe2AWixS5UrsYVUrKwYCsJUb6oX6w72').toString('hex') + 'f1b5847865d2094d',
         ]
       }
 
