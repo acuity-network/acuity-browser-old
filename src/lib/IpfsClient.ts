@@ -53,7 +53,7 @@ export default class IpfsClient {
 		})
 	}
 
-	_get(command: string, json: boolean = true) {
+	_get(command: string, json: boolean = true): Promise<any> {
 		return new Promise((resolve, reject) => {
 			let options = {
 				agent: this.agent,
@@ -61,7 +61,7 @@ export default class IpfsClient {
         port: 5101,
 			}
 
-			http.get(options)
+			let req: any = http.get(options)
 			.on('response', res => {
 				let body = ''
 				res.on('data', (data: any) => {
@@ -71,13 +71,23 @@ export default class IpfsClient {
 					resolve(json ? JSON.parse(body) : body)
 				})
 			})
-			.on('error', (error) => {
-			  reject(error)
+			.on('error', async (error: any) => {
+				if (req.reusedSocket && error.code === 'ECONNRESET') {
+					try {
+						resolve(await this._get(command, json))
+					}
+					catch (error) {
+						reject(error)
+					}
+				}
+				else {
+					reject(error)
+				}
 			})
 		})
 	}
 
-	_post(command: string, data: Buffer, encoding: string) {
+	_post(command: string, data: Buffer, encoding: string): Promise<any> {
 		return new Promise((resolve, reject) => {
 			let boundary = randomHex(32)
 
@@ -97,7 +107,7 @@ export default class IpfsClient {
 			postData += data.toString('binary')
 			postData += '\r\n--' + boundary + '--\r\n'
 
-			let req = http.request(options)
+			let req: any = http.request(options)
 			.on('response', res => {
 				let body = ''
 				res.on('data', (data: any) => {
@@ -107,8 +117,18 @@ export default class IpfsClient {
 					resolve(JSON.parse(body))
 				})
 			})
-			.on('error', (error) => {
-			  reject(error)
+			.on('error', async (error: any) => {
+        if (req.reusedSocket && error.code === 'ECONNRESET') {
+					try {
+						resolve(await this._post(command, data, encoding))
+					}
+					catch (error) {
+						reject(error)
+					}
+				}
+				else {
+					reject(error)
+				}
 			})
 
 			req.write(postData, encoding)
