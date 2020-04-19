@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video :poster="poster" ref="video" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
+    <video :poster="poster" ref="video" preload="metadata" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
     <b-field label="Resolution">
       <b-select v-model="ipfsHash" @input="input">
         <option v-for="resolution in resolutions" :value="resolution.ipfsHash">

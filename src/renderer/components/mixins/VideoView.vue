@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video v-if="src" :src="src" :poster="poster" ref="video" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
+    <video v-if="src" :src="src" :poster="poster" ref="video" preload="metadata" @loadedmetadata="loadedmetadata" controls width="1024" height="768"></video>
     <b-field label="Resolution">
       <b-select v-model="src" @input="input">
         <option
