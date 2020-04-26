@@ -82,20 +82,37 @@
         ]
       }
 
-      let subscriptions: any[] = []
+      let subscriptionsPromises: Promise<any>[] = []
+
       for (let feedId of feedIds) {
-        let count = await this.$mixClient.itemDagFeedItems.methods.getChildCount(feedId).call()
-        if (count > 0) {
-          let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(feedId, count - 1).call()
-          try {
-            let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
-            subscriptions.push({
-              feedId: feedId,
-              offset: count - 1,
-              itemId: itemId,
-              timestamp: (timestamp != 0) ? timestamp : 2000000000,
-            })
-          } catch (e) {}
+        subscriptionsPromises.push(new Promise(async (resolve, reject) => {
+          let count = await this.$mixClient.itemDagFeedItems.methods.getChildCount(feedId).call()
+          if (count > 0) {
+            let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(feedId, count - 1).call()
+            try {
+              let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
+              resolve({
+                feedId: feedId,
+                offset: count - 1,
+                itemId: itemId,
+                timestamp: (timestamp != 0) ? timestamp : 2000000000,
+              })
+            } catch (e) {
+              reject()
+            }
+          }
+          else {
+            reject()
+          }
+        }))
+      }
+
+      let subscriptionsSettled: any[] = await Promise.allSettled(subscriptionsPromises)
+      let subscriptions: any[] = []
+
+      for (let subscriptionSettled of subscriptionsSettled) {
+        if (subscriptionSettled.status == 'fulfilled') {
+          subscriptions.push(subscriptionSettled.value)
         }
       }
 
