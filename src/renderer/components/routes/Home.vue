@@ -25,9 +25,8 @@
     async created() {
       setTitle(this.$t('Home.Home'))
       let feedIds: string[] = []
-      let topicHashes: string[] = []
 
-      let feedsPromise = new Promise((resolve, reject) => {
+      await new Promise((resolve, reject) => {
         this.$db.createValueStream({
           'gte': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/',
           'lt': '/accountSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
@@ -39,21 +38,6 @@
           resolve()
         })
       })
-
-      let topicsPromise = new Promise((resolve, reject) => {
-        this.$db.createValueStream({
-          'gte': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/',
-          'lt': '/accountTopicSubscribed/' + this.$activeAccount.get().contractAddress + '/z',
-        })
-        .on('data', (topicHash: string) => {
-          topicHashes.push(topicHash)
-        })
-        .on('end', async () => {
-          resolve()
-        })
-      })
-
-      await Promise.all([feedsPromise, topicsPromise])
 
       if (feedIds.length == 0) {
         feedIds = [
@@ -106,7 +90,6 @@
           try {
             let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
             subscriptions.push({
-              type: 'feed',
               feedId: feedId,
               offset: count - 1,
               itemId: itemId,
@@ -114,25 +97,6 @@
             })
           } catch (e) {}
         }
-      }
-      for (let topicHash of topicHashes) {
-        try {
-          let count = await this.$mixClient.itemTopics.methods.getTopicItemCount(topicHash).call()
-          if (count > 0) {
-            let itemId = await this.$mixClient.itemTopics.methods.getTopicItem(topicHash, count - 1).call()
-            try {
-              let timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
-              subscriptions.push({
-                type: 'topic',
-                topicHash: topicHash,
-                offset: count - 1,
-                itemId: itemId,
-                timestamp: (timestamp != 0) ? timestamp : 2000000000,
-              })
-            } catch (e) {}
-          }
-        }
-        catch (e) {}
       }
 
       while (Object.keys(subscriptions).length > 0) {
@@ -152,15 +116,7 @@
         }
         else {
           let offset = subscriptions[topI].offset - 1
-          let itemId
-          switch (subscriptions[topI].type) {
-            case 'feed':
-              itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(subscriptions[topI].feedId, offset).call()
-              break;
-            case 'topic':
-              itemId = await this.$mixClient.itemTopics.methods.getTopicItem(subscriptions[topI].topicHash, offset).call()
-              break;
-          }
+          let itemId = await this.$mixClient.itemDagFeedItems.methods.getChildId(subscriptions[topI].feedId, offset).call()
           let timestamp = 0
           try {
             timestamp = await this.$mixClient.itemStoreIpfsSha256.methods.getRevisionTimestamp(itemId, 0).call()
