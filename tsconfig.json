@@ -2,7 +2,7 @@
   "extends": "./node_modules/electron-webpack/tsconfig-base.json",
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2019",
+    "target": "es2020",
     "noUnusedLocals": false,
     "strict": true,
     "noImplicitThis": false,
