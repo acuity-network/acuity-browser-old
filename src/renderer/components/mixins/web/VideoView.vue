@@ -33,8 +33,9 @@
       }
     },
     created() {
-      this.browser = detectBrowser.detect()
-      console.log(this.browser)
+      let browser = detectBrowser.detect()
+      console.log(browser)
+      this.useGateway = browser.name == 'safari' || browser.name == 'ios-webview'
       this.$ipfsClient.get(this.posterIpfsHash)
       .then((response: any) => {
         this.poster = 'data:image/jpeg;base64,' + response.toString('base64')
@@ -46,7 +47,7 @@
         let ipfsHash = bs58.encode(Buffer.from(encoding.getIpfsHash()))
         this.resolutions.push({
           ipfsHash: ipfsHash,
-          url: 'http://' + endpoint + '.mix-blockchain.org:8080/ipfs/' + ipfsHash,
+          url: 'https://' + endpoint + '.mix-blockchain.org:8081/ipfs/' + ipfsHash,
           width: encoding.getWidth(),
           height: encoding.getHeight(),
         })
@@ -56,7 +57,7 @@
     mounted() {
       this.$refs.video.addEventListener('error', console.error)
 
-      if (this.browser.name == 'safari') {
+      if (this.useGateway) {
         this.src = this.resolutions[0].url
       }
       else {
@@ -88,7 +89,7 @@
         console.log('input')
         this.$refs.video.pause()
         this.currentTime = this.$refs.video.currentTime
-        if (this.browser.name == 'safari') {
+        if (this.useGateway) {
           this.src = this.resolution.url
         }
         else {
