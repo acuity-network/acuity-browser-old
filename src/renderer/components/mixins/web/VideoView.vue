@@ -14,7 +14,7 @@
 <script lang="ts">
   import Vue from 'vue'
   import bs58 from 'bs58'
-  let detectBrowser: any = require('detect-browser')
+  import detectBrowser from 'detect-browser'
   let VideoStream: any = require('videostream')
 
   export default Vue.extend({
@@ -33,7 +33,7 @@
       }
     },
     created() {
-      let browser = detectBrowser.detect()
+      let browser = detectBrowser.detect()!
       console.log(browser)
       this.useGateway = browser.name == 'safari' || browser.name == 'ios-webview'
       this.$ipfsClient.get(this.posterIpfsHash)
