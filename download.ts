@@ -84,7 +84,7 @@ Promise.all([parity, ipfs, ffmpeg, youtubeDl])
       fs.renameSync('public/ffmpeg-4.2.2-win64-shared', 'public/ffmpeg')
       break
   }
-	fs.writeFileSync('download_rev', rev)
+	fs.writeFileSync('download_rev', rev.toString())
 	process.exit(0)
 })
 .catch(e => {
