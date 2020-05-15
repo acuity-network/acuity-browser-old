@@ -128,8 +128,7 @@
 */
       this.agent = (await this.$mixClient.web3.eth.getNodeInfo()).split('-stable-')[0]
       this.web3Version = this.$mixClient.web3.version
-      let protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
-      this.protocolVersion = this.$mixClient.web3.utils.hexToNumber(protocolVersion)
+      this.protocolVersion = await this.$mixClient.web3.eth.getProtocolVersion()
       this.networkId = await this.$mixClient.web3.eth.net.getId()
 
       let ipfsId = await this.$ipfsClient.id()
