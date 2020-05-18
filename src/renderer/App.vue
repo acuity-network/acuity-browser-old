@@ -194,8 +194,6 @@
     -webkit-font-smoothing: subpixel-antialiased;
   }
 
-  @import url('https://fonts.googleapis.com/css?family=Noto+Sans+HK:400,700|Noto+Sans+JP:400,700|Noto+Sans+KR:400,700|Noto+Sans+TC:400,700|Noto+Sans:400,700|Noto+Serif+JP:400,700|Noto+Serif+KR:400,700|Noto+Serif+SC:400,700|Noto+Serif+TC:400,700|Noto+Serif:400,700|Source+Code+Pro&display=swap&subset=chinese-hongkong,chinese-simplified,chinese-traditional,cyrillic,cyrillic-ext,devanagari,greek,greek-ext,japanese,korean,latin-ext,vietnamese');
-
   html body, html button, html input, html select {
     font-family: "Noto Sans", sans-serif;
   }

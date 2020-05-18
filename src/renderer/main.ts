@@ -37,6 +37,8 @@ Vue.use(VueTimeago, {
 
 import '@mdi/font/css/materialdesignicons.min.css'
 
+import './fonts.css'
+
 import axios from 'axios'
 Vue.prototype.$http = axios
 
