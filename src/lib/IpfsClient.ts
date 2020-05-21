@@ -63,7 +63,7 @@ export default class IpfsClient {
         method: 'POST',
 			}
 
-			let req: any = http.request(options).end()
+			let req: any = http.request(options)
 			.on('response', res => {
 				let body = ''
 				res.on('data', (data: any) => {
@@ -86,6 +86,7 @@ export default class IpfsClient {
 					reject(error)
 				}
 			})
+      .end()
 		})
 	}
 
