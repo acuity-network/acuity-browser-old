@@ -23,7 +23,7 @@ export default class IpfsClient {
 		await new Promise((resolve, reject) => {
 			let intervalId = setInterval(async () => {
 				try {
-					await this.get('id')
+					await this._get('id')
 					vue.$emit('ipfs-api')
 					clearInterval(intervalId)
 					resolve()
@@ -35,6 +35,7 @@ export default class IpfsClient {
 		// Wait for IPFS Gateway to start working.
 		return new Promise((resolve, reject) => {
 			let options = {
+        host: '127.0.0.1',  // must be ip address to prevent redirect
 				path: '/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',		// IPFS default file in repo
         port: 5102,
 				timeout: 0,
@@ -59,9 +60,10 @@ export default class IpfsClient {
 				agent: this.agent,
 				path: '/api/v0/' + command,
         port: 5101,
+        method: 'POST',
 			}
 
-			let req: any = http.get(options)
+			let req: any = http.request(options).end()
 			.on('response', res => {
 				let body = ''
 				res.on('data', (data: any) => {
