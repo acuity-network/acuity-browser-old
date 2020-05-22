@@ -67,7 +67,7 @@
     "ethereumjs-tx": "^2.1.2",
     "events": "^3.0.0",
     "google-protobuf": "^3.5.0",
-    "ipfs": "^0.43.3",
+    "ipfs": "^0.44.0",
     "it-to-stream": "^0.1.1",
     "just-throttle": "^1.1.0",
     "level": "^6.0.0",
