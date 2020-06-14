@@ -48,6 +48,7 @@
     }
   },
   "dependencies": {
+    "@acuitysocial/api": "^0.0.0",
     "@mdi/font": "^2.8.94",
     "@parity/api": "^5.1.5",
     "@pinata/sdk": "^1.1.3",

@@ -12,6 +12,11 @@
   resolved "https://registry.yarnpkg.com/7zip/-/7zip-0.0.6.tgz#9cafb171af82329490353b4816f03347aa150a30"
   integrity sha1-nK+xca+CMpSQNTtIFvAzR6oVCjA=
 
+"@acuitysocial/api@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@acuitysocial/api/-/api-0.0.0.tgz#bcc3dd38755c3e53d5714be2673137cc6a71e39f"
+  integrity sha512-UVQ6Cp02m7r03pvBR4qLSmownnN/9ZxR8I2aXNWXHG3k5GT1cwEkJHyKHIkKzEPb5SqGkmBr+GmNvj3psOSksw==
+
 "@assemblyscript/loader@^0.9.2":
   version "0.9.4"
   resolved "https://registry.yarnpkg.com/@assemblyscript/loader/-/loader-0.9.4.tgz#a483c54c1253656bb33babd464e3154a173e1577"
