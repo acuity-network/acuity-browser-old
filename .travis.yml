@@ -5,9 +5,10 @@ compiler: clang
 matrix:
   include:
   - os: osx
-    osx_image: xcode11.3
+    osx_image: xcode11.5
   - os: linux
     dist: bionic
+  - os: windows
 cache:
   yarn: true
   directories:
