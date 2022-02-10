@@ -114,7 +114,7 @@
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^3.2.0",
     "electron-webpack-vue": "^2.3.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "patch-package": "^6.1.4",
     "raw-loader": "^4.0.0",
     "sass-loader": "^8.0.0",
